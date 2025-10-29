@@ -1,36 +1,112 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pointfy Web
 
-## Getting Started
+Pointfy web sitesi - Takım işbirliği platformu için landing page ve yasal sayfalar.
 
-First, run the development server:
+## 🚀 Özellikler
+
+- ✅ Modern Next.js 14+ (App Router) ile geliştirilmiş
+- ✅ TypeScript ile tip güvenliği
+- ✅ Tailwind CSS ile responsive tasarım
+- ✅ shadcn/ui component kütüphanesi
+- ✅ Supabase entegrasyonu
+- ✅ Landing page (Hero, Features, CTA)
+- ✅ Yasal sayfalar (Privacy, Terms, Cookies, Third-party)
+
+## 📁 Proje Yapısı
+
+```
+pointfy-web/
+├── app/                    # Next.js App Router
+│   ├── legal/             # Yasal sayfalar
+│   ├── layout.tsx         # Root layout
+│   ├── page.tsx           # Landing page
+│   └── globals.css        # Global stiller
+├── components/
+│   ├── layout/            # Layout componentleri (Header, Footer)
+│   └── sections/          # Landing page bölümleri (Hero, Features, CTA)
+├── interfaces/            # TypeScript interface tanımları
+├── lib/                   # Utility fonksiyonlar ve konfigürasyonlar
+│   ├── supabase.ts       # Supabase client
+│   └── utils.ts          # Yardımcı fonksiyonlar
+└── public/                # Statik dosyalar
+```
+
+## 🛠️ Kurulum
+
+1. Bağımlılıkları yükleyin:
+
+```bash
+npm install
+```
+
+2. Environment değişkenlerini ayarlayın:
+
+`.env.local` dosyası oluşturun ve Supabase bilgilerinizi ekleyin:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+3. Development server'ı başlatın:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Tarayıcınızda [http://localhost:3000](http://localhost:3000) adresini açın.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📝 Scriptler
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` - Development server başlatır
+- `npm run build` - Production build oluşturur
+- `npm run start` - Production server başlatır
+- `npm run lint` - ESLint ile kod kontrolü yapar
 
-## Learn More
+## 🎨 Teknoloji Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Framework:** Next.js 16 (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS
+- **UI Components:** shadcn/ui
+- **Database:** Supabase
+- **Deployment:** Vercel (önerilen)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📄 Sayfalar
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `/` - Ana sayfa (Landing page)
+- `/legal/privacy` - Gizlilik Politikası
+- `/legal/terms` - Kullanım Şartları
+- `/legal/cookies` - Çerez Politikası
+- `/legal/third-party` - Üçüncü Taraf Hizmetler
 
-## Deploy on Vercel
+## 🔧 Geliştirme Kuralları
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Tüm interface'ler `interfaces/` klasöründe ayrı dosyalarda tanımlanmalı
+- Component'ler `React.memo` ile optimize edilmeli
+- `useMemo` ve `useCallback` ile performans optimizasyonu yapılmalı
+- Inline style kullanılmamalı, Tailwind CSS kullanılmalı
+- TypeScript strict mode aktif
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📦 Deployment
+
+### Vercel
+
+1. GitHub repository'yi bağlayın
+2. Environment variables ekleyin
+3. Deploy edin
+
+### Manuel Build
+
+```bash
+npm run build
+npm run start
+```
+
+## 📞 İletişim
+
+Sorularınız için iletişime geçebilirsiniz.
+
+## 📄 Lisans
+
+Tüm hakları saklıdır.
