@@ -7,6 +7,7 @@ import Hero from "@/components/sections/Hero";
 import QuickActions from "@/components/sections/QuickActions";
 import Features from "@/components/sections/Features";
 import CTA from "@/components/sections/CTA";
+import RecentRooms from "@/components/sections/RecentRooms";
 import type { Feature } from "@/interfaces/Feature.interface";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type { QuickAction } from "@/interfaces/QuickAction.interface";
@@ -66,28 +67,28 @@ export default function HomePage() {
         id: "create-room",
         title: "Oda Oluştur",
         description: "Yeni bir oda oluşturun",
-        href: "/login", // auth sonrası odalar/oluşturma akışına yönlenir
+        href: "/app/rooms",
         icon: "⚡",
       },
       {
         id: "personal-tasks",
         title: "Tasklarım",
         description: "Kişisel tasklarınızı yönetin",
-        href: "/login",
+        href: "/app/rooms",
         icon: "📝",
       },
       {
         id: "notes",
         title: "Notlarım",
         description: "Kişisel notlarınızı görüntüleyin",
-        href: "/login",
+        href: "/app/rooms",
         icon: "✏️",
       },
       {
         id: "retro",
         title: "Retro",
         description: "Takım retrosu başlat",
-        href: "/login",
+        href: "/app/rooms",
         icon: "🔁",
       },
     ],
@@ -100,6 +101,7 @@ export default function HomePage() {
       <main>
         <Hero />
         <QuickActions actions={actions} />
+        <RecentRooms />
         <Features features={features} />
         <CTA />
       </main>
