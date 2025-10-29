@@ -6,7 +6,9 @@ import { memo } from "react";
 const CTA = memo(function CTA() {
   return (
     <section id="download" className="container mx-auto px-4 py-20">
-      <div className="mx-auto max-w-4xl rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 p-8 text-center text-white md:p-12">
+      <div className="relative mx-auto max-w-4xl overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 p-8 text-center text-white shadow-lg md:p-12">
+        <div className="pointer-events-none absolute -left-16 -top-16 h-40 w-40 rounded-full bg-white/20 blur-2xl" />
+        <div className="pointer-events-none absolute -right-16 -bottom-16 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
         <h2 className="mb-4 text-3xl font-bold md:text-4xl">Hemen Başlayın</h2>
         <p className="mb-8 text-lg text-blue-100 md:text-xl">
           Pointfy&apos;ı indirin ve takımınızla daha verimli çalışmaya başlayın.
@@ -16,7 +18,7 @@ const CTA = memo(function CTA() {
             href="https://apps.apple.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex h-12 items-center justify-center rounded-lg bg-white px-6 font-semibold text-blue-600 transition-colors hover:bg-gray-100"
+            className="flex h-12 items-center justify-center rounded-lg bg-white px-6 font-semibold text-blue-600 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
           >
             App Store&apos;dan İndir
           </Link>
@@ -24,7 +26,7 @@ const CTA = memo(function CTA() {
             href="https://play.google.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex h-12 items-center justify-center rounded-lg border-2 border-white bg-transparent px-6 font-semibold text-white transition-colors hover:bg-white/10"
+            className="flex h-12 items-center justify-center rounded-lg border-2 border-white bg-transparent px-6 font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-white/10"
           >
             Google Play&apos;den İndir
           </Link>

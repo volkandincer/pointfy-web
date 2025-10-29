@@ -19,12 +19,13 @@ const Features = memo(function Features({ features }: FeaturesProps) {
         <p className="mb-12 text-center text-gray-600 dark:text-gray-400">
           Pointfy ile takımınızı yönetmek hiç bu kadar kolay olmamıştı
         </p>
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {memoizedFeatures.map((feature) => (
             <div
               key={feature.id}
-              className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
+              className="group relative overflow-hidden rounded-2xl border border-gray-200/70 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md dark:border-gray-800/70 dark:bg-gray-900"
             >
+              <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-blue-500/10 blur-2xl transition-opacity group-hover:opacity-100 dark:bg-blue-400/10" />
               <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-white">
                 {feature.title}
               </h3>
