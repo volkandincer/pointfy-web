@@ -1,14 +1,17 @@
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import type { Metadata } from "next";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
+import { getDefaultNavigationItems } from "@/lib/utils";
 
-const navigationItems: NavigationItem[] = [
-  { label: "Ana Sayfa", href: "/" },
-  { label: "Özellikler", href: "/#features" },
-  { label: "İndir", href: "/#download" },
-];
+export const metadata: Metadata = {
+  title: "Kullanım Şartları | Pointfy",
+  description: "Pointfy kullanım şartları: hizmet koşulları ve sorumluluklar.",
+  alternates: { canonical: "/legal/terms" },
+};
 
 export default function TermsPage() {
+  const navigationItems: NavigationItem[] = getDefaultNavigationItems();
   return (
     <>
       <Header navigationItems={navigationItems} />

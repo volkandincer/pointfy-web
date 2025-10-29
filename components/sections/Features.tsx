@@ -11,7 +11,7 @@ const Features = memo(function Features({ features }: FeaturesProps) {
   const memoizedFeatures = useMemo(() => features, [features]);
 
   return (
-    <section className="container mx-auto px-4 py-20">
+    <section id="features" className="container mx-auto px-4 py-20">
       <div className="mx-auto max-w-6xl">
         <h2 className="mb-4 text-center text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
           Özellikler

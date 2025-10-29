@@ -8,14 +8,11 @@ import Features from "@/components/sections/Features";
 import CTA from "@/components/sections/CTA";
 import type { Feature } from "@/interfaces/Feature.interface";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
+import { getDefaultNavigationItems } from "@/lib/utils";
 
 export default function HomePage() {
   const navigationItems: NavigationItem[] = useMemo(
-    () => [
-      { label: "Ana Sayfa", href: "/" },
-      { label: "Özellikler", href: "/#features" },
-      { label: "İndir", href: "/#download" },
-    ],
+    () => getDefaultNavigationItems(),
     []
   );
 

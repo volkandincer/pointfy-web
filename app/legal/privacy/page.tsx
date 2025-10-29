@@ -1,14 +1,18 @@
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import type { Metadata } from "next";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
+import { getDefaultNavigationItems } from "@/lib/utils";
 
-const navigationItems: NavigationItem[] = [
-  { label: "Ana Sayfa", href: "/" },
-  { label: "Özellikler", href: "/#features" },
-  { label: "İndir", href: "/#download" },
-];
+export const metadata: Metadata = {
+  title: "Gizlilik Politikası | Pointfy",
+  description:
+    "Pointfy gizlilik politikası: hangi verileri topluyoruz ve nasıl koruyoruz.",
+  alternates: { canonical: "/legal/privacy" },
+};
 
 export default function PrivacyPage() {
+  const navigationItems: NavigationItem[] = getDefaultNavigationItems();
   return (
     <>
       <Header navigationItems={navigationItems} />

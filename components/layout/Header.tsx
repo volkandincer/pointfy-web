@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { memo } from "react";
+import UserNav from "./UserNav";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 
 interface HeaderProps {
@@ -18,7 +19,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
         >
           Pointfy
         </Link>
-        <nav className="hidden gap-6 md:flex">
+        <nav className="hidden items-center gap-6 md:flex">
           {navigationItems.map((item) => (
             <Link
               key={item.href}
@@ -30,6 +31,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
               {item.label}
             </Link>
           ))}
+          <UserNav />
         </nav>
       </div>
     </header>

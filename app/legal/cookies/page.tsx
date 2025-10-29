@@ -1,14 +1,17 @@
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import type { Metadata } from "next";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
+import { getDefaultNavigationItems } from "@/lib/utils";
 
-const navigationItems: NavigationItem[] = [
-  { label: "Ana Sayfa", href: "/" },
-  { label: "Özellikler", href: "/#features" },
-  { label: "İndir", href: "/#download" },
-];
+export const metadata: Metadata = {
+  title: "Çerez Politikası | Pointfy",
+  description: "Pointfy çerez politikası: hangi çerezleri neden kullanıyoruz.",
+  alternates: { canonical: "/legal/cookies" },
+};
 
 export default function CookiesPage() {
+  const navigationItems: NavigationItem[] = getDefaultNavigationItems();
   return (
     <>
       <Header navigationItems={navigationItems} />
