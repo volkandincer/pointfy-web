@@ -4,10 +4,12 @@ import { useMemo } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Hero from "@/components/sections/Hero";
+import QuickActions from "@/components/sections/QuickActions";
 import Features from "@/components/sections/Features";
 import CTA from "@/components/sections/CTA";
 import type { Feature } from "@/interfaces/Feature.interface";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
+import type { QuickAction } from "@/interfaces/QuickAction.interface";
 import { getDefaultNavigationItems } from "@/lib/utils";
 
 export default function HomePage() {
@@ -58,11 +60,46 @@ export default function HomePage() {
     []
   );
 
+  const actions: QuickAction[] = useMemo(
+    () => [
+      {
+        id: "create-room",
+        title: "Oda Oluştur",
+        description: "Yeni bir oda oluşturun",
+        href: "/login", // auth sonrası odalar/oluşturma akışına yönlenir
+        icon: "⚡",
+      },
+      {
+        id: "personal-tasks",
+        title: "Tasklarım",
+        description: "Kişisel tasklarınızı yönetin",
+        href: "/login",
+        icon: "📝",
+      },
+      {
+        id: "notes",
+        title: "Notlarım",
+        description: "Kişisel notlarınızı görüntüleyin",
+        href: "/login",
+        icon: "✏️",
+      },
+      {
+        id: "retro",
+        title: "Retro",
+        description: "Takım retrosu başlat",
+        href: "/login",
+        icon: "🔁",
+      },
+    ],
+    []
+  );
+
   return (
     <>
       <Header navigationItems={navigationItems} />
       <main>
         <Hero />
+        <QuickActions actions={actions} />
         <Features features={features} />
         <CTA />
       </main>
