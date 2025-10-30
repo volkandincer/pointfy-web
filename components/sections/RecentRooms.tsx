@@ -5,7 +5,11 @@ import { memo, useEffect, useState } from "react";
 import type { RoomInfo } from "@/interfaces/Room.interface";
 import { getSupabase } from "@/lib/supabase";
 
-const RecentRooms = memo(function RecentRooms() {
+interface RecentRoomsProps {
+  createdByKey?: string;
+}
+
+const RecentRooms = memo(function RecentRooms({ createdByKey }: RecentRoomsProps) {
   const [rooms, setRooms] = useState<RoomInfo[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -14,11 +18,15 @@ const RecentRooms = memo(function RecentRooms() {
     async function fetchRooms() {
       try {
         const supabase = getSupabase();
-        const { data } = await supabase
+        let query = supabase
           .from("rooms")
           .select("id, name, code, created_by_username, is_active, created_at")
           .order("created_at", { ascending: false })
           .limit(8);
+        if (createdByKey) {
+          query = query.eq("created_by_key", createdByKey);
+        }
+        const { data } = await query;
         if (!mounted) return;
         setRooms(data || []);
       } catch {
@@ -38,7 +46,7 @@ const RecentRooms = memo(function RecentRooms() {
     <section className="container mx-auto px-4 py-12">
       <div className="mx-auto max-w-6xl">
         <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
-          Son Aktif Odalar
+          {createdByKey ? "Odalarım" : "Son Aktif Odalar"}
         </h2>
         <p className="mb-8 text-sm text-gray-600 dark:text-gray-400">
           En son oluşturulan ve aktif odalar
@@ -89,5 +97,3 @@ const RecentRooms = memo(function RecentRooms() {
 });
 
 export default RecentRooms;
-
-

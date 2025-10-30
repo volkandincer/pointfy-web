@@ -17,14 +17,18 @@ export default function RoomDetailPage() {
       <>
         <Header navigationItems={navigationItems} />
         <main className="container mx-auto px-4 py-16">
-          <h1 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">Oda Detayı</h1>
-          <p className="text-sm text-gray-600 dark:text-gray-400">Room ID: {String(roomId)}</p>
-          <p className="mt-4 text-gray-600 dark:text-gray-400">Bu sayfa ilerleyen adımda görevler/oylar/retro ile doldurulacak.</p>
+          <h1 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
+            Oda Detayı
+          </h1>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Room ID: {String(roomId)}
+          </p>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">
+            Bu sayfa ilerleyen adımda görevler/oylar/retro ile doldurulacak.
+          </p>
         </main>
         <Footer navigationItems={navigationItems} />
       </>
     </RequireAuth>
   );
 }
-
-

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Hero from "@/components/sections/Hero";
@@ -8,16 +8,49 @@ import QuickActions from "@/components/sections/QuickActions";
 import Features from "@/components/sections/Features";
 import CTA from "@/components/sections/CTA";
 import RecentRooms from "@/components/sections/RecentRooms";
+import HomeWelcome from "@/components/sections/HomeWelcome";
 import type { Feature } from "@/interfaces/Feature.interface";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type { QuickAction } from "@/interfaces/QuickAction.interface";
 import { getDefaultNavigationItems } from "@/lib/utils";
+import { getSupabase } from "@/lib/supabase";
 
 export default function HomePage() {
   const navigationItems: NavigationItem[] = useMemo(
     () => getDefaultNavigationItems(),
     []
   );
+  const [userId, setUserId] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const supabase = getSupabase();
+        const { data } = await supabase.auth.getUser();
+        if (!mounted) return;
+        if (data.user) {
+          setUserId(data.user.id);
+          const { data: userRow } = await supabase
+            .from("users")
+            .select("username")
+            .eq("key", data.user.id)
+            .single();
+          if (!mounted) return;
+          setUsername(userRow?.username);
+        } else {
+          setUserId(null);
+        }
+      } catch {
+        if (!mounted) return;
+        setUserId(null);
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const features: Feature[] = useMemo(
     () => [
@@ -99,9 +132,9 @@ export default function HomePage() {
     <>
       <Header navigationItems={navigationItems} />
       <main>
-        <Hero />
+        {userId ? <HomeWelcome username={username} /> : <Hero />}
         <QuickActions actions={actions} />
-        <RecentRooms />
+        <RecentRooms createdByKey={userId ?? undefined} />
         <Features features={features} />
         <CTA />
       </main>

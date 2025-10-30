@@ -6,5 +6,3 @@ export interface RoomInfo {
   created_by_username?: string;
   is_active?: boolean;
 }
-
-
