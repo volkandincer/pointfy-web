@@ -14,5 +14,3 @@ export interface PersonalTaskInput {
   category?: string;
   priority?: number;
 }
-
-
