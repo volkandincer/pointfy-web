@@ -23,6 +23,7 @@ export default function PersonalTasksPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [userKey, setUserKey] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [editingTask, setEditingTask] = useState<PersonalTask | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -119,7 +120,7 @@ export default function PersonalTasksPage() {
                 </p>
               </div>
               <button
-                onClick={() => setShowModal(true)}
+                onClick={() => { setEditingTask(null); setShowModal(true); }}
                 className="inline-flex h-10 items-center justify-center rounded-md bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
               >
                 + Yeni Task Ekle
@@ -129,7 +130,7 @@ export default function PersonalTasksPage() {
               {loading ? (
                 <div className="h-40 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800" />
               ) : (
-                <PersonalTaskList tasks={tasks} onDelete={handleDelete} />
+                <PersonalTaskList tasks={tasks} onDelete={handleDelete} onEdit={(t) => { setEditingTask(t); setShowModal(true); }} />
               )}
             </div>
           </div>
@@ -137,7 +138,30 @@ export default function PersonalTasksPage() {
         <PersonalTaskModal
           open={showModal}
           onClose={() => setShowModal(false)}
-          onCreate={handleCreate}
+          onSubmit={async (input, taskId) => {
+            if (taskId) {
+              // update
+              const supabase = getSupabase();
+              const { data, error } = await supabase
+                .from("user_personal_tasks")
+                .update({
+                  title: input.title,
+                  description: input.description ?? null,
+                  category: input.category ?? "general",
+                  priority: input.priority ?? 1,
+                })
+                .eq("id", taskId)
+                .select()
+                .single();
+              if (!error && data) {
+                setTasks((prev) => prev.map((t) => (t.id === taskId ? (data as PersonalTask) : t)));
+              }
+            } else {
+              await handleCreate(input);
+            }
+            setEditingTask(null);
+          }}
+          initialTask={editingTask ?? undefined}
         />
         <Footer navigationItems={navigationItems} />
       </>

@@ -2,12 +2,13 @@
 
 import { memo, useCallback, useMemo, useState } from "react";
 import Modal from "@/components/ui/Modal";
-import type { PersonalTaskInput } from "@/interfaces/PersonalTask.interface";
+import type { PersonalTask, PersonalTaskInput } from "@/interfaces/PersonalTask.interface";
 
 interface PersonalTaskModalProps {
   open: boolean;
   onClose: () => void;
-  onCreate: (input: PersonalTaskInput) => Promise<void>;
+  onSubmit: (input: PersonalTaskInput, taskId?: string) => Promise<void>;
+  initialTask?: PersonalTask;
 }
 
 const CATEGORY_PRESETS = [
@@ -26,12 +27,13 @@ const PRIORITY_PRESETS = [
 const PersonalTaskModal = memo(function PersonalTaskModal({
   open,
   onClose,
-  onCreate,
+  onSubmit,
+  initialTask,
 }: PersonalTaskModalProps) {
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [category, setCategory] = useState<string>("general");
-  const [priority, setPriority] = useState<number>(1);
+  const [title, setTitle] = useState<string>(initialTask?.title || "");
+  const [description, setDescription] = useState<string>(initialTask?.description || "");
+  const [category, setCategory] = useState<string>(initialTask?.category || "general");
+  const [priority, setPriority] = useState<number>(initialTask?.priority || 1);
   const [loading, setLoading] = useState<boolean>(false);
 
   const categories = useMemo(() => CATEGORY_PRESETS, []);
@@ -41,12 +43,12 @@ const PersonalTaskModal = memo(function PersonalTaskModal({
     if (!title.trim()) return;
     setLoading(true);
     try {
-      await onCreate({
+      await onSubmit({
         title: title.trim(),
         description: description.trim() || undefined,
         category,
         priority,
-      });
+      }, initialTask?.id);
       setTitle("");
       setDescription("");
       setCategory("general");
@@ -55,10 +57,10 @@ const PersonalTaskModal = memo(function PersonalTaskModal({
     } finally {
       setLoading(false);
     }
-  }, [category, description, onClose, onCreate, priority, title]);
+  }, [category, description, onClose, onSubmit, priority, title, initialTask?.id]);
 
   return (
-    <Modal open={open} onClose={onClose} title="Yeni Task Ekle">
+    <Modal open={open} onClose={onClose} title={initialTask ? "Taskı Düzenle" : "Yeni Task Ekle"}>
       <div className="space-y-4">
         <div>
           <input
@@ -132,7 +134,7 @@ const PersonalTaskModal = memo(function PersonalTaskModal({
             onClick={submit}
             className="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-5 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:opacity-60"
           >
-            Ekle
+            {initialTask ? "Kaydet" : "Ekle"}
           </button>
         </div>
       </div>

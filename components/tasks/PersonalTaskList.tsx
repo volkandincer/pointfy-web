@@ -1,17 +1,18 @@
 "use client";
 
 import { memo } from "react";
-import Link from "next/link";
 import type { PersonalTask } from "@/interfaces/PersonalTask.interface";
 
 interface PersonalTaskListProps {
   tasks: PersonalTask[];
   onDelete: (taskId: string) => Promise<void>;
+  onEdit: (task: PersonalTask) => void;
 }
 
 const PersonalTaskList = memo(function PersonalTaskList({
   tasks,
   onDelete,
+  onEdit,
 }: PersonalTaskListProps) {
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -34,12 +35,12 @@ const PersonalTaskList = memo(function PersonalTaskList({
             </p>
           )}
           <div className="flex items-center gap-3">
-            <Link
-              href={`/app/rooms`}
+            <button
+              onClick={() => onEdit(t)}
               className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-3 text-sm font-semibold text-white transition hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
             >
-              Odaya Git
-            </Link>
+              Düzenle
+            </button>
             <button
               onClick={() => onDelete(t.id)}
               className="text-sm text-red-600 hover:underline"
