@@ -10,14 +10,24 @@ interface PersonalTaskModalProps {
   onCreate: (input: PersonalTaskInput) => Promise<void>;
 }
 
-const CATEGORY_PRESETS = ["general", "work", "personal", "meeting", "project"] as const;
+const CATEGORY_PRESETS = [
+  "general",
+  "work",
+  "personal",
+  "meeting",
+  "project",
+] as const;
 const PRIORITY_PRESETS = [
   { key: 1, label: "Düşük" },
   { key: 2, label: "Orta" },
   { key: 3, label: "Yüksek" },
 ];
 
-const PersonalTaskModal = memo(function PersonalTaskModal({ open, onClose, onCreate }: PersonalTaskModalProps) {
+const PersonalTaskModal = memo(function PersonalTaskModal({
+  open,
+  onClose,
+  onCreate,
+}: PersonalTaskModalProps) {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [category, setCategory] = useState<string>("general");
@@ -67,7 +77,9 @@ const PersonalTaskModal = memo(function PersonalTaskModal({ open, onClose, onCre
           />
         </div>
         <div>
-          <p className="mb-2 text-xs font-medium text-gray-700 dark:text-gray-300">Kategori</p>
+          <p className="mb-2 text-xs font-medium text-gray-700 dark:text-gray-300">
+            Kategori
+          </p>
           <div className="flex flex-wrap gap-2">
             {categories.map((c) => (
               <button
@@ -86,7 +98,9 @@ const PersonalTaskModal = memo(function PersonalTaskModal({ open, onClose, onCre
           </div>
         </div>
         <div>
-          <p className="mb-2 text-xs font-medium text-gray-700 dark:text-gray-300">Öncelik</p>
+          <p className="mb-2 text-xs font-medium text-gray-700 dark:text-gray-300">
+            Öncelik
+          </p>
           <div className="flex flex-wrap gap-2">
             {priorities.map((p) => (
               <button
@@ -127,5 +141,3 @@ const PersonalTaskModal = memo(function PersonalTaskModal({ open, onClose, onCre
 });
 
 export default PersonalTaskModal;
-
-

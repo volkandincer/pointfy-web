@@ -9,7 +9,12 @@ interface ModalProps {
   children: React.ReactNode;
 }
 
-const Modal = memo(function Modal({ open, title, onClose, children }: ModalProps) {
+const Modal = memo(function Modal({
+  open,
+  title,
+  onClose,
+  children,
+}: ModalProps) {
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
@@ -36,5 +41,3 @@ const Modal = memo(function Modal({ open, title, onClose, children }: ModalProps
 });
 
 export default Modal;
-
-
