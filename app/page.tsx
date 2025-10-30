@@ -107,7 +107,7 @@ export default function HomePage() {
         id: "personal-tasks",
         title: "Tasklarım",
         description: "Kişisel tasklarınızı yönetin",
-        href: "/app/rooms",
+        href: "/app/tasks",
         icon: "📝",
       },
       {
