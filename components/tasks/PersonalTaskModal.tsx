@@ -2,7 +2,10 @@
 
 import { memo, useCallback, useMemo, useState } from "react";
 import Modal from "@/components/ui/Modal";
-import type { PersonalTask, PersonalTaskInput } from "@/interfaces/PersonalTask.interface";
+import type {
+  PersonalTask,
+  PersonalTaskInput,
+} from "@/interfaces/PersonalTask.interface";
 
 interface PersonalTaskModalProps {
   open: boolean;
@@ -31,8 +34,12 @@ const PersonalTaskModal = memo(function PersonalTaskModal({
   initialTask,
 }: PersonalTaskModalProps) {
   const [title, setTitle] = useState<string>(initialTask?.title || "");
-  const [description, setDescription] = useState<string>(initialTask?.description || "");
-  const [category, setCategory] = useState<string>(initialTask?.category || "general");
+  const [description, setDescription] = useState<string>(
+    initialTask?.description || ""
+  );
+  const [category, setCategory] = useState<string>(
+    initialTask?.category || "general"
+  );
   const [priority, setPriority] = useState<number>(initialTask?.priority || 1);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -43,12 +50,15 @@ const PersonalTaskModal = memo(function PersonalTaskModal({
     if (!title.trim()) return;
     setLoading(true);
     try {
-      await onSubmit({
-        title: title.trim(),
-        description: description.trim() || undefined,
-        category,
-        priority,
-      }, initialTask?.id);
+      await onSubmit(
+        {
+          title: title.trim(),
+          description: description.trim() || undefined,
+          category,
+          priority,
+        },
+        initialTask?.id
+      );
       setTitle("");
       setDescription("");
       setCategory("general");
@@ -57,10 +67,22 @@ const PersonalTaskModal = memo(function PersonalTaskModal({
     } finally {
       setLoading(false);
     }
-  }, [category, description, onClose, onSubmit, priority, title, initialTask?.id]);
+  }, [
+    category,
+    description,
+    onClose,
+    onSubmit,
+    priority,
+    title,
+    initialTask?.id,
+  ]);
 
   return (
-    <Modal open={open} onClose={onClose} title={initialTask ? "Taskı Düzenle" : "Yeni Task Ekle"}>
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={initialTask ? "Taskı Düzenle" : "Yeni Task Ekle"}
+    >
       <div className="space-y-4">
         <div>
           <input

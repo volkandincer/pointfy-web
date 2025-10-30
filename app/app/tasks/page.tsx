@@ -62,7 +62,9 @@ export default function PersonalTasksPage() {
             setTasks((prev) => prev.filter((t) => t.id !== payload.old.id));
           } else if (payload.eventType === "UPDATE") {
             setTasks((prev) =>
-              prev.map((t) => (t.id === payload.new.id ? (payload.new as PersonalTask) : t))
+              prev.map((t) =>
+                t.id === payload.new.id ? (payload.new as PersonalTask) : t
+              )
             );
           }
         }
@@ -120,7 +122,10 @@ export default function PersonalTasksPage() {
                 </p>
               </div>
               <button
-                onClick={() => { setEditingTask(null); setShowModal(true); }}
+                onClick={() => {
+                  setEditingTask(null);
+                  setShowModal(true);
+                }}
                 className="inline-flex h-10 items-center justify-center rounded-md bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
               >
                 + Yeni Task Ekle
@@ -130,7 +135,14 @@ export default function PersonalTasksPage() {
               {loading ? (
                 <div className="h-40 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800" />
               ) : (
-                <PersonalTaskList tasks={tasks} onDelete={handleDelete} onEdit={(t) => { setEditingTask(t); setShowModal(true); }} />
+                <PersonalTaskList
+                  tasks={tasks}
+                  onDelete={handleDelete}
+                  onEdit={(t) => {
+                    setEditingTask(t);
+                    setShowModal(true);
+                  }}
+                />
               )}
             </div>
           </div>
@@ -154,7 +166,11 @@ export default function PersonalTasksPage() {
                 .select()
                 .single();
               if (!error && data) {
-                setTasks((prev) => prev.map((t) => (t.id === taskId ? (data as PersonalTask) : t)));
+                setTasks((prev) =>
+                  prev.map((t) =>
+                    t.id === taskId ? (data as PersonalTask) : t
+                  )
+                );
               }
             } else {
               await handleCreate(input);
