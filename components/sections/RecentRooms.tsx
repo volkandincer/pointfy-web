@@ -9,7 +9,9 @@ interface RecentRoomsProps {
   createdByKey?: string;
 }
 
-const RecentRooms = memo(function RecentRooms({ createdByKey }: RecentRoomsProps) {
+const RecentRooms = memo(function RecentRooms({
+  createdByKey,
+}: RecentRoomsProps) {
   const [rooms, setRooms] = useState<RoomInfo[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 

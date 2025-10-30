@@ -25,7 +25,7 @@ export default function LoginPage() {
         const supabase = getSupabase();
         const { data } = await supabase.auth.getUser();
         if (!mounted) return;
-        if (data.user) router.replace("/app/rooms");
+        if (data.user) router.replace("/");
       } catch {
         // ignore
       }
@@ -46,7 +46,7 @@ export default function LoginPage() {
         password: password.trim(),
       });
       if (error || !data.user) throw error || new Error("Giriş başarısız.");
-      router.replace("/app/rooms");
+      router.replace("/");
     } catch (err: unknown) {
       setMessage((err as Error).message || "Giriş başarısız.");
     } finally {
@@ -79,7 +79,7 @@ export default function LoginPage() {
         password: password.trim(),
       });
       if (signInError) throw signInError;
-      router.replace("/app/rooms");
+      router.replace("/");
     } catch (err: unknown) {
       setMessage((err as Error).message || "Kayıt başarısız.");
     } finally {

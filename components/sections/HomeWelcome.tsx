@@ -17,7 +17,9 @@ const HomeWelcome = memo(function HomeWelcome({ username }: HomeWelcomeProps) {
                 Pointfy
               </h1>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                {username ? `Hoş geldin, ${username}!` : "Takım çalışmanızı başlatın"}
+                {username
+                  ? `Hoş geldin, ${username}!`
+                  : "Takım çalışmanızı başlatın"}
               </p>
             </div>
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-xl dark:bg-gray-800">
@@ -31,5 +33,3 @@ const HomeWelcome = memo(function HomeWelcome({ username }: HomeWelcomeProps) {
 });
 
 export default HomeWelcome;
-
-
