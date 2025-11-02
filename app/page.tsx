@@ -22,20 +22,24 @@ export default function HomePage() {
   );
   const [userId, setUserId] = useState<string | null>(null);
   const [username, setUsername] = useState<string | undefined>(undefined);
+  const [checkingAuth, setCheckingAuth] = useState<boolean>(true);
 
   useEffect(() => {
     let mounted = true;
     (async () => {
       try {
         const supabase = getSupabase();
-        const { data } = await supabase.auth.getUser();
+        // Use getSession first for faster check
+        const { data: sessionData } = await supabase.auth.getSession();
         if (!mounted) return;
-        if (data.user) {
-          setUserId(data.user.id);
+
+        if (sessionData.session?.user) {
+          setUserId(sessionData.session.user.id);
+          // Get username asynchronously
           const { data: userRow } = await supabase
             .from("users")
             .select("username")
-            .eq("key", data.user.id)
+            .eq("key", sessionData.session.user.id)
             .single();
           if (!mounted) return;
           setUsername(userRow?.username);
@@ -45,6 +49,8 @@ export default function HomePage() {
       } catch {
         if (!mounted) return;
         setUserId(null);
+      } finally {
+        if (mounted) setCheckingAuth(false);
       }
     })();
     return () => {
@@ -127,6 +133,21 @@ export default function HomePage() {
     ],
     []
   );
+
+  // Show loading state briefly to prevent flash
+  if (checkingAuth) {
+    return (
+      <>
+        <Header navigationItems={navigationItems} />
+        <main>
+          <div className="container mx-auto px-4 py-12">
+            <div className="h-64 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800" />
+          </div>
+        </main>
+        <Footer navigationItems={navigationItems} />
+      </>
+    );
+  }
 
   return (
     <>
