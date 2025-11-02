@@ -100,7 +100,7 @@ export default function HomePage() {
         id: "create-room",
         title: "Oda Oluştur",
         description: "Yeni bir oda oluşturun",
-        href: "/app/rooms",
+        href: "/app/rooms/create",
         icon: "⚡",
       },
       {

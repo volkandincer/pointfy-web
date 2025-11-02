@@ -20,6 +20,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     let mounted = true;
+    // Redirect immediately if already logged in
     (async () => {
       try {
         const supabase = getSupabase();
@@ -30,9 +31,21 @@ export default function LoginPage() {
         // ignore
       }
     })();
-    return () => {
-      mounted = false;
-    };
+    // Also listen for auth state changes to catch fresh logins
+    try {
+      const supabase = getSupabase();
+      const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+        if (session?.user) router.replace("/");
+      });
+      return () => {
+        mounted = false;
+        sub.subscription.unsubscribe();
+      };
+    } catch {
+      return () => {
+        mounted = false;
+      };
+    }
   }, [router]);
 
   async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
