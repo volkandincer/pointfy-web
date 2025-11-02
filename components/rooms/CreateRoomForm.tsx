@@ -2,11 +2,16 @@
 
 import { memo, useState } from "react";
 import RoomSettingsModal from "./RoomSettingsModal";
-import type { RoomType, RoomSettings, RoomCreateInput } from "@/interfaces/RoomCreate.interface";
+import type {
+  RoomType,
+  RoomSettings,
+  RoomCreateInput,
+} from "@/interfaces/RoomCreate.interface";
 
 interface CreateRoomFormProps {
   onSubmit: (input: RoomCreateInput) => Promise<void>;
   loading?: boolean;
+  initialRoomType?: RoomType;
 }
 
 const ROOM_TYPES: { key: RoomType; label: string }[] = [
@@ -18,10 +23,13 @@ const ROOM_TYPES: { key: RoomType; label: string }[] = [
 const CreateRoomForm = memo(function CreateRoomForm({
   onSubmit,
   loading = false,
+  initialRoomType,
 }: CreateRoomFormProps) {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [roomType, setRoomType] = useState<RoomType>("poker");
+  const [roomType, setRoomType] = useState<RoomType>(
+    initialRoomType || "poker"
+  );
   const [settings, setSettings] = useState<RoomSettings>({
     maxParticipants: 10,
     isPrivate: false,
@@ -145,4 +153,3 @@ const CreateRoomForm = memo(function CreateRoomForm({
 });
 
 export default CreateRoomForm;
-

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
@@ -11,6 +11,48 @@ import { getSupabase } from "@/lib/supabase";
 export default function LoginPage() {
   const navigationItems: NavigationItem[] = getDefaultNavigationItems();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const rawReturnUrl = searchParams.get("returnUrl") || "/";
+  // Clean returnUrl - remove any nested login URLs to prevent loops
+  const returnUrl = (() => {
+    try {
+      let decoded = decodeURIComponent(rawReturnUrl);
+      // Keep extracting nested returnUrl until we get a clean path
+      let maxIterations = 5; // Prevent infinite loops
+      while (
+        decoded.includes("/login") &&
+        decoded.includes("returnUrl=") &&
+        maxIterations > 0
+      ) {
+        try {
+          const url = new URL(decoded, "http://localhost");
+          const nestedReturnUrl = url.searchParams.get("returnUrl");
+          if (nestedReturnUrl && nestedReturnUrl !== decoded) {
+            decoded = decodeURIComponent(nestedReturnUrl);
+            maxIterations--;
+          } else {
+            break;
+          }
+        } catch {
+          // If URL parsing fails, try regex fallback
+          const match = decoded.match(/returnUrl=([^&]+)/);
+          if (match && match[1] !== decoded) {
+            decoded = decodeURIComponent(match[1]);
+            maxIterations--;
+          } else {
+            break;
+          }
+        }
+      }
+      // Final check: if still contains login, use home page
+      if (decoded.includes("/login")) {
+        return "/";
+      }
+      return decoded.startsWith("/") ? decoded : "/";
+    } catch {
+      return "/";
+    }
+  })();
   const [isLogin, setIsLogin] = useState<boolean>(true);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -26,7 +68,16 @@ export default function LoginPage() {
         const supabase = getSupabase();
         const { data } = await supabase.auth.getUser();
         if (!mounted) return;
-        if (data.user) router.replace("/");
+        if (data.user) {
+          // Use the cleaned returnUrl directly (already decoded)
+          const targetUrl =
+            returnUrl && returnUrl !== "/login" && returnUrl.startsWith("/")
+              ? returnUrl
+              : "/";
+          setTimeout(() => {
+            router.replace(targetUrl);
+          }, 300);
+        }
       } catch {
         // ignore
       }
@@ -35,7 +86,19 @@ export default function LoginPage() {
     try {
       const supabase = getSupabase();
       const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-        if (session?.user) router.replace("/");
+        if (session?.user && mounted) {
+          // Wait longer to ensure RequireAuth has detected the session
+          setTimeout(() => {
+            if (mounted) {
+              // Use the cleaned returnUrl directly (already decoded)
+              const targetUrl =
+                returnUrl && returnUrl !== "/login" && returnUrl.startsWith("/")
+                  ? returnUrl
+                  : "/";
+              router.replace(targetUrl);
+            }
+          }, 300);
+        }
       });
       return () => {
         mounted = false;
@@ -46,7 +109,7 @@ export default function LoginPage() {
         mounted = false;
       };
     }
-  }, [router]);
+  }, [router, returnUrl]);
 
   async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -59,7 +122,14 @@ export default function LoginPage() {
         password: password.trim(),
       });
       if (error || !data.user) throw error || new Error("Giriş başarısız.");
-      router.replace("/");
+      // Wait for session to be fully persisted and RequireAuth to detect it
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      // Use the cleaned returnUrl directly (already decoded)
+      const targetUrl =
+        returnUrl && returnUrl !== "/login" && returnUrl.startsWith("/")
+          ? returnUrl
+          : "/";
+      router.replace(targetUrl);
     } catch (err: unknown) {
       setMessage((err as Error).message || "Giriş başarısız.");
     } finally {
@@ -92,7 +162,14 @@ export default function LoginPage() {
         password: password.trim(),
       });
       if (signInError) throw signInError;
-      router.replace("/");
+      // Wait for session to be fully persisted and RequireAuth to detect it
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      // Use the cleaned returnUrl directly (already decoded)
+      const targetUrl =
+        returnUrl && returnUrl !== "/login" && returnUrl.startsWith("/")
+          ? returnUrl
+          : "/";
+      router.replace(targetUrl);
     } catch (err: unknown) {
       setMessage((err as Error).message || "Kayıt başarısız.");
     } finally {

@@ -121,7 +121,7 @@ export default function HomePage() {
         id: "retro",
         title: "Retro",
         description: "Takım retrosu başlat",
-        href: "/app/rooms",
+        href: "/app/rooms/create?type=retro",
         icon: "🔁",
       },
     ],

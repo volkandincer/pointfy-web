@@ -1,14 +1,17 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import RequireAuth from "@/components/auth/RequireAuth";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CreateRoomForm from "@/components/rooms/CreateRoomForm";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
-import type { RoomCreateInput } from "@/interfaces/RoomCreate.interface";
+import type {
+  RoomCreateInput,
+  RoomType,
+} from "@/interfaces/RoomCreate.interface";
 import { getSupabase } from "@/lib/supabase";
 
 function generateRoomCode(): string {
@@ -26,6 +29,8 @@ export default function CreateRoomPage() {
     []
   );
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const roomTypeFromQuery = searchParams.get("type") as RoomType | null;
   const [loading, setLoading] = useState<boolean>(false);
   const [userKey, setUserKey] = useState<string>("");
   const [username, setUsername] = useState<string>("");
@@ -38,7 +43,8 @@ export default function CreateRoomPage() {
         const { data } = await supabase.auth.getUser();
         if (!mounted) return;
         if (!data.user) {
-          router.replace("/login");
+          const returnUrl = encodeURIComponent("/app/rooms/create");
+          router.replace(`/login?returnUrl=${returnUrl}`);
           return;
         }
         setUserKey(data.user.id);
@@ -48,9 +54,14 @@ export default function CreateRoomPage() {
           .eq("key", data.user.id)
           .single();
         if (!mounted) return;
-        setUsername(userRow?.username || data.user.email?.split("@")[0] || "User");
+        setUsername(
+          userRow?.username || data.user.email?.split("@")[0] || "User"
+        );
       } catch {
-        if (mounted) router.replace("/login");
+        if (mounted) {
+          const returnUrl = encodeURIComponent("/app/rooms/create");
+          router.replace(`/login?returnUrl=${returnUrl}`);
+        }
       }
     })();
     return () => {
@@ -131,7 +142,11 @@ export default function CreateRoomPage() {
               Takımınızla birlikte çalışmak için bir oda oluşturun
             </p>
             <div className="rounded-2xl border border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
-              <CreateRoomForm onSubmit={handleCreate} loading={loading} />
+              <CreateRoomForm
+                onSubmit={handleCreate}
+                loading={loading}
+                initialRoomType={roomTypeFromQuery || undefined}
+              />
             </div>
           </div>
         </main>
@@ -140,4 +155,3 @@ export default function CreateRoomPage() {
     </RequireAuth>
   );
 }
-
