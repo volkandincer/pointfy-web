@@ -46,7 +46,9 @@ export default function PersonalTasksPage() {
       setTasks(rows || []);
       setLoading(false);
 
-      const channel = supabase.channel("personal-tasks-" + data.user.id).on(
+      const channel = supabase.channel("personal-tasks-" + data.user.id);
+      channel.on(
+        // @ts-ignore - Supabase channel type inference issue
         "postgres_changes",
         {
           event: "*",
@@ -58,12 +60,14 @@ export default function PersonalTasksPage() {
           if (!mounted) return;
           if (payload.eventType === "INSERT") {
             setTasks((prev) => [payload.new as PersonalTask, ...prev]);
-          } else if (payload.eventType === "DELETE") {
-            setTasks((prev) => prev.filter((t) => t.id !== payload.old.id));
-          } else if (payload.eventType === "UPDATE") {
+          } else if (payload.eventType === "DELETE" && payload.old) {
+            const oldId = payload.old.id;
+            setTasks((prev) => prev.filter((t) => t.id !== oldId));
+          } else if (payload.eventType === "UPDATE" && payload.new) {
+            const newTask = payload.new as PersonalTask;
             setTasks((prev) =>
               prev.map((t) =>
-                t.id === payload.new.id ? (payload.new as PersonalTask) : t
+                t.id === newTask.id ? newTask : t
               )
             );
           }

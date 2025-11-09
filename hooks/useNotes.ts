@@ -62,9 +62,10 @@ export function useNotes(): UseNotesResult {
 
         // Realtime subscription
         const channel = supabase
-          .channel("user-notes-" + userData.user.id)
-          .on(
-            "postgres_changes",
+          .channel("user-notes-" + userData.user.id);
+        channel.on(
+          // @ts-ignore - Supabase channel type inference issue
+          "postgres_changes",
             {
               event: "*",
               schema: "public",
@@ -74,12 +75,12 @@ export function useNotes(): UseNotesResult {
             (payload: { eventType: string; new?: { id: string; created_at?: string; [key: string]: unknown }; old?: { id: string } }) => {
               if (!mounted) return;
 
-              if (payload.eventType === "INSERT") {
+              if (payload.eventType === "INSERT" && payload.new) {
                 const newNote = {
-                  ...(payload.new as Note),
+                  ...(payload.new as unknown as Note),
                   createdAt: payload.new.created_at
                     ? new Date(payload.new.created_at).getTime()
-                    : Date.now(),
+                    : new Date().getTime(),
                 };
                 // Duplicate kontrolü: eğer not zaten varsa ekleme
                 setNotes((prev) => {
@@ -87,20 +88,23 @@ export function useNotes(): UseNotesResult {
                   if (exists) return prev;
                   return [newNote, ...prev];
                 });
-              } else if (payload.eventType === "DELETE") {
+              } else if (payload.eventType === "DELETE" && payload.old) {
+                const oldId = payload.old.id;
                 setNotes((prev) =>
-                  prev.filter((n) => n.id !== payload.old.id)
+                  prev.filter((n) => n.id !== oldId)
                 );
-              } else if (payload.eventType === "UPDATE") {
+              } else if (payload.eventType === "UPDATE" && payload.new) {
+                const newPayload = payload.new;
                 const updatedNote = {
-                  ...(payload.new as Note),
-                  createdAt: payload.new.created_at
-                    ? new Date(payload.new.created_at).getTime()
-                    : Date.now(),
+                  ...(newPayload as unknown as Note),
+                  createdAt: newPayload.created_at
+                    ? new Date(newPayload.created_at).getTime()
+                    : new Date().getTime(),
                 };
+                const newId = newPayload.id;
                 setNotes((prev) =>
                   prev.map((n) =>
-                    n.id === payload.new.id ? updatedNote : n
+                    n.id === newId ? updatedNote : n
                   )
                 );
               }

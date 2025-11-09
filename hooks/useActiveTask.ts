@@ -47,7 +47,9 @@ export function useActiveTask(roomId: string): UseActiveTaskResult {
     const supabase = getSupabase();
     // useTasks ile aynı channel adını kullanıyoruz ama farklı bir channel instance oluşturuyoruz
     // Bu sayede her hook kendi subscription'ını yönetir
-    const channel = supabase.channel("active-task-room-" + roomId).on(
+    const channel = supabase.channel("active-task-room-" + roomId);
+    channel.on(
+      // @ts-ignore - Supabase channel type inference issue
       "postgres_changes",
       {
         event: "*",
@@ -55,18 +57,19 @@ export function useActiveTask(roomId: string): UseActiveTaskResult {
         table: "tasks",
         filter: `room_id=eq.${roomId}`,
       },
-      (payload: { eventType: string; new?: { id: string; status: string; updated_at: string }; old?: { id: string } }) => {
+      (payload: { eventType: string; new?: { id: string; status: string; updated_at: string }; old?: { id: string; status?: string } }) => {
         if (!mounted) return;
         // Task güncellendiğinde veya eklendiğinde aktif task'ı yeniden çek
         // Özellikle status değişikliklerini dinle
         if (
           payload.eventType === "UPDATE" &&
+          payload.new &&
           (payload.new.status === "active" ||
             payload.new.status === "completed" ||
             payload.old?.status === "active")
         ) {
           fetchActiveTask();
-        } else if (payload.eventType === "INSERT" && payload.new.status === "active") {
+        } else if (payload.eventType === "INSERT" && payload.new && payload.new.status === "active") {
           // Yeni task active olarak eklendiyse güncelle
           fetchActiveTask();
         } else if (payload.eventType === "DELETE") {

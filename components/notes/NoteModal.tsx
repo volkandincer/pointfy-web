@@ -42,7 +42,7 @@ const NoteModal = memo(function NoteModal({
       // Kategori değerini kontrol et, eğer constraint'te yoksa 'general' yap
       const noteCategory = initialNote?.category || "";
       const validCategories = categories.map((c) => c.value);
-      if (noteCategory && validCategories.includes(noteCategory)) {
+      if (noteCategory && validCategories.includes(noteCategory as typeof validCategories[number])) {
         setCategory(noteCategory);
       } else {
         setCategory("general");

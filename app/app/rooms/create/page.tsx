@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import RequireAuth from "@/components/auth/RequireAuth";
 import Header from "@/components/layout/Header";
@@ -23,7 +23,7 @@ function generateRoomCode(): string {
   return result;
 }
 
-export default function CreateRoomPage() {
+function CreateRoomPageContent() {
   const navigationItems: NavigationItem[] = useMemo(
     () => getDefaultNavigationItems(),
     []
@@ -153,5 +153,23 @@ export default function CreateRoomPage() {
         <Footer navigationItems={navigationItems} />
       </>
     </RequireAuth>
+  );
+}
+
+export default function CreateRoomPage() {
+  return (
+    <Suspense fallback={
+      <RequireAuth>
+        <>
+          <Header navigationItems={getDefaultNavigationItems()} />
+          <main className="container mx-auto px-4 py-16">
+            <div className="h-40 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800" />
+          </main>
+          <Footer navigationItems={getDefaultNavigationItems()} />
+        </>
+      </RequireAuth>
+    }>
+      <CreateRoomPageContent />
+    </Suspense>
   );
 }

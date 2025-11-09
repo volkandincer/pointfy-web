@@ -85,26 +85,9 @@ export default function VotedTasksPage() {
 
         // Her vote için task'ın istatistiklerini hesapla
         const tasksWithStats = await Promise.all(
-          (votesData || []).map(async (vote: {
-            id: string;
-            task_id: string;
-            point: number | null;
-            created_at: string;
-            tasks: {
-              id: string;
-              title: string;
-              description: string | null;
-              status: string;
-              created_at: string;
-              room_id: string;
-              rooms: {
-                id: string;
-                name: string;
-                code: string;
-              };
-            };
-          }) => {
-            const task = vote.tasks;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (votesData || []).map(async (vote: any) => {
+            const task = Array.isArray(vote.tasks) ? vote.tasks[0] : vote.tasks;
             const room = task.rooms;
 
             // Bu task için tüm oyları getir

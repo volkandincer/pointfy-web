@@ -49,7 +49,9 @@ export function useRetroCards(roomId: string): UseRetroCardsResult {
     fetchRetroCards();
 
     const supabase = getSupabase();
-    const channel = supabase.channel("retro-cards-room-" + roomId).on(
+    const channel = supabase.channel("retro-cards-room-" + roomId);
+    channel.on(
+      // @ts-ignore - Supabase channel type inference issue
       "postgres_changes",
       {
         event: "*",
@@ -59,14 +61,17 @@ export function useRetroCards(roomId: string): UseRetroCardsResult {
       },
       (payload: { eventType: string; new?: { id: string; [key: string]: unknown }; old?: { id: string } }) => {
         if (!mounted) return;
-        if (payload.eventType === "INSERT") {
-          setCards((prev) => [...prev, payload.new as RetroCard]);
-        } else if (payload.eventType === "DELETE") {
-          setCards((prev) => prev.filter((c) => c.id !== payload.old.id));
-        } else if (payload.eventType === "UPDATE") {
+        if (payload.eventType === "INSERT" && payload.new) {
+          setCards((prev) => [...prev, payload.new as unknown as RetroCard]);
+        } else if (payload.eventType === "DELETE" && payload.old) {
+          const oldId = payload.old.id;
+          setCards((prev) => prev.filter((c) => c.id !== oldId));
+        } else if (payload.eventType === "UPDATE" && payload.new) {
+          const newPayload = payload.new;
+          const newId = newPayload.id;
           setCards((prev) =>
             prev.map((c) =>
-              c.id === payload.new.id ? (payload.new as RetroCard) : c
+              c.id === newId ? (newPayload as unknown as RetroCard) : c
             )
           );
         }

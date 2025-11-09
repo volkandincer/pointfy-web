@@ -103,9 +103,12 @@ const TaskFormModal = memo(function TaskFormModal({
     [description, onClose, onSubmit, title]
   );
 
+  const isCreateMode = mode === "create";
+  const isSelectMode = mode === "select";
+
   return (
     <Modal open={open} onClose={onClose} title="Yeni Task Ekle">
-      {mode === "create" ? (
+      {isCreateMode ? (
         <>
           {/* Mode Seçimi */}
           <div className="mb-4 flex gap-2">
@@ -113,7 +116,7 @@ const TaskFormModal = memo(function TaskFormModal({
               type="button"
               onClick={() => setMode("create")}
               className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
-                mode === "create"
+                isCreateMode
                   ? "bg-blue-600 text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
               }`}
@@ -124,7 +127,7 @@ const TaskFormModal = memo(function TaskFormModal({
               type="button"
               onClick={() => setMode("select")}
               className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
-                mode === "select"
+                isSelectMode
                   ? "bg-blue-600 text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
               }`}
@@ -195,7 +198,7 @@ const TaskFormModal = memo(function TaskFormModal({
               type="button"
               onClick={() => setMode("create")}
               className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
-                mode === "create"
+                isCreateMode
                   ? "bg-blue-600 text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
               }`}
@@ -206,7 +209,7 @@ const TaskFormModal = memo(function TaskFormModal({
               type="button"
               onClick={() => setMode("select")}
               className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
-                mode === "select"
+                isSelectMode
                   ? "bg-blue-600 text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
               }`}

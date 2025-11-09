@@ -109,7 +109,9 @@ export function useVotes(
     }
     fetchVotes();
     const supabase = getSupabase();
-    const channel = supabase.channel("votes-task-" + taskId).on(
+    const channel = supabase.channel("votes-task-" + taskId);
+    // @ts-ignore - Supabase channel type inference issue
+    channel.on(
       "postgres_changes",
       {
         event: "*",

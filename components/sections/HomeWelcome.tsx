@@ -28,10 +28,12 @@ const HomeWelcome = memo(function HomeWelcome() {
   const [usernameState, setUsernameState] = useState<string>("");
 
   useEffect(() => {
+    let mounted = true;
     async function fetchUserInfo() {
       try {
         const supabase = getSupabase();
         const { data: userData } = await supabase.auth.getUser();
+        if (!mounted) return;
         if (userData.user) {
           setUserKey(userData.user.id);
           const { data: userRow } = await supabase
@@ -39,6 +41,7 @@ const HomeWelcome = memo(function HomeWelcome() {
             .select("username")
             .eq("key", userData.user.id)
             .single();
+          if (!mounted) return;
           if (userRow?.username) {
             setUsernameState(userRow.username);
           } else {

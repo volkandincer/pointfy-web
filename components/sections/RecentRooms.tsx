@@ -201,7 +201,7 @@ const RecentRooms = memo(function RecentRooms() {
                   Tüm odaları gör
                 </span>
                 <div className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-50 text-xs font-bold text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
-                  {rooms.length - 3}
+                  {(rooms?.length || 0) - 3}
                 </div>
               </button>
             )}

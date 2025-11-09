@@ -164,7 +164,7 @@ function HomePageContent() {
     <>
       <Header navigationItems={navigationItems} />
       <main>
-        {userId ? <HomeWelcome username={username} /> : <Hero />}
+        {userId ? <HomeWelcome /> : <Hero />}
         <QuickActions actions={actions} />
         <RecentRooms />
         <Features features={features} />

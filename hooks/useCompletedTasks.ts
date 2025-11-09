@@ -103,7 +103,9 @@ export function useCompletedTasks(roomId: string): UseCompletedTasksResult {
     let mounted = true;
     fetchCompletedTasks();
     const supabase = getSupabase();
-    const channel = supabase.channel("completed-tasks-" + roomId).on(
+    const channel = supabase.channel("completed-tasks-" + roomId);
+    channel.on(
+      // @ts-ignore - Supabase channel type inference issue
       "postgres_changes",
       {
         event: "*",
@@ -115,11 +117,13 @@ export function useCompletedTasks(roomId: string): UseCompletedTasksResult {
         if (!mounted) return;
         if (
           payload.eventType === "UPDATE" &&
+          payload.new &&
           payload.new.status === "completed"
         ) {
           fetchCompletedTasks();
         } else if (
           payload.eventType === "INSERT" &&
+          payload.new &&
           payload.new.status === "completed"
         ) {
           fetchCompletedTasks();

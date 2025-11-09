@@ -101,7 +101,9 @@ export function useVotingSession(roomId: string): VotingSessionState {
     checkActiveTask();
 
     const supabase = getSupabase();
-    const channel = supabase.channel("tasks-status-" + roomId).on(
+    const channel = supabase.channel("tasks-status-" + roomId);
+    channel.on(
+      // @ts-ignore - Supabase channel type inference issue
       "postgres_changes",
       {
         event: "*",
@@ -110,11 +112,12 @@ export function useVotingSession(roomId: string): VotingSessionState {
         filter: `room_id=eq.${roomId}`,
       },
       (payload: { eventType: string; new?: { id: string; status: string; updated_at: string }; old?: { id: string } }) => {
-        if (payload.eventType === "UPDATE" && payload.new.status === "active") {
+        if (payload.eventType === "UPDATE" && payload.new && payload.new.status === "active") {
           // Yeni active task - timer'ı başlat (updated_at zamanını kullanarak)
           if (timer) clearInterval(timer);
           
-          const taskStartTime = new Date(payload.new.updated_at).getTime();
+          const newPayload = payload.new;
+          const taskStartTime = new Date(newPayload.updated_at).getTime();
           const now = Date.now();
           const elapsedSeconds = Math.floor((now - taskStartTime) / 1000);
           const totalDuration = 60;
@@ -135,7 +138,7 @@ export function useVotingSession(roomId: string): VotingSessionState {
               supabase
                 .from("tasks")
                 .update({ status: "pending" })
-                .eq("id", payload.new.id)
+                .eq("id", newPayload.id)
                 .then(({ error: error1 }) => {
                   if (error1) {
                     console.error("Task status güncelleme hatası:", error1);
@@ -148,6 +151,7 @@ export function useVotingSession(roomId: string): VotingSessionState {
           }, 1000);
         } else if (
           payload.eventType === "UPDATE" &&
+          payload.new &&
           payload.new.status === "pending"
         ) {
           if (timer) clearInterval(timer);
@@ -155,6 +159,7 @@ export function useVotingSession(roomId: string): VotingSessionState {
           setRemainingTime(0);
         } else if (
           payload.eventType === "UPDATE" &&
+          payload.new &&
           payload.new.status === "completed"
         ) {
           if (timer) clearInterval(timer);

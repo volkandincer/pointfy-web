@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -8,7 +8,7 @@ import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import { getSupabase } from "@/lib/supabase";
 
-export default function LoginPage() {
+function LoginPageContent() {
   const navigationItems: NavigationItem[] = getDefaultNavigationItems();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -284,5 +284,21 @@ export default function LoginPage() {
       </main>
       <Footer navigationItems={navigationItems} />
     </>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <>
+        <Header navigationItems={getDefaultNavigationItems()} />
+        <main className="container mx-auto px-4 py-16">
+          <div className="h-40 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800" />
+        </main>
+        <Footer navigationItems={getDefaultNavigationItems()} />
+      </>
+    }>
+      <LoginPageContent />
+    </Suspense>
   );
 }

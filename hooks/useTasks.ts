@@ -60,7 +60,9 @@ export function useTasks(roomId: string): UseTasksResult {
     let mounted = true;
     fetchTasks();
     const supabase = getSupabase();
-    const channel = supabase.channel("tasks-room-" + roomId).on(
+    const channel = supabase.channel("tasks-room-" + roomId);
+    channel.on(
+      // @ts-ignore - Supabase channel type inference issue
       "postgres_changes",
       {
         event: "*",
@@ -73,26 +75,37 @@ export function useTasks(roomId: string): UseTasksResult {
         switch (payload.eventType) {
           case "INSERT":
             // Yeni task eklendiğinde listeye ekle
-            setTasks((prev) => {
-              // Duplicate kontrolü - eğer task zaten varsa ekleme
-              const exists = prev.some((task) => task.id === payload.new.id);
-              if (exists) return prev;
-              return [...prev, payload.new];
-            });
+            if (payload.new) {
+              const newPayload = payload.new;
+              const newId = newPayload.id;
+              setTasks((prev) => {
+                // Duplicate kontrolü - eğer task zaten varsa ekleme
+                const exists = prev.some((task) => task.id === newId);
+                if (exists) return prev;
+                return [...prev, newPayload as unknown as TaskInfo];
+              });
+            }
             break;
           case "UPDATE":
             // Task güncellendiğinde (özellikle status değişiklikleri)
-            setTasks((prev) =>
-              prev.map((task) =>
-                task.id === payload.new.id ? payload.new : task
-              )
-            );
+            if (payload.new) {
+              const newPayload = payload.new;
+              const newId = newPayload.id;
+              setTasks((prev) =>
+                prev.map((task) =>
+                  task.id === newId ? (newPayload as unknown as TaskInfo) : task
+                )
+              );
+            }
             break;
           case "DELETE":
             // Task silindiğinde listeden çıkar
-            setTasks((prev) =>
-              prev.filter((task) => task.id !== payload.old.id)
-            );
+            if (payload.old) {
+              const oldId = payload.old.id;
+              setTasks((prev) =>
+                prev.filter((task) => task.id !== oldId)
+              );
+            }
             break;
           default:
             // Diğer durumlarda tüm listeyi yeniden çek
