@@ -92,7 +92,7 @@ function HomePageContent() {
         id: "5",
         title: "Gerçek Zamanlı Senkronizasyon",
         description:
-          "Supabase Realtime ile anında güncellemeler alın ve değişiklikleri takip edin.",
+          "Realtime ile anında güncellemeler alın ve değişiklikleri takip edin.",
       },
       {
         id: "6",
@@ -126,6 +126,13 @@ function HomePageContent() {
         description: "Kişisel notlarınızı görüntüleyin",
         href: "/app/notes",
         icon: "✏️",
+      },
+      {
+        id: "voted-tasks",
+        title: "Puanladığım Task'lar",
+        description: "Oy verdiğiniz task'ları görüntüleyin",
+        href: "/app/voted-tasks",
+        icon: "📊",
       },
       {
         id: "retro",

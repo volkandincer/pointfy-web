@@ -7,8 +7,10 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import UserVotingView from "@/components/voting/UserVotingView";
 import AdminVotingView from "@/components/voting/AdminVotingView";
+import UserCompletedTasksView from "@/components/voting/UserCompletedTasksView";
 import TaskFormModal from "@/components/rooms/TaskFormModal";
 import TaskCard from "@/components/rooms/TaskCard";
+import RoomPinModal from "@/components/rooms/RoomPinModal";
 import RetroRoomView from "@/components/retro/RetroRoomView";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
@@ -18,6 +20,7 @@ import { getSupabase } from "@/lib/supabase";
 import { useActiveTask } from "@/hooks/useActiveTask";
 import { useTasks } from "@/hooks/useTasks";
 import { useRoomAdmin } from "@/hooks/useRoomAdmin";
+import { checkRoomEntry, verifyRoomPin, addUserToRoom } from "@/lib/roomUtils";
 
 export default function RoomDetailPage() {
   const navigationItems: NavigationItem[] = useMemo(
@@ -33,6 +36,10 @@ export default function RoomDetailPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [showTaskModal, setShowTaskModal] = useState<boolean>(false);
   const [creatingTask, setCreatingTask] = useState<boolean>(false);
+  const [showPinModal, setShowPinModal] = useState<boolean>(false);
+  const [pinError, setPinError] = useState<string | null>(null);
+  const [pinLoading, setPinLoading] = useState<boolean>(false);
+  const [checkingPin, setCheckingPin] = useState<boolean>(true);
 
   const { activeTask, loading: activeTaskLoading } = useActiveTask(roomId);
   const { tasks, loading: tasksLoading } = useTasks(roomId);
@@ -71,7 +78,7 @@ export default function RoomDetailPage() {
         const { data: roomData } = await supabase
           .from("rooms")
           .select(
-            "id, name, code, created_by_key, created_by_username, is_active, room_type"
+            "id, name, code, created_by_key, created_by_username, is_active, room_type, is_private, room_password"
           )
           .eq("id", roomId)
           .single();
@@ -81,6 +88,48 @@ export default function RoomDetailPage() {
           return;
         }
         setRoom(roomData);
+
+        // PIN kontrolü - eğer oda şifreli ise ve kullanıcı odada değilse PIN iste
+        if (roomData.is_private && userData.user) {
+          // Kullanıcının odada olup olmadığını kontrol et
+          const { data: participantData } = await supabase
+            .from("room_participants")
+            .select("user_key")
+            .eq("room_code", roomData.code)
+            .eq("user_key", userData.user.id)
+            .single();
+          
+          if (!mounted) return;
+          
+          // Kullanıcı odada değilse PIN iste
+          if (!participantData) {
+            setCheckingPin(false);
+            setShowPinModal(true);
+            return;
+          }
+        }
+
+        // Şifresiz oda veya kullanıcı zaten odada - kullanıcıyı odaya ekle (eğer değilse)
+        if (userData.user && !roomData.is_private) {
+          const { data: participantData } = await supabase
+            .from("room_participants")
+            .select("user_key")
+            .eq("room_code", roomData.code)
+            .eq("user_key", userData.user.id)
+            .single();
+          
+          if (!mounted) return;
+          
+          // Kullanıcı odada değilse ekle
+          if (!participantData) {
+            if (userRow?.username) {
+              await addUserToRoom(roomData.code, userData.user.id, userRow.username);
+            } else {
+              const emailUsername = userData.user.email?.split("@")[0] || "User";
+              await addUserToRoom(roomData.code, userData.user.id, emailUsername);
+            }
+          }
+        }
         // Admin kontrolü useRoomAdmin hook'u tarafından yapılıyor
       } catch (err) {
         console.error("Room detail fetch error:", err);
@@ -89,13 +138,48 @@ export default function RoomDetailPage() {
           router.replace("/app/rooms");
         }
       } finally {
-        if (mounted) setLoading(false);
+        if (mounted) {
+          setLoading(false);
+          setCheckingPin(false);
+        }
       }
     })();
     return () => {
       mounted = false;
     };
   }, [roomId, router]);
+
+  const handlePinSubmit = useCallback(
+    async (pin: string) => {
+      if (!room) return;
+
+      setPinLoading(true);
+      setPinError(null);
+
+      try {
+        const result = await verifyRoomPin(room.id, pin);
+
+        if (!result.success) {
+          setPinError(result.error || "PIN yanlış!");
+          setPinLoading(false);
+          return;
+        }
+
+        // PIN doğru - kullanıcıyı odaya ekle
+        if (userKey && username) {
+          await addUserToRoom(room.code, userKey, username);
+        }
+
+        setShowPinModal(false);
+        setPinError(null);
+      } catch (err) {
+        setPinError(err instanceof Error ? err.message : "Bilinmeyen hata");
+      } finally {
+        setPinLoading(false);
+      }
+    },
+    [room, userKey, username]
+  );
 
   const handleSetActiveTask = useCallback(
     async (taskId: string) => {
@@ -160,7 +244,7 @@ export default function RoomDetailPage() {
     [roomId, userKey, username, isAdmin]
   );
 
-  if (loading || activeTaskLoading || adminLoading) {
+  if (loading || activeTaskLoading || adminLoading || checkingPin) {
     return (
       <RequireAuth>
         <>
@@ -233,6 +317,15 @@ export default function RoomDetailPage() {
                     kadar bekleyin.
                   </p>
                 </div>
+
+                {/* User için tamamlanan task'lar */}
+                {!isAdmin && (
+                  <UserCompletedTasksView
+                    roomId={roomId}
+                    userKey={userKey}
+                    username={username}
+                  />
+                )}
 
                 {isAdmin && (
                   <>
@@ -329,6 +422,17 @@ export default function RoomDetailPage() {
           onClose={() => setShowTaskModal(false)}
           onSubmit={handleCreateTask}
           loading={creatingTask}
+        />
+        <RoomPinModal
+          open={showPinModal}
+          onClose={() => {
+            setShowPinModal(false);
+            setPinError(null);
+            router.replace("/app/rooms");
+          }}
+          onSubmit={handlePinSubmit}
+          loading={pinLoading}
+          error={pinError}
         />
         <Footer navigationItems={navigationItems} />
       </>
