@@ -120,7 +120,7 @@ export default function HomePage() {
         id: "notes",
         title: "Notlarım",
         description: "Kişisel notlarınızı görüntüleyin",
-        href: "/app/rooms",
+        href: "/app/notes",
         icon: "✏️",
       },
       {
