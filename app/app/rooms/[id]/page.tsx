@@ -11,6 +11,7 @@ import UserCompletedTasksView from "@/components/voting/UserCompletedTasksView";
 import TaskFormModal from "@/components/rooms/TaskFormModal";
 import TaskCard from "@/components/rooms/TaskCard";
 import RoomPinModal from "@/components/rooms/RoomPinModal";
+import RoomParticipants from "@/components/rooms/RoomParticipants";
 import RetroRoomView from "@/components/retro/RetroRoomView";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
@@ -283,6 +284,17 @@ export default function RoomDetailPage() {
                 ← Geri
               </button>
             </div>
+
+            {/* Katılımcılar - Hem admin hem user için görünür */}
+            {room?.code && (
+              <div className="mb-6">
+                <RoomParticipants
+                  roomCode={room.code}
+                  currentUserKey={userKey}
+                  isAdmin={isAdmin}
+                />
+              </div>
+            )}
 
             {room?.room_type === "retro" ? (
               <RetroRoomView

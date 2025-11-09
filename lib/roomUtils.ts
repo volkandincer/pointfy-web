@@ -86,7 +86,7 @@ export async function checkRoomEntry(
 }
 
 /**
- * Kullanıcıyı odaya ekler
+ * Kullanıcıyı odaya ekler veya günceller
  * @param roomCode Oda kodu
  * @param userKey Kullanıcı key'i
  * @param username Kullanıcı adı
@@ -98,21 +98,49 @@ export async function addUserToRoom(
 ): Promise<void> {
   try {
     const supabase = getSupabase();
-    const { error } = await supabase.from("room_participants").insert({
-      room_code: roomCode,
-      user_key: userKey,
-      username: username,
-      is_admin: false,
-      joined_at: new Date().toISOString(),
-    });
+    
+    // Önce kullanıcının odada olup olmadığını kontrol et
+    const { data: existingParticipant, error: checkError } = await supabase
+      .from("room_participants")
+      .select("user_key, is_admin")
+      .eq("room_code", roomCode)
+      .eq("user_key", userKey)
+      .maybeSingle();
 
-    if (error) {
-      // Eğer kullanıcı zaten odada ise, bu hata normal olabilir (unique constraint)
-      if (error.code !== "23505") {
-        // Unique constraint violation değilse gerçek bir hata
-        throw error;
+    if (checkError && checkError.code !== "PGRST116") {
+      // PGRST116 = no rows found, bu normal
+      throw checkError;
+    }
+
+    if (existingParticipant) {
+      // Kullanıcı zaten odada - joined_at'i güncelle (tekrar geldiğinde)
+      const { error: updateError } = await supabase
+        .from("room_participants")
+        .update({
+          joined_at: new Date().toISOString(),
+          username: username, // Username değişmiş olabilir
+        })
+        .eq("room_code", roomCode)
+        .eq("user_key", userKey);
+
+      if (updateError) {
+        throw updateError;
       }
-      // Kullanıcı zaten odada, bu normal
+    } else {
+      // Kullanıcı odada değil - ekle
+      const { error: insertError } = await supabase
+        .from("room_participants")
+        .insert({
+          room_code: roomCode,
+          user_key: userKey,
+          username: username,
+          is_admin: false,
+          joined_at: new Date().toISOString(),
+        });
+
+      if (insertError) {
+        throw insertError;
+      }
     }
   } catch (err) {
     console.error("Odaya katılma hatası:", err);
