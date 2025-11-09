@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/ui/Modal";
 import RoomPinModal from "@/components/rooms/RoomPinModal";
@@ -34,9 +34,14 @@ const AllRoomsModal = memo(function AllRoomsModal({
   const [pinLoading, setPinLoading] = useState<boolean>(false);
   const [userKey, setUserKey] = useState<string>("");
   const [username, setUsername] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      // Modal kapandığında arama sorgusunu temizle
+      setSearchQuery("");
+      return;
+    }
 
     let mounted = true;
     async function fetchRooms() {
@@ -151,8 +156,49 @@ const AllRoomsModal = memo(function AllRoomsModal({
     }
   };
 
+  // Arama filtresi
+  const filteredRooms = useMemo(() => {
+    if (!searchQuery.trim()) return rooms;
+    const query = searchQuery.toLowerCase().trim();
+    return rooms.filter(
+      (room) =>
+        room.name?.toLowerCase().includes(query) ||
+        room.code?.toLowerCase().includes(query) ||
+        room.created_by_username?.toLowerCase().includes(query)
+    );
+  }, [rooms, searchQuery]);
+
   return (
     <Modal open={open} title="Tüm Aktif Odalar" onClose={onClose}>
+      {/* Arama Input */}
+      <div className="mb-4">
+        <div className="relative">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Oda adı, kod veya oluşturan ile ara..."
+            className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 pl-10 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
+          />
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+            🔍
+          </span>
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            >
+              ✕
+            </button>
+          )}
+        </div>
+        {searchQuery && (
+          <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+            {filteredRooms.length} oda bulundu
+          </p>
+        )}
+      </div>
+
       <div className="max-h-[60vh] overflow-y-auto pr-2 -mr-2">
         {loading ? (
           <div className="space-y-3">
@@ -174,9 +220,19 @@ const AllRoomsModal = memo(function AllRoomsModal({
               Hiç aktif oda yok.
             </p>
           </div>
+        ) : filteredRooms.length === 0 ? (
+          <div className="py-8 text-center">
+            <p className="mb-2 text-4xl">🔍</p>
+            <p className="text-sm font-medium text-gray-900 dark:text-white">
+              Arama sonucu bulunamadı
+            </p>
+            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+              &quot;{searchQuery}&quot; için sonuç yok
+            </p>
+          </div>
         ) : (
           <div className="space-y-3">
-            {rooms.map((room) => (
+            {filteredRooms.map((room) => (
               <button
                 key={room.id}
                 onClick={() => handleRoomClick(room.id)}
