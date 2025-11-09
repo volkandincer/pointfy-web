@@ -13,6 +13,5 @@ export function getDefaultNavigationItems(): NavigationItem[] {
     { label: "İndir", href: "/#download" },
     { label: "Hakkında", href: "/about" },
     { label: "İletişim", href: "/contact" },
-    { label: "Fiyatlandırma", href: "/pricing" },
   ];
 }
