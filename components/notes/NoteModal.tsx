@@ -21,6 +21,7 @@ const CATEGORIES = [
   { label: "Yapılacaklar", value: "todo" },
   { label: "Önemli", value: "important" },
   { label: "Genel", value: "general" },
+  { label: "Özel...", value: "custom" },
 ] as const;
 
 const NoteModal = memo(function NoteModal({
@@ -31,6 +32,7 @@ const NoteModal = memo(function NoteModal({
 }: NoteModalProps) {
   const [content, setContent] = useState<string>("");
   const [category, setCategory] = useState<string>("general");
+  const [customCategory, setCustomCategory] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [inputFocused, setInputFocused] = useState<boolean>(false);
 
@@ -39,22 +41,33 @@ const NoteModal = memo(function NoteModal({
   useEffect(() => {
     if (open) {
       setContent(initialNote?.content || "");
-      // Kategori değerini kontrol et, eğer constraint'te yoksa 'general' yap
+      // Kategori değerini kontrol et
       const noteCategory = initialNote?.category || "";
       const validCategories = categories.map((c) => c.value);
+      // Eğer kategori constraint'teki kategorilerden biri değilse, custom olarak işaretle
       if (noteCategory && validCategories.includes(noteCategory as typeof validCategories[number])) {
         setCategory(noteCategory);
+        setCustomCategory("");
+      } else if (noteCategory) {
+        // Custom kategori
+        setCategory("custom");
+        setCustomCategory(noteCategory);
       } else {
         setCategory("general");
+        setCustomCategory("");
       }
       setInputFocused(false);
     }
   }, [initialNote, open, categories]);
 
   const getSelectedCategory = useCallback(() => {
+    // Eğer custom kategori seçildiyse, custom kategori adını döndür
+    if (category === "custom") {
+      return customCategory.trim() || "Özel";
+    }
     // Constraint'teki kategorilerden birini döndür
     return category || "general";
-  }, [category]);
+  }, [category, customCategory]);
 
   const submit = useCallback(async () => {
     const selectedCategory = getSelectedCategory();
@@ -70,6 +83,7 @@ const NoteModal = memo(function NoteModal({
       );
       setContent("");
       setCategory("general");
+      setCustomCategory("");
       onClose();
     } catch (error) {
       console.error("Error submitting note:", error);
@@ -113,7 +127,12 @@ const NoteModal = memo(function NoteModal({
               <button
                 key={cat.value}
                 type="button"
-                onClick={() => setCategory(cat.value)}
+                onClick={() => {
+                  setCategory(cat.value);
+                  if (cat.value !== "custom") {
+                    setCustomCategory("");
+                  }
+                }}
                 disabled={loading}
                 className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                   category === cat.value
@@ -125,6 +144,16 @@ const NoteModal = memo(function NoteModal({
               </button>
             ))}
           </div>
+          {category === "custom" && (
+            <input
+              type="text"
+              value={customCategory}
+              onChange={(e) => setCustomCategory(e.target.value)}
+              placeholder="Özel kategori adı..."
+              maxLength={20}
+              className="mt-3 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+          )}
         </div>
 
 
@@ -139,7 +168,7 @@ const NoteModal = memo(function NoteModal({
           </button>
           <button
             type="button"
-            disabled={loading || !content.trim() || !getSelectedCategory()}
+            disabled={loading || !content.trim() || !getSelectedCategory() || (category === "custom" && !customCategory.trim())}
             onClick={submit}
             className="inline-flex h-11 items-center justify-center rounded-xl bg-blue-600 px-6 text-base font-semibold text-white transition hover:bg-blue-700 disabled:opacity-60"
           >

@@ -33,6 +33,16 @@ export default function NotesPage() {
     general: "Genel",
   };
 
+  // Custom kategoriler için label'ı direkt göster
+  const getCategoryLabel = (cat: string): string => {
+    if (cat === "Tümü") return cat;
+    // Eğer constraint'teki kategorilerden biri değilse, direkt kategori adını göster (custom kategori)
+    if (CATEGORY_LABELS[cat]) {
+      return CATEGORY_LABELS[cat];
+    }
+    return cat;
+  };
+
   // Mevcut kategorileri çıkar (label'larla birlikte)
   const categories = useMemo(() => {
     const cats = Array.from(new Set(notes.map((n) => n.category)));
@@ -76,7 +86,7 @@ export default function NotesPage() {
                           : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
                       }`}
                     >
-                      {cat === "Tümü" ? cat : CATEGORY_LABELS[cat] || cat}
+                      {getCategoryLabel(cat)}
                     </button>
                   ))}
                 </div>
