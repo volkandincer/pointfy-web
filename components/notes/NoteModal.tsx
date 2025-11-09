@@ -63,7 +63,7 @@ const NoteModal = memo(function NoteModal({
   const getSelectedCategory = useCallback(() => {
     // Eğer custom kategori seçildiyse, custom kategori adını döndür
     if (category === "custom") {
-      return customCategory.trim() || "Özel";
+      return customCategory.trim();
     }
     // Constraint'teki kategorilerden birini döndür
     return category || "general";
@@ -145,14 +145,21 @@ const NoteModal = memo(function NoteModal({
             ))}
           </div>
           {category === "custom" && (
-            <input
-              type="text"
-              value={customCategory}
-              onChange={(e) => setCustomCategory(e.target.value)}
-              placeholder="Özel kategori adı..."
-              maxLength={20}
-              className="mt-3 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
+            <div className="mt-3">
+              <input
+                type="text"
+                value={customCategory}
+                onChange={(e) => setCustomCategory(e.target.value)}
+                placeholder="Özel kategori adı..."
+                maxLength={20}
+                disabled={loading}
+                autoFocus
+                className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              />
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                Özel kategori adınızı yazın (max 20 karakter)
+              </p>
+            </div>
           )}
         </div>
 
@@ -168,7 +175,7 @@ const NoteModal = memo(function NoteModal({
           </button>
           <button
             type="button"
-            disabled={loading || !content.trim() || !getSelectedCategory() || (category === "custom" && !customCategory.trim())}
+            disabled={loading || !content.trim() || !getSelectedCategory()}
             onClick={submit}
             className="inline-flex h-11 items-center justify-center rounded-xl bg-blue-600 px-6 text-base font-semibold text-white transition hover:bg-blue-700 disabled:opacity-60"
           >
