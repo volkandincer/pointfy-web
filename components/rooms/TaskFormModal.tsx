@@ -45,7 +45,7 @@ const TaskFormModal = memo(function TaskFormModal({
 
         const { data, error } = await supabase
           .from("user_personal_tasks")
-          .select("id, title, description, category, priority, created_at")
+          .select("id, user_key, title, description, category, priority, created_at")
           .eq("user_key", userData.user.id)
           .order("priority", { ascending: false })
           .order("created_at", { ascending: false });
@@ -56,7 +56,7 @@ const TaskFormModal = memo(function TaskFormModal({
           console.error("Personal tasks fetch error:", error);
           if (mounted) setPersonalTasks([]);
         } else {
-          if (mounted) setPersonalTasks(data || []);
+          if (mounted) setPersonalTasks((data || []) as PersonalTask[]);
         }
       } catch (err) {
         console.error("Personal tasks fetch exception:", err);
