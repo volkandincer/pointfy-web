@@ -9,13 +9,16 @@ import Features from "@/components/sections/Features";
 import CTA from "@/components/sections/CTA";
 import RecentRooms from "@/components/sections/RecentRooms";
 import HomeWelcome from "@/components/sections/HomeWelcome";
+import GlobalNoteFab from "@/components/notes/GlobalNoteFab";
+import ToastContainer from "@/components/ui/ToastContainer";
+import { ToastProvider, useToastContext } from "@/contexts/ToastContext";
 import type { Feature } from "@/interfaces/Feature.interface";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type { QuickAction } from "@/interfaces/QuickAction.interface";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import { getSupabase } from "@/lib/supabase";
 
-export default function HomePage() {
+function HomePageContent() {
   const navigationItems: NavigationItem[] = useMemo(
     () => getDefaultNavigationItems(),
     []
@@ -23,6 +26,7 @@ export default function HomePage() {
   const [userId, setUserId] = useState<string | null>(null);
   const [username, setUsername] = useState<string | undefined>(undefined);
   const [checkingAuth, setCheckingAuth] = useState<boolean>(true);
+  const { toasts, removeToast } = useToastContext();
 
   useEffect(() => {
     let mounted = true;
@@ -159,7 +163,17 @@ export default function HomePage() {
         <Features features={features} />
         <CTA />
       </main>
+      {userId ? <GlobalNoteFab /> : null}
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
       <Footer navigationItems={navigationItems} />
     </>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <ToastProvider>
+      <HomePageContent />
+    </ToastProvider>
   );
 }
