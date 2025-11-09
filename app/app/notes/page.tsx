@@ -106,9 +106,9 @@ export default function NotesPage() {
                     try {
                       await removeNote(id);
                       showToast("Not başarıyla silindi!", "success");
-                    } catch (error: any) {
+                    } catch (error: unknown) {
                       showToast(
-                        `Not silinemedi: ${error?.message || "Bilinmeyen hata"}`,
+                        `Not silinemedi: ${error instanceof Error ? error.message : "Bilinmeyen hata"}`,
                         "error"
                       );
                     }
@@ -141,10 +141,10 @@ export default function NotesPage() {
                 showToast("Not başarıyla kaydedildi!", "success");
               }
               setEditingNote(null);
-            } catch (error: any) {
+            } catch (error: unknown) {
               console.error("Error saving note:", error);
               showToast(
-                `Not kaydedilemedi: ${error?.message || "Bilinmeyen hata"}`,
+                `Not kaydedilemedi: ${error instanceof Error ? error.message : "Bilinmeyen hata"}`,
                 "error"
               );
             }

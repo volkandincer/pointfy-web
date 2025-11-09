@@ -21,8 +21,11 @@ export function useVotes(
 
   useEffect(() => {
     if (!roomId || !taskId) {
-      setVotes([]);
-      setLoading(false);
+      // Use setTimeout to avoid calling setState synchronously in effect
+      setTimeout(() => {
+        setVotes([]);
+        setLoading(false);
+      }, 0);
       return;
     }
     let mounted = true;
@@ -41,7 +44,7 @@ export function useVotes(
         const shouldShowAllVotes =
           isRevealed || taskData?.status === "completed";
 
-        let query = supabase
+        const query = supabase
           .from("votes")
           .select("user_name, user_key, point")
           .eq("room_id", roomId)
@@ -114,7 +117,7 @@ export function useVotes(
         table: "votes",
         filter: `task_id=eq.${taskId}`,
       },
-      (_payload: any) => {
+      () => {
         fetchVotes();
       }
     );

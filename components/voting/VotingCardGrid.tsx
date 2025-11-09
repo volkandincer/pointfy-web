@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useState, useEffect } from "react";
+import { memo, useState } from "react";
 import { FIBONACCI_POINTS } from "@/interfaces/Voting.interface";
 
 interface VotingCardGridProps {

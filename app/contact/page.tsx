@@ -44,7 +44,7 @@ export default function ContactPage() {
       } else {
         setResult({ type: "error", message: data.error || "Bir hata oluştu." });
       }
-    } catch (err) {
+    } catch {
       setResult({ type: "error", message: "Sunucuya ulaşılamıyor." });
     } finally {
       setLoading(false);

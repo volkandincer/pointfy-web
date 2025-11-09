@@ -13,7 +13,6 @@ interface RoomParticipantsProps {
 const RoomParticipants = memo(function RoomParticipants({
   roomCode,
   currentUserKey,
-  isAdmin,
 }: RoomParticipantsProps) {
   const { participants, loading, error } = useRoomParticipants(roomCode);
 

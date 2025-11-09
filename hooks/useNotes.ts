@@ -71,7 +71,7 @@ export function useNotes(): UseNotesResult {
               table: "notes",
               filter: `user_key=eq.${userData.user.id}`,
             },
-            (payload: any) => {
+            (payload: { eventType: string; new?: { id: string; created_at?: string; [key: string]: unknown }; old?: { id: string } }) => {
               if (!mounted) return;
 
               if (payload.eventType === "INSERT") {
@@ -127,7 +127,7 @@ export function useNotes(): UseNotesResult {
       if (!userKey) throw new Error("User not authenticated");
 
       const supabase = getSupabase();
-      const { data, error: insertError } = await supabase
+      const { error: insertError } = await supabase
         .from("notes")
         .insert({
           user_key: userKey,
@@ -170,7 +170,7 @@ export function useNotes(): UseNotesResult {
   const updateNote = useCallback(
     async (id: string, input: NoteInput) => {
       const supabase = getSupabase();
-      const { data, error: updateError } = await supabase
+      const { error: updateError } = await supabase
         .from("notes")
         .update({
           content: input.content,

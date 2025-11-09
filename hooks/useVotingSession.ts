@@ -109,7 +109,7 @@ export function useVotingSession(roomId: string): VotingSessionState {
         table: "tasks",
         filter: `room_id=eq.${roomId}`,
       },
-      (payload: any) => {
+      (payload: { eventType: string; new?: { id: string; status: string; updated_at: string }; old?: { id: string } }) => {
         if (payload.eventType === "UPDATE" && payload.new.status === "active") {
           // Yeni active task - timer'ı başlat (updated_at zamanını kullanarak)
           if (timer) clearInterval(timer);

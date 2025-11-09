@@ -111,7 +111,7 @@ export function useCompletedTasks(roomId: string): UseCompletedTasksResult {
         table: "tasks",
         filter: `room_id=eq.${roomId}`,
       },
-      (payload: any) => {
+      (payload: { eventType: string; new?: { id: string; status: string }; old?: { id: string } }) => {
         if (!mounted) return;
         if (
           payload.eventType === "UPDATE" &&

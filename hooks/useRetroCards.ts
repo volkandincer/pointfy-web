@@ -57,7 +57,7 @@ export function useRetroCards(roomId: string): UseRetroCardsResult {
         table: "retro_cards",
         filter: `room_id=eq.${roomId}`,
       },
-      (payload: any) => {
+      (payload: { eventType: string; new?: { id: string; [key: string]: unknown }; old?: { id: string } }) => {
         if (!mounted) return;
         if (payload.eventType === "INSERT") {
           setCards((prev) => [...prev, payload.new as RetroCard]);

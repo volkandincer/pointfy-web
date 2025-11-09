@@ -12,13 +12,7 @@ import {
   addUserToRoom,
 } from "@/lib/roomUtils";
 
-interface RecentRoomsProps {
-  createdByKey?: string; // Artık kullanılmıyor, tüm odalar gösteriliyor
-}
-
-const RecentRooms = memo(function RecentRooms({
-  createdByKey, // Artık kullanılmıyor
-}: RecentRoomsProps) {
+const RecentRooms = memo(function RecentRooms() {
   const router = useRouter();
   const [rooms, setRooms] = useState<RoomInfo[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);

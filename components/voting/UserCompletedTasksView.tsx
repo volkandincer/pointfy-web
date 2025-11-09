@@ -38,7 +38,7 @@ const UserCompletedTasksView = memo(function UserCompletedTasksView({
           Henüz tamamlanan task yok
         </p>
         <p className="text-sm text-gray-600 dark:text-gray-400">
-          Task'lar tamamlandığında burada görünecek
+          Task&apos;lar tamamlandığında burada görünecek
         </p>
       </div>
     );

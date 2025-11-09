@@ -129,7 +129,7 @@ const TaskFormModal = memo(function TaskFormModal({
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
               }`}
             >
-              📋 Task'larımdan Seç
+              📋 Task&apos;larımdan Seç
             </button>
           </div>
 
@@ -211,7 +211,7 @@ const TaskFormModal = memo(function TaskFormModal({
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
               }`}
             >
-              📋 Task'larımdan Seç
+              📋 Task&apos;larımdan Seç
             </button>
           </div>
 
@@ -220,7 +220,7 @@ const TaskFormModal = memo(function TaskFormModal({
             {loadingTasks ? (
               <div className="py-8 text-center">
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Task'lar yükleniyor...
+                  Task&apos;lar yükleniyor...
                 </p>
               </div>
             ) : personalTasks.length === 0 ? (
@@ -230,7 +230,7 @@ const TaskFormModal = memo(function TaskFormModal({
                   Henüz task yok
                 </p>
                 <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                  Önce kişisel task'larınızı oluşturun
+                  Önce kişisel task&apos;larınızı oluşturun
                 </p>
               </div>
             ) : (

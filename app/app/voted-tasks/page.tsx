@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import RequireAuth from "@/components/auth/RequireAuth";
 import Header from "@/components/layout/Header";
@@ -31,10 +30,8 @@ export default function VotedTasksPage() {
     () => getDefaultNavigationItems(),
     []
   );
-  const router = useRouter();
   const [votedTasks, setVotedTasks] = useState<VotedTask[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [userKey, setUserKey] = useState<string>("");
 
   useEffect(() => {
     let mounted = true;
@@ -48,7 +45,7 @@ export default function VotedTasksPage() {
           if (mounted) setLoading(false);
           return;
         }
-        setUserKey(userData.user.id);
+        // userKey is not used in this component
 
         // Kullanıcının oy verdiği task'ları getir
         const { data: votesData, error: votesError } = await supabase
@@ -88,7 +85,25 @@ export default function VotedTasksPage() {
 
         // Her vote için task'ın istatistiklerini hesapla
         const tasksWithStats = await Promise.all(
-          (votesData || []).map(async (vote: any) => {
+          (votesData || []).map(async (vote: {
+            id: string;
+            task_id: string;
+            point: number | null;
+            created_at: string;
+            tasks: {
+              id: string;
+              title: string;
+              description: string | null;
+              status: string;
+              created_at: string;
+              room_id: string;
+              rooms: {
+                id: string;
+                name: string;
+                code: string;
+              };
+            };
+          }) => {
             const task = vote.tasks;
             const room = task.rooms;
 
@@ -100,8 +115,8 @@ export default function VotedTasksPage() {
               .not("point", "is", null);
 
             const validPoints = (allVotes || [])
-              .map((v: any) => v.point)
-              .filter((p: any): p is number => p !== null && p !== undefined);
+              .map((v: { point: number | null }) => v.point)
+              .filter((p: number | null): p is number => p !== null && p !== undefined);
 
             const averagePoint =
               validPoints.length > 0
@@ -216,10 +231,10 @@ export default function VotedTasksPage() {
             <div className="mb-6 flex items-center justify-between">
               <div>
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  Puanladığım Task'lar
+                  Puanladığım Task&apos;lar
                 </h1>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Oy verdiğiniz tüm task'ları görüntüleyin
+                  Oy verdiğiniz tüm task&apos;ları görüntüleyin
                 </p>
               </div>
             </div>
@@ -240,7 +255,7 @@ export default function VotedTasksPage() {
                   Henüz puanladığınız task yok
                 </p>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Odalarda task'lara oy vererek buraya ekleyebilirsiniz
+                  Odalarda task&apos;lara oy vererek buraya ekleyebilirsiniz
                 </p>
               </div>
             ) : (

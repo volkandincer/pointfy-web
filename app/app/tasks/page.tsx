@@ -54,7 +54,7 @@ export default function PersonalTasksPage() {
           table: "user_personal_tasks",
           filter: `user_key=eq.${data.user.id}`,
         },
-        (payload: any) => {
+        (payload: { eventType: string; new?: PersonalTask; old?: { id: string } }) => {
           if (!mounted) return;
           if (payload.eventType === "INSERT") {
             setTasks((prev) => [payload.new as PersonalTask, ...prev]);
@@ -115,10 +115,10 @@ export default function PersonalTasksPage() {
             <div className="mb-6 flex items-center justify-between">
               <div>
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  Kişisel Task'larım
+                  Kişisel Task&apos;larım
                 </h1>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Oda açarken kullanmak üzere task'larını yönet
+                  Oda açarken kullanmak üzere task&apos;larını yönet
                 </p>
               </div>
               <button

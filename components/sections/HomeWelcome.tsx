@@ -11,11 +11,7 @@ import {
   addUserToRoom,
 } from "@/lib/roomUtils";
 
-interface HomeWelcomeProps {
-  username?: string;
-}
-
-const HomeWelcome = memo(function HomeWelcome({ username }: HomeWelcomeProps) {
+const HomeWelcome = memo(function HomeWelcome() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [rooms, setRooms] = useState<RoomInfo[]>([]);
@@ -32,7 +28,6 @@ const HomeWelcome = memo(function HomeWelcome({ username }: HomeWelcomeProps) {
   const [usernameState, setUsernameState] = useState<string>("");
 
   useEffect(() => {
-    let mounted = true;
     async function fetchUserInfo() {
       try {
         const supabase = getSupabase();

@@ -55,7 +55,7 @@ export function useActiveTask(roomId: string): UseActiveTaskResult {
         table: "tasks",
         filter: `room_id=eq.${roomId}`,
       },
-      (payload: any) => {
+      (payload: { eventType: string; new?: { id: string; status: string; updated_at: string }; old?: { id: string } }) => {
         if (!mounted) return;
         // Task güncellendiğinde veya eklendiğinde aktif task'ı yeniden çek
         // Özellikle status değişikliklerini dinle

@@ -31,9 +31,9 @@ const GlobalNoteFab = memo(function GlobalNoteFab() {
             await addNote(input);
             showToast("Not başarıyla kaydedildi!", "success");
             setShowModal(false);
-          } catch (error: any) {
+          } catch (error: unknown) {
             showToast(
-              `Not kaydedilemedi: ${error?.message || "Bilinmeyen hata"}`,
+              `Not kaydedilemedi: ${error instanceof Error ? error.message : "Bilinmeyen hata"}`,
               "error"
             );
           }

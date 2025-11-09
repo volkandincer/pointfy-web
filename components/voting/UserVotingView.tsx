@@ -39,7 +39,10 @@ const UserVotingView = memo(function UserVotingView({
       (v) => v.user_key === userKey || v.user_name === username
     );
     if (myVote?.point !== null && myVote?.point !== undefined) {
-      setSelectedPoint(myVote.point);
+      // Use setTimeout to avoid calling setState synchronously in effect
+      setTimeout(() => {
+        setSelectedPoint(myVote.point);
+      }, 0);
     }
   }, [votes, userKey, username]);
 

@@ -16,12 +16,11 @@ import RetroRoomView from "@/components/retro/RetroRoomView";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type { RoomInfo } from "@/interfaces/Room.interface";
-import type { TaskInfo } from "@/interfaces/Voting.interface";
 import { getSupabase } from "@/lib/supabase";
 import { useActiveTask } from "@/hooks/useActiveTask";
 import { useTasks } from "@/hooks/useTasks";
 import { useRoomAdmin } from "@/hooks/useRoomAdmin";
-import { checkRoomEntry, verifyRoomPin, addUserToRoom } from "@/lib/roomUtils";
+import { verifyRoomPin, addUserToRoom } from "@/lib/roomUtils";
 import { useToastContext } from "@/contexts/ToastContext";
 
 export default function RoomDetailPage() {
@@ -51,8 +50,6 @@ export default function RoomDetailPage() {
   const {
     isAdmin,
     loading: adminLoading,
-    error: adminError,
-    permissions,
   } = useRoomAdmin(room?.code || "", userKey);
 
   // Yeni task aktif olduğunda user'a toast göster
@@ -405,7 +402,7 @@ export default function RoomDetailPage() {
                           <div className="mb-4 flex items-center justify-between">
                             <div>
                               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                                ⏳ Puanlanmayı Bekleyen Task'lar
+                                ⏳ Puanlanmayı Bekleyen Task&apos;lar
                               </h2>
                               <p className="text-xs text-gray-600 dark:text-gray-400">
                                 {pendingTasks.length} task puanlamaya hazır
@@ -441,7 +438,7 @@ export default function RoomDetailPage() {
                             Task Yönetimi (Admin)
                           </h2>
                           <p className="text-xs text-gray-600 dark:text-gray-400">
-                            Aktif ve tamamlanan task'lar
+                            Aktif ve tamamlanan task&apos;lar
                           </p>
                         </div>
                         <button

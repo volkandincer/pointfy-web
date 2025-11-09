@@ -65,7 +65,7 @@ const NoteList = memo(function NoteList({
       {notes.map((note) => {
         const chipColor = getChipColor(note.category);
         const chipTextColor = getChipTextColor(note.category);
-        const dateValue = note.createdAt || note.created_at || Date.now();
+        const dateValue = note.createdAt || note.created_at || new Date().toISOString();
 
         return (
           <div

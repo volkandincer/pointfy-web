@@ -68,7 +68,7 @@ export function useTasks(roomId: string): UseTasksResult {
         table: "tasks",
         filter: `room_id=eq.${roomId}`,
       },
-      (payload: any) => {
+      (payload: { eventType: string; new?: { id: string; [key: string]: unknown }; old?: { id: string } }) => {
         if (!mounted) return;
         switch (payload.eventType) {
           case "INSERT":
