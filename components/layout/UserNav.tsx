@@ -43,7 +43,7 @@ const UserNav = memo(function UserNav() {
     return (
       <Link
         href="/login"
-        className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+        className="rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-md"
       >
         Giriş Yap
       </Link>
@@ -54,9 +54,10 @@ const UserNav = memo(function UserNav() {
     <div className="flex items-center gap-2">
       <Link
         href="/app/account"
-        className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+        className="group flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-gray-700 transition-all hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-blue-500 dark:hover:bg-blue-900/20 dark:hover:text-blue-400"
       >
-        Hesabım
+        <span className="text-base">👤</span>
+        <span className="hidden sm:inline">Hesabım</span>
       </Link>
       <button
         onClick={async () => {
@@ -67,9 +68,10 @@ const UserNav = memo(function UserNav() {
             // ignore
           }
         }}
-        className="rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
+        className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-gray-700 transition-all hover:border-red-300 hover:bg-red-50 hover:text-red-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-red-500 dark:hover:bg-red-900/20 dark:hover:text-red-400"
       >
-        Çıkış Yap
+        <span className="hidden sm:inline">Çıkış</span>
+        <span className="sm:hidden">🚪</span>
       </button>
     </div>
   );
