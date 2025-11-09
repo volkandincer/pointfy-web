@@ -5,6 +5,10 @@ export interface ToastMessage {
   message: string;
   type?: "success" | "error" | "info";
   duration?: number;
+  action?: {
+    label: string;
+    onClick: () => void;
+  };
 }
 
 export function useToast() {

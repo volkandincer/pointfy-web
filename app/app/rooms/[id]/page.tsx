@@ -22,6 +22,7 @@ import { useActiveTask } from "@/hooks/useActiveTask";
 import { useTasks } from "@/hooks/useTasks";
 import { useRoomAdmin } from "@/hooks/useRoomAdmin";
 import { checkRoomEntry, verifyRoomPin, addUserToRoom } from "@/lib/roomUtils";
+import { useToastContext } from "@/contexts/ToastContext";
 
 export default function RoomDetailPage() {
   const navigationItems: NavigationItem[] = useMemo(
@@ -44,6 +45,7 @@ export default function RoomDetailPage() {
 
   const { activeTask, loading: activeTaskLoading } = useActiveTask(roomId);
   const { tasks, loading: tasksLoading } = useTasks(roomId);
+  const { showToast } = useToastContext();
 
   // Admin kontrolü için hook kullan
   const {
@@ -52,6 +54,52 @@ export default function RoomDetailPage() {
     error: adminError,
     permissions,
   } = useRoomAdmin(room?.code || "", userKey);
+
+  // Yeni task aktif olduğunda user'a toast göster
+  const [previousActiveTaskId, setPreviousActiveTaskId] = useState<string | null>(null);
+  const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
+  
+  useEffect(() => {
+    // İlk yükleme tamamlandıktan sonra toast göster
+    if (isInitialLoad && !activeTaskLoading) {
+      setIsInitialLoad(false);
+      if (activeTask) {
+        setPreviousActiveTaskId(activeTask.id);
+      }
+      return;
+    }
+
+    // Sadece user için ve yeni bir task aktif olduğunda toast göster
+    // (İlk yüklemede değil, sonradan değiştiğinde)
+    if (
+      !isAdmin &&
+      !isInitialLoad &&
+      activeTask &&
+      activeTask.id !== previousActiveTaskId
+    ) {
+      showToast(
+        `Yeni task başlatıldı: ${activeTask.title}`,
+        "info",
+        5000,
+        {
+          label: "Puanlamaya Git",
+          onClick: () => {
+            // Voting view'e scroll yap
+            const votingElement = document.getElementById("voting-view");
+            if (votingElement) {
+              votingElement.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+          },
+        }
+      );
+    }
+    
+    if (activeTask) {
+      setPreviousActiveTaskId(activeTask.id);
+    } else {
+      setPreviousActiveTaskId(null);
+    }
+  }, [activeTask, isAdmin, previousActiveTaskId, isInitialLoad, activeTaskLoading, showToast]);
 
   useEffect(() => {
     let mounted = true;
@@ -305,20 +353,22 @@ export default function RoomDetailPage() {
               />
             ) : activeTask ? (
               <>
-                {isAdmin ? (
-                  <AdminVotingView
-                    roomId={roomId}
-                    activeTask={activeTask}
-                    isAdmin={isAdmin}
-                  />
-                ) : (
-                  <UserVotingView
-                    roomId={roomId}
-                    activeTask={activeTask}
-                    userKey={userKey}
-                    username={username}
-                  />
-                )}
+                <div id="voting-view">
+                  {isAdmin ? (
+                    <AdminVotingView
+                      roomId={roomId}
+                      activeTask={activeTask}
+                      isAdmin={isAdmin}
+                    />
+                  ) : (
+                    <UserVotingView
+                      roomId={roomId}
+                      activeTask={activeTask}
+                      userKey={userKey}
+                      username={username}
+                    />
+                  )}
+                </div>
               </>
             ) : (
               <div className="space-y-6">

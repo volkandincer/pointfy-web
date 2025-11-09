@@ -24,6 +24,7 @@ const ToastContainer = memo(function ToastContainer({
               message={toast.message}
               type={toast.type}
               duration={toast.duration}
+              action={toast.action}
               onClose={() => onRemove(toast.id)}
             />
           </div>

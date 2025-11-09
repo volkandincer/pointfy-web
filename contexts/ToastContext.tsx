@@ -8,7 +8,11 @@ interface ToastContextType {
   showToast: (
     message: string,
     type?: "success" | "error" | "info",
-    duration?: number
+    duration?: number,
+    action?: {
+      label: string;
+      onClick: () => void;
+    }
   ) => void;
   removeToast: (id: string) => void;
 }
@@ -22,10 +26,14 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     (
       message: string,
       type: "success" | "error" | "info" = "success",
-      duration: number = 3000
+      duration: number = 3000,
+      action?: {
+        label: string;
+        onClick: () => void;
+      }
     ) => {
       const id = Math.random().toString(36).substring(7);
-      const newToast: ToastMessage = { id, message, type, duration };
+      const newToast: ToastMessage = { id, message, type, duration, action };
       setToasts((prev) => [...prev, newToast]);
     },
     []
