@@ -155,7 +155,7 @@ export default function HomePage() {
       <main>
         {userId ? <HomeWelcome username={username} /> : <Hero />}
         <QuickActions actions={actions} />
-        <RecentRooms createdByKey={userId ?? undefined} />
+        <RecentRooms />
         <Features features={features} />
         <CTA />
       </main>

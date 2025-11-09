@@ -28,7 +28,9 @@ export function useTasks(roomId: string): UseTasksResult {
       const supabase = getSupabase();
       const { data, error: dbError } = await supabase
         .from("tasks")
-        .select("*")
+        .select(
+          "id, title, description, status, room_id, created_at, updated_at, created_by_username, created_by_key"
+        )
         .eq("room_id", roomId)
         .order("created_at", { ascending: true });
       if (dbError) {
@@ -70,9 +72,16 @@ export function useTasks(roomId: string): UseTasksResult {
         if (!mounted) return;
         switch (payload.eventType) {
           case "INSERT":
-            setTasks((prev) => [...prev, payload.new]);
+            // Yeni task eklendiğinde listeye ekle
+            setTasks((prev) => {
+              // Duplicate kontrolü - eğer task zaten varsa ekleme
+              const exists = prev.some((task) => task.id === payload.new.id);
+              if (exists) return prev;
+              return [...prev, payload.new];
+            });
             break;
           case "UPDATE":
+            // Task güncellendiğinde (özellikle status değişiklikleri)
             setTasks((prev) =>
               prev.map((task) =>
                 task.id === payload.new.id ? payload.new : task
@@ -80,11 +89,13 @@ export function useTasks(roomId: string): UseTasksResult {
             );
             break;
           case "DELETE":
+            // Task silindiğinde listeden çıkar
             setTasks((prev) =>
               prev.filter((task) => task.id !== payload.old.id)
             );
             break;
           default:
+            // Diğer durumlarda tüm listeyi yeniden çek
             fetchTasks();
             break;
         }

@@ -10,6 +10,7 @@ import type { Note } from "@/interfaces/Note.interface";
 import NoteList from "@/components/notes/NoteList";
 import NoteModal from "@/components/notes/NoteModal";
 import { useNotes } from "@/hooks/useNotes";
+import { useToastContext } from "@/contexts/ToastContext";
 
 export default function NotesPage() {
   const navigationItems: NavigationItem[] = useMemo(
@@ -17,6 +18,7 @@ export default function NotesPage() {
     []
   );
   const { notes, loading, addNote, removeNote, updateNote } = useNotes();
+  const { showToast } = useToastContext();
   const [showModal, setShowModal] = useState<boolean>(false);
   const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("Tümü");
@@ -99,13 +101,23 @@ export default function NotesPage() {
                   <div className="h-40 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800" />
                 ) : (
                   <NoteList
-                    notes={filteredNotes}
-                    onDelete={removeNote}
-                    onEdit={(n) => {
-                      setEditingNote(n);
-                      setShowModal(true);
-                    }}
-                  />
+                  notes={filteredNotes}
+                  onDelete={async (id) => {
+                    try {
+                      await removeNote(id);
+                      showToast("Not başarıyla silindi!", "success");
+                    } catch (error: any) {
+                      showToast(
+                        `Not silinemedi: ${error?.message || "Bilinmeyen hata"}`,
+                        "error"
+                      );
+                    }
+                  }}
+                  onEdit={(n) => {
+                    setEditingNote(n);
+                    setShowModal(true);
+                  }}
+                />
                 )}
               </div>
             </div>
@@ -123,19 +135,17 @@ export default function NotesPage() {
             try {
               if (noteId) {
                 await updateNote(noteId, input);
+                showToast("Not başarıyla güncellendi!", "success");
               } else {
                 await addNote(input);
+                showToast("Not başarıyla kaydedildi!", "success");
               }
               setEditingNote(null);
             } catch (error: any) {
               console.error("Error saving note:", error);
-              console.error("Error details:", JSON.stringify(error, null, 2));
-              console.error("Error message:", error?.message);
-              console.error("Error code:", error?.code);
-              console.error("Error details:", error?.details);
-              console.error("Error hint:", error?.hint);
-              alert(
-                `Not kaydedilemedi: ${error?.message || "Bilinmeyen hata"}`
+              showToast(
+                `Not kaydedilemedi: ${error?.message || "Bilinmeyen hata"}`,
+                "error"
               );
             }
           }}

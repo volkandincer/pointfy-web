@@ -6,11 +6,11 @@ import type { RoomInfo } from "@/interfaces/Room.interface";
 import { getSupabase } from "@/lib/supabase";
 
 interface RecentRoomsProps {
-  createdByKey?: string;
+  createdByKey?: string; // Artık kullanılmıyor, tüm odalar gösteriliyor
 }
 
 const RecentRooms = memo(function RecentRooms({
-  createdByKey,
+  createdByKey, // Artık kullanılmıyor
 }: RecentRoomsProps) {
   const [rooms, setRooms] = useState<RoomInfo[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -20,15 +20,14 @@ const RecentRooms = memo(function RecentRooms({
     async function fetchRooms() {
       try {
         const supabase = getSupabase();
-        let query = supabase
+        // Mobil projede olduğu gibi: sadece aktif odaları göster, tüm odaları göster (createdByKey filtresi yok)
+        const { data } = await supabase
           .from("rooms")
           .select("id, name, code, created_by_username, is_active, created_at")
+          .eq("is_active", true)
+          .eq("status", "active")
           .order("created_at", { ascending: false })
           .limit(8);
-        if (createdByKey) {
-          query = query.eq("created_by_key", createdByKey);
-        }
-        const { data } = await query;
         if (!mounted) return;
         setRooms(data || []);
       } catch {
@@ -48,7 +47,7 @@ const RecentRooms = memo(function RecentRooms({
     <section className="container mx-auto px-4 py-12">
       <div className="mx-auto max-w-6xl">
         <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
-          {createdByKey ? "Odalarım" : "Son Aktif Odalar"}
+          Odalar
         </h2>
         <p className="mb-8 text-sm text-gray-600 dark:text-gray-400">
           En son oluşturulan ve aktif odalar

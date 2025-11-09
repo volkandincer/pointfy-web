@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { getSupabase } from "@/lib/supabase";
 import { useVotes } from "@/hooks/useVotes";
 import { useVotingSession } from "@/hooks/useVotingSession";
@@ -9,11 +9,13 @@ import type { TaskInfo } from "@/interfaces/Voting.interface";
 interface AdminVotingViewProps {
   roomId: string;
   activeTask: TaskInfo;
+  isAdmin?: boolean; // Admin kontrolü için
 }
 
 const AdminVotingView = memo(function AdminVotingView({
   roomId,
   activeTask,
+  isAdmin = true, // Varsayılan olarak true, ama kontrol için kullanılabilir
 }: AdminVotingViewProps) {
   const { votes, loading: votesLoading } = useVotes(
     roomId,
@@ -21,8 +23,15 @@ const AdminVotingView = memo(function AdminVotingView({
     false
   );
   const { remainingTime, isVotingActive } = useVotingSession(roomId);
+  const [taskCompleted, setTaskCompleted] = useState<boolean>(false);
 
   const handleCompleteTask = useCallback(async () => {
+    // Admin kontrolü - sadece admin task'ı bitirebilir
+    if (!isAdmin) {
+      alert("Bu işlem için admin yetkisi gereklidir.");
+      return;
+    }
+
     try {
       const supabase = getSupabase();
       const { error } = await supabase
@@ -30,11 +39,26 @@ const AdminVotingView = memo(function AdminVotingView({
         .update({ status: "completed" })
         .eq("id", activeTask.id);
       if (error) throw error;
+      
+      // Task başarıyla tamamlandı
+      setTaskCompleted(true);
+      
+      // Web'de zaten room detail sayfasındayız, yönlendirme yapmaya gerek yok
+      // Realtime subscription sayesinde activeTask null olacak ve "Aktif Task Yok" ekranı gösterilecek
     } catch (err) {
       console.error("Complete task error:", err);
       alert("Task tamamlanamadı. Lütfen tekrar deneyin.");
     }
-  }, [activeTask.id]);
+  }, [activeTask.id, isAdmin]);
+  
+  // Task completed olduğunda otomatik olarak algıla (realtime subscription'dan)
+  useEffect(() => {
+    if (activeTask.status === "completed" && !taskCompleted) {
+      setTaskCompleted(true);
+      // Web'de zaten room detail sayfasındayız, yönlendirme yapmaya gerek yok
+      // Realtime subscription sayesinde activeTask null olacak ve "Aktif Task Yok" ekranı gösterilecek
+    }
+  }, [activeTask.status, taskCompleted]);
 
   const validVotes = votes.filter(
     (v) => v.point !== null && v.point !== undefined

@@ -70,7 +70,8 @@ const NoteList = memo(function NoteList({
         return (
           <div
             key={note.id}
-            className="group rounded-2xl border border-gray-200/70 bg-white p-5 shadow-sm transition hover:shadow-md dark:border-gray-800/70 dark:bg-gray-900"
+            onClick={() => onEdit(note)}
+            className="group cursor-pointer rounded-2xl border border-gray-200/70 bg-white p-5 shadow-sm transition hover:shadow-md dark:border-gray-800/70 dark:bg-gray-900"
           >
             <div className="mb-3 flex items-center justify-between">
               <span
@@ -83,16 +84,16 @@ const NoteList = memo(function NoteList({
                 {getCategoryLabel(note.category)}
               </span>
               <button
-                onClick={() => onDelete(note.id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(note.id);
+                }}
                 className="rounded-lg bg-red-50 px-3 py-1 text-xs font-semibold text-red-600 transition hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400"
               >
                 Sil
               </button>
             </div>
-            <p
-              onClick={() => onEdit(note)}
-              className="mb-3 min-h-[3rem] cursor-pointer text-base font-semibold text-gray-900 dark:text-white"
-            >
+            <p className="mb-3 min-h-[3rem] text-base font-semibold text-gray-900 dark:text-white">
               {note.content}
             </p>
             <div className="flex items-center justify-end">

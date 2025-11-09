@@ -21,4 +21,6 @@ export interface TaskInfo {
   room_id: string;
   created_at?: string;
   updated_at?: string;
+  created_by_username?: string;
+  created_by_key?: string;
 }
