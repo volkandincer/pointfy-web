@@ -196,10 +196,13 @@ export default function RoomDetailPage() {
           .from("tasks")
           .update({ status: "completed" })
           .eq("room_id", roomId);
-        // Sonra seçilen task'ı active yap
+        // Sonra seçilen task'ı active yap ve updated_at'i güncelle (timer için)
         const { error } = await supabase
           .from("tasks")
-          .update({ status: "active" })
+          .update({ 
+            status: "active",
+            updated_at: new Date().toISOString() // Timer başlangıcı için zamanı güncelle
+          })
           .eq("id", taskId);
         if (error) throw error;
       } catch (err) {

@@ -35,11 +35,22 @@ export function useVotingSession(roomId: string): VotingSessionState {
           setRemainingTime(0);
         } else if (activeTask) {
           setIsVotingActive(true);
-          let timeLeft = 60;
+          
+          // Task'ın başlangıç zamanını kullanarak gerçek kalan süreyi hesapla
+          const taskStartTime = new Date(activeTask.updated_at).getTime();
+          const now = Date.now();
+          const elapsedSeconds = Math.floor((now - taskStartTime) / 1000);
+          const totalDuration = 60; // 60 saniye
+          let timeLeft = Math.max(0, totalDuration - elapsedSeconds);
+          
           setRemainingTime(timeLeft);
 
           timer = setInterval(() => {
-            timeLeft--;
+            // Her saniye gerçek kalan süreyi yeniden hesapla
+            const currentTime = Date.now();
+            const currentElapsed = Math.floor((currentTime - taskStartTime) / 1000);
+            timeLeft = Math.max(0, totalDuration - currentElapsed);
+            
             if (timeLeft <= 0) {
               setIsVotingActive(false);
               setRemainingTime(0);
@@ -100,8 +111,41 @@ export function useVotingSession(roomId: string): VotingSessionState {
       },
       (payload: any) => {
         if (payload.eventType === "UPDATE" && payload.new.status === "active") {
+          // Yeni active task - timer'ı başlat (updated_at zamanını kullanarak)
           if (timer) clearInterval(timer);
-          checkActiveTask();
+          
+          const taskStartTime = new Date(payload.new.updated_at).getTime();
+          const now = Date.now();
+          const elapsedSeconds = Math.floor((now - taskStartTime) / 1000);
+          const totalDuration = 60;
+          let timeLeft = Math.max(0, totalDuration - elapsedSeconds);
+          
+          setIsVotingActive(true);
+          setRemainingTime(timeLeft);
+          
+          timer = setInterval(() => {
+            const currentTime = Date.now();
+            const currentElapsed = Math.floor((currentTime - taskStartTime) / 1000);
+            timeLeft = Math.max(0, totalDuration - currentElapsed);
+            
+            if (timeLeft <= 0) {
+              setIsVotingActive(false);
+              setRemainingTime(0);
+              const supabase = getSupabase();
+              supabase
+                .from("tasks")
+                .update({ status: "pending" })
+                .eq("id", payload.new.id)
+                .then(({ error: error1 }) => {
+                  if (error1) {
+                    console.error("Task status güncelleme hatası:", error1);
+                  }
+                });
+              if (timer) clearInterval(timer);
+            } else {
+              setRemainingTime(timeLeft);
+            }
+          }, 1000);
         } else if (
           payload.eventType === "UPDATE" &&
           payload.new.status === "pending"
