@@ -51,19 +51,27 @@ const UserNav = memo(function UserNav() {
   }
 
   return (
-    <button
-      onClick={async () => {
-        try {
-          const supabase = getSupabase();
-          await supabase.auth.signOut();
-        } catch {
-          // ignore
-        }
-      }}
-      className="rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
-    >
-      Çıkış Yap
-    </button>
+    <div className="flex items-center gap-2">
+      <Link
+        href="/app/account"
+        className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+      >
+        Hesabım
+      </Link>
+      <button
+        onClick={async () => {
+          try {
+            const supabase = getSupabase();
+            await supabase.auth.signOut();
+          } catch {
+            // ignore
+          }
+        }}
+        className="rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
+      >
+        Çıkış Yap
+      </button>
+    </div>
   );
 });
 
