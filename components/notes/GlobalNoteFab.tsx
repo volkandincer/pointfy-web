@@ -29,11 +29,22 @@ const GlobalNoteFab = memo(function GlobalNoteFab() {
         onSubmit={async (input) => {
           try {
             await addNote(input);
-            showToast("Not başarıyla kaydedildi!", "success");
+            // Eğer custom kategori "general" olarak kaydedildiyse kullanıcıyı bilgilendir
+            const validCategories = ["general", "work", "personal", "ideas", "todo", "important"];
+            if (!validCategories.includes(input.category)) {
+              showToast(
+                "Not kaydedildi, ancak özel kategori 'Genel' olarak kaydedildi (veritabanı kısıtlaması).",
+                "info",
+                5000
+              );
+            } else {
+              showToast("Not başarıyla kaydedildi!", "success");
+            }
             setShowModal(false);
           } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : "Bilinmeyen hata";
             showToast(
-              `Not kaydedilemedi: ${error instanceof Error ? error.message : "Bilinmeyen hata"}`,
+              `Not kaydedilemedi: ${errorMessage}`,
               "error"
             );
           }

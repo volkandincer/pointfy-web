@@ -147,6 +147,28 @@ export function useNotes(): UseNotesResult {
         console.error("Error message:", insertError.message);
         console.error("Error details:", insertError.details);
         console.error("Error hint:", insertError.hint);
+        console.error("Attempted category:", input.category);
+        
+        // Eğer constraint hatası varsa, custom kategorileri "general" olarak kaydet
+        if (insertError.code === "23514" || insertError.message?.includes("check_note_category")) {
+          console.warn("Category constraint violation. Saving custom category as 'general'");
+          const { error: retryError } = await supabase
+            .from("notes")
+            .insert({
+              user_key: userKey,
+              content: input.content,
+              category: "general", // Constraint'teki bir kategoriye fallback
+            })
+            .select()
+            .single();
+          
+          if (retryError) {
+            throw retryError;
+          }
+          // Not: Custom kategori bilgisi kaybolacak, sadece "general" olarak kaydedilecek
+          return;
+        }
+        
         throw insertError;
       }
 

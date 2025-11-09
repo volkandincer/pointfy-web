@@ -148,7 +148,17 @@ export default function NotesPage() {
                 showToast("Not başarıyla güncellendi!", "success");
               } else {
                 await addNote(input);
-                showToast("Not başarıyla kaydedildi!", "success");
+                // Eğer custom kategori "general" olarak kaydedildiyse kullanıcıyı bilgilendir
+                const validCategories = ["general", "work", "personal", "ideas", "todo", "important"];
+                if (!validCategories.includes(input.category)) {
+                  showToast(
+                    "Not kaydedildi, ancak özel kategori 'Genel' olarak kaydedildi (veritabanı kısıtlaması).",
+                    "info",
+                    5000
+                  );
+                } else {
+                  showToast("Not başarıyla kaydedildi!", "success");
+                }
               }
               setEditingNote(null);
             } catch (error: unknown) {
