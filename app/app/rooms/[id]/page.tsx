@@ -56,6 +56,26 @@ export default function RoomDetailPage() {
   const [previousActiveTaskId, setPreviousActiveTaskId] = useState<string | null>(null);
   const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
   
+  // Auth state değişikliğini dinle - logout olduğunda anasayfaya yönlendir
+  useEffect(() => {
+    let mounted = true;
+    const supabase = getSupabase();
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (!mounted) return;
+        // Logout olduğunda anasayfaya yönlendir
+        if (event === "SIGNED_OUT" || !session) {
+          router.replace("/");
+        }
+      }
+    );
+
+    return () => {
+      mounted = false;
+      listener.subscription.unsubscribe();
+    };
+  }, [router]);
+  
   useEffect(() => {
     // İlk yükleme tamamlandıktan sonra toast göster
     if (isInitialLoad && !activeTaskLoading) {

@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { memo } from "react";
 
 const CTA = memo(function CTA() {
@@ -16,22 +15,18 @@ const CTA = memo(function CTA() {
           Pointfy&apos;ı indirin ve takımınızla daha verimli çalışmaya başlayın.
         </p>
         <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Link
-            href="https://apps.apple.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex h-11 items-center justify-center rounded-lg bg-white px-5 text-sm font-semibold text-blue-600 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+          <button
+            disabled
+            className="flex h-11 cursor-not-allowed items-center justify-center rounded-lg bg-white/60 px-5 text-sm font-semibold text-blue-600/60 shadow-sm"
           >
-            App Store&apos;dan İndir
-          </Link>
-          <Link
-            href="https://play.google.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex h-11 items-center justify-center rounded-lg border-2 border-white bg-transparent px-5 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-white/10"
+            App Store&apos;dan İndir - Yakında
+          </button>
+          <button
+            disabled
+            className="flex h-11 cursor-not-allowed items-center justify-center rounded-lg border-2 border-white/60 bg-transparent px-5 text-sm font-semibold text-white/60"
           >
-            Google Play&apos;den İndir
-          </Link>
+            Google Play&apos;den İndir - Yakında
+          </button>
         </div>
       </div>
     </section>

@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { memo } from "react";
 
 const Hero = memo(function Hero() {
@@ -13,7 +12,7 @@ const Hero = memo(function Hero() {
       <div className="container mx-auto px-4 py-20 md:py-32">
         <div className="mx-auto max-w-4xl text-center">
           <div className="mx-auto mb-5 inline-flex items-center gap-2 rounded-full border border-blue-200/60 bg-white/70 px-3 py-1 text-xs font-medium text-blue-700 backdrop-blur dark:border-blue-800/60 dark:bg-gray-900/60 dark:text-blue-300">
-            <span className="h-2 w-2 rounded-full bg-blue-500" /> Supabase Realtime Destekli
+            <span className="h-2 w-2 rounded-full bg-blue-500" /> Realtime Destekli
           </div>
           <h1 className="mb-6 text-4xl font-bold tracking-tight text-gray-900 dark:text-white md:text-6xl">
             Takım İşbirliği için
@@ -26,22 +25,18 @@ const Hero = memo(function Hero() {
             Poker planning, retrospektif ve görev yönetimi ile tek yerde. Gerçek zamanlı işbirliği sayesinde daha hızlı kararlar alın.
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Link
-              href="https://apps.apple.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex h-12 items-center justify-center rounded-lg bg-gray-900 px-6 font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
+            <button
+              disabled
+              className="flex h-12 cursor-not-allowed items-center justify-center rounded-lg bg-gray-400 px-6 font-semibold text-white shadow-sm dark:bg-gray-700 dark:text-gray-300"
             >
-              App Store&apos;dan İndir
-            </Link>
-            <Link
-              href="https://play.google.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex h-12 items-center justify-center rounded-lg border border-gray-300 bg-white px-6 font-semibold text-gray-900 shadow-sm transition-all hover:-translate-y-0.5 hover:bg-gray-50 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+              App Store&apos;dan İndir - Yakında
+            </button>
+            <button
+              disabled
+              className="flex h-12 cursor-not-allowed items-center justify-center rounded-lg border border-gray-300 bg-gray-100 px-6 font-semibold text-gray-500 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-500"
             >
-              Google Play&apos;den İndir
-            </Link>
+              Google Play&apos;den İndir - Yakında
+            </button>
           </div>
         </div>
       </div>
