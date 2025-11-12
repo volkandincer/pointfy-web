@@ -114,6 +114,13 @@ function HomePageContent() {
         icon: "⚡",
       },
       {
+        id: "boards",
+        title: "Board'larım",
+        description: "Task ve notlarınızı organize edin",
+        href: "/app/boards",
+        icon: "📋",
+      },
+      {
         id: "personal-tasks",
         title: "Tasklarım",
         description: "Kişisel tasklarınızı yönetin",

@@ -5,6 +5,7 @@ export interface PersonalTask {
   description: string | null;
   category: string;
   priority: number;
+  board_id?: string | null;
   created_at?: string;
 }
 
@@ -13,4 +14,5 @@ export interface PersonalTaskInput {
   description?: string;
   category?: string;
   priority?: number;
+  board_id?: string | null;
 }

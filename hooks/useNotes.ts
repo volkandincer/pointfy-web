@@ -36,7 +36,7 @@ export function useNotes(): UseNotesResult {
         // Notları yükle
         const { data: rows, error: fetchError } = await supabase
           .from("notes")
-          .select("id, user_key, content, category, created_at, updated_at")
+          .select("id, user_key, content, category, board_id, created_at, updated_at")
           .eq("user_key", userData.user.id)
           .order("updated_at", { ascending: false })
           .order("created_at", { ascending: false });
@@ -131,7 +131,7 @@ export function useNotes(): UseNotesResult {
       if (!userKey) throw new Error("User not authenticated");
 
       const supabase = getSupabase();
-      const { error: insertError } = await supabase
+      const { data: newNote, error: insertError } = await supabase
         .from("notes")
         .insert({
           user_key: userKey,
@@ -152,7 +152,7 @@ export function useNotes(): UseNotesResult {
         // Eğer constraint hatası varsa, custom kategorileri "general" olarak kaydet
         if (insertError.code === "23514" || insertError.message?.includes("check_note_category")) {
           console.warn("Category constraint violation. Saving custom category as 'general'");
-          const { error: retryError } = await supabase
+          const { data: retryNote, error: retryError } = await supabase
             .from("notes")
             .insert({
               user_key: userKey,
@@ -165,6 +165,21 @@ export function useNotes(): UseNotesResult {
           if (retryError) {
             throw retryError;
           }
+
+          // Realtime subscription çalışmıyorsa fallback olarak manuel ekle
+          if (retryNote) {
+            const noteWithCreatedAt = {
+              ...retryNote,
+              createdAt: retryNote.created_at
+                ? new Date(retryNote.created_at).getTime()
+                : Date.now(),
+            };
+            setNotes((prev) => {
+              const exists = prev.some((n) => n.id === noteWithCreatedAt.id);
+              if (exists) return prev;
+              return [noteWithCreatedAt, ...prev];
+            });
+          }
           // Not: Custom kategori bilgisi kaybolacak, sadece "general" olarak kaydedilecek
           return;
         }
@@ -172,8 +187,20 @@ export function useNotes(): UseNotesResult {
         throw insertError;
       }
 
-      // Realtime subscription otomatik olarak state'i güncelleyecek,
-      // manuel güncelleme yapmaya gerek yok
+      // Realtime subscription çalışmıyorsa fallback olarak manuel ekle
+      if (newNote) {
+        const noteWithCreatedAt = {
+          ...newNote,
+          createdAt: newNote.created_at
+            ? new Date(newNote.created_at).getTime()
+            : Date.now(),
+        };
+        setNotes((prev) => {
+          const exists = prev.some((n) => n.id === noteWithCreatedAt.id);
+          if (exists) return prev;
+          return [noteWithCreatedAt, ...prev];
+        });
+      }
     },
     [userKey]
   );
