@@ -133,20 +133,24 @@ function CreateRoomPageContent() {
     <RequireAuth>
       <>
         <Header navigationItems={navigationItems} />
-        <main className="container mx-auto px-4 py-16">
-          <div className="mx-auto max-w-2xl">
-            <h1 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
-              Yeni Oda
-            </h1>
-            <p className="mb-6 text-sm text-gray-600 dark:text-gray-400">
-              Takımınızla birlikte çalışmak için bir oda oluşturun
-            </p>
-            <div className="rounded-2xl border border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
-              <CreateRoomForm
-                onSubmit={handleCreate}
-                loading={loading}
-                initialRoomType={roomTypeFromQuery || undefined}
-              />
+        <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+          <div className="container mx-auto px-4 py-12">
+            <div className="mx-auto max-w-3xl">
+              <div className="mb-8">
+                <h1 className="mb-3 text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+                  Yeni Oda Oluştur
+                </h1>
+                <p className="text-lg text-gray-600 dark:text-gray-400">
+                  Takımınızla birlikte çalışmak için bir oda oluşturun
+                </p>
+              </div>
+              <div className="rounded-2xl border-2 border-gray-200/70 bg-white p-8 shadow-lg dark:border-gray-800/70 dark:bg-gray-900">
+                <CreateRoomForm
+                  onSubmit={handleCreate}
+                  loading={loading}
+                  initialRoomType={roomTypeFromQuery || undefined}
+                />
+              </div>
             </div>
           </div>
         </main>
