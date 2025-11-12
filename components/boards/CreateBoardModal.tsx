@@ -144,7 +144,9 @@ const CreateBoardModal = memo(function CreateBoardModal({
                 }`}
                 style={{
                   backgroundColor: c.value,
-                  ringColor: color === c.value ? c.value : undefined,
+                  ...(color === c.value && {
+                    "--tw-ring-color": c.value,
+                  } as React.CSSProperties),
                 }}
                 title={c.label}
               >
