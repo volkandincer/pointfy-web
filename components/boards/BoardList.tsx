@@ -137,39 +137,82 @@ const BoardList = memo(function BoardList({
 
   return (
     <>
-      <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-          {showArchived ? "Arşivlenmiş Board'lar" : "Board'larım"}
-        </h2>
-        {!showArchived && (
+      {!showArchived && (
+        <div className="mb-6 flex items-center justify-end">
           <button
             onClick={() => setShowCreateModal(true)}
             disabled={actionLoading}
-            className="rounded-md bg-gray-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-gray-800 disabled:opacity-60 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
+            className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-xl disabled:opacity-60 disabled:hover:shadow-lg"
           >
-            + Yeni Board
+            <svg
+              className="h-5 w-5 transition-transform group-hover:rotate-90"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            Yeni Board Oluştur
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       {filteredBoards.length === 0 ? (
-        <div className="rounded-xl border border-gray-200 bg-white p-12 text-center dark:border-gray-800 dark:bg-gray-900">
-          <p className="text-gray-600 dark:text-gray-400">
+        <div className="rounded-2xl border-2 border-dashed border-gray-300 bg-white p-16 text-center dark:border-gray-700 dark:bg-gray-900">
+          <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30">
+            <svg
+              className="h-10 w-10 text-blue-600 dark:text-blue-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+          </div>
+          <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-white">
             {showArchived
-              ? "Arşivlenmiş board bulunmuyor."
-              : "Henüz board oluşturmadınız."}
+              ? "Arşivlenmiş board bulunmuyor"
+              : "Henüz board oluşturmadınız"}
+          </h3>
+          <p className="mb-6 text-gray-600 dark:text-gray-400">
+            {showArchived
+              ? "Arşivlenmiş board'larınız burada görünecek"
+              : "İlk board'unuzu oluşturarak başlayın"}
           </p>
           {!showArchived && (
             <button
               onClick={() => setShowCreateModal(true)}
-              className="mt-4 rounded-md bg-gray-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
+              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-xl"
             >
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
               İlk Board'unu Oluştur
             </button>
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filteredBoards.map((board) => (
             <BoardCard
               key={board.id}

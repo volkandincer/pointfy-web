@@ -59,75 +59,96 @@ export default function NotesPage() {
     <RequireAuth>
       <>
         <Header navigationItems={navigationItems} />
-        <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
-          <div className="container mx-auto px-4 py-8">
-            <div className="mx-auto max-w-4xl">
-              {/* Header */}
-              <div className="mb-6 text-center">
-                <h1 className="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-                  Notlarım
-                </h1>
-                <p className="text-base font-medium text-gray-600 dark:text-gray-400">
-                  Kişisel notlarını kategorilere ayır, toplantı öncesi hazırlık
-                  yap!
-                </p>
-              </div>
-
-              {/* Chip Filter Bar */}
-              <div className="mb-6 border-b border-gray-200 pb-4 dark:border-gray-800">
-                <div className="flex flex-wrap gap-2">
-                  {categories.map((cat) => (
-                    <button
-                      key={cat}
-                      onClick={() => setSelectedCategory(cat)}
-                      className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-                        selectedCategory === cat
-                          ? "bg-blue-600 text-white shadow-md"
-                          : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-                      }`}
-                    >
-                      {getCategoryLabel(cat)}
-                    </button>
-                  ))}
+        <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+          <div className="container mx-auto px-4 py-12">
+            <div className="mx-auto max-w-7xl">
+              {/* Header Section */}
+              <div className="mb-8">
+                <div className="mb-6">
+                  <h1 className="mb-3 text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+                    Notlarım
+                  </h1>
+                  <p className="text-lg text-gray-600 dark:text-gray-400">
+                    Kişisel notlarını kategorilere ayır, toplantı öncesi hazırlık yap!
+                  </p>
                 </div>
-              </div>
 
-              {/* Add Note Button */}
-              <div className="mb-6 flex justify-end">
-                <button
-                  onClick={() => {
-                    setEditingNote(null);
-                    setShowModal(true);
-                  }}
-                  className="inline-flex h-10 items-center justify-center rounded-md bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
-                >
-                  + Yeni Not Ekle
-                </button>
+                {/* Chip Filter Bar */}
+                <div className="mb-6 rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+                  <div className="flex flex-wrap gap-2">
+                    {categories.map((cat) => (
+                      <button
+                        key={cat}
+                        onClick={() => setSelectedCategory(cat)}
+                        className={`rounded-full px-5 py-2.5 text-sm font-semibold transition-all ${
+                          selectedCategory === cat
+                            ? "bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-md"
+                            : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                        }`}
+                      >
+                        {getCategoryLabel(cat)}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Add Note Button */}
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => {
+                      setEditingNote(null);
+                      setShowModal(true);
+                    }}
+                    className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-purple-700 px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:from-purple-700 hover:to-purple-800 hover:shadow-xl"
+                  >
+                    <svg
+                      className="h-5 w-5 transition-transform group-hover:rotate-90"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 4v16m8-8H4"
+                      />
+                    </svg>
+                    Yeni Not Ekle
+                  </button>
+                </div>
               </div>
 
               {/* Notes List */}
               <div>
                 {loading ? (
-                  <div className="h-40 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800" />
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    {[1, 2, 3, 4, 5, 6].map((i) => (
+                      <div
+                        key={i}
+                        className="h-64 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800"
+                      />
+                    ))}
+                  </div>
                 ) : (
                   <NoteList
-                  notes={filteredNotes}
-                  onDelete={async (id) => {
-                    try {
-                      await removeNote(id);
-                      showToast("Not başarıyla silindi!", "success");
-                    } catch (error: unknown) {
-                      showToast(
-                        `Not silinemedi: ${error instanceof Error ? error.message : "Bilinmeyen hata"}`,
-                        "error"
-                      );
-                    }
-                  }}
-                  onEdit={(n) => {
-                    setEditingNote(n);
-                    setShowModal(true);
-                  }}
-                />
+                    notes={filteredNotes}
+                    onDelete={async (id) => {
+                      try {
+                        await removeNote(id);
+                        showToast("Not başarıyla silindi!", "success");
+                      } catch (error: unknown) {
+                        showToast(
+                          `Not silinemedi: ${error instanceof Error ? error.message : "Bilinmeyen hata"}`,
+                          "error"
+                        );
+                      }
+                    }}
+                    onEdit={(n) => {
+                      setEditingNote(n);
+                      setShowModal(true);
+                    }}
+                  />
                 )}
               </div>
             </div>

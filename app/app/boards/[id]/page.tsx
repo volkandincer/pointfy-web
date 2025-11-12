@@ -388,46 +388,100 @@ export default function BoardDetailPage() {
     <RequireAuth>
       <>
         <Header navigationItems={navigationItems} />
-        <main className="container mx-auto px-4 py-16">
-          <div className="mx-auto max-w-6xl">
+        <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+          <div className="container mx-auto px-4 py-12">
+            <div className="mx-auto max-w-6xl">
             {/* Board Header */}
             <div
-              className="mb-6 rounded-xl border p-6 text-white"
-              style={{ backgroundColor: boardColor }}
+              className="group relative mb-8 overflow-hidden rounded-2xl border-2 border-white/20 p-8 text-white shadow-2xl"
+              style={{
+                background: `linear-gradient(135deg, ${boardColor} 0%, ${boardColor}dd 100%)`,
+              }}
             >
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="mb-2 flex items-center gap-2">
-                    <span className="text-3xl">{boardIcon}</span>
-                    <h1 className="text-2xl font-bold">{board.name}</h1>
+              {/* Pattern Overlay */}
+              <div className="absolute inset-0 opacity-10">
+                <div
+                  className="h-full w-full"
+                  style={{
+                    backgroundImage:
+                      "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
+                    backgroundSize: "24px 24px",
+                  }}
+                />
+              </div>
+
+              <div className="relative z-10">
+                <div className="mb-4 flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="mb-3 flex items-center gap-3">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/20 text-4xl backdrop-blur-sm">
+                        {boardIcon}
+                      </div>
+                      <div>
+                        <h1 className="mb-1 text-3xl font-bold tracking-tight">
+                          {board.name}
+                        </h1>
+                        {board.description && (
+                          <p className="text-white/90">{board.description}</p>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  {board.description && (
-                    <p className="mb-2 opacity-90">{board.description}</p>
-                  )}
+                  <button
+                    onClick={() => setShowEditBoardModal(true)}
+                    className="rounded-xl bg-white/20 px-5 py-2.5 text-sm font-semibold backdrop-blur-sm transition-all hover:bg-white/30 hover:scale-105"
+                  >
+                    <svg
+                      className="mr-2 inline h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      />
+                    </svg>
+                    Düzenle
+                  </button>
                 </div>
-                <button
-                  onClick={() => setShowEditBoardModal(true)}
-                  className="rounded-md bg-white/20 px-4 py-2 text-sm font-semibold transition hover:bg-white/30"
-                >
-                  Düzenle
-                </button>
               </div>
             </div>
 
             {/* Tasks Section */}
             <div className="mb-8">
-              <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                  Task&apos;lar
-                </h2>
+              <div className="mb-6 flex items-center justify-between">
+                <div>
+                  <h2 className="mb-1 text-2xl font-bold text-gray-900 dark:text-white">
+                    Task&apos;lar
+                  </h2>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Bu board&apos;a ait görevleriniz
+                  </p>
+                </div>
                 <button
                   onClick={() => {
                     setEditingTask(null);
                     setShowTaskModal(true);
                   }}
-                  className="rounded-md bg-gray-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
+                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-xl"
                 >
-                  + Yeni Task
+                  <svg
+                    className="h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
+                  </svg>
+                  Yeni Task
                 </button>
               </div>
               {tasksLoading ? (
@@ -446,18 +500,36 @@ export default function BoardDetailPage() {
 
             {/* Notes Section */}
             <div>
-              <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                  Notlar
-                </h2>
+              <div className="mb-6 flex items-center justify-between">
+                <div>
+                  <h2 className="mb-1 text-2xl font-bold text-gray-900 dark:text-white">
+                    Notlar
+                  </h2>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Bu board&apos;a ait notlarınız
+                  </p>
+                </div>
                 <button
                   onClick={() => {
                     setEditingNote(null);
                     setShowNoteModal(true);
                   }}
-                  className="rounded-md bg-gray-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
+                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-purple-700 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-all hover:from-purple-700 hover:to-purple-800 hover:shadow-xl"
                 >
-                  + Yeni Not
+                  <svg
+                    className="h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
+                  </svg>
+                  Yeni Not
                 </button>
               </div>
               <NoteList
@@ -468,6 +540,7 @@ export default function BoardDetailPage() {
                   setShowNoteModal(true);
                 }}
               />
+            </div>
             </div>
           </div>
         </main>
