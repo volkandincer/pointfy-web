@@ -61,13 +61,15 @@ const BoardCard = memo(function BoardCard({
   return (
     <Link
       href={`/app/boards/${board.id}`}
-      className="group relative block overflow-hidden rounded-2xl border-2 border-gray-200/70 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-gray-300 hover:shadow-lg dark:border-gray-800/70 dark:bg-gray-900 dark:hover:border-gray-700"
-      style={{
-        borderLeftColor: boardColor,
-        borderLeftWidth: "4px",
-      }}
+      className="group relative block overflow-hidden rounded-2xl border-2 border-gray-200/70 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-gray-300 hover:shadow-xl dark:border-gray-800/70 dark:bg-gray-900 dark:hover:border-gray-700"
     >
-      {/* Gradient Background Overlay */}
+      {/* Left Border with Board Color */}
+      <div
+        className="absolute left-0 top-0 h-full w-1 transition-all group-hover:w-1.5"
+        style={{ backgroundColor: boardColor }}
+      />
+
+      {/* Gradient Background Overlay on Hover */}
       <div
         className="absolute inset-0 opacity-0 transition-opacity group-hover:opacity-5"
         style={{
@@ -78,36 +80,37 @@ const BoardCard = memo(function BoardCard({
       {/* Content */}
       <div className="relative z-10">
         {/* Header */}
-        <div className="mb-4 flex items-start justify-between">
-          <div className="flex-1">
-            <div className="mb-3 flex items-center gap-3">
-              <div
-                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-2xl shadow-sm transition-transform group-hover:scale-110"
-                style={{
-                  backgroundColor: getColorWithOpacity(boardColor, 0.1),
-                }}
-              >
-                {boardIcon}
-              </div>
-              <div className="min-w-0 flex-1">
-                <h3 className="mb-1 text-xl font-bold text-gray-900 dark:text-white">
-                  {board.name}
-                </h3>
-                {board.description && (
-                  <p className="line-clamp-2 text-sm text-gray-600 dark:text-gray-400">
-                    {board.description}
-                  </p>
-                )}
-              </div>
+        <div className="relative mb-4">
+          <div className="flex items-start gap-3 pr-20">
+            {/* Icon Box */}
+            <div
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-2xl shadow-md transition-all group-hover:scale-110 group-hover:shadow-lg"
+              style={{
+                backgroundColor: getColorWithOpacity(boardColor, 0.15),
+              }}
+            >
+              {boardIcon}
+            </div>
+
+            {/* Title and Description */}
+            <div className="min-w-0 flex-1">
+              <h3 className="mb-1.5 text-xl font-bold text-gray-900 dark:text-white line-clamp-2">
+                {board.name}
+              </h3>
+              {board.description && (
+                <p className="line-clamp-3 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                  {board.description}
+                </p>
+              )}
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="ml-2 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+          {/* Action Buttons - Absolute positioned */}
+          <div className="absolute right-0 top-0 flex shrink-0 gap-1.5 opacity-0 transition-opacity group-hover:opacity-100">
             {onEdit && (
               <button
                 onClick={handleEdit}
-                className="rounded-lg bg-gray-100 p-2 text-gray-600 transition hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
+                className="rounded-lg bg-blue-50 p-2 text-blue-600 transition-all hover:bg-blue-100 hover:scale-110 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/30"
                 title="Düzenle"
               >
                 <svg
@@ -128,7 +131,7 @@ const BoardCard = memo(function BoardCard({
             {onArchive && (
               <button
                 onClick={handleArchive}
-                className="rounded-lg bg-gray-100 p-2 text-gray-600 transition hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
+                className="rounded-lg bg-gray-100 p-2 text-gray-600 transition-all hover:bg-gray-200 hover:scale-110 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
                 title={board.is_archived ? "Arşivden Çıkar" : "Arşivle"}
               >
                 <svg
@@ -153,7 +156,7 @@ const BoardCard = memo(function BoardCard({
             {onDelete && (
               <button
                 onClick={handleDelete}
-                className="rounded-lg bg-red-50 p-2 text-red-600 transition hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30"
+                className="rounded-lg bg-red-50 p-2 text-red-600 transition-all hover:bg-red-100 hover:scale-110 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30"
                 title="Sil"
               >
                 <svg
@@ -174,26 +177,18 @@ const BoardCard = memo(function BoardCard({
           </div>
         </div>
 
-        {/* Color Indicator Bar */}
-        <div className="flex items-center gap-2">
+        {/* Bottom Color Indicator */}
+        <div className="flex items-center gap-3">
           <div
-            className="h-2 flex-1 rounded-full transition-all group-hover:h-2.5"
+            className="h-1.5 flex-1 rounded-full transition-all group-hover:h-2"
             style={{ backgroundColor: boardColor }}
           />
           <div
-            className="h-8 w-8 rounded-full border-2 border-white shadow-sm dark:border-gray-800"
+            className="h-6 w-6 rounded-full border-2 border-white shadow-sm dark:border-gray-800 transition-transform group-hover:scale-110"
             style={{ backgroundColor: boardColor }}
           />
         </div>
       </div>
-
-      {/* Hover Effect Overlay */}
-      <div
-        className="absolute inset-0 -z-0 opacity-0 transition-opacity group-hover:opacity-100"
-        style={{
-          background: `linear-gradient(135deg, ${getColorWithOpacity(boardColor, 0.03)} 0%, transparent 100%)`,
-        }}
-      />
     </Link>
   );
 });
