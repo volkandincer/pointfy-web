@@ -43,7 +43,7 @@ function HomePageContent() {
           const { data: userRow } = await supabase
             .from("users")
             .select("username")
-            .eq("key", sessionData.session.user.id)
+            .eq("id", sessionData.session.user.id)
             .single();
           if (!mounted) return;
           setUsername(userRow?.username);

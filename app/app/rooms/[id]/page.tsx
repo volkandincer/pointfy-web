@@ -134,7 +134,7 @@ export default function RoomDetailPage() {
         const { data: userRow } = await supabase
           .from("users")
           .select("username")
-          .eq("key", userData.user.id)
+          .eq("id", userData.user.id)
           .single();
         if (!mounted) return;
         setUsername(

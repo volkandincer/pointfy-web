@@ -51,7 +51,7 @@ function CreateRoomPageContent() {
         const { data: userRow } = await supabase
           .from("users")
           .select("username")
-          .eq("key", data.user.id)
+          .eq("id", data.user.id)
           .single();
         if (!mounted) return;
         setUsername(

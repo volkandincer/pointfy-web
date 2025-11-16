@@ -16,12 +16,15 @@ export default function AccountPage() {
   );
   const router = useRouter();
   const [userKey, setUserKey] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [email, setEmail] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [editingUsername, setEditingUsername] = useState<boolean>(false);
   const [newUsername, setNewUsername] = useState<string>("");
   const [saving, setSaving] = useState<boolean>(false);
+  const [bitbucketConnected, setBitbucketConnected] = useState<boolean>(false);
+  const [bitbucketUsername, setBitbucketUsername] = useState<string>("");
 
   useEffect(() => {
     let mounted = true;
@@ -40,21 +43,85 @@ export default function AccountPage() {
         setUserKey(userData.user.id);
         setEmail(userData.user.email || "");
 
-        const { data: userRow } = await supabase
+        // Önce sadece username'i al (bitbucket kolonları olmayabilir)
+        const { data: userRow, error: userRowError } = await supabase
           .from("users")
           .select("username")
-          .eq("key", userData.user.id)
-          .single();
+          .eq("id", userData.user.id)
+          .maybeSingle();
 
         if (!mounted) return;
+
+        if (userRowError) {
+          console.error("User row fetch error:", userRowError);
+          // Eğer kayıt yoksa (PGRST116), yeni kayıt oluştur
+          if (userRowError.code === "PGRST116" || userRowError.message?.includes("0 rows")) {
+            const emailUsername = userData.user.email?.split("@")[0] || "User";
+            // Trigger (handle_new_user) otomatik olarak public.users tablosuna insert yapıyor
+            // Ama eğer row yoksa, upsert kullanarak güvenli bir şekilde oluştur
+            const { error: insertError } = await supabase
+              .from("users")
+              .upsert({
+                id: userData.user.id,
+                username: emailUsername,
+                email: userData.user.email || "",
+                created_at: new Date().toISOString(),
+              }, {
+                onConflict: "id",
+              });
+            
+            if (insertError) {
+              console.error("User insert/update error:", insertError);
+            } else {
+              setUsername(emailUsername);
+              setNewUsername(emailUsername);
+            }
+          }
+        }
 
         if (userRow?.username) {
           setUsername(userRow.username);
           setNewUsername(userRow.username);
-        } else {
+        } else if (!userRowError || userRowError.code !== "PGRST116") {
+          // Sadece kayıt yoksa değil, başka bir hata varsa email'den username oluştur
           const emailUsername = userData.user.email?.split("@")[0] || "User";
           setUsername(emailUsername);
           setNewUsername(emailUsername);
+        }
+
+        // Bitbucket bağlantı durumu (kolonlar varsa kontrol et)
+        try {
+          console.log("🔍 Bitbucket sorgusu başlıyor - User ID:", userData.user.id.substring(0, 20) + "...");
+          const { data: bitbucketRow, error: bitbucketError } = await supabase
+            .from("users")
+            .select("bitbucket_uuid, bitbucket_username")
+            .eq("id", userData.user.id)
+            .maybeSingle();
+
+          console.log("🔍 Bitbucket bağlantı kontrolü:", {
+            userId: userData.user.id.substring(0, 20) + "...",
+            hasRow: !!bitbucketRow,
+            hasUuid: !!bitbucketRow?.bitbucket_uuid,
+            username: bitbucketRow?.bitbucket_username,
+            error: bitbucketError,
+            errorCode: bitbucketError?.code,
+            errorMessage: bitbucketError?.message,
+          });
+
+          if (bitbucketRow?.bitbucket_uuid) {
+            console.log("✅ Bitbucket bağlı - state güncelleniyor");
+            setBitbucketConnected(true);
+            setBitbucketUsername(bitbucketRow.bitbucket_username || "");
+          } else {
+            console.log("⚠️ Bitbucket bağlı değil");
+            setBitbucketConnected(false);
+            setBitbucketUsername("");
+          }
+        } catch (bitbucketError) {
+          console.error("❌ Bitbucket kontrol hatası:", bitbucketError);
+          // Bitbucket kolonları yoksa (migration çalıştırılmamışsa) sadece false yap
+          setBitbucketConnected(false);
+          setBitbucketUsername("");
         }
       } catch (err) {
         console.error("Account fetch error:", err);
@@ -64,8 +131,52 @@ export default function AccountPage() {
     }
 
     fetchUserData();
+    
+    // URL'deki error ve success parametrelerini kontrol et
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      const error = urlParams.get("error");
+      const bitbucketConnected = urlParams.get("bitbucket_connected");
+      
+      if (error) {
+        setErrorMessage(decodeURIComponent(error));
+        // URL'den error parametresini temizle
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, "", newUrl);
+      }
+      
+      // Bitbucket bağlantısı başarılı olduysa, veriyi yeniden çek
+      if (bitbucketConnected === "true") {
+        console.log("🔄 Bitbucket bağlantısı başarılı, veri yeniden çekiliyor...");
+        // URL'den parametreyi temizle
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, "", newUrl);
+        // Veriyi yeniden çek
+        fetchUserData();
+      }
+    }
+    
+    // Sayfa focus olduğunda veya visibility change olduğunda veriyi yeniden çek
+    // (OAuth callback'ten döndükten sonra state'i güncellemek için)
+    const handleFocus = () => {
+      if (mounted) {
+        fetchUserData();
+      }
+    };
+    
+    const handleVisibilityChange = () => {
+      if (mounted && !document.hidden) {
+        fetchUserData();
+      }
+    };
+    
+    window.addEventListener("focus", handleFocus);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    
     return () => {
       mounted = false;
+      window.removeEventListener("focus", handleFocus);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, []);
 
@@ -83,7 +194,7 @@ export default function AccountPage() {
       const { data: existingUser } = await supabase
         .from("users")
         .select("key")
-        .eq("key", userKey)
+        .eq("id", userKey)
         .maybeSingle();
 
       if (existingUser) {
@@ -91,15 +202,23 @@ export default function AccountPage() {
         const { error } = await supabase
           .from("users")
           .update({ username: newUsername.trim() })
-          .eq("key", userKey);
+          .eq("id", userKey);
 
         if (error) throw error;
       } else {
-        // Yeni kayıt oluştur
-        const { error } = await supabase.from("users").insert({
-          key: userKey,
-          username: newUsername.trim(),
-        });
+        // Yeni kayıt oluştur (veya varsa güncelle)
+        // Trigger (handle_new_user) otomatik olarak public.users tablosuna insert yapıyor
+        // Ama eğer row yoksa, upsert kullanarak güvenli bir şekilde oluştur
+        const { error } = await supabase
+          .from("users")
+          .upsert({
+            id: userKey,
+            username: newUsername.trim(),
+            email: email, // Ensure email is also inserted
+            created_at: new Date().toISOString(),
+          }, {
+            onConflict: "id",
+          });
 
         if (error) throw error;
       }
@@ -121,6 +240,63 @@ export default function AccountPage() {
       router.replace("/");
     } catch (err) {
       console.error("Sign out error:", err);
+    }
+  };
+
+  const handleConnectBitbucket = async () => {
+    // Önce user ID'yi al (eğer userKey boşsa)
+    let userId = userKey;
+    if (!userId) {
+      try {
+        const supabase = getSupabase();
+        const { data: userData } = await supabase.auth.getUser();
+        if (userData?.user?.id) {
+          userId = userData.user.id;
+        }
+      } catch (err) {
+        console.error("User ID alınamadı:", err);
+        alert("Kullanıcı bilgileri alınamadı. Lütfen sayfayı yenileyin.");
+        return;
+      }
+    }
+    
+    if (!userId) {
+      alert("Kullanıcı bilgileri alınamadı. Lütfen sayfayı yenileyin.");
+      return;
+    }
+    
+    // OAuth akışını başlat - returnUrl ve userId ile account sayfasına dön
+    const returnUrl = encodeURIComponent("/app/account");
+    const encodedUserId = encodeURIComponent(userId);
+    window.location.href = `/api/auth/bitbucket?returnUrl=${returnUrl}&userId=${encodedUserId}`;
+  };
+
+  const handleDisconnectBitbucket = async () => {
+    if (!confirm("Bitbucket hesabınızı bağlantıdan koparmak istediğinize emin misiniz?")) {
+      return;
+    }
+
+    try {
+      const supabase = getSupabase();
+      const { error } = await supabase
+        .from("users")
+        .update({
+          bitbucket_access_token: null,
+          bitbucket_refresh_token: null,
+          bitbucket_token_expires_at: null,
+          bitbucket_username: null,
+          bitbucket_uuid: null,
+        })
+        .eq("id", userKey);
+
+      if (error) throw error;
+
+      setBitbucketConnected(false);
+      setBitbucketUsername("");
+      alert("Bitbucket hesabı bağlantıdan koparıldı.");
+    } catch (err) {
+      console.error("Bitbucket disconnect error:", err);
+      alert("Bitbucket bağlantısı koparılamadı.");
     }
   };
 
@@ -152,6 +328,19 @@ export default function AccountPage() {
                 Profil bilgilerinizi yönetin
               </p>
             </div>
+
+            {/* Error mesajı (OAuth callback'ten döndükten sonra) */}
+            {errorMessage && (
+              <div className="mb-6 rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+                Hata: {errorMessage}
+                <button
+                  onClick={() => setErrorMessage(null)}
+                  className="ml-2 text-red-800 hover:text-red-900 dark:text-red-300 dark:hover:text-red-200"
+                >
+                  ✕
+                </button>
+              </div>
+            )}
 
             {/* Profil Bilgileri */}
             <div className="mb-6 rounded-2xl border border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
@@ -227,6 +416,53 @@ export default function AccountPage() {
                   )}
                 </div>
               </div>
+            </div>
+
+            {/* Bitbucket Bağlantısı */}
+            <div className="mb-6 rounded-2xl border border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
+              <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+                Bitbucket Bağlantısı
+              </h2>
+              <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+                Bitbucket hesabınızı bağlayın.
+              </p>
+              {bitbucketConnected ? (
+                <div className="space-y-3">
+                  <button
+                    disabled
+                    className="flex w-full items-center justify-center gap-3 rounded-lg border border-green-300 bg-green-50 px-4 py-2.5 text-sm font-semibold text-green-700 transition-all dark:border-green-700 dark:bg-green-900/20 dark:text-green-400"
+                  >
+                    <svg
+                      className="h-5 w-5 text-green-600 dark:text-green-400"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    {bitbucketUsername ? `Bitbucket Bağlı (@${bitbucketUsername})` : "Bitbucket Bağlı"}
+                  </button>
+                  <button
+                    onClick={handleDisconnectBitbucket}
+                    className="w-full rounded-md border border-red-300 bg-white px-4 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50 dark:border-red-700 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-900/20"
+                  >
+                    Bağlantıyı Kopar
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={handleConnectBitbucket}
+                  className="flex w-full items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-all hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                >
+                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M.778 1.213a.768.768 0 00-.768.892l3.263 19.81c.084.5.515.868 1.022.873H20.71a.772.772 0 00.77-.646l3.27-20.03a.768.768 0 00-.768-.891L.778 1.213zM14.52 15.53H9.522L8.17 8.466h7.561l-1.211 7.064z" />
+                  </svg>
+                  Bitbucket Bağla
+                </button>
+              )}
             </div>
 
             {/* Çıkış Yap */}
