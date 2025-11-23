@@ -36,3 +36,4 @@ DROP COLUMN IF EXISTS bitbucket_uuid;
 -- 2. Kullanıcılar tekrar Bitbucket bağlantısı yapmak zorunda kalır
 -- 3. Jira görevleri görüntüleme özelliği çalışmaz
 
+

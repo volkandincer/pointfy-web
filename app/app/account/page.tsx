@@ -23,8 +23,7 @@ export default function AccountPage() {
   const [editingUsername, setEditingUsername] = useState<boolean>(false);
   const [newUsername, setNewUsername] = useState<string>("");
   const [saving, setSaving] = useState<boolean>(false);
-  const [bitbucketConnected, setBitbucketConnected] = useState<boolean>(false);
-  const [bitbucketUsername, setBitbucketUsername] = useState<string>("");
+  const [jiraConnected, setJiraConnected] = useState<boolean>(false);
 
   useEffect(() => {
     let mounted = true;
@@ -33,7 +32,7 @@ export default function AccountPage() {
         const supabase = getSupabase();
         const { data: userData } = await supabase.auth.getUser();
         if (!mounted) return;
-        
+
         // RequireAuth zaten kontrol ediyor, burada sadece user yoksa return et
         if (!userData.user) {
           setLoading(false);
@@ -55,21 +54,25 @@ export default function AccountPage() {
         if (userRowError) {
           console.error("User row fetch error:", userRowError);
           // Eğer kayıt yoksa (PGRST116), yeni kayıt oluştur
-          if (userRowError.code === "PGRST116" || userRowError.message?.includes("0 rows")) {
+          if (
+            userRowError.code === "PGRST116" ||
+            userRowError.message?.includes("0 rows")
+          ) {
             const emailUsername = userData.user.email?.split("@")[0] || "User";
             // Trigger (handle_new_user) otomatik olarak public.users tablosuna insert yapıyor
             // Ama eğer row yoksa, upsert kullanarak güvenli bir şekilde oluştur
-            const { error: insertError } = await supabase
-              .from("users")
-              .upsert({
+            const { error: insertError } = await supabase.from("users").upsert(
+              {
                 id: userData.user.id,
                 username: emailUsername,
                 email: userData.user.email || "",
                 created_at: new Date().toISOString(),
-              }, {
+              },
+              {
                 onConflict: "id",
-              });
-            
+              }
+            );
+
             if (insertError) {
               console.error("User insert/update error:", insertError);
             } else {
@@ -89,39 +92,22 @@ export default function AccountPage() {
           setNewUsername(emailUsername);
         }
 
-        // Bitbucket bağlantı durumu (kolonlar varsa kontrol et)
+        // Jira bağlantı durumu
         try {
-          console.log("🔍 Bitbucket sorgusu başlıyor - User ID:", userData.user.id.substring(0, 20) + "...");
-          const { data: bitbucketRow, error: bitbucketError } = await supabase
+          const { data: jiraRow, error: jiraError } = await supabase
             .from("users")
-            .select("bitbucket_uuid, bitbucket_username")
+            .select("jira_access_token")
             .eq("id", userData.user.id)
             .maybeSingle();
 
-          console.log("🔍 Bitbucket bağlantı kontrolü:", {
-            userId: userData.user.id.substring(0, 20) + "...",
-            hasRow: !!bitbucketRow,
-            hasUuid: !!bitbucketRow?.bitbucket_uuid,
-            username: bitbucketRow?.bitbucket_username,
-            error: bitbucketError,
-            errorCode: bitbucketError?.code,
-            errorMessage: bitbucketError?.message,
-          });
-
-          if (bitbucketRow?.bitbucket_uuid) {
-            console.log("✅ Bitbucket bağlı - state güncelleniyor");
-            setBitbucketConnected(true);
-            setBitbucketUsername(bitbucketRow.bitbucket_username || "");
+          if (jiraRow?.jira_access_token) {
+            setJiraConnected(true);
           } else {
-            console.log("⚠️ Bitbucket bağlı değil");
-            setBitbucketConnected(false);
-            setBitbucketUsername("");
+            setJiraConnected(false);
           }
-        } catch (bitbucketError) {
-          console.error("❌ Bitbucket kontrol hatası:", bitbucketError);
-          // Bitbucket kolonları yoksa (migration çalıştırılmamışsa) sadece false yap
-          setBitbucketConnected(false);
-          setBitbucketUsername("");
+        } catch (jiraError) {
+          console.error("❌ Jira kontrol hatası:", jiraError);
+          setJiraConnected(false);
         }
       } catch (err) {
         console.error("Account fetch error:", err);
@@ -131,23 +117,24 @@ export default function AccountPage() {
     }
 
     fetchUserData();
-    
+
     // URL'deki error ve success parametrelerini kontrol et
     if (typeof window !== "undefined") {
       const urlParams = new URLSearchParams(window.location.search);
       const error = urlParams.get("error");
-      const bitbucketConnected = urlParams.get("bitbucket_connected");
-      
       if (error) {
         setErrorMessage(decodeURIComponent(error));
         // URL'den error parametresini temizle
         const newUrl = window.location.pathname;
         window.history.replaceState({}, "", newUrl);
       }
-      
-      // Bitbucket bağlantısı başarılı olduysa, veriyi yeniden çek
-      if (bitbucketConnected === "true") {
-        console.log("🔄 Bitbucket bağlantısı başarılı, veri yeniden çekiliyor...");
+
+      // Jira bağlantısı başarılı olduysa, veriyi yeniden çek
+      const jiraConnected = urlParams.get("jira_connected");
+      if (jiraConnected === "true") {
+        console.log(
+          "🔄 Jira bağlantısı başarılı, veri yeniden çekiliyor..."
+        );
         // URL'den parametreyi temizle
         const newUrl = window.location.pathname;
         window.history.replaceState({}, "", newUrl);
@@ -155,7 +142,7 @@ export default function AccountPage() {
         fetchUserData();
       }
     }
-    
+
     // Sayfa focus olduğunda veya visibility change olduğunda veriyi yeniden çek
     // (OAuth callback'ten döndükten sonra state'i güncellemek için)
     const handleFocus = () => {
@@ -163,16 +150,16 @@ export default function AccountPage() {
         fetchUserData();
       }
     };
-    
+
     const handleVisibilityChange = () => {
       if (mounted && !document.hidden) {
         fetchUserData();
       }
     };
-    
+
     window.addEventListener("focus", handleFocus);
     document.addEventListener("visibilitychange", handleVisibilityChange);
-    
+
     return () => {
       mounted = false;
       window.removeEventListener("focus", handleFocus);
@@ -189,7 +176,7 @@ export default function AccountPage() {
     setSaving(true);
     try {
       const supabase = getSupabase();
-      
+
       // Önce kullanıcının users tablosunda kaydı var mı kontrol et
       const { data: existingUser } = await supabase
         .from("users")
@@ -209,16 +196,17 @@ export default function AccountPage() {
         // Yeni kayıt oluştur (veya varsa güncelle)
         // Trigger (handle_new_user) otomatik olarak public.users tablosuna insert yapıyor
         // Ama eğer row yoksa, upsert kullanarak güvenli bir şekilde oluştur
-        const { error } = await supabase
-          .from("users")
-          .upsert({
+        const { error } = await supabase.from("users").upsert(
+          {
             id: userKey,
             username: newUsername.trim(),
             email: email, // Ensure email is also inserted
             created_at: new Date().toISOString(),
-          }, {
+          },
+          {
             onConflict: "id",
-          });
+          }
+        );
 
         if (error) throw error;
       }
@@ -243,7 +231,7 @@ export default function AccountPage() {
     }
   };
 
-  const handleConnectBitbucket = async () => {
+  const handleConnectJira = async () => {
     // Önce user ID'yi al (eğer userKey boşsa)
     let userId = userKey;
     if (!userId) {
@@ -259,20 +247,24 @@ export default function AccountPage() {
         return;
       }
     }
-    
+
     if (!userId) {
       alert("Kullanıcı bilgileri alınamadı. Lütfen sayfayı yenileyin.");
       return;
     }
-    
+
     // OAuth akışını başlat - returnUrl ve userId ile account sayfasına dön
     const returnUrl = encodeURIComponent("/app/account");
     const encodedUserId = encodeURIComponent(userId);
-    window.location.href = `/api/auth/bitbucket?returnUrl=${returnUrl}&userId=${encodedUserId}`;
+    window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
   };
 
-  const handleDisconnectBitbucket = async () => {
-    if (!confirm("Bitbucket hesabınızı bağlantıdan koparmak istediğinize emin misiniz?")) {
+  const handleDisconnectJira = async () => {
+    if (
+      !confirm(
+        "Jira hesabınızı bağlantıdan koparmak istediğinize emin misiniz?"
+      )
+    ) {
       return;
     }
 
@@ -281,22 +273,19 @@ export default function AccountPage() {
       const { error } = await supabase
         .from("users")
         .update({
-          bitbucket_access_token: null,
-          bitbucket_refresh_token: null,
-          bitbucket_token_expires_at: null,
-          bitbucket_username: null,
-          bitbucket_uuid: null,
+          jira_access_token: null,
+          jira_refresh_token: null,
+          jira_token_expires_at: null,
         })
         .eq("id", userKey);
 
       if (error) throw error;
 
-      setBitbucketConnected(false);
-      setBitbucketUsername("");
-      alert("Bitbucket hesabı bağlantıdan koparıldı.");
+      setJiraConnected(false);
+      alert("Jira hesabı bağlantıdan koparıldı.");
     } catch (err) {
-      console.error("Bitbucket disconnect error:", err);
-      alert("Bitbucket bağlantısı koparılamadı.");
+      console.error("Jira disconnect error:", err);
+      alert("Jira bağlantısı koparılamadı.");
     }
   };
 
@@ -418,15 +407,15 @@ export default function AccountPage() {
               </div>
             </div>
 
-            {/* Bitbucket Bağlantısı */}
+            {/* Jira Bağlantısı */}
             <div className="mb-6 rounded-2xl border border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
               <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-                Bitbucket Bağlantısı
+                Jira Bağlantısı
               </h2>
               <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
-                Bitbucket hesabınızı bağlayın.
+                Jira hesabınızı bağlayın.
               </p>
-              {bitbucketConnected ? (
+              {jiraConnected ? (
                 <div className="space-y-3">
                   <button
                     disabled
@@ -443,10 +432,10 @@ export default function AccountPage() {
                         clipRule="evenodd"
                       />
                     </svg>
-                    {bitbucketUsername ? `Bitbucket Bağlı (@${bitbucketUsername})` : "Bitbucket Bağlı"}
+                    Jira Bağlı
                   </button>
                   <button
-                    onClick={handleDisconnectBitbucket}
+                    onClick={handleDisconnectJira}
                     className="w-full rounded-md border border-red-300 bg-white px-4 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50 dark:border-red-700 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-900/20"
                   >
                     Bağlantıyı Kopar
@@ -454,13 +443,17 @@ export default function AccountPage() {
                 </div>
               ) : (
                 <button
-                  onClick={handleConnectBitbucket}
+                  onClick={handleConnectJira}
                   className="flex w-full items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-all hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
                 >
-                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M.778 1.213a.768.768 0 00-.768.892l3.263 19.81c.084.5.515.868 1.022.873H20.71a.772.772 0 00.77-.646l3.27-20.03a.768.768 0 00-.768-.891L.778 1.213zM14.52 15.53H9.522L8.17 8.466h7.561l-1.211 7.064z" />
+                  <svg
+                    className="h-5 w-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z" />
                   </svg>
-                  Bitbucket Bağla
+                  Jira Bağla
                 </button>
               )}
             </div>
@@ -470,9 +463,7 @@ export default function AccountPage() {
               <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
                 Hesap İşlemleri
               </h2>
-              <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
-                Hesabınızdan çıkış yapmak için aşağıdaki butona tıklayın.
-              </p>
+
               <button
                 onClick={handleSignOut}
                 className="rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700"
@@ -487,4 +478,3 @@ export default function AccountPage() {
     </RequireAuth>
   );
 }
-

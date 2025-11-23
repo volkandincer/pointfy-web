@@ -1,21 +1,23 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { getSupabase } from "@/lib/supabase";
 
 /**
- * Bitbucket OAuth başlatma endpoint'i
- * Kullanıcıyı Bitbucket OAuth sayfasına yönlendirir
+ * Jira OAuth başlatma endpoint'i
+ * Kullanıcıyı Jira OAuth sayfasına yönlendirir
  */
 export async function GET(request: Request) {
-  const clientId = process.env.BITBUCKET_CLIENT_ID;
+  const clientId = process.env.JIRA_CLIENT_ID;
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
   const { searchParams } = new URL(request.url);
-  const returnUrl = searchParams.get("returnUrl") || "/app/account";
-  const userIdFromQuery = searchParams.get("userId"); // Client-side'dan gelen user ID
+  const returnUrl = searchParams.get("returnUrl") || "/app/jira-test";
+  const userIdFromQuery = searchParams.get("userId");
 
   if (!clientId) {
     return NextResponse.json(
-      { error: "Bitbucket OAuth yapılandırılmamış" },
+      { 
+        error: "Jira OAuth yapılandırılmamış",
+        details: "JIRA_CLIENT_ID environment variable'ı eksik. Lütfen .env.local dosyanıza şu değişkenleri ekleyin:\n\nJIRA_CLIENT_ID=your_client_id\nJIRA_CLIENT_SECRET=your_client_secret\n\nJira OAuth uygulaması oluşturmak için: https://developer.atlassian.com/console/myapps/"
+      },
       { status: 500 }
     );
   }
@@ -39,29 +41,9 @@ export async function GET(request: Request) {
         // JWT decode başarısız
       }
     }
-
-    // Eğer JWT'den alınamadıysa, Supabase API'sine istek yap
-    if (!currentUserId && accessToken) {
-      try {
-        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-        const userResponse = await fetch(`${supabaseUrl}/auth/v1/user`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
-          },
-        });
-        
-        if (userResponse.ok) {
-          const userData = await userResponse.json();
-          currentUserId = userData.id;
-        }
-      } catch (apiError) {
-        // API isteği başarısız
-      }
-    }
   }
-  
-  console.log("🔍 OAuth başlatma - User ID:", {
+
+  console.log("🔍 Jira OAuth başlatma - User ID:", {
     fromQuery: !!userIdFromQuery,
     fromCookie: !userIdFromQuery && !!currentUserId,
     userId: currentUserId?.substring(0, 20) + "...",
@@ -69,28 +51,38 @@ export async function GET(request: Request) {
 
   // OAuth state oluştur - user ID'yi state'e encode et
   const randomState = Math.random().toString(36).substring(2, 15);
-  // State formatı: {randomState}:{userId} (base64 encode edilmiş)
   const statePayload = currentUserId 
     ? `${randomState}:${Buffer.from(currentUserId).toString("base64")}`
     : randomState;
   
-  const redirectUri = `${appUrl}/api/auth/bitbucket/callback`;
+  const redirectUri = `${appUrl}/api/auth/jira/callback`;
 
-  const authUrl = new URL("https://bitbucket.org/site/oauth2/authorize");
+  // Jira OAuth 2.0 (3LO) authorization URL
+  // Jira Cloud için: https://auth.atlassian.com/authorize
+  const authUrl = new URL("https://auth.atlassian.com/authorize");
+  authUrl.searchParams.set("audience", "api.atlassian.com");
   authUrl.searchParams.set("client_id", clientId);
-  authUrl.searchParams.set("response_type", "code");
+  // Jira OAuth scope'ları
+  // read:jira-work: Temel Jira verilerine erişim (issues, projects, vb.)
+  // write:jira-work: Jira verilerini güncelleme
+  // offline_access: Refresh token almak için
+  // Not: Agile API scope'ları (read:board-scope:jira-software) Developer Console'da görünmüyor olabilir
+  // Bu durumda Agile API yerine REST API v3 kullanılabilir veya scope'lar farklı bir API grubu altında olabilir
+  authUrl.searchParams.set("scope", "read:jira-work write:jira-work offline_access");
   authUrl.searchParams.set("redirect_uri", redirectUri);
   authUrl.searchParams.set("state", statePayload);
+  authUrl.searchParams.set("response_type", "code");
+  authUrl.searchParams.set("prompt", "consent");
 
   const response = NextResponse.redirect(authUrl.toString());
   // State'in ilk kısmını (randomState) cookie'de sakla (güvenlik kontrolü için)
-  response.cookies.set("bitbucket_oauth_state", randomState, {
+  response.cookies.set("jira_oauth_state", randomState, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     maxAge: 600, // 10 dakika
   });
-  response.cookies.set("bitbucket_oauth_return_url", returnUrl, {
+  response.cookies.set("jira_oauth_return_url", returnUrl, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
