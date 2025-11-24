@@ -1,6 +1,6 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import type { JiraTask } from "@/interfaces/Jira.interface";
 
 interface JiraIssueModalProps {
@@ -14,16 +14,52 @@ const JiraIssueModal = memo(function JiraIssueModal({
   isOpen,
   onClose,
 }: JiraIssueModalProps) {
+  // Modal açıkken body scroll'unu disable et
+  useEffect(() => {
+    if (isOpen) {
+      // Scroll pozisyonunu kaydet
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = "100%";
+      document.body.style.overflow = "hidden";
+    } else {
+      // Scroll pozisyonunu geri yükle
+      const scrollY = document.body.style.top;
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || "0") * -1);
+      }
+    }
+
+    return () => {
+      // Cleanup
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
   if (!isOpen || !issue) return null;
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 overflow-y-auto"
       onClick={onClose}
+      onTouchMove={(e) => {
+        // Modal içindeki scroll'u sayfa scroll'undan ayır
+        e.stopPropagation();
+      }}
     >
       <div
-        className="relative w-full max-w-3xl rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-900"
+        className="relative w-full max-w-3xl my-8 rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-900"
         onClick={(e) => e.stopPropagation()}
+        onTouchStart={(e) => e.stopPropagation()}
+        onTouchMove={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="border-b border-gray-200 p-6 dark:border-gray-800">
@@ -83,7 +119,15 @@ const JiraIssueModal = memo(function JiraIssueModal({
         </div>
 
         {/* Content */}
-        <div className="max-h-[calc(100vh-200px)] overflow-y-auto p-6">
+        <div 
+          className="max-h-[calc(100vh-200px)] overflow-y-auto p-6 overscroll-contain"
+          style={{
+            WebkitOverflowScrolling: 'touch',
+            touchAction: 'pan-y',
+          }}
+          onTouchStart={(e) => e.stopPropagation()}
+          onTouchMove={(e) => e.stopPropagation()}
+        >
           {/* Description */}
           {issue.description && (
             <div className="mb-6">

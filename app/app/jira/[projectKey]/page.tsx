@@ -10,6 +10,7 @@ import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type { JiraTask } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
 import JiraIssueModal from "@/components/jira/JiraIssueModal";
+import MobileSelect from "@/components/jira/MobileSelect";
 
 export default function JiraProjectDetailPage() {
   const navigationItems: NavigationItem[] = useMemo(
@@ -276,7 +277,7 @@ export default function JiraProjectDetailPage() {
 
   const priorities = useMemo(() => {
     const uniquePriorities = Array.from(
-      new Set(allIssues.map((issue) => issue.priority).filter(Boolean))
+      new Set(allIssues.map((issue) => issue.priority).filter((p): p is string => Boolean(p)))
     ).sort();
     return uniquePriorities;
   }, [allIssues]);
@@ -392,12 +393,16 @@ export default function JiraProjectDetailPage() {
                 Jira'ya Dön
               </button>
               <div className="mb-6">
-                <h1 className="mb-3 text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
-                  {projectName || projectKey}
-                </h1>
-                <p className="text-lg text-gray-600 dark:text-gray-400">
-                  Proje Key: <span className="font-mono">{projectKey}</span>
-                </p>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+                    {projectName || projectKey}
+                  </h1>
+                  {projectKey && (
+                    <span className="rounded-lg bg-blue-100 px-3 py-1.5 font-mono text-sm font-bold text-blue-700 shadow-sm dark:bg-blue-900/30 dark:text-blue-400">
+                      {projectKey}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -607,7 +612,7 @@ export default function JiraProjectDetailPage() {
             )}
 
             {/* Filters and Search */}
-            <div className="mb-6 overflow-hidden rounded-xl border border-gray-200/50 bg-white p-6 shadow-sm dark:border-gray-800/50 dark:bg-gray-900">
+            <div className="relative mb-6 overflow-visible rounded-xl border border-gray-200/50 bg-white p-6 shadow-sm dark:border-gray-800/50 dark:bg-gray-900">
               <div className="mb-5">
                 <div className="relative flex items-center gap-3">
                   <div className="absolute left-3 z-10">
@@ -630,7 +635,7 @@ export default function JiraProjectDetailPage() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Issue'da ara (başlık, açıklama, key)..."
-                    className="w-full rounded-lg border border-gray-300 bg-gray-50/50 pl-10 pr-10 py-3 text-sm text-gray-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800/50 dark:text-white dark:focus:bg-gray-800"
+                    className="w-full rounded-lg border border-gray-300 bg-gray-50/50 pl-10 pr-10 py-3 text-base text-gray-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800/50 dark:text-white dark:focus:bg-gray-800 sm:text-sm"
                   />
                   {searchQuery && (
                     <button
@@ -657,99 +662,61 @@ export default function JiraProjectDetailPage() {
 
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
                 {/* Status Filter */}
-                <div>
-                  <label className="mb-2 block text-xs font-semibold text-gray-700 dark:text-gray-300">
-                    Status
-                  </label>
-                  <select
-                    value={statusFilter}
-                    onChange={(e) => setStatusFilter(e.target.value)}
-                    className="w-full rounded-lg border border-gray-300 bg-gray-50/50 px-3 py-2.5 text-sm text-gray-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800/50 dark:text-white dark:focus:bg-gray-800"
-                  >
-                    <option value="all">Tümü</option>
-                    {statuses.map((status) => (
-                      <option key={status} value={status}>
-                        {status}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                <MobileSelect
+                  value={statusFilter}
+                  onChange={setStatusFilter}
+                  label="Status"
+                  options={[
+                    { value: "all", label: "Tümü" },
+                    ...statuses.map((status) => ({ value: status, label: status })),
+                  ]}
+                />
 
                 {/* Priority Filter */}
-                <div>
-                  <label className="mb-2 block text-xs font-semibold text-gray-700 dark:text-gray-300">
-                    Priority
-                  </label>
-                  <select
-                    value={priorityFilter}
-                    onChange={(e) => setPriorityFilter(e.target.value)}
-                    className="w-full rounded-lg border border-gray-300 bg-gray-50/50 px-3 py-2.5 text-sm text-gray-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800/50 dark:text-white dark:focus:bg-gray-800"
-                  >
-                    <option value="all">Tümü</option>
-                    {priorities.map((priority) => (
-                      <option key={priority} value={priority}>
-                        {priority}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                <MobileSelect
+                  value={priorityFilter}
+                  onChange={setPriorityFilter}
+                  label="Priority"
+                  options={[
+                    { value: "all", label: "Tümü" },
+                    ...priorities.filter(Boolean).map((priority) => ({ value: priority, label: priority })),
+                  ]}
+                />
 
                 {/* Type Filter */}
-                <div>
-                  <label className="mb-2 block text-xs font-semibold text-gray-700 dark:text-gray-300">
-                    Type
-                  </label>
-                  <select
-                    value={typeFilter}
-                    onChange={(e) => setTypeFilter(e.target.value)}
-                    className="w-full rounded-lg border border-gray-300 bg-gray-50/50 px-3 py-2.5 text-sm text-gray-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800/50 dark:text-white dark:focus:bg-gray-800"
-                  >
-                    <option value="all">Tümü</option>
-                    {types.map((type) => (
-                      <option key={type} value={type}>
-                        {type}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                <MobileSelect
+                  value={typeFilter}
+                  onChange={setTypeFilter}
+                  label="Type"
+                  options={[
+                    { value: "all", label: "Tümü" },
+                    ...types.map((type) => ({ value: type, label: type })),
+                  ]}
+                />
 
                 {/* Assignee Filter */}
-                <div>
-                  <label className="mb-2 block text-xs font-semibold text-gray-700 dark:text-gray-300">
-                    Assignee
-                  </label>
-                  <select
-                    value={assigneeFilter}
-                    onChange={(e) => setAssigneeFilter(e.target.value)}
-                    className="w-full rounded-lg border border-gray-300 bg-gray-50/50 px-3 py-2.5 text-sm text-gray-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800/50 dark:text-white dark:focus:bg-gray-800"
-                  >
-                    <option value="all">Tümü</option>
-                    <option value="unassigned">Atanmamış</option>
-                    {assignees.map((assignee) => (
-                      <option key={assignee} value={assignee}>
-                        {assignee}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                <MobileSelect
+                  value={assigneeFilter}
+                  onChange={setAssigneeFilter}
+                  label="Assignee"
+                  options={[
+                    { value: "all", label: "Tümü" },
+                    { value: "unassigned", label: "Atanmamış" },
+                    ...assignees.map((assignee) => ({ value: assignee, label: assignee })),
+                  ]}
+                />
 
                 {/* View Mode */}
-                <div>
-                  <label className="mb-2 block text-xs font-semibold text-gray-700 dark:text-gray-300">
-                    Görünüm
-                  </label>
-                  <select
-                    value={viewMode}
-                    onChange={(e) =>
-                      setViewMode(e.target.value as "list" | "kanban" | "compact")
-                    }
-                    className="w-full rounded-lg border border-gray-300 bg-gray-50/50 px-3 py-2.5 text-sm text-gray-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800/50 dark:text-white dark:focus:bg-gray-800"
-                  >
-                    <option value="list">Liste</option>
-                    <option value="kanban">Kanban</option>
-                    <option value="compact">Kompakt</option>
-                  </select>
-                </div>
+                <MobileSelect
+                  value={viewMode}
+                  onChange={(value) => setViewMode(value as "list" | "kanban" | "compact")}
+                  label="Görünüm"
+                  options={[
+                    { value: "list", label: "Liste" },
+                    { value: "kanban", label: "Kanban" },
+                    { value: "compact", label: "Kompakt" },
+                  ]}
+                />
               </div>
 
               {/* Active Filters Summary */}
@@ -759,23 +726,37 @@ export default function JiraProjectDetailPage() {
                 typeFilter !== "all" ||
                 assigneeFilter !== "all") && (
                 <div className="mt-5 rounded-lg bg-gray-50/50 p-4 dark:bg-gray-800/50">
-                  <div className="mb-2 flex items-center gap-2">
-                    <svg
-                      className="h-4 w-4 text-gray-500 dark:text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+                  <div className="mb-2 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <svg
+                        className="h-4 w-4 text-gray-500 dark:text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                        />
+                      </svg>
+                      <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+                        Aktif Filtreler
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setSearchQuery("");
+                        setStatusFilter("all");
+                        setPriorityFilter("all");
+                        setTypeFilter("all");
+                        setAssigneeFilter("all");
+                      }}
+                      className="rounded-lg bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700 transition hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-                      />
-                    </svg>
-                    <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                      Aktif Filtreler
-                    </span>
+                      Tümünü Temizle
+                    </button>
                   </div>
                   <div className="flex flex-wrap items-center gap-2">
                     {searchQuery && (
@@ -875,18 +856,6 @@ export default function JiraProjectDetailPage() {
                         </button>
                       </span>
                     )}
-                    <button
-                      onClick={() => {
-                        setSearchQuery("");
-                        setStatusFilter("all");
-                        setPriorityFilter("all");
-                        setTypeFilter("all");
-                        setAssigneeFilter("all");
-                      }}
-                      className="ml-auto rounded-lg bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700 transition hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-                    >
-                      Tümünü Temizle
-                    </button>
                   </div>
                 </div>
               )}
