@@ -14,13 +14,34 @@ const GlobalNoteFab = memo(function GlobalNoteFab() {
     <>
       <button
         onClick={() => setShowModal(true)}
-        className="fixed bottom-6 right-0 z-50 flex items-center gap-2 rounded-l-2xl border border-gray-200/70 bg-white px-5 py-3.5 shadow-[0_6px_12px_rgba(0,0,0,0.15)] transition hover:shadow-[0_8px_16px_rgba(0,0,0,0.2)] dark:border-gray-800/70 dark:bg-gray-900"
+        className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-white/80 text-indigo-600 shadow-lg shadow-gray-500/20 backdrop-blur-sm transition hover:bg-white hover:shadow-xl"
         aria-label="Not ekle"
       >
-        <span className="text-xl">📝</span>
-        <span className="text-base font-semibold text-gray-900 dark:text-white">
-          Not Ekle
-        </span>
+        <svg
+          className="h-6 w-6"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 5V19M5 12H19"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <rect
+            x="3.5"
+            y="3.5"
+            width="17"
+            height="17"
+            rx="4.5"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
       </button>
 
       <NoteModal
