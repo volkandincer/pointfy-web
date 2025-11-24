@@ -26,7 +26,6 @@ export async function GET(request: Request) {
               userId = payload.sub;
             }
           } catch (tokenError) {
-            console.log("JWT decode failed, trying Supabase API...");
           }
         }
         

@@ -8,11 +8,9 @@ import { getSupabase, getSupabaseServer } from "@/lib/supabase";
  */
 export async function GET(request: Request) {
   try {
-    // 1. Kullanıcıyı doğrula
     const { searchParams } = new URL(request.url);
     let userId: string | undefined = searchParams.get("userId") || undefined;
 
-    // Eğer query'den alınamadıysa, cookie'den deneyelim
     if (!userId) {
       try {
         const cookieStore = await cookies();
@@ -29,11 +27,9 @@ export async function GET(request: Request) {
             }
           } catch (tokenError) {
             // JWT decode başarısız, Supabase API'ye istek yap
-            console.log("JWT decode failed, trying Supabase API...");
           }
         }
 
-        // Eğer JWT'den alınamadıysa, Supabase API'sine istek yap
         if (!userId && accessToken) {
           try {
             const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -53,7 +49,6 @@ export async function GET(request: Request) {
           }
         }
 
-        // Son çare: Supabase client ile getUser()
         if (!userId) {
           const supabase = getSupabase();
           const {
@@ -77,7 +72,6 @@ export async function GET(request: Request) {
       );
     }
 
-    // 2. Jira token'ı al
     let supabase;
     try {
       supabase = getSupabaseServer();
@@ -101,7 +95,6 @@ export async function GET(request: Request) {
       );
     }
 
-    // Jira token kontrolü
     if (!userRow.jira_access_token) {
       return NextResponse.json(
         {
@@ -113,7 +106,6 @@ export async function GET(request: Request) {
       );
     }
 
-    // Jira token ile istek yap
     return await handleJiraRequestWithJiraToken(userRow, request, userId);
   } catch (error) {
     console.error("Jira boards API error:", error);
@@ -146,13 +138,11 @@ async function handleJiraRequestWithJiraToken(
     supabase = getSupabase();
   }
 
-  // Token'ın geçerliliğini kontrol et ve refresh et (gerekirse)
   let jiraToken = userRow.jira_access_token;
   const tokenExpiresAt = userRow.jira_token_expires_at
     ? new Date(userRow.jira_token_expires_at)
     : null;
 
-  // Token süresi dolmuşsa refresh et
   if (tokenExpiresAt && tokenExpiresAt < new Date()) {
     if (!userRow.jira_refresh_token) {
       return NextResponse.json(
@@ -184,7 +174,6 @@ async function handleJiraRequestWithJiraToken(
 
       jiraToken = refreshed.access_token;
 
-      // Token'ı veritabanına kaydet
       const expiresAt = new Date();
       expiresAt.setSeconds(expiresAt.getSeconds() + refreshed.expires_in);
 
@@ -220,7 +209,6 @@ async function handleJiraRequestWithJiraToken(
     }
   }
 
-  // Jira base URL'i al
   const { searchParams } = new URL(request.url);
   const jiraBaseUrl =
     searchParams.get("jiraBaseUrl") ||
@@ -239,8 +227,6 @@ async function handleJiraRequestWithJiraToken(
     );
   }
 
-  // OAuth 2.0 (3LO) için cloudId'yi al ve API URL'ini oluştur
-  // Önce accessible-resources endpoint'inden cloudId'yi al
   let cloudId: string | undefined;
   try {
     const accessibleResourcesResponse = await fetch(
@@ -255,13 +241,13 @@ async function handleJiraRequestWithJiraToken(
 
     if (!accessibleResourcesResponse.ok) {
       const errorText = await accessibleResourcesResponse.text();
-      let errorDetails = errorText;
-      try {
-        const errorJson = JSON.parse(errorText);
-        errorDetails = errorJson.errorMessage || errorJson.message || errorText;
-      } catch {
-        // JSON parse başarısız
-      }
+          let errorDetails = errorText;
+          try {
+            const errorJson = JSON.parse(errorText);
+            errorDetails = errorJson.errorMessage || errorJson.message || errorText;
+          } catch {
+            // JSON parse failed
+          }
 
       console.error("❌ Accessible resources hatası:", {
         status: accessibleResourcesResponse.status,
@@ -271,14 +257,8 @@ async function handleJiraRequestWithJiraToken(
         tokenPreview: jiraToken?.substring(0, 20) + "...",
       });
 
-      // 401 hatası alıyorsak, token geçersiz demektir
-      // Önce token'ı refresh etmeyi dene
       if (accessibleResourcesResponse.status === 401) {
-        console.log(
-          "⚠️ Accessible resources 401 hatası - Token refresh deneniyor..."
-        );
 
-        // Token refresh mekanizması
         if (userRow.jira_refresh_token) {
           try {
             const { refreshJiraToken } = await import("@/lib/jira");
@@ -349,7 +329,6 @@ async function handleJiraRequestWithJiraToken(
                   cloudId = resources[0].id;
                 }
               } else {
-                // Refresh sonrası hala 401, token gerçekten geçersiz
                 const retryErrorText = await retryResponse.text();
                 console.error("❌ Token refresh sonrası hala 401:", {
                   status: retryResponse.status,
@@ -387,8 +366,6 @@ async function handleJiraRequestWithJiraToken(
             );
           }
         } else {
-          // Refresh token yok, kullanıcı yeniden bağlanmalı
-          console.error("❌ Refresh token mevcut değil");
           return NextResponse.json(
             {
               error:
@@ -429,34 +406,21 @@ async function handleJiraRequestWithJiraToken(
           r.name.toLowerCase().includes("jira")
       );
 
-      if (jiraResource) {
-        cloudId = jiraResource.id;
-        console.log("✅ CloudId bulundu:", {
-          cloudId,
-          resourceName: jiraResource.name,
-          resourceUrl: jiraResource.url,
-        });
-      } else if (resources.length > 0) {
-        // İlk resource'u kullan (genellikle Jira olur)
-        cloudId = resources[0].id;
-        console.log("⚠️ Jira resource bulunamadı, ilk resource kullanılıyor:", {
-          cloudId,
-          resourceName: resources[0].name,
-        });
-      }
+        if (jiraResource) {
+          cloudId = jiraResource.id;
+        } else if (resources.length > 0) {
+          cloudId = resources[0].id;
+        }
     }
   } catch (error) {
     console.error("❌ CloudId alınamadı:", error);
     // Hata durumunda fallback URL kullanılacak
   }
 
-  // OAuth 2.0 (3LO) için doğru URL formatını kullan
   let apiUrl: string;
   if (cloudId) {
-    // OAuth 2.0 (3LO) formatı: https://api.atlassian.com/ex/jira/{cloudId}/rest/api/3/...
     apiUrl = `https://api.atlassian.com/ex/jira/${cloudId}`;
   } else {
-    // Fallback: Direkt Jira URL'i kullan (eski format - basic auth veya Connect apps için)
     let jiraUrl = jiraBaseUrl;
     if (!jiraUrl.startsWith("http")) {
       jiraUrl = `https://${jiraUrl}`;
@@ -510,7 +474,6 @@ async function handleJiraRequestWithJiraToken(
     );
 
     if (response.status === 401) {
-      // Token refresh denemesi
       if (userRow.jira_refresh_token) {
         try {
           const { refreshJiraToken } = await import("@/lib/jira");
@@ -518,16 +481,12 @@ async function handleJiraRequestWithJiraToken(
           const clientSecret = process.env.JIRA_CLIENT_SECRET;
 
           if (clientId && clientSecret) {
-            console.log(
-              "⚠️ Projects API 401 hatası - Token refresh deneniyor..."
-            );
             const refreshed = await refreshJiraToken(
               userRow.jira_refresh_token,
               clientId,
               clientSecret
             );
 
-            // Yeni token ile tekrar dene (REST API v3 kullan)
             const retryResponse = await fetch(`${apiUrl}/rest/api/3/project`, {
               headers: {
                 Authorization: `Bearer ${refreshed.access_token}`,
@@ -536,7 +495,6 @@ async function handleJiraRequestWithJiraToken(
             });
 
             if (retryResponse.ok) {
-              // Token refresh başarılı, yeni token'ı kaydet
               const expiresAt = new Date();
               expiresAt.setSeconds(
                 expiresAt.getSeconds() + refreshed.expires_in
@@ -552,7 +510,6 @@ async function handleJiraRequestWithJiraToken(
                 })
                 .eq("id", userId);
 
-              // Başarılı response'u döndür (projeleri board formatına çevir)
               const retryProjects = (await retryResponse.json()) as Array<{
                 id: string;
                 key: string;
@@ -600,18 +557,9 @@ async function handleJiraRequestWithJiraToken(
               "Jira OAuth configuration missing (CLIENT_ID or CLIENT_SECRET)"
             );
           }
-        } catch (refreshError) {
-          console.error("❌ Token refresh başarısız:", {
-            error: refreshError,
-            message:
-              refreshError instanceof Error
-                ? refreshError.message
-                : "Unknown error",
-            stack:
-              refreshError instanceof Error ? refreshError.stack : undefined,
-          });
-          // Hata detaylarını response'a ekle
-          const errorMessage =
+          } catch (refreshError) {
+            console.error("Token refresh başarısız:", refreshError);
+            const errorMessage =
             refreshError instanceof Error
               ? refreshError.message
               : "Token refresh denemesi başarısız oldu";
@@ -628,8 +576,6 @@ async function handleJiraRequestWithJiraToken(
         }
       }
 
-      // Token refresh başarısız veya refresh token yok
-      // Jira'dan gelen GERÇEK hatayı direkt döndür (kendi mesajımızı ekleme)
       return NextResponse.json(
         errorJson || {
           error:
@@ -671,7 +617,6 @@ async function handleJiraRequestWithJiraToken(
         { status: 404 }
       );
     }
-    // Jira'dan gelen GERÇEK hatayı direkt döndür (kendi mesajımızı ekleme)
     return NextResponse.json(
       errorJson || {
         error:
@@ -696,7 +641,6 @@ async function handleJiraRequestWithJiraToken(
     avatarUrls: Record<string, string>;
   }>;
 
-  // Jira URL'i başarıyla çalıştıysa, veritabanına kaydet
   if (jiraBaseUrl && userId) {
     try {
       await supabase
@@ -708,11 +652,10 @@ async function handleJiraRequestWithJiraToken(
     }
   }
 
-  // Projeleri board formatına çevir (uyumluluk için)
   const boards = projects.map((project) => ({
     id: parseInt(project.id) || 0,
     name: project.name,
-    type: "scrum", // Varsayılan olarak scrum
+    type: "scrum",
     location: {
       projectId: parseInt(project.id) || 0,
       projectName: project.name,
@@ -721,8 +664,9 @@ async function handleJiraRequestWithJiraToken(
   }));
 
   return NextResponse.json({
-    boards: boards,
+    boards,
     total: projects.length,
-    jiraBaseUrl: jiraBaseUrl,
+    jiraBaseUrl,
+    note: "Agile API scope'ları mevcut olmadığı için projeler döndürülüyor",
   });
 }
