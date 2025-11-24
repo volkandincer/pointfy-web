@@ -149,10 +149,21 @@ export default function JiraPage() {
 
       const data = await response.json();
 
+      console.log("🔍 Issues API Response:", {
+        status: response.status,
+        ok: response.ok,
+        dataKeys: Object.keys(data),
+        issuesCount: data.issues?.length || 0,
+        total: data.total,
+        error: data.error,
+      });
+
       if (!response.ok) {
+        console.error("❌ Issues API Error:", data);
         throw new Error(data.error || "Failed to fetch issues");
       }
 
+      console.log("✅ Issues loaded:", data.issues?.length || 0, "issues");
       setIssues(data.issues || []);
     } catch (err) {
       console.error("Fetch issues error:", err);

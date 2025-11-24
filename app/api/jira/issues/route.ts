@@ -358,13 +358,15 @@ async function handleJiraIssuesRequestWithJiraToken(
   }
 
 
-  // JQL query oluştur
+  // JQL query oluştur - sadece kullanıcıya atanmış issue'ları getir
   let jql = "assignee=currentuser()";
   if (status === "active") {
     jql += " AND status != Done AND status != Closed";
   } else if (status === "done") {
     jql += " AND (status = Done OR status = Closed)";
   }
+  
+  console.log("🔍 JQL Query:", jql);
 
   // Board ID varsa, board'a ait issue'ları getir
   // Board ID ile issue fetch - /rest/api/3/search/jql endpoint'ini kullan
@@ -487,7 +489,25 @@ async function handleJiraIssuesRequestWithJiraToken(
   const requestBody = {
     jql: jql,
     maxResults: maxResults,
+    fields: [
+      "summary",
+      "description",
+      "status",
+      "assignee",
+      "priority",
+      "issuetype",
+      "project",
+      "created",
+      "updated",
+      "resolutiondate",
+    ],
   };
+  
+  console.log("🔍 Issues API Request:", {
+    endpoint: searchEndpoint,
+    jql: jql,
+    maxResults: maxResults,
+  });
   
   const response = await fetch(searchEndpoint, {
     method: "POST",
@@ -579,7 +599,17 @@ async function handleJiraIssuesRequestWithJiraToken(
 
   const data = (await response.json()) as JiraSearchResponse;
 
+  console.log("🔍 Jira Issues API Response:", {
+    status: response.status,
+    ok: response.ok,
+    total: data.total,
+    issuesCount: data.issues?.length || 0,
+    startAt: data.startAt,
+    maxResults: data.maxResults,
+  });
+
   if (!data.issues || !Array.isArray(data.issues)) {
+    console.error("❌ Invalid response format:", data);
     return NextResponse.json(
       {
         error: "Invalid response format from Jira API",
