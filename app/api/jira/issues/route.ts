@@ -184,7 +184,6 @@ async function handleJiraIssuesRequestWithJiraToken(
         })
         .eq("id", userId);
 
-      console.log("✅ Jira token refreshed successfully");
     } catch (refreshError) {
       console.error("❌ Jira token refresh error:", refreshError);
       const errorMessage = refreshError instanceof Error ? refreshError.message : "Failed to refresh token";
@@ -229,7 +228,6 @@ async function handleJiraIssuesRequestWithJiraToken(
       // 401 hatası alıyorsak, token geçersiz demektir
       // Önce token'ı refresh etmeyi dene
       if (accessibleResourcesResponse.status === 401) {
-        console.log("⚠️ Accessible resources 401 hatası - Token refresh deneniyor...");
         
         // Token refresh mekanizması
         if (userRow.jira_refresh_token) {
@@ -270,7 +268,6 @@ async function handleJiraIssuesRequestWithJiraToken(
                   })
                   .eq("id", userId);
 
-                console.log("✅ Token refresh başarılı, accessible resources tekrar deneniyor...");
                 jiraToken = refreshed.access_token;
                 
                 // Tekrar accessible resources al
@@ -321,7 +318,7 @@ async function handleJiraIssuesRequestWithJiraToken(
           );
         }
       } else {
-        console.warn("⚠️ Accessible resources alınamadı, fallback URL kullanılacak:", {
+        // Fallback URL kullanılacak
           status: accessibleResourcesResponse.status,
         });
       }
@@ -345,7 +342,7 @@ async function handleJiraIssuesRequestWithJiraToken(
       }
     }
   } catch (error) {
-    console.warn("⚠️ CloudId alınamadı, fallback URL kullanılacak:", error);
+    console.error("CloudId alınamadı:", error);
   }
 
   // OAuth 2.0 (3LO) için doğru URL formatını kullan

@@ -380,16 +380,6 @@ async function handleJiraRequestWithJiraToken(
         }
       }
 
-      // 401 değilse ama başarısız, fallback URL kullan
-      if (accessibleResourcesResponse.status !== 401) {
-        console.warn(
-          "⚠️ Accessible resources alınamadı, fallback URL kullanılacak:",
-          {
-            status: accessibleResourcesResponse.status,
-            errorDetails,
-          }
-        );
-      }
     } else {
       const resources = (await accessibleResourcesResponse.json()) as Array<{
         id: string;
