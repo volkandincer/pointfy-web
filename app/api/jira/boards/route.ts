@@ -241,13 +241,13 @@ async function handleJiraRequestWithJiraToken(
 
     if (!accessibleResourcesResponse.ok) {
       const errorText = await accessibleResourcesResponse.text();
-          let errorDetails = errorText;
-          try {
-            const errorJson = JSON.parse(errorText);
-            errorDetails = errorJson.errorMessage || errorJson.message || errorText;
-          } catch {
-            // JSON parse failed
-          }
+      let errorDetails = errorText;
+      try {
+        const errorJson = JSON.parse(errorText);
+        errorDetails = errorJson.errorMessage || errorJson.message || errorText;
+      } catch {
+        // JSON parse failed
+      }
 
       console.error("❌ Accessible resources hatası:", {
         status: accessibleResourcesResponse.status,
@@ -258,7 +258,6 @@ async function handleJiraRequestWithJiraToken(
       });
 
       if (accessibleResourcesResponse.status === 401) {
-
         if (userRow.jira_refresh_token) {
           try {
             const { refreshJiraToken } = await import("@/lib/jira");
@@ -379,7 +378,6 @@ async function handleJiraRequestWithJiraToken(
           );
         }
       }
-
     } else {
       const resources = (await accessibleResourcesResponse.json()) as Array<{
         id: string;
@@ -396,11 +394,11 @@ async function handleJiraRequestWithJiraToken(
           r.name.toLowerCase().includes("jira")
       );
 
-        if (jiraResource) {
-          cloudId = jiraResource.id;
-        } else if (resources.length > 0) {
-          cloudId = resources[0].id;
-        }
+      if (jiraResource) {
+        cloudId = jiraResource.id;
+      } else if (resources.length > 0) {
+        cloudId = resources[0].id;
+      }
     }
   } catch (error) {
     console.error("❌ CloudId alınamadı:", error);
@@ -547,9 +545,9 @@ async function handleJiraRequestWithJiraToken(
               "Jira OAuth configuration missing (CLIENT_ID or CLIENT_SECRET)"
             );
           }
-          } catch (refreshError) {
-            console.error("Token refresh başarısız:", refreshError);
-            const errorMessage =
+        } catch (refreshError) {
+          console.error("Token refresh başarısız:", refreshError);
+          const errorMessage =
             refreshError instanceof Error
               ? refreshError.message
               : "Token refresh denemesi başarısız oldu";

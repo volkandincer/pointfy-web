@@ -317,10 +317,6 @@ async function handleJiraIssuesRequestWithJiraToken(
             { status: 401 }
           );
         }
-      } else {
-        // Fallback URL kullanılacak
-          status: accessibleResourcesResponse.status,
-        });
       }
     } else {
       const resources = (await accessibleResourcesResponse.json()) as Array<{
