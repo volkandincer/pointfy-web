@@ -4,6 +4,7 @@ export interface QuickAction {
   description: string;
   href: string;
   icon: string; // emoji or icon name
+  onClick?: () => void | Promise<void>; // Optional click handler
 }
 
 

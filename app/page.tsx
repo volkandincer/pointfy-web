@@ -26,11 +26,12 @@ function HomePageContent() {
   const [userId, setUserId] = useState<string | null>(null);
   const [username, setUsername] = useState<string | undefined>(undefined);
   const [checkingAuth, setCheckingAuth] = useState<boolean>(true);
+  const [jiraConnected, setJiraConnected] = useState<boolean>(false);
   const { toasts, removeToast } = useToastContext();
 
   useEffect(() => {
     let mounted = true;
-    (async () => {
+    async function checkAuthAndJira() {
       try {
         const supabase = getSupabase();
         // Use getSession first for faster check
@@ -39,24 +40,39 @@ function HomePageContent() {
 
         if (sessionData.session?.user) {
           setUserId(sessionData.session.user.id);
-          // Get username asynchronously
+          // Get username and Jira connection status
           const { data: userRow } = await supabase
             .from("users")
-            .select("username")
+            .select("username, jira_access_token")
             .eq("id", sessionData.session.user.id)
             .single();
           if (!mounted) return;
           setUsername(userRow?.username);
+          setJiraConnected(!!userRow?.jira_access_token);
         } else {
           setUserId(null);
+          setJiraConnected(false);
         }
       } catch {
         if (!mounted) return;
         setUserId(null);
+        setJiraConnected(false);
       } finally {
         if (mounted) setCheckingAuth(false);
       }
-    })();
+    }
+
+    checkAuthAndJira();
+
+    // Jira OAuth callback'ten döndükten sonra durumu kontrol et
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("jira_connected") === "true") {
+      // OAuth callback'ten döndük, durumu yeniden kontrol et
+      setTimeout(() => {
+        checkAuthAndJira();
+      }, 1000);
+    }
+
     return () => {
       mounted = false;
     };
@@ -148,8 +164,29 @@ function HomePageContent() {
         href: "/app/rooms/create?type=retro",
         icon: "🔁",
       },
+      {
+        id: "jira",
+        title: jiraConnected ? "Jira" : "Jira'yı Bağla",
+        description: jiraConnected
+          ? "Jira projelerinizi ve issue'larınızı görüntüleyin"
+          : "Jira hesabınızı bağlayın ve projelerinizi yönetin",
+        href: jiraConnected ? "/app/jira" : "#",
+        icon: "🔗",
+        onClick: jiraConnected
+          ? undefined
+          : async () => {
+              if (!userId) return;
+              try {
+                const returnUrl = encodeURIComponent("/");
+                const encodedUserId = encodeURIComponent(userId);
+                window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
+              } catch (err) {
+                console.error("Jira OAuth error:", err);
+              }
+            },
+      },
     ],
-    []
+    [jiraConnected, userId]
   );
 
   // Show loading state briefly to prevent flash

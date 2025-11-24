@@ -27,37 +27,70 @@ const QuickActions = memo(function QuickActions({ actions }: QuickActionsProps) 
 
         {/* Featured Card - Oda Oluştur */}
         {featuredAction && (
-          <Link
-            href={featuredAction.href}
-            className="group relative mb-5 block overflow-hidden rounded-3xl border-2 border-blue-400/40 bg-white p-6 shadow-[0_12px_24px_rgba(59,130,246,0.3)] transition-all hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(59,130,246,0.4)] dark:border-blue-500/30 dark:bg-gray-900"
-          >
-            <div className="mb-4 text-4xl">{featuredAction.icon}</div>
-            <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-white">
-              {featuredAction.title}
-            </h3>
-            <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
-              {featuredAction.description}
-            </p>
-          </Link>
+          <>
+            {featuredAction.onClick ? (
+              <button
+                onClick={featuredAction.onClick}
+                className="group relative mb-5 block w-full overflow-hidden rounded-3xl border-2 border-blue-400/40 bg-white p-6 text-left shadow-[0_12px_24px_rgba(59,130,246,0.3)] transition-all hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(59,130,246,0.4)] dark:border-blue-500/30 dark:bg-gray-900"
+              >
+                <div className="mb-4 text-4xl">{featuredAction.icon}</div>
+                <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-white">
+                  {featuredAction.title}
+                </h3>
+                <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                  {featuredAction.description}
+                </p>
+              </button>
+            ) : (
+              <Link
+                href={featuredAction.href}
+                className="group relative mb-5 block overflow-hidden rounded-3xl border-2 border-blue-400/40 bg-white p-6 shadow-[0_12px_24px_rgba(59,130,246,0.3)] transition-all hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(59,130,246,0.4)] dark:border-blue-500/30 dark:bg-gray-900"
+              >
+                <div className="mb-4 text-4xl">{featuredAction.icon}</div>
+                <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-white">
+                  {featuredAction.title}
+                </h3>
+                <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                  {featuredAction.description}
+                </p>
+              </Link>
+            )}
+          </>
         )}
 
         {/* Diğer Action'lar */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {otherActions.map((action) => (
-            <Link
-              key={action.id}
-              href={action.href}
-              className="group relative block overflow-hidden rounded-2xl border-2 border-blue-400/15 bg-white p-5 shadow-[0_8px_20px_rgba(59,130,246,0.15)] transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(59,130,246,0.2)] dark:border-blue-500/10 dark:bg-gray-900"
-            >
-              <div className="mb-3 text-4xl">{action.icon}</div>
-              <h3 className="mb-1.5 text-base font-semibold text-gray-900 dark:text-white">
-                {action.title}
-              </h3>
-              <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400">
-                {action.description}
-              </p>
-            </Link>
-          ))}
+          {otherActions.map((action) =>
+            action.onClick ? (
+              <button
+                key={action.id}
+                onClick={action.onClick}
+                className="group relative block w-full overflow-hidden rounded-2xl border-2 border-blue-400/15 bg-white p-5 text-left shadow-[0_8px_20px_rgba(59,130,246,0.15)] transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(59,130,246,0.2)] dark:border-blue-500/10 dark:bg-gray-900"
+              >
+                <div className="mb-3 text-4xl">{action.icon}</div>
+                <h3 className="mb-1.5 text-base font-semibold text-gray-900 dark:text-white">
+                  {action.title}
+                </h3>
+                <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400">
+                  {action.description}
+                </p>
+              </button>
+            ) : (
+              <Link
+                key={action.id}
+                href={action.href}
+                className="group relative block overflow-hidden rounded-2xl border-2 border-blue-400/15 bg-white p-5 shadow-[0_8px_20px_rgba(59,130,246,0.15)] transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(59,130,246,0.2)] dark:border-blue-500/10 dark:bg-gray-900"
+              >
+                <div className="mb-3 text-4xl">{action.icon}</div>
+                <h3 className="mb-1.5 text-base font-semibold text-gray-900 dark:text-white">
+                  {action.title}
+                </h3>
+                <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400">
+                  {action.description}
+                </p>
+              </Link>
+            )
+          )}
         </div>
       </div>
     </section>

@@ -131,6 +131,7 @@ export async function POST(request: Request) {
     }
 
     // JQL search endpoint'ine istek yap
+    // /rest/api/3/search/jql endpoint'i fields parametresi ile hangi field'ların döndürüleceğini belirler
     const searchEndpoint = `${apiUrl}/rest/api/3/search/jql`;
     const response = await fetch(searchEndpoint, {
       method: "POST",
@@ -142,6 +143,18 @@ export async function POST(request: Request) {
       body: JSON.stringify({
         jql: jql,
         maxResults: Math.min(maxResults, 100), // Max 100
+        fields: [
+          "summary",
+          "description",
+          "status",
+          "assignee",
+          "priority",
+          "issuetype",
+          "project",
+          "created",
+          "updated",
+          "resolutiondate",
+        ],
       }),
     });
 
@@ -161,6 +174,15 @@ export async function POST(request: Request) {
     }
 
     const data = (await response.json()) as JiraSearchResponse;
+    
+    console.log("🔍 Jira Search API Response:", {
+      status: response.status,
+      total: data.total,
+      issuesCount: data.issues?.length || 0,
+      startAt: data.startAt,
+      maxResults: data.maxResults,
+    });
+
     return NextResponse.json(data);
   } catch (error) {
     console.error("Jira search API error:", error);

@@ -330,12 +330,30 @@ export default function JiraTestPage() {
         throw new Error(data.error || "Failed to search");
       }
 
+      // Helper function: ADF format description'ı string'e çevir
+      const extractDescription = (desc: any): string | undefined => {
+        if (!desc) return undefined;
+        if (typeof desc === "string") return desc;
+        if (typeof desc === "object" && desc.content) {
+          const extractText = (node: any): string => {
+            if (typeof node === "string") return node;
+            if (node.text) return node.text;
+            if (node.content && Array.isArray(node.content)) {
+              return node.content.map(extractText).join("");
+            }
+            return "";
+          };
+          return desc.content.map(extractText).join("").trim() || undefined;
+        }
+        return undefined;
+      };
+
       // Issues'ları JiraTask formatına çevir
       const tasks: JiraTask[] = (data.issues || []).map((issue: any) => ({
         id: issue.id,
         key: issue.key,
         summary: issue.fields?.summary || "",
-        description: issue.fields?.description,
+        description: extractDescription(issue.fields?.description),
         status: issue.fields?.status?.name || "",
         statusColor: issue.fields?.status?.statusCategory?.colorName || "gray",
         assignee: issue.fields?.assignee
