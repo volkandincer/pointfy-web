@@ -69,11 +69,10 @@ export async function GET(request: Request) {
   // read:jira-work: Temel Jira verilerine erişim (issues, projects, vb.)
   // write:jira-work: Jira verilerini güncelleme
   // offline_access: Refresh token almak için
-  // Not: Agile API scope'ları (read:board-scope:jira-software) Developer Console'da görünmüyor olabilir
-  // Bu durumda Agile API yerine REST API v3 kullanılabilir veya scope'lar farklı bir API grubu altında olabilir
+  // read:board-scope:jira-software: Agile API (board'lar ve sprint'ler) için erişim
   authUrl.searchParams.set(
     "scope",
-    "read:jira-work write:jira-work offline_access"
+    "read:jira-work write:jira-work offline_access read:board-scope:jira-software"
   );
   authUrl.searchParams.set("redirect_uri", redirectUri);
   authUrl.searchParams.set("state", statePayload);

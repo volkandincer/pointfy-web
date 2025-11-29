@@ -23,4 +23,7 @@ export interface TaskInfo {
   updated_at?: string;
   created_by_username?: string;
   created_by_key?: string;
+  jira_key?: string | null;
+  jira_url?: string | null;
+  jira_id?: string | null;
 }

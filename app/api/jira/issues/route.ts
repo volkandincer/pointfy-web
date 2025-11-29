@@ -7,6 +7,7 @@ import type {
   JiraAdfDocument,
   JiraAdfNode,
   JiraApiErrorResponse,
+  JiraIssue,
   JiraSearchResponse,
   JiraTask,
 } from "@/interfaces/Jira.interface";
@@ -386,26 +387,25 @@ async function handleJiraIssuesRequestWithJiraToken(
   console.log("🔍 JQL Query:", jql);
 
   // Board ID varsa, board'a ait issue'ları getir
-  // Board ID ile issue fetch - /rest/api/3/search/jql endpoint'ini kullan
+  // Agile API kullanarak board'dan issue'ları çek
   if (boardId) {
-    // Board ID ile issue'ları filtrelemek için JQL'e board filter ekle
-    const boardJql = `${jql} AND board = ${boardId}`;
+    // Agile API endpoint: /rest/agile/1.0/board/{boardId}/issue
+    const agileEndpoint = `${apiUrl}/rest/agile/1.0/board/${boardId}/issue`;
     
-    // POST method ile body'de jql gönder
-    // /rest/api/3/search/jql endpoint'i için sadece jql ve maxResults gerekli
+    console.log("🔍 Board issues fetch - Agile API:", {
+      endpoint: agileEndpoint,
+      boardId,
+      maxResults,
+    });
+
     const boardResponse = await fetch(
-      `${apiUrl}/rest/api/3/search/jql`,
+      `${agileEndpoint}?maxResults=${maxResults}&startAt=0`,
       {
-        method: "POST",
+        method: "GET",
         headers: {
           Authorization: `Bearer ${jiraToken}`,
           Accept: "application/json",
-          "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          jql: boardJql,
-          maxResults: maxResults,
-        }),
       }
     );
 
@@ -428,46 +428,73 @@ async function handleJiraIssuesRequestWithJiraToken(
         // JSON parse başarısız
       }
 
+      console.error("❌ Agile API error:", {
+        status: boardResponse.status,
+        statusText: boardResponse.statusText,
+        errorDetails,
+        boardId,
+      });
 
       if (boardResponse.status === 404) {
         return NextResponse.json(
           { 
-            error: `Jira instance bulunamadı: ${jiraBaseUrl || "cloudId: " + (cloudId || "not found")}`,
-            details: errorDetails || "Jira URL'i yanlış olabilir veya Jira instance'ı geçici olarak kullanılamıyor.",
-            suggestion: cloudId 
-              ? `CloudId bulundu ama API erişimi başarısız. Kullandığımız URL: ${apiUrl}\n\nOAuth 2.0 (3LO) için doğru format kullanılıyor.`
-              : `CloudId bulunamadı. Kullandığımız URL: ${apiUrl}\n\nDoğru Jira URL'inizi manuel olarak girin (örn: pointf.atlassian.net)`,
+            error: `Board bulunamadı veya Agile API erişimi yok: Board ID ${boardId}`,
+            details: errorDetails || "Board ID yanlış olabilir veya Agile API scope'ları eksik olabilir.",
+            suggestion: "Lütfen board ID'sini kontrol edin. OAuth scope'larında 'read:board-scope:jira-software' olmalı.",
             apiUrl: apiUrl,
-            jiraBaseUrl: jiraBaseUrl,
-            cloudId: cloudId || "not found",
+            boardId,
           },
           { status: 404 }
         );
       }
 
-      if (boardResponse.status === 410) {
+      if (boardResponse.status === 401) {
+        // Token geçersiz veya scope eksik - kullanıcıya Jira bağlantısını yenilemesini söyle
         return NextResponse.json(
           { 
-            error: "Jira API error: 410 Gone",
+            error: "Jira Agile API erişim hatası",
             details: errorDetails,
-            apiUrl: apiUrl,
-            cloudId: cloudId || "not found",
+            suggestion: "Agile API erişimi için 'read:board-scope:jira-software' scope'u gerekiyor. Lütfen hesap sayfasından Jira bağlantınızı koparıp tekrar bağlayın.",
             boardId,
-            suggestion: "Lütfen Jira API dokümantasyonunu kontrol edin. OAuth 3LO için endpoint formatı farklı olabilir."
+            requiresReconnect: true,
           },
-          { status: 410 }
+          { status: 401 }
+        );
+      }
+
+      if (boardResponse.status === 403) {
+        return NextResponse.json(
+          { 
+            error: "Agile API erişim izni yok",
+            details: errorDetails,
+            suggestion: "OAuth scope'larında 'read:board-scope:jira-software' olmalı. Lütfen Jira bağlantınızı yenileyin.",
+            boardId,
+            requiresReconnect: true,
+          },
+          { status: 403 }
         );
       }
 
       return NextResponse.json(
-        { error: `Jira API error: ${boardResponse.status} ${boardResponse.statusText}`, details: errorDetails },
+        { error: `Jira Agile API error: ${boardResponse.status} ${boardResponse.statusText}`, details: errorDetails },
         { status: boardResponse.status }
       );
     }
 
-    const boardData = (await boardResponse.json()) as JiraSearchResponse;
+    // Agile API response formatı
+    const boardData = (await boardResponse.json()) as {
+      maxResults: number;
+      startAt: number;
+      total: number;
+      issues: JiraIssue[];
+    };
     
-    const tasks: JiraTask[] = boardData.issues.map((issue) => ({
+    console.log("✅ Board issues fetched:", {
+      total: boardData.total,
+      issuesCount: boardData.issues?.length || 0,
+    });
+    
+    const tasks: JiraTask[] = (boardData.issues || []).map((issue) => ({
       id: issue.id,
       key: issue.key,
       summary: issue.fields.summary,

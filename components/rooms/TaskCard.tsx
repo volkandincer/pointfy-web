@@ -112,10 +112,25 @@ const TaskCard = memo(function TaskCard({
       {/* Header */}
       <div className="mb-4 flex items-start justify-between">
         <div className="flex-1">
-          <div className="mb-2 flex items-center gap-2">
+          <div className="mb-2 flex items-center gap-2 flex-wrap">
             <h3 className="text-lg font-bold text-gray-900 dark:text-white">
               {task.title}
             </h3>
+            {task.jira_key && (
+              <a
+                href={task.jira_url || "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-mono font-semibold text-blue-700 transition hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50"
+                onClick={(e) => {
+                  if (!task.jira_url) {
+                    e.preventDefault();
+                  }
+                }}
+              >
+                🔗 {task.jira_key}
+              </a>
+            )}
             {task.status === "completed" && (
               <span className="rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-semibold text-green-700 dark:bg-green-900/30 dark:text-green-400">
                 ✅ Tamamlandı

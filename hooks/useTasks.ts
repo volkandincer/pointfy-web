@@ -29,7 +29,7 @@ export function useTasks(roomId: string): UseTasksResult {
       const { data, error: dbError } = await supabase
         .from("tasks")
         .select(
-          "id, title, description, status, room_id, created_at, updated_at, created_by_username, created_by_key"
+          "id, title, description, status, room_id, created_at, updated_at, created_by_username, created_by_key, jira_key, jira_url, jira_id"
         )
         .eq("room_id", roomId)
         .order("created_at", { ascending: true });

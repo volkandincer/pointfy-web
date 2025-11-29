@@ -280,7 +280,13 @@ export default function RoomDetailPage() {
   );
 
   const handleCreateTask = useCallback(
-    async (title: string, description?: string) => {
+    async (
+      title: string,
+      description?: string,
+      jiraKey?: string,
+      jiraUrl?: string,
+      jiraId?: string
+    ) => {
       // Admin kontrolü - sadece admin task oluşturabilir
       if (!isAdmin) {
         alert("Bu işlem için admin yetkisi gereklidir.");
@@ -300,6 +306,9 @@ export default function RoomDetailPage() {
           status: "pending", // Direkt active değil, pending olarak ekle
           created_by_key: userKey,
           created_by_username: username,
+          jira_key: jiraKey || null,
+          jira_url: jiraUrl || null,
+          jira_id: jiraId || null,
         });
         if (error) throw error;
       } catch (err) {
