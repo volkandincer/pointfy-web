@@ -41,7 +41,7 @@ export async function GET(request: Request) {
               userId = payload.sub;
             }
           } catch (error) {
-            console.warn(
+            // JWT decode başarısız
               "JWT decode başarısız, Supabase API isteği yapılacak:",
               error
             );

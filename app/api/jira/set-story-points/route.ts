@@ -36,11 +36,11 @@ export async function POST(request: Request) {
               userId = payload.sub;
             }
           } catch (error) {
-            console.warn("JWT decode başarısız:", error);
+            // JWT decode başarısız
           }
         }
       } catch (authError) {
-        console.error("Auth error:", authError);
+        // Auth error
       }
     }
 
@@ -91,7 +91,7 @@ export async function POST(request: Request) {
       userId
     );
   } catch (error) {
-    console.error("Jira set story points API error:", error);
+    // Jira set story points API error
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Internal server error" },
       { status: 500 }

@@ -36,11 +36,11 @@ export async function GET(request: Request) {
               userId = payload.sub;
             }
           } catch (error) {
-            console.warn("JWT decode başarısız:", error);
+            // JWT decode başarısız
           }
         }
       } catch (authError) {
-        console.error("Auth error:", authError);
+        // Auth error
       }
     }
 
@@ -89,7 +89,7 @@ export async function GET(request: Request) {
       userId
     );
   } catch (error) {
-    console.error("Jira get story points API error:", error);
+    // Jira get story points API error
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Internal server error" },
       { status: 500 }
@@ -159,7 +159,7 @@ async function handleGetStoryPoints(
         })
         .eq("id", userId);
     } catch (refreshError) {
-      console.error("❌ Jira token refresh error:", refreshError);
+      // Jira token refresh error
       return NextResponse.json(
         { error: "Jira token expired and refresh failed. Please reconnect Jira." },
         { status: 401 }
@@ -207,7 +207,7 @@ async function handleGetStoryPoints(
       }
     }
   } catch (error) {
-    console.error("CloudId alınamadı:", error);
+    // CloudId alınamadı
   }
 
   // API URL oluştur
