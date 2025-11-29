@@ -29,21 +29,6 @@ export const resolveEnvValue = (
   );
 };
 
-export type { AppEnvironment };
-type AppEnvironment = "prod" | "test";
-
-const getAppEnvironment = (): AppEnvironment => {
-  const rawEnv =
-    process.env.NEXT_PUBLIC_APP_ENV ||
-    process.env.APP_ENV ||
-    process.env.NEXT_PUBLIC_JIRA_ENVIRONMENT ||
-    process.env.JIRA_ENV ||
-    "test";
-
-  return rawEnv.toLowerCase().startsWith("prod") ? "prod" : "test";
-};
-
-export const appEnvironment = getAppEnvironment();
 export const isProdEnvironment = appEnvironment === "prod";
 
 export type { AppEnvironment };
