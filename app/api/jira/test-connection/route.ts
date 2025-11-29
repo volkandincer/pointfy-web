@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
+import type {
+  JiraAccessibleResource,
+  JiraApiErrorResponse,
+} from "@/interfaces/Jira.interface";
 
 /**
  * Jira API bağlantısını test et
@@ -25,7 +29,8 @@ export async function GET(request: Request) {
               const payload = JSON.parse(Buffer.from(tokenParts[1], "base64").toString());
               userId = payload.sub;
             }
-          } catch (tokenError) {
+          } catch (error) {
+            console.warn("JWT decode başarısız:", error);
           }
         }
         
@@ -140,9 +145,9 @@ export async function GET(request: Request) {
       );
 
       const responseText = await accessibleResourcesResponse.text();
-      let responseJson: any = null;
+      let responseJson: JiraAccessibleResource[] | null = null;
       try {
-        responseJson = JSON.parse(responseText);
+        responseJson = JSON.parse(responseText) as JiraAccessibleResource[];
       } catch {
         // JSON parse başarısız
       }
@@ -162,7 +167,11 @@ export async function GET(request: Request) {
           ? "Token geçerli, accessible resources alındı"
           : accessibleResourcesResponse.status === 401
           ? "Token geçersiz veya süresi dolmuş"
-          : `Beklenmeyen hata: ${responseJson?.errorMessage || accessibleResourcesResponse.statusText}`,
+          : `Beklenmeyen hata: ${
+              responseJson
+                ? JSON.stringify(responseJson).substring(0, 120)
+                : accessibleResourcesResponse.statusText
+            }`,
       });
     } catch (error) {
       console.error("❌ Test 1 Error:", error);
@@ -224,9 +233,9 @@ export async function GET(request: Request) {
       });
 
       const responseText = await boardResponse.text();
-      let responseJson: any = null;
+      let responseJson: JiraApiErrorResponse | null = null;
       try {
-        responseJson = JSON.parse(responseText);
+        responseJson = JSON.parse(responseText) as JiraApiErrorResponse;
       } catch {
         // JSON parse başarısız
       }

@@ -1,7 +1,18 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
+import { jiraConfig } from "@/lib/jiraConfig";
+import type {
+  JiraAccessibleResource,
+  JiraApiErrorResponse,
+  JiraProjectSummary,
+} from "@/interfaces/Jira.interface";
 
+const isJiraApiErrorResponse = (
+  value: unknown
+): value is JiraApiErrorResponse => typeof value === "object" && value !== null;
+
+const { clientId: jiraClientId, clientSecret: jiraClientSecret } = jiraConfig;
 /**
  * Jira Board'larını getir
  * Jira OAuth token'ı kullanarak Jira API'ye erişir
@@ -25,8 +36,11 @@ export async function GET(request: Request) {
               );
               userId = payload.sub;
             }
-          } catch (tokenError) {
-            // JWT decode başarısız, Supabase API'ye istek yap
+          } catch (error) {
+            console.warn(
+              "JWT decode başarısız, Supabase API isteği yapılacak:",
+              error
+            );
           }
         }
 
@@ -156,10 +170,8 @@ async function handleJiraRequestWithJiraToken(
 
     try {
       const { refreshJiraToken } = await import("@/lib/jira");
-      const clientId = process.env.JIRA_CLIENT_ID;
-      const clientSecret = process.env.JIRA_CLIENT_SECRET;
 
-      if (!clientId || !clientSecret) {
+      if (!jiraClientId || !jiraClientSecret) {
         return NextResponse.json(
           { error: "Jira OAuth configuration missing" },
           { status: 500 }
@@ -168,8 +180,8 @@ async function handleJiraRequestWithJiraToken(
 
       const refreshed = await refreshJiraToken(
         userRow.jira_refresh_token,
-        clientId,
-        clientSecret
+        jiraClientId,
+        jiraClientSecret
       );
 
       jiraToken = refreshed.access_token;
@@ -243,8 +255,10 @@ async function handleJiraRequestWithJiraToken(
       const errorText = await accessibleResourcesResponse.text();
       let errorDetails = errorText;
       try {
-        const errorJson = JSON.parse(errorText);
-        errorDetails = errorJson.errorMessage || errorJson.message || errorText;
+        const parsed = JSON.parse(errorText);
+        if (isJiraApiErrorResponse(parsed)) {
+          errorDetails = parsed.errorMessage || parsed.message || errorText;
+        }
       } catch {
         // JSON parse failed
       }
@@ -261,14 +275,11 @@ async function handleJiraRequestWithJiraToken(
         if (userRow.jira_refresh_token) {
           try {
             const { refreshJiraToken } = await import("@/lib/jira");
-            const clientId = process.env.JIRA_CLIENT_ID;
-            const clientSecret = process.env.JIRA_CLIENT_SECRET;
-
-            if (clientId && clientSecret) {
+            if (jiraClientId && jiraClientSecret) {
               const refreshed = await refreshJiraToken(
                 userRow.jira_refresh_token,
-                clientId,
-                clientSecret
+                jiraClientId,
+                jiraClientSecret
               );
 
               // Yeni token ile tekrar dene
@@ -379,13 +390,8 @@ async function handleJiraRequestWithJiraToken(
         }
       }
     } else {
-      const resources = (await accessibleResourcesResponse.json()) as Array<{
-        id: string;
-        name: string;
-        url: string;
-        scopes: string[];
-        avatarUrl?: string;
-      }>;
+      const resources =
+        (await accessibleResourcesResponse.json()) as JiraAccessibleResource[];
 
       // Jira resource'unu bul (name veya url'den)
       const jiraResource = resources.find(
@@ -430,16 +436,19 @@ async function handleJiraRequestWithJiraToken(
   if (!response.ok) {
     const errorText = await response.text();
     let errorDetails = errorText;
-    let errorJson: any = null;
+    let errorJson: JiraApiErrorResponse | null = null;
     try {
-      errorJson = JSON.parse(errorText);
-      if (errorJson.errorMessages && Array.isArray(errorJson.errorMessages)) {
-        errorDetails = JSON.stringify({
-          errorMessages: errorJson.errorMessages,
-          errors: errorJson.errors || {},
-        });
-      } else {
-        errorDetails = errorJson.errorMessage || errorJson.message || errorText;
+      const parsed = JSON.parse(errorText);
+      if (isJiraApiErrorResponse(parsed)) {
+        errorJson = parsed;
+        if (parsed.errorMessages && Array.isArray(parsed.errorMessages)) {
+          errorDetails = JSON.stringify({
+            errorMessages: parsed.errorMessages,
+            errors: parsed.errors || {},
+          });
+        } else {
+          errorDetails = parsed.errorMessage || parsed.message || errorText;
+        }
       }
     } catch {
       // JSON parse başarısız, text olarak kullan
@@ -465,14 +474,12 @@ async function handleJiraRequestWithJiraToken(
       if (userRow.jira_refresh_token) {
         try {
           const { refreshJiraToken } = await import("@/lib/jira");
-          const clientId = process.env.JIRA_CLIENT_ID;
-          const clientSecret = process.env.JIRA_CLIENT_SECRET;
 
-          if (clientId && clientSecret) {
+          if (jiraClientId && jiraClientSecret) {
             const refreshed = await refreshJiraToken(
               userRow.jira_refresh_token,
-              clientId,
-              clientSecret
+              jiraClientId,
+              jiraClientSecret
             );
 
             const retryResponse = await fetch(`${apiUrl}/rest/api/3/project`, {
@@ -498,17 +505,8 @@ async function handleJiraRequestWithJiraToken(
                 })
                 .eq("id", userId);
 
-              const retryProjects = (await retryResponse.json()) as Array<{
-                id: string;
-                key: string;
-                name: string;
-                projectTypeKey: string;
-                simplified: boolean;
-                style: string;
-                isPrivate: boolean;
-                properties: Record<string, any>;
-                avatarUrls: Record<string, string>;
-              }>;
+              const retryProjects =
+                (await retryResponse.json()) as JiraProjectSummary[];
 
               const retryBoards = retryProjects.map((project) => ({
                 id: parseInt(project.id) || 0,
@@ -617,17 +615,7 @@ async function handleJiraRequestWithJiraToken(
   }
 
   // REST API v3 /rest/api/3/project endpoint'i projeleri döndürür (array)
-  const projects = (await response.json()) as Array<{
-    id: string;
-    key: string;
-    name: string;
-    projectTypeKey: string;
-    simplified: boolean;
-    style: string;
-    isPrivate: boolean;
-    properties: Record<string, any>;
-    avatarUrls: Record<string, string>;
-  }>;
+  const projects = (await response.json()) as JiraProjectSummary[];
 
   if (jiraBaseUrl && userId) {
     try {

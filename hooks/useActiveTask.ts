@@ -49,7 +49,7 @@ export function useActiveTask(roomId: string): UseActiveTaskResult {
     // Bu sayede her hook kendi subscription'ını yönetir
     const channel = supabase.channel("active-task-room-" + roomId);
     channel.on(
-      // @ts-ignore - Supabase channel type inference issue
+      // @ts-expect-error - Supabase channel type inference issue
       "postgres_changes",
       {
         event: "*",

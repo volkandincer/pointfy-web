@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, startTransition, useCallback, useEffect, useState } from "react";
 import Modal from "@/components/ui/Modal";
 import type { Board, BoardInput } from "@/interfaces/Board.interface";
 
@@ -49,12 +49,16 @@ const EditBoardModal = memo(function EditBoardModal({
   const [icon, setIcon] = useState<string>(BOARD_ICONS[0]);
 
   useEffect(() => {
-    if (board) {
+    if (!board) {
+      return;
+    }
+
+    startTransition(() => {
       setName(board.name);
       setDescription(board.description || "");
       setColor(board.color || BOARD_COLORS[0].value);
       setIcon(board.icon || BOARD_ICONS[0]);
-    }
+    });
   }, [board]);
 
   const handleSubmit = useCallback(

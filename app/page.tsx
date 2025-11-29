@@ -24,7 +24,6 @@ function HomePageContent() {
     []
   );
   const [userId, setUserId] = useState<string | null>(null);
-  const [username, setUsername] = useState<string | undefined>(undefined);
   const [checkingAuth, setCheckingAuth] = useState<boolean>(true);
   const [jiraConnected, setJiraConnected] = useState<boolean>(false);
   const { toasts, removeToast } = useToastContext();
@@ -47,7 +46,6 @@ function HomePageContent() {
             .eq("id", sessionData.session.user.id)
             .single();
           if (!mounted) return;
-          setUsername(userRow?.username);
           setJiraConnected(!!userRow?.jira_access_token);
         } else {
           setUserId(null);
@@ -168,7 +166,7 @@ function HomePageContent() {
         id: "jira",
         title: jiraConnected ? "Jira" : "Jira'yı Bağla",
         description: jiraConnected
-          ? "Jira projelerinizi ve issue'larınızı görüntüleyin"
+          ? "Jira projelerinizi ve issue&apos;larınızı görüntüleyin"
           : "Jira hesabınızı bağlayın ve projelerinizi yönetin",
         href: jiraConnected ? "/app/jira" : "#",
         icon: "🔗",

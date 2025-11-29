@@ -64,7 +64,7 @@ export function useNotes(): UseNotesResult {
         const channel = supabase
           .channel("user-notes-" + userData.user.id);
         channel.on(
-          // @ts-ignore - Supabase channel type inference issue
+          // @ts-expect-error - Supabase channel type inference issue
           "postgres_changes",
             {
               event: "*",

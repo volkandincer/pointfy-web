@@ -1,22 +1,23 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { jiraConfig } from "@/lib/jiraConfig";
 
 /**
  * Jira OAuth başlatma endpoint'i
  * Kullanıcıyı Jira OAuth sayfasına yönlendirir
  */
 export async function GET(request: Request) {
-  const clientId = process.env.JIRA_CLIENT_ID;
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const { clientId, appUrl } = jiraConfig;
   const { searchParams } = new URL(request.url);
   const returnUrl = searchParams.get("returnUrl") || "/app/jira-test";
   const userIdFromQuery = searchParams.get("userId");
 
   if (!clientId) {
     return NextResponse.json(
-      { 
+      {
         error: "Jira OAuth yapılandırılmamış",
-        details: "JIRA_CLIENT_ID environment variable'ı eksik. Lütfen .env.local dosyanıza şu değişkenleri ekleyin:\n\nJIRA_CLIENT_ID=your_client_id\nJIRA_CLIENT_SECRET=your_client_secret\n\nJira OAuth uygulaması oluşturmak için: https://developer.atlassian.com/console/myapps/"
+        details:
+          "JIRA_CLIENT_ID_* environment variable'ları eksik. Lütfen .env dosyanıza JIRA_CLIENT_ID_TEST / JIRA_CLIENT_ID_PROD ve karşılık gelen secret değerlerini ekleyin (bkz. docs/env.md). Jira OAuth uygulaması oluşturmak için: https://developer.atlassian.com/console/myapps/",
       },
       { status: 500 }
     );
@@ -34,11 +35,13 @@ export async function GET(request: Request) {
       try {
         const tokenParts = accessToken.split(".");
         if (tokenParts.length === 3) {
-          const payload = JSON.parse(Buffer.from(tokenParts[1], "base64").toString());
+          const payload = JSON.parse(
+            Buffer.from(tokenParts[1], "base64").toString()
+          );
           currentUserId = payload.sub;
         }
-      } catch (tokenError) {
-        // JWT decode başarısız
+      } catch (error) {
+        console.warn("JWT decode başarısız:", error);
       }
     }
   }
@@ -51,10 +54,10 @@ export async function GET(request: Request) {
 
   // OAuth state oluştur - user ID'yi state'e encode et
   const randomState = Math.random().toString(36).substring(2, 15);
-  const statePayload = currentUserId 
+  const statePayload = currentUserId
     ? `${randomState}:${Buffer.from(currentUserId).toString("base64")}`
     : randomState;
-  
+
   const redirectUri = `${appUrl}/api/auth/jira/callback`;
 
   // Jira OAuth 2.0 (3LO) authorization URL
@@ -68,7 +71,10 @@ export async function GET(request: Request) {
   // offline_access: Refresh token almak için
   // Not: Agile API scope'ları (read:board-scope:jira-software) Developer Console'da görünmüyor olabilir
   // Bu durumda Agile API yerine REST API v3 kullanılabilir veya scope'lar farklı bir API grubu altında olabilir
-  authUrl.searchParams.set("scope", "read:jira-work write:jira-work offline_access");
+  authUrl.searchParams.set(
+    "scope",
+    "read:jira-work write:jira-work offline_access"
+  );
   authUrl.searchParams.set("redirect_uri", redirectUri);
   authUrl.searchParams.set("state", statePayload);
   authUrl.searchParams.set("response_type", "code");
@@ -91,4 +97,3 @@ export async function GET(request: Request) {
 
   return response;
 }
-

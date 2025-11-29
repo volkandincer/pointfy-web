@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { memo, useEffect } from "react";
 import type { JiraTask } from "@/interfaces/Jira.interface";
 
@@ -163,9 +164,11 @@ const JiraIssueModal = memo(function JiraIssueModal({
                 </div>
                 <div className="flex items-center gap-2">
                   {issue.assignee.avatar && (
-                    <img
+                    <Image
                       src={issue.assignee.avatar}
                       alt={issue.assignee.name}
+                      width={24}
+                      height={24}
                       className="h-6 w-6 rounded-full"
                     />
                   )}
@@ -244,7 +247,7 @@ const JiraIssueModal = memo(function JiraIssueModal({
               rel="noopener noreferrer"
               className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
             >
-              <span>Jira'da Aç</span>
+              <span>Jira&apos;da Aç</span>
               <svg
                 className="h-4 w-4"
                 fill="none"

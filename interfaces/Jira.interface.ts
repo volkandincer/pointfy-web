@@ -112,3 +112,51 @@ export interface JiraSprint {
   endDate?: string;
   goal?: string;
 }
+
+export type JiraJsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JiraJsonValue[]
+  | { [key: string]: JiraJsonValue };
+
+export interface JiraProjectSummary {
+  id: string;
+  key: string;
+  name: string;
+  projectTypeKey: string;
+  simplified: boolean;
+  style: string;
+  isPrivate: boolean;
+  properties: Record<string, JiraJsonValue>;
+  avatarUrls: Record<string, string>;
+}
+
+export interface JiraApiErrorResponse {
+  error?: string;
+  errorMessage?: string;
+  message?: string;
+  rawResponse?: string;
+  errorMessages?: string[];
+  errors?: Record<string, string>;
+  [key: string]: unknown;
+}
+
+export interface JiraAccessibleResource {
+  id: string;
+  name: string;
+  url: string;
+  scopes?: string[];
+  avatarUrl?: string;
+}
+
+export interface JiraAdfNode {
+  type: string;
+  text?: string;
+  content?: JiraAdfNode[];
+}
+
+export interface JiraAdfDocument {
+  content?: JiraAdfNode[];
+}

@@ -103,7 +103,7 @@ export function useVotingSession(roomId: string): VotingSessionState {
     const supabase = getSupabase();
     const channel = supabase.channel("tasks-status-" + roomId);
     channel.on(
-      // @ts-ignore - Supabase channel type inference issue
+      // @ts-expect-error - Supabase channel type inference issue
       "postgres_changes",
       {
         event: "*",

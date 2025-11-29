@@ -105,7 +105,7 @@ export function useCompletedTasks(roomId: string): UseCompletedTasksResult {
     const supabase = getSupabase();
     const channel = supabase.channel("completed-tasks-" + roomId);
     channel.on(
-      // @ts-ignore - Supabase channel type inference issue
+      // @ts-expect-error - Supabase channel type inference issue
       "postgres_changes",
       {
         event: "*",

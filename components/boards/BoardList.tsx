@@ -186,8 +186,8 @@ const BoardList = memo(function BoardList({
           </h3>
           <p className="mb-6 text-gray-600 dark:text-gray-400">
             {showArchived
-              ? "Arşivlenmiş board'larınız burada görünecek"
-              : "İlk board'unuzu oluşturarak başlayın"}
+              ? "Arşivlenmiş board&apos;larınız burada görünecek"
+              : "İlk board&apos;unuzu oluşturarak başlayın"}
           </p>
           {!showArchived && (
             <button
@@ -207,7 +207,7 @@ const BoardList = memo(function BoardList({
                   d="M12 4v16m8-8H4"
                 />
               </svg>
-              İlk Board'unu Oluştur
+              İlk Board&apos;unu Oluştur
             </button>
           )}
         </div>

@@ -51,7 +51,7 @@ export function useRetroCards(roomId: string): UseRetroCardsResult {
     const supabase = getSupabase();
     const channel = supabase.channel("retro-cards-room-" + roomId);
     channel.on(
-      // @ts-ignore - Supabase channel type inference issue
+      // @ts-expect-error - Supabase channel type inference issue
       "postgres_changes",
       {
         event: "*",

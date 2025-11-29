@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
+import type { JiraApiErrorResponse } from "@/interfaces/Jira.interface";
 
 /**
  * Jira kullanıcı bilgilerini getir (/rest/api/3/myself)
@@ -25,8 +26,8 @@ export async function GET(request: Request) {
               );
               userId = payload.sub;
             }
-          } catch (tokenError) {
-            // JWT decode başarısız
+          } catch (error) {
+            console.warn("JWT decode başarısız:", error);
           }
         }
       } catch (authError) {
@@ -128,9 +129,12 @@ export async function GET(request: Request) {
 
     if (!response.ok) {
       const errorText = await response.text();
-      let errorJson: any = null;
+      let errorJson: JiraApiErrorResponse | null = null;
       try {
-        errorJson = JSON.parse(errorText);
+        const parsed = JSON.parse(errorText);
+        if (typeof parsed === "object" && parsed !== null) {
+          errorJson = parsed as JiraApiErrorResponse;
+        }
       } catch {
         // JSON parse başarısız
       }

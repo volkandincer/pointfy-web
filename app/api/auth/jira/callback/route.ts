@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
+import { jiraConfig } from "@/lib/jiraConfig";
 
 interface JiraTokenResponse {
   access_token: string;
@@ -24,9 +25,7 @@ export async function GET(request: Request) {
   const state = searchParams.get("state");
   const error = searchParams.get("error");
 
-  const clientId = process.env.JIRA_CLIENT_ID;
-  const clientSecret = process.env.JIRA_CLIENT_SECRET;
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const { clientId, clientSecret, appUrl } = jiraConfig;
 
   if (error) {
     return NextResponse.redirect(
@@ -42,7 +41,9 @@ export async function GET(request: Request) {
 
   if (!clientId || !clientSecret) {
     return NextResponse.redirect(
-      `${appUrl}/app/jira-test?error=${encodeURIComponent("Jira OAuth yapılandırma hatası. JIRA_CLIENT_ID ve JIRA_CLIENT_SECRET environment variable'ları eksik. Lütfen .env.local dosyanıza bu değişkenleri ekleyin.")}`
+      `${appUrl}/app/jira-test?error=${encodeURIComponent(
+        "Jira OAuth yapılandırma hatası. Lütfen JIRA_CLIENT_ID_TEST / JIRA_CLIENT_ID_PROD (ve secret) değişkenlerini docs/env.md'deki yönergelere göre ekleyin."
+      )}`
     );
   }
 

@@ -94,7 +94,7 @@ export default function AccountPage() {
 
         // Jira bağlantı durumu
         try {
-          const { data: jiraRow, error: jiraError } = await supabase
+          const { data: jiraRow } = await supabase
             .from("users")
             .select("jira_access_token")
             .eq("id", userData.user.id)

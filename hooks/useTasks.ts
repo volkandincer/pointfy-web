@@ -62,7 +62,7 @@ export function useTasks(roomId: string): UseTasksResult {
     const supabase = getSupabase();
     const channel = supabase.channel("tasks-room-" + roomId);
     channel.on(
-      // @ts-ignore - Supabase channel type inference issue
+      // @ts-expect-error - Supabase channel type inference issue
       "postgres_changes",
       {
         event: "*",

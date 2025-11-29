@@ -50,6 +50,7 @@ export default function NotesPage() {
   }, [notes]);
 
   // Filtrelenmiş notlar
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const filteredNotes = useMemo(() => {
     if (selectedCategory === "Tümü") return notes;
     return notes.filter((n) => n.category === selectedCategory);

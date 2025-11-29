@@ -29,7 +29,7 @@ export default function BoardDetailPage() {
   const router = useRouter();
   const boardId = String(params?.id);
   const { boards, updateBoard } = useBoards();
-  const { notes, addNote, updateNote, removeNote } = useNotes();
+  const { notes, updateNote, removeNote } = useNotes();
   const { showToast } = useToastContext();
 
   const [board, setBoard] = useState<Board | null>(null);
@@ -104,7 +104,7 @@ export default function BoardDetailPage() {
       // Realtime subscription
       const channel = supabase.channel("board-tasks-" + boardId);
       channel.on(
-        // @ts-ignore
+        // @ts-expect-error - Supabase channel type inference issue
         "postgres_changes",
         {
           event: "*",

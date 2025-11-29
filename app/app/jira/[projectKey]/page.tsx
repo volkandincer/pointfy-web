@@ -1,13 +1,18 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import RequireAuth from "@/components/auth/RequireAuth";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
-import type { JiraTask } from "@/interfaces/Jira.interface";
+import type {
+  JiraAdfDocument,
+  JiraAdfNode,
+  JiraTask,
+} from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
 import JiraIssueModal from "@/components/jira/JiraIssueModal";
 import MobileSelect from "@/components/jira/MobileSelect";
@@ -145,21 +150,25 @@ export default function JiraProjectDetailPage() {
       }
 
       // Helper function: ADF format description'ı string'e çevir
-      const extractDescription = (desc: any): string | undefined => {
+      const extractDescription = (
+        desc: JiraAdfDocument | string | undefined
+      ): string | undefined => {
         if (!desc) return undefined;
         if (typeof desc === "string") return desc;
-        if (typeof desc === "object" && desc.content) {
-          // ADF format - content array'inden text'leri çıkar
-          const extractText = (node: any): string => {
-            if (typeof node === "string") return node;
-            if (node.text) return node.text;
-            if (node.content && Array.isArray(node.content)) {
-              return node.content.map(extractText).join("");
-            }
-            return "";
-          };
-          return desc.content.map(extractText).join("").trim() || undefined;
+
+        const extractText = (node: JiraAdfNode): string => {
+          const currentText = node.text ?? "";
+          if (node.content && Array.isArray(node.content)) {
+            return currentText + node.content.map(extractText).join("");
+          }
+          return currentText;
+        };
+
+        if (Array.isArray(desc.content)) {
+          const combined = desc.content.map(extractText).join("").trim();
+          return combined || undefined;
         }
+
         return undefined;
       };
 
@@ -354,7 +363,7 @@ export default function JiraProjectDetailPage() {
                   }}
                   className="w-full rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-base font-semibold text-white shadow-md transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-lg"
                 >
-                  Jira'yı Bağla
+                  Jira&apos;yı Bağla
                 </button>
               </div>
             </div>
@@ -390,7 +399,7 @@ export default function JiraProjectDetailPage() {
                     d="M15 19l-7-7 7-7"
                   />
                 </svg>
-                Jira'ya Dön
+                Jira&apos;ya Dön
               </button>
               <div className="mb-6">
                 <div className="flex items-center gap-3">
@@ -634,7 +643,7 @@ export default function JiraProjectDetailPage() {
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Issue'da ara (başlık, açıklama, key)..."
+                    placeholder="Issue&apos;da ara (başlık, açıklama, key)..."
                     className="w-full rounded-lg border border-gray-300 bg-gray-50/50 pl-10 pr-10 py-3 text-base text-gray-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800/50 dark:text-white dark:focus:bg-gray-800 sm:text-sm"
                   />
                   {searchQuery && (
@@ -893,7 +902,7 @@ export default function JiraProjectDetailPage() {
               <div className="p-6">
                 <div className="mb-4 flex items-center justify-between">
                   <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                    Issue'lar {filteredIssues.length !== allIssues.length && `(${filteredIssues.length})`}
+                    Issue&apos;lar {filteredIssues.length !== allIssues.length && `(${filteredIssues.length})`}
                   </h2>
                   <button
                     onClick={fetchProjectIssues}
@@ -1104,9 +1113,11 @@ export default function JiraProjectDetailPage() {
                               {issue.assignee && (
                                 <span className="flex items-center gap-2 text-xs font-medium text-gray-700 dark:text-gray-300">
                                   {issue.assignee.avatar && (
-                                    <img
+                                    <Image
                                       src={issue.assignee.avatar}
                                       alt={issue.assignee.name}
+                                      width={20}
+                                      height={20}
                                       className="h-5 w-5 rounded-full ring-2 ring-white dark:ring-gray-700"
                                     />
                                   )}

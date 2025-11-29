@@ -214,7 +214,7 @@ export default function JiraPage() {
                     Jira Bağlantısı Gerekli
                   </h2>
                   <p className="text-gray-600 dark:text-gray-400">
-                    Jira projelerinizi ve issue'larınızı görüntülemek için Jira hesabınızı bağlamanız gerekiyor.
+                    Jira projelerinizi ve issue&apos;larınızı görüntülemek için Jira hesabınızı bağlamanız gerekiyor.
                   </p>
                 </div>
                 <button
@@ -233,7 +233,7 @@ export default function JiraPage() {
                   }}
                   className="w-full rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-base font-semibold text-white shadow-md transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-lg"
                 >
-                  Jira'yı Bağla
+                  Jira&apos;yı Bağla
                 </button>
               </div>
             </div>
@@ -257,7 +257,7 @@ export default function JiraPage() {
                   Jira
                 </h1>
                 <p className="text-lg text-gray-600 dark:text-gray-400">
-                  Projelerinizi ve issue'larınızı görüntüleyin
+                  Projelerinizi ve issue&apos;larınızı görüntüleyin
                 </p>
               </div>
 
@@ -281,7 +281,7 @@ export default function JiraPage() {
                       : "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
                   }`}
                 >
-                  Issue'larım
+                  Issue&apos;larım
                 </button>
               </div>
             </div>
@@ -344,7 +344,7 @@ export default function JiraPage() {
                 <div className="p-6">
                   <div className="mb-4 flex items-center justify-between">
                     <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                      Issue'larım
+                      Issue&apos;larım
                     </h2>
                     <button
                       onClick={fetchIssues}

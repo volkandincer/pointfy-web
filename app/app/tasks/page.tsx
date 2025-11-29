@@ -48,7 +48,7 @@ export default function PersonalTasksPage() {
 
       const channel = supabase.channel("personal-tasks-" + data.user.id);
       channel.on(
-        // @ts-ignore - Supabase channel type inference issue
+        // @ts-expect-error - Supabase channel type inference issue
         "postgres_changes",
         {
           event: "*",

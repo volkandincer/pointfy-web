@@ -60,7 +60,7 @@ export function useBoards(): UseBoardsResult {
         // Realtime subscription
         const channel = supabase.channel("user-boards-" + userData.user.id);
         channel.on(
-          // @ts-ignore - Supabase channel type inference issue
+        // @ts-expect-error - Supabase channel type inference issue
           "postgres_changes",
           {
             event: "*",

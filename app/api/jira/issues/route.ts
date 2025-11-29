@@ -1,7 +1,20 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
-import type { JiraSearchResponse, JiraTask } from "@/interfaces/Jira.interface";
+import { jiraConfig } from "@/lib/jiraConfig";
+import type {
+  JiraAdfDocument,
+  JiraAdfNode,
+  JiraApiErrorResponse,
+  JiraSearchResponse,
+  JiraTask,
+} from "@/interfaces/Jira.interface";
+
+const isJiraApiErrorResponse = (
+  value: unknown
+): value is JiraApiErrorResponse => typeof value === "object" && value !== null;
+
+const { clientId: jiraClientId, clientSecret: jiraClientSecret } = jiraConfig;
 
 /**
  * Jira Issue'larını getir (kullanıcıya assign edilmiş)
@@ -26,9 +39,8 @@ export async function GET(request: Request) {
               const payload = JSON.parse(Buffer.from(tokenParts[1], "base64").toString());
               userId = payload.sub;
             }
-          } catch (tokenError) {
-            // JWT decode başarısız, Supabase API'ye istek yap
-            console.log("JWT decode failed, trying Supabase API...");
+          } catch (error) {
+            console.warn("JWT decode başarısız, Supabase API'ye istek yapılacak:", error);
           }
         }
         
@@ -153,10 +165,8 @@ async function handleJiraIssuesRequestWithJiraToken(
 
     try {
       const { refreshJiraToken } = await import("@/lib/jira");
-      const clientId = process.env.JIRA_CLIENT_ID;
-      const clientSecret = process.env.JIRA_CLIENT_SECRET;
 
-      if (!clientId || !clientSecret) {
+      if (!jiraClientId || !jiraClientSecret) {
         return NextResponse.json(
           { error: "Jira OAuth configuration missing" },
           { status: 500 }
@@ -165,8 +175,8 @@ async function handleJiraIssuesRequestWithJiraToken(
 
       const refreshed = await refreshJiraToken(
         userRow.jira_refresh_token,
-        clientId,
-        clientSecret
+        jiraClientId,
+        jiraClientSecret
       );
 
       jiraToken = refreshed.access_token;
@@ -199,7 +209,7 @@ async function handleJiraIssuesRequestWithJiraToken(
 
   // Jira base URL ve query parametrelerini al
   const { searchParams } = new URL(request.url);
-  let jiraBaseUrl = searchParams.get("jiraBaseUrl") || userRow.jira_base_url || process.env.JIRA_BASE_URL;
+  const jiraBaseUrl = searchParams.get("jiraBaseUrl") || userRow.jira_base_url || process.env.JIRA_BASE_URL;
   const boardId = searchParams.get("boardId");
   const status = searchParams.get("status");
   const maxResults = parseInt(searchParams.get("maxResults") || "50");
@@ -233,14 +243,12 @@ async function handleJiraIssuesRequestWithJiraToken(
         if (userRow.jira_refresh_token) {
           try {
             const { refreshJiraToken } = await import("@/lib/jira");
-            const clientId = process.env.JIRA_CLIENT_ID;
-            const clientSecret = process.env.JIRA_CLIENT_SECRET;
 
-            if (clientId && clientSecret) {
+            if (jiraClientId && jiraClientSecret) {
               const refreshed = await refreshJiraToken(
                 userRow.jira_refresh_token,
-                clientId,
-                clientSecret
+                jiraClientId,
+                jiraClientSecret
               );
 
               // Yeni token ile tekrar dene
@@ -396,15 +404,16 @@ async function handleJiraIssuesRequestWithJiraToken(
       const errorText = await boardResponse.text();
       let errorDetails = errorText;
       try {
-        const errorJson = JSON.parse(errorText);
-        // errorMessages array'i varsa onu kullan
-        if (errorJson.errorMessages && Array.isArray(errorJson.errorMessages)) {
-          errorDetails = JSON.stringify({
-            errorMessages: errorJson.errorMessages,
-            errors: errorJson.errors || {},
-          });
-        } else {
-          errorDetails = errorJson.errorMessage || errorJson.message || errorText;
+        const parsed = JSON.parse(errorText);
+        if (isJiraApiErrorResponse(parsed)) {
+          if (parsed.errorMessages && Array.isArray(parsed.errorMessages)) {
+            errorDetails = JSON.stringify({
+              errorMessages: parsed.errorMessages,
+              errors: parsed.errors || {},
+            });
+          } else {
+            errorDetails = parsed.errorMessage || parsed.message || errorText;
+          }
         }
       } catch {
         // JSON parse başarısız
@@ -523,15 +532,16 @@ async function handleJiraIssuesRequestWithJiraToken(
     const errorText = await response.text();
     let errorDetails = errorText;
     try {
-      const errorJson = JSON.parse(errorText);
-      // errorMessages array'i varsa onu kullan
-      if (errorJson.errorMessages && Array.isArray(errorJson.errorMessages)) {
-        errorDetails = JSON.stringify({
-          errorMessages: errorJson.errorMessages,
-          errors: errorJson.errors || {},
-        });
-      } else {
-        errorDetails = errorJson.errorMessage || errorJson.message || errorText;
+      const parsed = JSON.parse(errorText);
+      if (isJiraApiErrorResponse(parsed)) {
+        if (parsed.errorMessages && Array.isArray(parsed.errorMessages)) {
+          errorDetails = JSON.stringify({
+            errorMessages: parsed.errorMessages,
+            errors: parsed.errors || {},
+          });
+        } else {
+          errorDetails = parsed.errorMessage || parsed.message || errorText;
+        }
       }
     } catch {
       // JSON parse başarısız
@@ -627,20 +637,25 @@ async function handleJiraIssuesRequestWithJiraToken(
         throw new Error("Issue missing fields");
       }
       // Helper function: ADF format description'ı string'e çevir
-      const extractDescription = (desc: any): string | undefined => {
+      const extractDescription = (
+        desc: JiraAdfDocument | string | undefined
+      ): string | undefined => {
         if (!desc) return undefined;
         if (typeof desc === "string") return desc;
-        if (typeof desc === "object" && desc.content) {
-          const extractText = (node: any): string => {
-            if (typeof node === "string") return node;
-            if (node.text) return node.text;
-            if (node.content && Array.isArray(node.content)) {
-              return node.content.map(extractText).join("");
-            }
-            return "";
-          };
-          return desc.content.map(extractText).join("").trim() || undefined;
+
+        const extractText = (node: JiraAdfNode): string => {
+          const currentText = node.text ?? "";
+          if (node.content && Array.isArray(node.content)) {
+            return currentText + node.content.map(extractText).join("");
+          }
+          return currentText;
+        };
+
+        if (Array.isArray(desc.content)) {
+          const combined = desc.content.map(extractText).join("").trim();
+          return combined || undefined;
         }
+
         return undefined;
       };
 

@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
-import type { JiraSearchResponse } from "@/interfaces/Jira.interface";
+import type {
+  JiraAccessibleResource,
+  JiraApiErrorResponse,
+  JiraSearchResponse,
+} from "@/interfaces/Jira.interface";
 
 /**
  * Jira JQL ile arama yap
@@ -26,8 +30,8 @@ export async function POST(request: Request) {
               );
               userId = payload.sub;
             }
-          } catch (tokenError) {
-            // JWT decode başarısız
+          } catch (error) {
+            console.warn("JWT decode başarısız:", error);
           }
         }
       } catch (authError) {
@@ -88,14 +92,12 @@ export async function POST(request: Request) {
       );
 
       if (accessibleResourcesResponse.ok) {
-        const resources = (await accessibleResourcesResponse.json()) as Array<{
-          id: string;
-          name: string;
-          url: string;
-        }>;
+        const resources =
+          (await accessibleResourcesResponse.json()) as JiraAccessibleResource[];
 
         const jiraResource = resources.find(
-          (r) => r.url.includes("atlassian.net") || r.name.toLowerCase().includes("jira")
+          (r) =>
+            r.url.includes("atlassian.net") || r.name.toLowerCase().includes("jira")
         );
 
         if (jiraResource) {
@@ -160,9 +162,12 @@ export async function POST(request: Request) {
 
     if (!response.ok) {
       const errorText = await response.text();
-      let errorJson: any = null;
+      let errorJson: JiraApiErrorResponse | null = null;
       try {
-        errorJson = JSON.parse(errorText);
+        const parsed = JSON.parse(errorText);
+        if (typeof parsed === "object" && parsed !== null) {
+          errorJson = parsed as JiraApiErrorResponse;
+        }
       } catch {
         // JSON parse başarısız
       }

@@ -24,7 +24,8 @@ export async function POST(request: Request) {
               const payload = JSON.parse(Buffer.from(tokenParts[1], "base64").toString());
               userId = payload.sub;
             }
-          } catch (tokenError) {
+          } catch (error) {
+            console.warn("JWT decode başarısız:", error);
           }
         }
         
