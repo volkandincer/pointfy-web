@@ -182,13 +182,6 @@ export async function POST(request: Request) {
 
     const data = (await response.json()) as JiraSearchResponse;
     
-    console.log("🔍 Jira Search API Response:", {
-      status: response.status,
-      total: data.total,
-      issuesCount: data.issues?.length || 0,
-      startAt: data.startAt,
-      maxResults: data.maxResults,
-    });
 
     return NextResponse.json(data);
   } catch (error) {

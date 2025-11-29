@@ -17,8 +17,6 @@ interface JiraTokenResponse {
  */
 export async function GET(request: Request) {
   const timestamp = new Date().toISOString();
-  console.log(`[${timestamp}] 🔵 Jira OAuth callback başladı`);
-  console.log(`[${timestamp}] 🔵 Request URL:`, request.url);
   
   const { searchParams } = new URL(request.url);
   const code = searchParams.get("code");
@@ -57,20 +55,13 @@ export async function GET(request: Request) {
   if (stateParts.length === 2) {
     try {
       userIdFromState = Buffer.from(stateParts[1], "base64").toString();
-      console.log(`[${timestamp}] ✅ State'ten user ID decode edildi:`, { userId: userIdFromState?.substring(0, 20) + "..." });
     } catch (decodeError) {
-      console.warn("⚠️ State decode hatası:", decodeError);
+      // State decode hatası
     }
   }
   
   // State güvenlik kontrolü
   const randomStateFromUrl = stateParts[0];
-  console.log(`[${timestamp}] 🍪 Cookie kontrolü:`, {
-    hasState: !!storedState,
-    stateMatch: storedState === randomStateFromUrl,
-    returnUrl,
-    hasUserIdInState: !!userIdFromState,
-  });
 
   if (!storedState || storedState !== randomStateFromUrl) {
     return NextResponse.redirect(
@@ -100,31 +91,20 @@ export async function GET(request: Request) {
 
     if (!tokenResponse.ok) {
       const errorText = await tokenResponse.text();
-      console.error(`[${timestamp}] ❌ Token exchange hatası:`, {
-        status: tokenResponse.status,
-        statusText: tokenResponse.statusText,
-        error: errorText,
-      });
+      // Token exchange hatası
       throw new Error(
         `Token exchange başarısız: ${tokenResponse.status} ${tokenResponse.statusText}`
       );
     }
 
     const tokenData = (await tokenResponse.json()) as JiraTokenResponse;
-    console.log(`[${timestamp}] ✅ Token exchange başarılı:`, {
-      hasAccessToken: !!tokenData.access_token,
-      hasRefreshToken: !!tokenData.refresh_token,
-      expiresIn: tokenData.expires_in,
-      scope: tokenData.scope,
-    });
 
     // 2. Kullanıcıyı bul
     let supabase;
     try {
       supabase = getSupabaseServer();
-      console.log(`[${timestamp}] ✅ Service role key ile Supabase client oluşturuldu`);
     } catch (serviceError) {
-      console.warn("⚠️ Service role key bulunamadı, anon key kullanılıyor:", serviceError);
+      // Service role key bulunamadı, anon key kullanılıyor
       supabase = getSupabase();
     }
 

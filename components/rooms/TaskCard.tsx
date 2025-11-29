@@ -52,8 +52,8 @@ const TaskCard = memo(function TaskCard({
         if (mounted && userRow?.jira_base_url) {
           setJiraBaseUrl(userRow.jira_base_url);
         }
-      } catch (err) {
-        console.error("Jira base URL fetch error:", err);
+      } catch {
+        // Jira base URL fetch error
       }
     }
 
@@ -86,8 +86,8 @@ const TaskCard = memo(function TaskCard({
         } else {
           setVotes([]);
         }
-      } catch (err) {
-        console.error("Fetch votes error:", err);
+      } catch {
+        // Fetch votes error
         if (!mounted) return;
         setVotes([]);
       } finally {
@@ -199,8 +199,8 @@ const TaskCard = memo(function TaskCard({
             setSelectedSource("average");
           }
         }
-      } catch (err) {
-        console.error("Get Jira story points error:", err);
+      } catch {
+        // Get Jira story points error
         // Hata durumunda ortalama puanı göster
         if (!inputFocused && avgPoint > 0) {
           setStoryPointsInput(avgPoint);
@@ -280,15 +280,6 @@ const TaskCard = memo(function TaskCard({
   };
 
   const handleCardClick = (e: React.MouseEvent) => {
-    console.log("Card clicked:", {
-      taskStatus: task.status,
-      isAdmin,
-      jiraKey: task.jira_key,
-      jiraId: task.jira_id,
-      validVotes: validVotes.length,
-      avgPoint,
-    });
-
     // Eğer tıklanan element bir buton, input veya link ise, card click'i çalıştırma
     const target = e.target as HTMLElement;
     if (
@@ -299,13 +290,11 @@ const TaskCard = memo(function TaskCard({
       target.closest("input") ||
       target.closest("a")
     ) {
-      console.log("Click ignored - button/input/link clicked");
       return;
     }
 
     // Pending task'lar için modal aç
     if (task.status === "pending" && isAdmin) {
-      console.log("Opening confirm modal for pending task");
       setShowConfirmModal(true);
       return;
     }
@@ -319,19 +308,10 @@ const TaskCard = memo(function TaskCard({
     ) {
       // Puan varsa direkt gönder, yoksa input'tan değer girilmesini bekle
       if (validVotes.length > 0 && avgPoint > 0) {
-        console.log("Sending story points to Jira");
         handleSendStoryPoints();
-      } else {
-        // Puan yoksa, input'tan değer girilmesini bekle - sadece input'un görünür olduğundan emin ol
-        console.log(
-          "No votes yet - user should enter story points manually in the input field"
-        );
-        // Input zaten görünür olmalı, kullanıcı değer girip butona tıklayabilir
       }
       return;
     }
-
-    console.log("No action taken for this card click");
   };
 
   const handleSendStoryPoints = async () => {
@@ -404,7 +384,7 @@ const TaskCard = memo(function TaskCard({
         "success"
       );
     } catch (err) {
-      console.error("Set story points error:", err);
+      // Set story points error
       showToast(
         err instanceof Error ? err.message : "Story point set edilemedi",
         "error"

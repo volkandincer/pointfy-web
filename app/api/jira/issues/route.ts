@@ -384,7 +384,6 @@ async function handleJiraIssuesRequestWithJiraToken(
     jql += " AND (status = Done OR status = Closed)";
   }
   
-  console.log("🔍 JQL Query:", jql);
 
   // Board ID varsa, board'a ait issue'ları getir
   // Agile API kullanarak board'dan issue'ları çek
@@ -392,11 +391,6 @@ async function handleJiraIssuesRequestWithJiraToken(
     // Agile API endpoint: /rest/agile/1.0/board/{boardId}/issue
     const agileEndpoint = `${apiUrl}/rest/agile/1.0/board/${boardId}/issue`;
     
-    console.log("🔍 Board issues fetch - Agile API:", {
-      endpoint: agileEndpoint,
-      boardId,
-      maxResults,
-    });
 
     const boardResponse = await fetch(
       `${agileEndpoint}?maxResults=${maxResults}&startAt=0`,
@@ -428,12 +422,7 @@ async function handleJiraIssuesRequestWithJiraToken(
         // JSON parse başarısız
       }
 
-      console.error("❌ Agile API error:", {
-        status: boardResponse.status,
-        statusText: boardResponse.statusText,
-        errorDetails,
-        boardId,
-      });
+      // Agile API error
 
       if (boardResponse.status === 404) {
         return NextResponse.json(
@@ -489,10 +478,6 @@ async function handleJiraIssuesRequestWithJiraToken(
       issues: JiraIssue[];
     };
     
-    console.log("✅ Board issues fetched:", {
-      total: boardData.total,
-      issuesCount: boardData.issues?.length || 0,
-    });
     
     const tasks: JiraTask[] = (boardData.issues || []).map((issue) => ({
       id: issue.id,
@@ -548,7 +533,7 @@ async function handleJiraIssuesRequestWithJiraToken(
     ],
   };
   
-  console.log("🔍 Issues API Request:", {
+  // Issues API Request
     endpoint: searchEndpoint,
     jql: jql,
     maxResults: maxResults,
@@ -583,16 +568,7 @@ async function handleJiraIssuesRequestWithJiraToken(
       // JSON parse başarısız
     }
 
-    console.error("Jira Issues API Error:", {
-      status: response.status,
-      statusText: response.statusText,
-      apiUrl,
-      endpoint: searchEndpoint,
-      requestBody,
-      errorDetails,
-      cloudId: cloudId || "not found",
-      responseUrl: response.url,
-    });
+    // Jira Issues API Error
 
     if (response.status === 401) {
       return NextResponse.json(
