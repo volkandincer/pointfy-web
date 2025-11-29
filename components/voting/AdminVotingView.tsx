@@ -46,7 +46,7 @@ const AdminVotingView = memo(function AdminVotingView({
       // Web'de zaten room detail sayfasındayız, yönlendirme yapmaya gerek yok
       // Realtime subscription sayesinde activeTask null olacak ve "Aktif Task Yok" ekranı gösterilecek
     } catch (err) {
-      console.error("Complete task error:", err);
+      // Complete task error
       alert("Task tamamlanamadı. Lütfen tekrar deneyin.");
     }
   }, [activeTask.id, isAdmin]);

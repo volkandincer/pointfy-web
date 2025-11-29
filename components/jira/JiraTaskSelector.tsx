@@ -105,12 +105,12 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
               }
             }
           } catch (storageError) {
-            console.warn("LocalStorage read error:", storageError);
+            // LocalStorage read error
           }
         }
       } catch (err) {
         if (!mounted) return;
-        console.error("Fetch boards error:", err);
+        // Fetch boards error
         setError(err instanceof Error ? err.message : "Board'lar yüklenemedi");
       } finally {
         if (mounted) setLoadingBoards(false);
@@ -220,7 +220,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
         setIssues(issuesArray);
       } catch (err) {
         if (!mounted) return;
-        console.error("Fetch issues error:", err);
+        // Fetch issues error
         setError(err instanceof Error ? err.message : "Issue'lar yüklenemedi");
         setIssues([]);
       } finally {
@@ -255,7 +255,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
         try {
           localStorage.setItem(STORAGE_KEY, selectedBoardId.toString());
         } catch (storageError) {
-          console.warn("LocalStorage write error:", storageError);
+          // LocalStorage write error
         }
       }
       onTaskSelect(task);
@@ -305,13 +305,13 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
                 try {
                   localStorage.setItem(STORAGE_KEY, boardId.toString());
                 } catch (storageError) {
-                  console.warn("LocalStorage write error:", storageError);
+                  // LocalStorage write error
                 }
               } else {
                 try {
                   localStorage.removeItem(STORAGE_KEY);
                 } catch (storageError) {
-                  console.warn("LocalStorage remove error:", storageError);
+                  // LocalStorage remove error
                 }
               }
             }}

@@ -198,7 +198,7 @@ export default function RoomDetailPage() {
         }
         // Admin kontrolü useRoomAdmin hook'u tarafından yapılıyor
       } catch (err) {
-        console.error("Room detail fetch error:", err);
+        // Room detail fetch error
         if (mounted) {
           // If room not found or error, go back to rooms list
           router.replace("/app/rooms");
@@ -272,7 +272,7 @@ export default function RoomDetailPage() {
           .eq("id", taskId);
         if (error) throw error;
       } catch (err) {
-        console.error("Set active task error:", err);
+        // Set active task error
         alert("Task aktif yapılamadı.");
       }
     },
@@ -312,7 +312,7 @@ export default function RoomDetailPage() {
         });
         if (error) throw error;
       } catch (err) {
-        console.error("Create task error:", err);
+        // Create task error
         alert("Task oluşturulamadı.");
         throw err;
       } finally {

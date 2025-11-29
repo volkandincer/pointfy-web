@@ -62,7 +62,7 @@ const TaskFormModal = memo(function TaskFormModal({
           }
         }
       } catch (err) {
-        console.error("Jira connection check error:", err);
+        // Jira connection check error
       }
     }
 
@@ -101,13 +101,13 @@ const TaskFormModal = memo(function TaskFormModal({
         if (!mounted) return;
 
         if (error) {
-          console.error("Personal tasks fetch error:", error);
+          // Personal tasks fetch error
           if (mounted) setPersonalTasks([]);
         } else {
           if (mounted) setPersonalTasks((data || []) as PersonalTask[]);
         }
       } catch (err) {
-        console.error("Personal tasks fetch exception:", err);
+        // Personal tasks fetch exception
         if (mounted) setPersonalTasks([]);
       } finally {
         if (mounted) setLoadingTasks(false);

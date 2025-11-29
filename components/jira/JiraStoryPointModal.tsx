@@ -97,7 +97,7 @@ const JiraStoryPointModal = memo(function JiraStoryPointModal({
         onClose();
       }, 2000);
     } catch (err) {
-      console.error("Set story points error:", err);
+      // Set story points error
       setError(err instanceof Error ? err.message : "Story point set edilemedi");
     } finally {
       setLoading(false);
