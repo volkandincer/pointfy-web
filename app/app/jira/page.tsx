@@ -149,14 +149,6 @@ export default function JiraPage() {
 
       const data = await response.json();
 
-        status: response.status,
-        ok: response.ok,
-        dataKeys: Object.keys(data),
-        issuesCount: data.issues?.length || 0,
-        total: data.total,
-        error: data.error,
-      });
-
       if (!response.ok) {
         // Issues API Error
         throw new Error(data.error || "Failed to fetch issues");
