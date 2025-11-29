@@ -86,7 +86,7 @@ const NoteModal = memo(function NoteModal({
       setCustomCategory("");
       onClose();
     } catch (error) {
-      console.error("Error submitting note:", error);
+      // Error submitting note
     } finally {
       setLoading(false);
     }

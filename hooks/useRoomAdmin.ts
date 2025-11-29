@@ -110,7 +110,7 @@ export function useRoomAdmin(
         });
       } catch (err) {
         if (!mounted) return;
-        console.error("Admin kontrolü exception:", err);
+        // Admin kontrolü exception
         setError(err instanceof Error ? err.message : "Bilinmeyen hata");
         setIsAdmin(false);
       } finally {

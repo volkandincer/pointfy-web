@@ -184,7 +184,7 @@ export default function NotesPage() {
               }
               setEditingNote(null);
             } catch (error: unknown) {
-              console.error("Error saving note:", error);
+              // Error saving note
               showToast(
                 `Not kaydedilemedi: ${error instanceof Error ? error.message : "Bilinmeyen hata"}`,
                 "error"

@@ -94,14 +94,14 @@ const HomeWelcome = memo(function HomeWelcome() {
         if (!mounted) return;
 
         if (error) {
-          console.error("Search error:", error);
+          // Search error
           setRooms([]);
         } else {
           setRooms(data || []);
           setShowResults(true);
         }
       } catch (err) {
-        console.error("Search exception:", err);
+        // Search exception
         if (mounted) setRooms([]);
       } finally {
         if (mounted) setLoading(false);
@@ -143,7 +143,7 @@ const HomeWelcome = memo(function HomeWelcome() {
       setShowResults(false);
       router.push(`/app/rooms/${roomId}`);
     } catch (err) {
-      console.error("Room entry error:", err);
+      // Room entry error
       alert("Odaya giriş yapılırken bir hata oluştu.");
     }
   };

@@ -77,7 +77,7 @@ const RetroRoomView = memo(function RetroRoomView({
         if (error) throw error;
         setShowAddModal(false);
       } catch (err) {
-        console.error("Kart ekleme hatası:", err);
+        // Kart ekleme hatası
         alert("Kart eklenirken bir hata oluştu.");
       }
     },
@@ -99,7 +99,7 @@ const RetroRoomView = memo(function RetroRoomView({
         if (error) throw error;
         setEditingCard(null);
       } catch (err) {
-        console.error("Kart güncelleme hatası:", err);
+        // Kart güncelleme hatası
         alert("Kart güncellenirken bir hata oluştu.");
       }
     },
@@ -124,7 +124,7 @@ const RetroRoomView = memo(function RetroRoomView({
 
         if (error) throw error;
       } catch (err) {
-        console.error("Kart silme hatası:", err);
+        // Kart silme hatası
         alert("Kart silinirken bir hata oluştu.");
       }
     },
@@ -142,7 +142,7 @@ const RetroRoomView = memo(function RetroRoomView({
       if (error) throw error;
       alert("🎉 Tüm kartlar açıldı!");
     } catch (err) {
-      console.error("Kart açma hatası:", err);
+      // Kart açma hatası
       alert("Kartlar açılırken bir hata oluştu.");
     } finally {
       setIsRevealing(false);

@@ -67,11 +67,11 @@ const UserVotingView = memo(function UserVotingView({
         task_id: activeTask.id,
       });
       if (error) {
-        console.error("Vote error:", error);
+        // Vote error
         setSelectedPoint(null);
       }
     } catch (err) {
-      console.error("Vote exception:", err);
+      // Vote exception
       setSelectedPoint(null);
     }
   };

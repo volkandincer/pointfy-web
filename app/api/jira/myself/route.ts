@@ -28,11 +28,11 @@ export async function GET(request: Request) {
               userId = payload.sub;
             }
           } catch (error) {
-            console.warn("JWT decode başarısız:", error);
+            // JWT decode başarısız
           }
         }
       } catch (authError) {
-        console.error("Auth error:", authError);
+        // Auth error
       }
     }
 
@@ -95,7 +95,7 @@ export async function GET(request: Request) {
         }
       }
     } catch (error) {
-      console.warn("CloudId alınamadı:", error);
+      // CloudId alınamadı
     }
 
     // API URL oluştur
@@ -150,7 +150,7 @@ export async function GET(request: Request) {
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error) {
-    console.error("Jira myself API error:", error);
+    // Jira myself API error
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Internal server error" },
       { status: 500 }

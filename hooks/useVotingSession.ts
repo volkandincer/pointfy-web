@@ -60,7 +60,7 @@ export function useVotingSession(roomId: string): VotingSessionState {
                 .eq("id", activeTask.id)
                 .then(({ error: error1 }) => {
                   if (error1) {
-                    console.error("Task status güncelleme hatası:", error1);
+                    // Task status güncelleme hatası
                   }
                 });
               if (timer) clearInterval(timer);
@@ -141,7 +141,7 @@ export function useVotingSession(roomId: string): VotingSessionState {
                 .eq("id", newPayload.id)
                 .then(({ error: error1 }) => {
                   if (error1) {
-                    console.error("Task status güncelleme hatası:", error1);
+                    // Task status güncelleme hatası
                   }
                 });
               if (timer) clearInterval(timer);

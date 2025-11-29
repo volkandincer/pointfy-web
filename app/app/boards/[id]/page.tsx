@@ -180,7 +180,7 @@ export default function BoardDetailPage() {
         setShowTaskModal(false);
         showToast("Task başarıyla eklendi!", "success");
       } catch (err) {
-        console.error("Task oluşturma hatası:", err);
+        // Task oluşturma hatası
         showToast(
           err instanceof Error ? err.message : "Task oluşturulamadı.",
           "error"
@@ -223,7 +223,7 @@ export default function BoardDetailPage() {
         setEditingTask(null);
         showToast("Task başarıyla güncellendi!", "success");
       } catch (err) {
-        console.error("Task güncelleme hatası:", err);
+        // Task güncelleme hatası
         showToast(
           err instanceof Error ? err.message : "Task güncellenemedi.",
           "error"
@@ -250,7 +250,7 @@ export default function BoardDetailPage() {
 
         showToast("Task başarıyla silindi!", "success");
       } catch (err) {
-        console.error("Task silme hatası:", err);
+        // Task silme hatası
         showToast(
           err instanceof Error ? err.message : "Task silinemedi.",
           "error"
@@ -288,13 +288,13 @@ export default function BoardDetailPage() {
 
           // Notun board_id ile kaydedildiğini kontrol et
           if (newNote && newNote.board_id !== boardId) {
-            console.warn("Not board_id ile kaydedilmedi, güncelleniyor...");
+            // Not board_id ile kaydedilmedi, güncelleniyor
             const { error: updateError } = await supabase
               .from("notes")
               .update({ board_id: boardId })
               .eq("id", newNote.id);
             if (updateError) {
-              console.error("Board_id güncelleme hatası:", updateError);
+              // Board_id güncelleme hatası
             }
           }
 
@@ -304,7 +304,7 @@ export default function BoardDetailPage() {
         setShowNoteModal(false);
         setEditingNote(null);
       } catch (err) {
-        console.error("Not ekleme/güncelleme hatası:", err);
+        // Not ekleme/güncelleme hatası
         showToast(
           err instanceof Error ? err.message : "Not kaydedilemedi.",
           "error"
@@ -337,7 +337,7 @@ export default function BoardDetailPage() {
         setShowEditBoardModal(false);
         showToast("Board başarıyla güncellendi!", "success");
       } catch (err) {
-        console.error("Board güncelleme hatası:", err);
+        // Board güncelleme hatası
         showToast(
           err instanceof Error ? err.message : "Board güncellenemedi.",
           "error"

@@ -45,7 +45,7 @@ export async function GET(request: Request) {
               userId = payload.sub;
             }
           } catch (error) {
-            console.warn("JWT decode başarısız, Supabase API'ye istek yapılacak:", error);
+            // JWT decode başarısız, Supabase API'ye istek yapılacak
           }
         }
         
@@ -67,7 +67,7 @@ export async function GET(request: Request) {
               userId = userData.id;
             }
           } catch (apiError) {
-            console.error("Supabase API error:", apiError);
+            // Supabase API error
           }
         }
         
@@ -81,7 +81,7 @@ export async function GET(request: Request) {
           }
         }
       } catch (authError) {
-        console.error("Auth error:", authError);
+        // Auth error
       }
     }
 
@@ -127,7 +127,7 @@ export async function GET(request: Request) {
     // Jira token ile istek yap
     return await handleJiraIssuesRequestWithJiraToken(userRow, request, userId);
   } catch (error) {
-    console.error("Jira issues API error:", error);
+    // Jira issues API error
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Internal server error" },
       { status: 500 }
@@ -202,7 +202,7 @@ async function handleJiraIssuesRequestWithJiraToken(
         .eq("id", userId);
 
     } catch (refreshError) {
-      console.error("❌ Jira token refresh error:", refreshError);
+      // Jira token refresh error
       const errorMessage = refreshError instanceof Error ? refreshError.message : "Failed to refresh token";
       return NextResponse.json(
         { 
@@ -314,7 +314,7 @@ async function handleJiraIssuesRequestWithJiraToken(
               throw new Error("Jira OAuth configuration missing");
             }
           } catch (refreshError) {
-            console.error("❌ Token refresh başarısız:", refreshError);
+            // Token refresh başarısız
             return NextResponse.json(
               { 
                 error: "Jira API erişim hatası: Token geçersiz veya süresi dolmuş. Lütfen Jira bağlantınızı yenileyin.",
@@ -356,7 +356,7 @@ async function handleJiraIssuesRequestWithJiraToken(
       }
     }
   } catch (error) {
-    console.error("CloudId alınamadı:", error);
+    // CloudId alınamadı
   }
 
   // OAuth 2.0 (3LO) için doğru URL formatını kullan
@@ -621,17 +621,9 @@ async function handleJiraIssuesRequestWithJiraToken(
 
   const data = (await response.json()) as JiraSearchResponse;
 
-  console.log("🔍 Jira Issues API Response:", {
-    status: response.status,
-    ok: response.ok,
-    total: data.total,
-    issuesCount: data.issues?.length || 0,
-    startAt: data.startAt,
-    maxResults: data.maxResults,
-  });
 
   if (!data.issues || !Array.isArray(data.issues)) {
-    console.error("❌ Invalid response format:", data);
+    // Invalid response format
     return NextResponse.json(
       {
         error: "Invalid response format from Jira API",

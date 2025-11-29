@@ -41,7 +41,7 @@ const BoardList = memo(function BoardList({
         await addBoard(input);
         setShowCreateModal(false);
       } catch (err) {
-        console.error("Board oluşturma hatası:", err);
+        // Board oluşturma hatası
         alert(
           err instanceof Error ? err.message : "Board oluşturulamadı."
         );
@@ -65,7 +65,7 @@ const BoardList = memo(function BoardList({
         setShowEditModal(false);
         setEditingBoard(null);
       } catch (err) {
-        console.error("Board güncelleme hatası:", err);
+        // Board güncelleme hatası
         alert(
           err instanceof Error ? err.message : "Board güncellenemedi."
         );
@@ -82,7 +82,7 @@ const BoardList = memo(function BoardList({
       try {
         await deleteBoard(board.id);
       } catch (err) {
-        console.error("Board silme hatası:", err);
+        // Board silme hatası
         alert(err instanceof Error ? err.message : "Board silinemedi.");
       } finally {
         setActionLoading(false);
@@ -97,7 +97,7 @@ const BoardList = memo(function BoardList({
       try {
         await archiveBoard(board.id, archived);
       } catch (err) {
-        console.error("Board arşivleme hatası:", err);
+        // Board arşivleme hatası
         alert(
           err instanceof Error ? err.message : "Board arşivlenemedi."
         );

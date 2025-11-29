@@ -58,7 +58,7 @@ export default function JiraPage() {
           setLoading(false);
         }
       } catch (err) {
-        console.error("Jira connection check error:", err);
+        // Jira connection check error
         if (mounted) {
           setLoading(false);
         }
@@ -114,7 +114,7 @@ export default function JiraPage() {
 
       setProjects(data.boards || []);
     } catch (err) {
-      console.error("Fetch projects error:", err);
+      // Fetch projects error
       setProjectsError(err instanceof Error ? err.message : "Failed to load projects");
     } finally {
       setProjectsLoading(false);
@@ -149,7 +149,6 @@ export default function JiraPage() {
 
       const data = await response.json();
 
-      console.log("🔍 Issues API Response:", {
         status: response.status,
         ok: response.ok,
         dataKeys: Object.keys(data),
@@ -163,10 +162,9 @@ export default function JiraPage() {
         throw new Error(data.error || "Failed to fetch issues");
       }
 
-      console.log("✅ Issues loaded:", data.issues?.length || 0, "issues");
       setIssues(data.issues || []);
     } catch (err) {
-      console.error("Fetch issues error:", err);
+      // Fetch issues error
       setIssuesError(err instanceof Error ? err.message : "Failed to load issues");
     } finally {
       setIssuesLoading(false);
@@ -228,7 +226,7 @@ export default function JiraPage() {
                       const encodedUserId = encodeURIComponent(userData.user.id);
                       window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
                     } catch (err) {
-                      console.error("Jira OAuth error:", err);
+                      // Jira OAuth error
                     }
                   }}
                   className="w-full rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-base font-semibold text-white shadow-md transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-lg"

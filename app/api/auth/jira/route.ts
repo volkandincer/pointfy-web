@@ -41,12 +41,11 @@ export async function GET(request: Request) {
           currentUserId = payload.sub;
         }
       } catch (error) {
-        console.warn("JWT decode başarısız:", error);
+        // JWT decode başarısız
       }
     }
   }
 
-  console.log("🔍 Jira OAuth başlatma - User ID:", {
     fromQuery: !!userIdFromQuery,
     fromCookie: !userIdFromQuery && !!currentUserId,
     userId: currentUserId?.substring(0, 20) + "...",

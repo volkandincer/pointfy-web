@@ -179,7 +179,7 @@ function HomePageContent() {
                 const encodedUserId = encodeURIComponent(userId);
                 window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
               } catch (err) {
-                console.error("Jira OAuth error:", err);
+                // Jira OAuth error
               }
             },
       },

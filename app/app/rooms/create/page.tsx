@@ -120,7 +120,7 @@ function CreateRoomPageContent() {
         // Odaya yönlendir
         router.replace(`/app/rooms/${roomData.id}`);
       } catch (err: unknown) {
-        console.error("CreateRoomPage: Oda oluşturma hatası:", err);
+        // CreateRoomPage: Oda oluşturma hatası
         alert((err as Error).message || "Oda oluşturulamadı.");
       } finally {
         setLoading(false);

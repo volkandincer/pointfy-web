@@ -75,7 +75,7 @@ export default function VotedTasksPage() {
           .order("created_at", { ascending: false });
 
         if (votesError) {
-          console.error("Votes fetch error:", votesError);
+          // Votes fetch error
           if (mounted) setVotedTasks([]);
           if (mounted) setLoading(false);
           return;
@@ -155,7 +155,7 @@ export default function VotedTasksPage() {
         channel.subscribe();
         unsubscribe = () => channel.unsubscribe();
       } catch (err) {
-        console.error("Fetch voted tasks error:", err);
+        // Fetch voted tasks error
         if (mounted) {
           setVotedTasks([]);
           setLoading(false);

@@ -101,7 +101,7 @@ const RecentRooms = memo(function RecentRooms() {
       }
       router.push(`/app/rooms/${roomId}`);
     } catch (err) {
-      console.error("Room entry error:", err);
+      // Room entry error
       alert("Odaya giriş yapılırken bir hata oluştu.");
     }
   };

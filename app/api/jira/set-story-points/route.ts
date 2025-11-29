@@ -210,7 +210,7 @@ async function handleSetStoryPoints(
       }
     }
   } catch (error) {
-    console.error("CloudId alınamadı:", error);
+    // CloudId alınamadı
   }
 
   // API URL oluştur
@@ -308,7 +308,7 @@ async function handleSetStoryPoints(
   if (!storyPointFieldId) {
     // Story points field bulunamadı, default olarak customfield_10016 kullan
     storyPointFieldId = "customfield_10016";
-    console.warn("Story points field bulunamadı, default field kullanılıyor:", storyPointFieldId);
+    // Story points field bulunamadı, default field kullanılıyor
   }
 
   // Story point'i set et
@@ -341,13 +341,7 @@ async function handleSetStoryPoints(
       // JSON parse başarısız
     }
 
-    console.error("❌ Story point set error:", {
-      status: updateResponse.status,
-      errorDetails,
-      issueId,
-      storyPoints,
-      fieldId: storyPointFieldId,
-    });
+    // Story point set error
 
     return NextResponse.json(
       {

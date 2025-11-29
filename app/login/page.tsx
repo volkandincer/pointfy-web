@@ -168,7 +168,7 @@ function LoginPageContent() {
         });
       
       if (userInsertError) {
-        console.error("User insert/update error:", userInsertError);
+        // User insert/update error
         // Hata olsa bile devam et, trigger zaten insert yapmış olabilir
       }
       const { error: signInError } = await supabase.auth.signInWithPassword({

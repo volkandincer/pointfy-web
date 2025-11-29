@@ -26,7 +26,7 @@ export async function POST(request: Request) {
               userId = payload.sub;
             }
           } catch (error) {
-            console.warn("JWT decode başarısız:", error);
+            // JWT decode başarısız
           }
         }
         
@@ -51,11 +51,11 @@ export async function POST(request: Request) {
               userId = userData.id;
             }
           } catch (apiError) {
-            console.error("Supabase API error:", apiError);
+            // Supabase API error
           }
         }
       } catch (authError) {
-        console.error("Auth error:", authError);
+        // Auth error
       }
     }
 
@@ -100,7 +100,7 @@ export async function POST(request: Request) {
       .eq("id", userId);
 
     if (updateError) {
-      console.error("Jira URL save error:", updateError);
+      // Jira URL save error
       return NextResponse.json(
         { error: `Failed to save Jira URL: ${updateError.message}` },
         { status: 500 }
@@ -113,7 +113,7 @@ export async function POST(request: Request) {
       message: "Jira URL saved successfully",
     });
   } catch (error) {
-    console.error("Save Jira URL API error:", error);
+    // Save Jira URL API error
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Internal server error" },
       { status: 500 }

@@ -52,7 +52,7 @@ export default function AccountPage() {
         if (!mounted) return;
 
         if (userRowError) {
-          console.error("User row fetch error:", userRowError);
+          // User row fetch error
           // Eğer kayıt yoksa (PGRST116), yeni kayıt oluştur
           if (
             userRowError.code === "PGRST116" ||
@@ -74,7 +74,7 @@ export default function AccountPage() {
             );
 
             if (insertError) {
-              console.error("User insert/update error:", insertError);
+              // User insert/update error
             } else {
               setUsername(emailUsername);
               setNewUsername(emailUsername);
@@ -106,11 +106,11 @@ export default function AccountPage() {
             setJiraConnected(false);
           }
         } catch (jiraError) {
-          console.error("❌ Jira kontrol hatası:", jiraError);
+          // Jira kontrol hatası
           setJiraConnected(false);
         }
       } catch (err) {
-        console.error("Account fetch error:", err);
+        // Account fetch error
       } finally {
         if (mounted) setLoading(false);
       }
@@ -132,9 +132,7 @@ export default function AccountPage() {
       // Jira bağlantısı başarılı olduysa, veriyi yeniden çek
       const jiraConnected = urlParams.get("jira_connected");
       if (jiraConnected === "true") {
-        console.log(
-          "🔄 Jira bağlantısı başarılı, veri yeniden çekiliyor..."
-        );
+        // Jira bağlantısı başarılı, veri yeniden çekiliyor
         // URL'den parametreyi temizle
         const newUrl = window.location.pathname;
         window.history.replaceState({}, "", newUrl);
@@ -227,7 +225,7 @@ export default function AccountPage() {
       await supabase.auth.signOut();
       router.replace("/");
     } catch (err) {
-      console.error("Sign out error:", err);
+      // Sign out error
     }
   };
 
@@ -242,7 +240,7 @@ export default function AccountPage() {
           userId = userData.user.id;
         }
       } catch (err) {
-        console.error("User ID alınamadı:", err);
+        // User ID alınamadı
         alert("Kullanıcı bilgileri alınamadı. Lütfen sayfayı yenileyin.");
         return;
       }
@@ -284,7 +282,7 @@ export default function AccountPage() {
       setJiraConnected(false);
       alert("Jira hesabı bağlantıdan koparıldı.");
     } catch (err) {
-      console.error("Jira disconnect error:", err);
+      // Jira disconnect error
       alert("Jira bağlantısı koparılamadı.");
     }
   };

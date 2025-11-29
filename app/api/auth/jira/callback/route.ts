@@ -121,7 +121,7 @@ export async function GET(request: Request) {
             currentUserId = payload.sub;
           }
         } catch (tokenError) {
-          console.warn("⚠️ JWT decode hatası:", tokenError);
+          // JWT decode hatası
         }
       }
     }
@@ -130,13 +130,11 @@ export async function GET(request: Request) {
       throw new Error("Kullanıcı bulunamadı. Lütfen tekrar giriş yapın.");
     }
 
-    console.log(`[${timestamp}] ✅ Kullanıcı bulundu, Jira token'ı kaydediliyor...`, { userId: currentUserId.substring(0, 20) + "..." });
 
     // 3. Jira token'ını users tablosuna kaydet
     const expiresAt = new Date();
     expiresAt.setSeconds(expiresAt.getSeconds() + tokenData.expires_in);
 
-    console.log(`[${timestamp}] 🔄 Update başlıyor - User ID:`, currentUserId.substring(0, 20) + "...");
     const { data: updateData, error: updateError } = await supabase
       .from("users")
       .update({
@@ -147,7 +145,6 @@ export async function GET(request: Request) {
       .eq("id", currentUserId)
       .select("id");
     
-    console.log(`[${timestamp}] 🔄 Update sonucu:`, {
       hasData: !!updateData,
       dataLength: updateData?.length,
       error: updateError,
@@ -160,7 +157,6 @@ export async function GET(request: Request) {
       throw new Error(`Jira token kaydedilemedi: ${updateError.message}`);
     }
 
-    console.log(`[${timestamp}] ✅ Jira token başarıyla kaydedildi:`, {
       userId: currentUserId.substring(0, 20) + "...",
       expiresAt: expiresAt.toISOString(),
     });
@@ -177,7 +173,7 @@ export async function GET(request: Request) {
   } catch (err) {
     const errorMessage =
       err instanceof Error ? err.message : "Jira OAuth hatası";
-    console.error(`[${timestamp}] ❌ Jira OAuth callback hatası:`, err);
+    // Jira OAuth callback hatası
     return NextResponse.redirect(
       `${appUrl}/app/jira-test?error=${encodeURIComponent(errorMessage)}`
     );

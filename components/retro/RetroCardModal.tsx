@@ -56,7 +56,7 @@ const RetroCardModal = memo(function RetroCardModal({
         setContent("");
         onClose();
       } catch (err) {
-        console.error("Modal submit error:", err);
+        // Modal submit error
       } finally {
         setLoading(false);
       }

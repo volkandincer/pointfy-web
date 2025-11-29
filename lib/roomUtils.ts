@@ -143,7 +143,7 @@ export async function addUserToRoom(
       }
     }
   } catch (err) {
-    console.error("Odaya katılma hatası:", err);
+    // Odaya katılma hatası
     throw err;
   }
 }

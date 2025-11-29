@@ -343,10 +343,7 @@ async function handleJiraRequestWithJiraToken(
                 }
               } else {
                 const retryErrorText = await retryResponse.text();
-                console.error("❌ Token refresh sonrası hala 401:", {
-                  status: retryResponse.status,
-                  errorText: retryErrorText,
-                });
+                // Token refresh sonrası hala 401
                 throw new Error(
                   `Token refresh sonrası hala 401 hatası: ${retryErrorText}`
                 );
@@ -356,14 +353,6 @@ async function handleJiraRequestWithJiraToken(
             }
           } catch (refreshError) {
             // Token refresh başarısız
-              error: refreshError,
-              message:
-                refreshError instanceof Error
-                  ? refreshError.message
-                  : "Unknown error",
-              stack:
-                refreshError instanceof Error ? refreshError.stack : undefined,
-            });
             return NextResponse.json(
               {
                 error:

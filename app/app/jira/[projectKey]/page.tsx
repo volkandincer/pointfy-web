@@ -76,7 +76,7 @@ export default function JiraProjectDetailPage() {
           setLoading(false);
         }
       } catch (err) {
-        console.error("Jira connection check error:", err);
+        // Jira connection check error
         if (mounted) {
           setLoading(false);
         }
@@ -127,7 +127,6 @@ export default function JiraProjectDetailPage() {
 
       const data = await response.json();
 
-      console.log("🔍 Project Issues API Response:", {
         status: response.status,
         ok: response.ok,
         dataKeys: Object.keys(data),
@@ -137,16 +136,15 @@ export default function JiraProjectDetailPage() {
       });
 
       if (!response.ok) {
-        console.error("❌ Project Issues API Error:", data);
+        // Project Issues API Error
         throw new Error(data.error || "Failed to fetch project issues");
       }
 
       // Issues'ları JiraTask formatına çevir
       const issuesArray = data.issues || [];
-      console.log("📦 Issues array:", issuesArray.length, issuesArray);
       
       if (issuesArray.length === 0) {
-        console.warn("⚠️ No issues found in response");
+        // No issues found in response
       }
 
       // Helper function: ADF format description'ı string'e çevir
@@ -203,11 +201,10 @@ export default function JiraProjectDetailPage() {
               : `https://${jiraBaseUrl}/browse/${issue.key}`,
           });
         } catch (mapError) {
-          console.error("❌ Issue mapping error:", mapError, issue);
+          // Issue mapping error
         }
       }
 
-      console.log("✅ Mapped tasks:", tasks.length, tasks);
       setAllIssues(tasks);
       setIssues(tasks);
 
@@ -219,7 +216,7 @@ export default function JiraProjectDetailPage() {
         setProjectName(tasks[0].project.key);
       }
     } catch (err) {
-      console.error("Fetch project issues error:", err);
+      // Fetch project issues error
       setIssuesError(err instanceof Error ? err.message : "Failed to load project issues");
     } finally {
       setIssuesLoading(false);
@@ -358,7 +355,7 @@ export default function JiraProjectDetailPage() {
                       const encodedUserId = encodeURIComponent(userData.user.id);
                       window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
                     } catch (err) {
-                      console.error("Jira OAuth error:", err);
+                      // Jira OAuth error
                     }
                   }}
                   className="w-full rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-base font-semibold text-white shadow-md transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-lg"
