@@ -45,7 +45,12 @@ const NoteModal = memo(function NoteModal({
       const noteCategory = initialNote?.category || "";
       const validCategories = categories.map((c) => c.value);
       // Eğer kategori constraint'teki kategorilerden biri değilse, custom olarak işaretle
-      if (noteCategory && validCategories.includes(noteCategory as typeof validCategories[number])) {
+      if (
+        noteCategory &&
+        validCategories.includes(
+          noteCategory as (typeof validCategories)[number]
+        )
+      ) {
         setCategory(noteCategory);
         setCustomCategory("");
       } else if (noteCategory) {
@@ -162,7 +167,6 @@ const NoteModal = memo(function NoteModal({
             </div>
           )}
         </div>
-
 
         <div className="flex items-center justify-end gap-3 pt-2">
           <button

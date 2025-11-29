@@ -153,7 +153,7 @@ export async function GET(request: Request) {
     });
 
     if (updateError) {
-      console.error(`[${timestamp}] ❌ Jira token update hatası:`, updateError);
+      // Jira token update hatası
       throw new Error(`Jira token kaydedilemedi: ${updateError.message}`);
     }
 

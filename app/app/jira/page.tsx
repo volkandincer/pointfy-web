@@ -158,7 +158,7 @@ export default function JiraPage() {
       });
 
       if (!response.ok) {
-        console.error("❌ Issues API Error:", data);
+        // Issues API Error
         throw new Error(data.error || "Failed to fetch issues");
       }
 
