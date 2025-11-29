@@ -68,7 +68,7 @@ export async function GET(request: Request) {
               userId = userData.id;
             }
           } catch (apiError) {
-            console.error("Supabase API error:", apiError);
+            // Supabase API error
           }
         }
 
@@ -84,7 +84,7 @@ export async function GET(request: Request) {
           }
         }
       } catch (authError) {
-        console.error("Auth error:", authError);
+        // Auth error
       }
     }
 
@@ -111,7 +111,7 @@ export async function GET(request: Request) {
       .maybeSingle();
 
     if (userError || !userRow) {
-      console.error("User fetch error:", userError);
+      // User fetch error
       return NextResponse.json(
         { error: `User not found: ${userError?.message || "Unknown error"}` },
         { status: 404 }
@@ -131,7 +131,7 @@ export async function GET(request: Request) {
 
     return await handleJiraRequestWithJiraToken(userRow, request, userId);
   } catch (error) {
-    console.error("Jira boards API error:", error);
+    // Jira boards API error
     return NextResponse.json(
       {
         error: error instanceof Error ? error.message : "Internal server error",
@@ -214,7 +214,7 @@ async function handleJiraRequestWithJiraToken(
         refreshed.refresh_token || userRow.jira_refresh_token;
       userRow.jira_token_expires_at = expiresAt.toISOString();
     } catch (refreshError) {
-      console.error("❌ Jira token refresh error:", refreshError);
+      // Jira token refresh error
       const errorMessage =
         refreshError instanceof Error
           ? refreshError.message
@@ -361,7 +361,7 @@ async function handleJiraRequestWithJiraToken(
               throw new Error("Jira OAuth configuration missing");
             }
           } catch (refreshError) {
-            console.error("❌ Token refresh başarısız:", {
+            // Token refresh başarısız
               error: refreshError,
               message:
                 refreshError instanceof Error
@@ -416,7 +416,7 @@ async function handleJiraRequestWithJiraToken(
       }
     }
   } catch (error) {
-    console.error("❌ CloudId alınamadı:", error);
+    // CloudId alınamadı
     // Hata durumunda fallback URL kullanılacak
   }
 
@@ -553,7 +553,7 @@ async function handleJiraRequestWithJiraToken(
             );
           }
         } catch (refreshError) {
-          console.error("Token refresh başarısız:", refreshError);
+          // Token refresh başarısız
           const errorMessage =
             refreshError instanceof Error
               ? refreshError.message
@@ -633,7 +633,7 @@ async function handleJiraRequestWithJiraToken(
         .update({ jira_base_url: jiraBaseUrl })
         .eq("id", userId);
     } catch (saveError) {
-      console.error("Jira URL save error:", saveError);
+      // Jira URL save error
     }
   }
 
