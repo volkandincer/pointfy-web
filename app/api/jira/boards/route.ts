@@ -42,9 +42,6 @@ export async function GET(request: Request) {
             }
           } catch (error) {
             // JWT decode başarısız
-              "JWT decode başarısız, Supabase API isteği yapılacak:",
-              error
-            );
           }
         }
 

@@ -46,11 +46,6 @@ export async function GET(request: Request) {
     }
   }
 
-    fromQuery: !!userIdFromQuery,
-    fromCookie: !userIdFromQuery && !!currentUserId,
-    userId: currentUserId?.substring(0, 20) + "...",
-  });
-
   // OAuth state oluştur - user ID'yi state'e encode et
   const randomState = Math.random().toString(36).substring(2, 15);
   const statePayload = currentUserId

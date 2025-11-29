@@ -144,22 +144,11 @@ export async function GET(request: Request) {
       })
       .eq("id", currentUserId)
       .select("id");
-    
-      hasData: !!updateData,
-      dataLength: updateData?.length,
-      error: updateError,
-      errorCode: updateError?.code,
-      errorMessage: updateError?.message,
-    });
 
     if (updateError) {
       // Jira token update hatası
       throw new Error(`Jira token kaydedilemedi: ${updateError.message}`);
     }
-
-      userId: currentUserId.substring(0, 20) + "...",
-      expiresAt: expiresAt.toISOString(),
-    });
 
     // 4. Cookie'leri temizle ve yönlendir
     const decodedReturnUrl = decodeURIComponent(returnUrl);

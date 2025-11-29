@@ -533,12 +533,6 @@ async function handleJiraIssuesRequestWithJiraToken(
     ],
   };
   
-  // Issues API Request
-    endpoint: searchEndpoint,
-    jql: jql,
-    maxResults: maxResults,
-  });
-  
   const response = await fetch(searchEndpoint, {
     method: "POST",
     headers: {
