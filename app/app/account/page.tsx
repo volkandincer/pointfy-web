@@ -212,7 +212,7 @@ export default function AccountPage() {
       setUsername(newUsername.trim());
       setEditingUsername(false);
     } catch (err) {
-      console.error("Username update error:", err);
+      // Username update error
       alert("Kullanıcı adı güncellenemedi.");
     } finally {
       setSaving(false);
