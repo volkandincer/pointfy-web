@@ -41,11 +41,19 @@ npm install
 
 2. Environment değişkenlerini ayarlayın:
 
-`.env.local` dosyası oluşturun ve Supabase bilgilerinizi ekleyin:
+`.env.local` dosyası oluşturun ve Supabase/Jira test bilgilerinizi ekleyin (bkz. `docs/env.md`):
 
 ```env
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+NEXT_PUBLIC_APP_ENV=test
+APP_ENV=test
+
+NEXT_PUBLIC_SUPABASE_URL_TEST=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY_TEST=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY_TEST=your_supabase_service_role_key
+
+JIRA_CLIENT_ID_TEST=your_jira_dev_client_id
+JIRA_CLIENT_SECRET_TEST=your_jira_dev_client_secret
+NEXT_PUBLIC_APP_URL_TEST=http://localhost:3000
 ```
 
 3. Development server'ı başlatın:

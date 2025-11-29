@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
+import { resolveEnvValue } from "@/lib/appEnvironment";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://pointfy.app";
+const SITE_URL = resolveEnvValue("NEXT_PUBLIC_SITE_URL") || "https://pointfy.app";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [

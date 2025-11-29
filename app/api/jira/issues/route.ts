@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
+import { resolveEnvValue } from "@/lib/appEnvironment";
 import { jiraConfig } from "@/lib/jiraConfig";
 import type {
   JiraAdfDocument,
@@ -15,6 +16,9 @@ const isJiraApiErrorResponse = (
 ): value is JiraApiErrorResponse => typeof value === "object" && value !== null;
 
 const { clientId: jiraClientId, clientSecret: jiraClientSecret } = jiraConfig;
+const supabaseRestUrl = resolveEnvValue("NEXT_PUBLIC_SUPABASE_URL");
+const supabaseRestAnonKey = resolveEnvValue("NEXT_PUBLIC_SUPABASE_ANON_KEY");
+const fallbackJiraBaseUrl = resolveEnvValue("JIRA_BASE_URL");
 
 /**
  * Jira Issue'larını getir (kullanıcıya assign edilmiş)
@@ -47,11 +51,13 @@ export async function GET(request: Request) {
         // Eğer JWT'den alınamadıysa, Supabase API'sine istek yap
         if (!userId && accessToken) {
           try {
-            const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-            const userResponse = await fetch(`${supabaseUrl}/auth/v1/user`, {
+            if (!supabaseRestUrl || !supabaseRestAnonKey) {
+              throw new Error("Supabase REST env vars missing");
+            }
+            const userResponse = await fetch(`${supabaseRestUrl}/auth/v1/user`, {
               headers: {
                 Authorization: `Bearer ${accessToken}`,
-                apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
+                apikey: supabaseRestAnonKey,
               },
             });
             
@@ -209,7 +215,10 @@ async function handleJiraIssuesRequestWithJiraToken(
 
   // Jira base URL ve query parametrelerini al
   const { searchParams } = new URL(request.url);
-  const jiraBaseUrl = searchParams.get("jiraBaseUrl") || userRow.jira_base_url || process.env.JIRA_BASE_URL;
+  const jiraBaseUrl =
+    searchParams.get("jiraBaseUrl") ||
+    userRow.jira_base_url ||
+    fallbackJiraBaseUrl;
   const boardId = searchParams.get("boardId");
   const status = searchParams.get("status");
   const maxResults = parseInt(searchParams.get("maxResults") || "50");

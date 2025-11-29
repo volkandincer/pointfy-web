@@ -6,6 +6,7 @@ import type {
   JiraApiErrorResponse,
   JiraSearchResponse,
 } from "@/interfaces/Jira.interface";
+import { resolveEnvValue } from "@/lib/appEnvironment";
 
 /**
  * Jira JQL ile arama yap
@@ -115,7 +116,8 @@ export async function POST(request: Request) {
     if (cloudId) {
       apiUrl = `https://api.atlassian.com/ex/jira/${cloudId}`;
     } else {
-      const jiraBaseUrl = userRow.jira_base_url || process.env.JIRA_BASE_URL;
+      const jiraBaseUrl =
+        userRow.jira_base_url || resolveEnvValue("JIRA_BASE_URL");
       if (!jiraBaseUrl) {
         return NextResponse.json(
           { error: "Jira base URL could not be determined" },

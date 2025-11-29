@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
+import { resolveEnvValue } from "@/lib/appEnvironment";
 import type { JiraApiErrorResponse } from "@/interfaces/Jira.interface";
 
 /**
@@ -102,7 +103,8 @@ export async function GET(request: Request) {
     if (cloudId) {
       apiUrl = `https://api.atlassian.com/ex/jira/${cloudId}`;
     } else {
-      const jiraBaseUrl = userRow.jira_base_url || process.env.JIRA_BASE_URL;
+      const jiraBaseUrl =
+        userRow.jira_base_url || resolveEnvValue("JIRA_BASE_URL");
       if (!jiraBaseUrl) {
         return NextResponse.json(
           { error: "Jira base URL could not be determined" },

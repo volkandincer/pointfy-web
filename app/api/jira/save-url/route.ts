@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
+import { resolveEnvValue } from "@/lib/appEnvironment";
 
 /**
  * Jira URL'ini veritabanına kaydet
@@ -31,11 +32,17 @@ export async function POST(request: Request) {
         
         if (!userId && accessToken) {
           try {
-            const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+            const supabaseUrl = resolveEnvValue("NEXT_PUBLIC_SUPABASE_URL");
+            const supabaseAnonKey = resolveEnvValue(
+              "NEXT_PUBLIC_SUPABASE_ANON_KEY"
+            );
+            if (!supabaseUrl || !supabaseAnonKey) {
+              throw new Error("Supabase REST env vars missing");
+            }
             const userResponse = await fetch(`${supabaseUrl}/auth/v1/user`, {
               headers: {
                 Authorization: `Bearer ${accessToken}`,
-                apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
+                apikey: supabaseAnonKey,
               },
             });
             

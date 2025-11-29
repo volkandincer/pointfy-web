@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
 import { jiraConfig } from "@/lib/jiraConfig";
+import { resolveEnvValue } from "@/lib/appEnvironment";
 import type {
   JiraAccessibleResource,
   JiraApiErrorResponse,
@@ -13,6 +14,9 @@ const isJiraApiErrorResponse = (
 ): value is JiraApiErrorResponse => typeof value === "object" && value !== null;
 
 const { clientId: jiraClientId, clientSecret: jiraClientSecret } = jiraConfig;
+const supabaseRestUrl = resolveEnvValue("NEXT_PUBLIC_SUPABASE_URL");
+const supabaseRestAnonKey = resolveEnvValue("NEXT_PUBLIC_SUPABASE_ANON_KEY");
+const fallbackJiraBaseUrl = resolveEnvValue("JIRA_BASE_URL");
 /**
  * Jira Board'larını getir
  * Jira OAuth token'ı kullanarak Jira API'ye erişir
@@ -46,13 +50,18 @@ export async function GET(request: Request) {
 
         if (!userId && accessToken) {
           try {
-            const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-            const userResponse = await fetch(`${supabaseUrl}/auth/v1/user`, {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-                apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
-              },
-            });
+            if (!supabaseRestUrl || !supabaseRestAnonKey) {
+              throw new Error("Supabase REST env vars missing");
+            }
+            const userResponse = await fetch(
+              `${supabaseRestUrl}/auth/v1/user`,
+              {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                  apikey: supabaseRestAnonKey,
+                },
+              }
+            );
 
             if (userResponse.ok) {
               const userData = await userResponse.json();
@@ -225,7 +234,7 @@ async function handleJiraRequestWithJiraToken(
   const jiraBaseUrl =
     searchParams.get("jiraBaseUrl") ||
     userRow.jira_base_url ||
-    process.env.JIRA_BASE_URL;
+    fallbackJiraBaseUrl;
 
   if (!jiraBaseUrl) {
     return NextResponse.json(
