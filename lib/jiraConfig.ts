@@ -7,6 +7,6 @@ export const jiraConfig = {
   appUrl:
     resolveEnvValue("NEXT_PUBLIC_APP_URL") ||
     (appEnvironment === "prod"
-      ? process.env.NEXT_PUBLIC_APP_URL || "https://pointfy-web.vercel.app"
+      ? "https://pointfy-web.vercel.app"
       : "http://localhost:3000"),
 };
