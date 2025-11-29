@@ -98,7 +98,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
             const lastBoardId = localStorage.getItem(STORAGE_KEY);
             if (lastBoardId) {
               const boardIdNum = Number(lastBoardId);
-              const lastBoard = boardsData.find((b) => b.id === boardIdNum);
+              const lastBoard = boardsData.find((b: JiraBoard) => b.id === boardIdNum);
               if (lastBoard) {
                 setSelectedBoardId(boardIdNum);
                 setSelectedProjectKey(lastBoard.location.projectKey);

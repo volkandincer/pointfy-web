@@ -1,7 +1,9 @@
 "use client";
 
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useState, useMemo } from "react";
 import { getSupabase } from "@/lib/supabase";
+import Modal from "@/components/ui/Modal";
+import { useToastContext } from "@/contexts/ToastContext";
 import type { TaskInfo } from "@/interfaces/Voting.interface";
 
 interface TaskCardProps {
@@ -17,10 +19,50 @@ const TaskCard = memo(function TaskCard({
   isAdmin,
   onSetActive,
 }: TaskCardProps) {
+  const { showToast } = useToastContext();
   const [votes, setVotes] = useState<
     Array<{ user_name: string; user_key: string; point: number | null }>
   >([]);
   const [loadingVotes, setLoadingVotes] = useState<boolean>(false);
+  const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
+  const [jiraBaseUrl, setJiraBaseUrl] = useState<string | null>(null);
+  const [storyPointsInput, setStoryPointsInput] = useState<number>(0);
+  const [sendingStoryPoints, setSendingStoryPoints] = useState<boolean>(false);
+  const [inputFocused, setInputFocused] = useState<boolean>(false);
+  const [jiraStoryPoints, setJiraStoryPoints] = useState<number | null>(null);
+  const [selectedSource, setSelectedSource] = useState<
+    "jira" | "average" | "manual"
+  >("manual");
+
+  // Jira base URL'i yükle
+  useEffect(() => {
+    let mounted = true;
+    async function fetchJiraBaseUrl() {
+      try {
+        const supabase = getSupabase();
+        const { data: userData } = await supabase.auth.getUser();
+        if (!mounted || !userData.user) return;
+
+        const { data: userRow } = await supabase
+          .from("users")
+          .select("jira_base_url")
+          .eq("id", userData.user.id)
+          .maybeSingle();
+
+        if (mounted && userRow?.jira_base_url) {
+          setJiraBaseUrl(userRow.jira_base_url);
+        }
+      } catch (err) {
+        console.error("Jira base URL fetch error:", err);
+      }
+    }
+
+    fetchJiraBaseUrl();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -56,20 +98,18 @@ const TaskCard = memo(function TaskCard({
 
     // Realtime subscription for votes
     const supabase = getSupabase();
-    const channel = supabase
-      .channel(`task-votes-${task.id}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "votes",
-          filter: `task_id=eq.${task.id}`,
-        },
-        () => {
-          fetchVotes();
-        }
-      );
+    const channel = supabase.channel(`task-votes-${task.id}`).on(
+      "postgres_changes",
+      {
+        event: "*",
+        schema: "public",
+        table: "votes",
+        filter: `task_id=eq.${task.id}`,
+      },
+      () => {
+        fetchVotes();
+      }
+    );
     channel.subscribe();
 
     return () => {
@@ -81,13 +121,153 @@ const TaskCard = memo(function TaskCard({
   const validVotes = votes.filter(
     (v) => v.point !== null && v.point !== undefined
   );
-  const avgPoint =
+  const avgPointRaw =
     validVotes.length > 0
-      ? Math.round(
-          validVotes.reduce((sum, v) => sum + (v.point || 0), 0) /
-            validVotes.length
-        )
+      ? validVotes.reduce((sum, v) => sum + (v.point || 0), 0) /
+        validVotes.length
       : 0;
+  const avgPoint = Math.round(avgPointRaw);
+
+  // Jira'dan mevcut story point'i çek
+  useEffect(() => {
+    let mounted = true;
+    async function fetchJiraStoryPoints() {
+      if (
+        task.status !== "completed" ||
+        !isAdmin ||
+        !task.jira_key ||
+        !task.jira_id ||
+        !jiraBaseUrl
+      ) {
+        return;
+      }
+
+      try {
+        const supabase = getSupabase();
+        const { data: userData } = await supabase.auth.getUser();
+
+        if (!mounted || !userData.user) {
+          return;
+        }
+
+        // Jira base URL'i al (eğer state'te yoksa tekrar fetch et)
+        let baseUrl = jiraBaseUrl;
+        if (!baseUrl) {
+          const { data: userRow } = await supabase
+            .from("users")
+            .select("jira_base_url")
+            .eq("id", userData.user.id)
+            .maybeSingle();
+          baseUrl = userRow?.jira_base_url || null;
+        }
+
+        if (!baseUrl) {
+          return;
+        }
+
+        const urlParams = new URLSearchParams();
+        urlParams.set("userId", userData.user.id);
+        urlParams.set("issueId", task.jira_id);
+        urlParams.set("jiraBaseUrl", baseUrl);
+
+        const response = await fetch(
+          `/api/jira/get-story-points?${urlParams.toString()}`,
+          {
+            credentials: "include",
+          }
+        );
+
+        const data = await response.json();
+
+        if (!mounted) return;
+
+        if (
+          response.ok &&
+          data.storyPoints !== null &&
+          data.storyPoints !== undefined
+        ) {
+          setJiraStoryPoints(data.storyPoints);
+          // Jira'da puan varsa onu göster ve source'u jira yap
+          if (!inputFocused) {
+            setStoryPointsInput(data.storyPoints);
+            setSelectedSource("jira");
+          }
+        } else {
+          // Jira'da puan yoksa ortalama puanı göster ve source'u average yap
+          if (!inputFocused && avgPoint > 0) {
+            setStoryPointsInput(avgPoint);
+            setSelectedSource("average");
+          }
+        }
+      } catch (err) {
+        console.error("Get Jira story points error:", err);
+        // Hata durumunda ortalama puanı göster
+        if (!inputFocused && avgPoint > 0) {
+          setStoryPointsInput(avgPoint);
+        }
+      }
+    }
+
+    fetchJiraStoryPoints();
+
+    return () => {
+      mounted = false;
+    };
+  }, [
+    task.status,
+    task.jira_id,
+    task.jira_key,
+    isAdmin,
+    jiraBaseUrl,
+    inputFocused,
+    avgPoint,
+  ]);
+
+  // Ortalama puan değiştiğinde input'u güncelle (eğer Jira'da puan yoksa ve input focus değilse)
+  useEffect(() => {
+    if (
+      task.status === "completed" &&
+      !inputFocused &&
+      jiraStoryPoints === null &&
+      avgPoint > 0 &&
+      storyPointsInput === 0 &&
+      selectedSource !== "manual"
+    ) {
+      setStoryPointsInput(avgPoint);
+      setSelectedSource("average");
+    }
+  }, [
+    task.status,
+    avgPoint,
+    storyPointsInput,
+    inputFocused,
+    jiraStoryPoints,
+    selectedSource,
+  ]);
+
+  // Seçilen source'a göre input değerini güncelle
+  const handleSourceSelect = (source: "jira" | "average") => {
+    if (source === "jira" && jiraStoryPoints !== null && jiraStoryPoints > 0) {
+      setStoryPointsInput(jiraStoryPoints);
+      setSelectedSource("jira");
+    } else if (source === "average" && avgPoint > 0) {
+      setStoryPointsInput(avgPoint);
+      setSelectedSource("average");
+    }
+  };
+
+  // Input değeri değişti mi kontrol et
+  const hasInputChanged = useMemo(() => {
+    if (jiraStoryPoints !== null && jiraStoryPoints > 0) {
+      // Jira'da puan varsa, input değeri Jira'daki puanla farklı mı?
+      return Math.abs(storyPointsInput - jiraStoryPoints) > 0.01;
+    } else if (avgPoint > 0) {
+      // Jira'da puan yoksa, input değeri ortalama puanla farklı mı?
+      return Math.abs(storyPointsInput - avgPoint) > 0.01;
+    }
+    // Hiç puan yoksa, input 0'dan büyükse değişiklik var
+    return storyPointsInput > 0;
+  }, [storyPointsInput, jiraStoryPoints, avgPoint]);
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return "";
@@ -99,21 +279,192 @@ const TaskCard = memo(function TaskCard({
     });
   };
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    console.log("Card clicked:", {
+      taskStatus: task.status,
+      isAdmin,
+      jiraKey: task.jira_key,
+      jiraId: task.jira_id,
+      validVotes: validVotes.length,
+      avgPoint,
+    });
+
+    // Eğer tıklanan element bir buton, input veya link ise, card click'i çalıştırma
+    const target = e.target as HTMLElement;
+    if (
+      target.tagName === "BUTTON" ||
+      target.tagName === "INPUT" ||
+      target.tagName === "A" ||
+      target.closest("button") ||
+      target.closest("input") ||
+      target.closest("a")
+    ) {
+      console.log("Click ignored - button/input/link clicked");
+      return;
+    }
+
+    // Pending task'lar için modal aç
+    if (task.status === "pending" && isAdmin) {
+      console.log("Opening confirm modal for pending task");
+      setShowConfirmModal(true);
+      return;
+    }
+
+    // Completed task'lar için Jira'ya story point gönder (eğer Jira task'ı ise)
+    if (
+      task.status === "completed" &&
+      isAdmin &&
+      task.jira_key &&
+      task.jira_id
+    ) {
+      // Puan varsa direkt gönder, yoksa input'tan değer girilmesini bekle
+      if (validVotes.length > 0 && avgPoint > 0) {
+        console.log("Sending story points to Jira");
+        handleSendStoryPoints();
+      } else {
+        // Puan yoksa, input'tan değer girilmesini bekle - sadece input'un görünür olduğundan emin ol
+        console.log(
+          "No votes yet - user should enter story points manually in the input field"
+        );
+        // Input zaten görünür olmalı, kullanıcı değer girip butona tıklayabilir
+      }
+      return;
+    }
+
+    console.log("No action taken for this card click");
+  };
+
+  const handleSendStoryPoints = async () => {
+    if (!task.jira_id || !jiraBaseUrl) {
+      showToast("Jira bilgileri eksik", "error");
+      return;
+    }
+
+    if (storyPointsInput < 0) {
+      showToast("Story point negatif olamaz", "error");
+      return;
+    }
+
+    setSendingStoryPoints(true);
+
+    try {
+      const supabase = getSupabase();
+      const { data: userData } = await supabase.auth.getUser();
+
+      if (!userData.user) {
+        throw new Error("Kullanıcı bulunamadı");
+      }
+
+      // Jira base URL'i al (eğer state'te yoksa tekrar fetch et)
+      let baseUrl = jiraBaseUrl;
+      if (!baseUrl) {
+        const { data: userRow } = await supabase
+          .from("users")
+          .select("jira_base_url")
+          .eq("id", userData.user.id)
+          .maybeSingle();
+        baseUrl = userRow?.jira_base_url || null;
+      }
+
+      if (!baseUrl) {
+        throw new Error("Jira base URL bulunamadı");
+      }
+
+      const urlParams = new URLSearchParams();
+      urlParams.set("userId", userData.user.id);
+      urlParams.set("jiraBaseUrl", baseUrl);
+
+      const response = await fetch(
+        `/api/jira/set-story-points?${urlParams.toString()}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            issueId: task.jira_id,
+            storyPoints: storyPointsInput,
+            jiraBaseUrl: baseUrl,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Story point set edilemedi");
+      }
+
+      setJiraStoryPoints(storyPointsInput); // Jira'daki puanı güncelle
+      showToast(
+        `${
+          task.jira_key || "Task"
+        } için ${storyPointsInput} story point Jira'ya gönderildi`,
+        "success"
+      );
+    } catch (err) {
+      console.error("Set story points error:", err);
+      showToast(
+        err instanceof Error ? err.message : "Story point set edilemedi",
+        "error"
+      );
+    } finally {
+      setSendingStoryPoints(false);
+    }
+  };
+
+  const handleConfirmSetActive = async () => {
+    setShowConfirmModal(false);
+    await onSetActive(task.id);
+  };
+
   return (
     <div
-      className={`rounded-2xl border p-5 shadow-sm transition ${
+      className={`group relative overflow-hidden rounded-xl border-2 p-6 shadow-sm transition-all duration-200 ${
         task.status === "completed"
-          ? "border-green-200/70 bg-green-50/50 dark:border-green-800/70 dark:bg-green-900/10"
+          ? "border-green-200/60 bg-gradient-to-br from-green-50/80 to-white dark:border-green-800/40 dark:from-green-900/20 dark:to-gray-900"
           : task.status === "active"
-            ? "border-blue-200/70 bg-blue-50/50 dark:border-blue-800/70 dark:bg-blue-900/10"
-            : "border-gray-200/70 bg-white dark:border-gray-800/70 dark:bg-gray-900"
+          ? "border-blue-200/60 bg-gradient-to-br from-blue-50/80 to-white dark:border-blue-800/40 dark:from-blue-900/20 dark:to-gray-900"
+          : "border-gray-200/60 bg-white dark:border-gray-800/40 dark:bg-gray-900"
+      } ${
+        (task.status === "pending" && isAdmin) ||
+        (task.status === "completed" &&
+          isAdmin &&
+          task.jira_key &&
+          task.jira_id)
+          ? "cursor-pointer hover:border-blue-300 hover:shadow-lg hover:scale-[1.01] dark:hover:border-blue-600"
+          : ""
       }`}
+      onClick={handleCardClick}
+      role={
+        task.status === "completed" && isAdmin && task.jira_key && task.jira_id
+          ? "button"
+          : undefined
+      }
+      tabIndex={
+        task.status === "completed" && isAdmin && task.jira_key && task.jira_id
+          ? 0
+          : undefined
+      }
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          const mouseEvent = {
+            target: e.target,
+            currentTarget: e.currentTarget,
+            stopPropagation: () => e.stopPropagation(),
+            preventDefault: () => e.preventDefault(),
+          } as React.MouseEvent<HTMLDivElement>;
+          handleCardClick(mouseEvent);
+        }
+      }}
     >
       {/* Header */}
-      <div className="mb-4 flex items-start justify-between">
-        <div className="flex-1">
-          <div className="mb-2 flex items-center gap-2 flex-wrap">
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+      <div className="mb-5 flex items-start justify-between gap-4">
+        <div className="flex-1 min-w-0">
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white">
               {task.title}
             </h3>
             {task.jira_key && (
@@ -121,34 +472,38 @@ const TaskCard = memo(function TaskCard({
                 href={task.jira_url || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-mono font-semibold text-blue-700 transition hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50"
+                className="inline-flex items-center gap-1 rounded-lg bg-blue-100 px-2.5 py-1 text-xs font-mono font-semibold text-blue-700 transition-all hover:bg-blue-200 hover:scale-105 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
                 onClick={(e) => {
                   if (!task.jira_url) {
                     e.preventDefault();
                   }
                 }}
               >
-                🔗 {task.jira_key}
+                <span>🔗</span>
+                <span>{task.jira_key}</span>
               </a>
             )}
             {task.status === "completed" && (
-              <span className="rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-semibold text-green-700 dark:bg-green-900/30 dark:text-green-400">
-                ✅ Tamamlandı
+              <span className="inline-flex items-center gap-1 rounded-lg bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-700 dark:bg-green-900/40 dark:text-green-300">
+                <span>✅</span>
+                <span>Tamamlandı</span>
               </span>
             )}
             {task.status === "active" && (
-              <span className="rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-semibold text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
-                🔄 Aktif
+              <span className="inline-flex items-center gap-1 rounded-lg bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
+                <span>🔄</span>
+                <span>Aktif</span>
               </span>
             )}
             {task.status === "pending" && (
-              <span className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-semibold text-gray-700 dark:bg-gray-800 dark:text-gray-300">
-                ⏳ Beklemede
+              <span className="inline-flex items-center gap-1 rounded-lg bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                <span>⏳</span>
+                <span>Beklemede</span>
               </span>
             )}
           </div>
           {task.description && (
-            <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
+            <p className="mb-0 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
               {task.description}
             </p>
           )}
@@ -156,42 +511,135 @@ const TaskCard = memo(function TaskCard({
       </div>
 
       {/* Details Grid */}
-      <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {/* Oluşturan */}
-        <div className="rounded-lg bg-gray-100/50 p-2 dark:bg-gray-800/50">
-          <p className="text-xs text-gray-500 dark:text-gray-400">Oluşturan</p>
-          <p className="text-sm font-semibold text-gray-900 dark:text-white">
+        <div className="rounded-lg border border-gray-200/50 bg-white/60 p-3 shadow-sm dark:border-gray-700/50 dark:bg-gray-800/60">
+          <p className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
+            Oluşturan
+          </p>
+          <p className="text-sm font-bold text-gray-900 dark:text-white">
             {task.created_by_username || "Bilinmiyor"}
           </p>
         </div>
 
         {/* Tarih */}
-        <div className="rounded-lg bg-gray-100/50 p-2 dark:bg-gray-800/50">
-          <p className="text-xs text-gray-500 dark:text-gray-400">Oluşturulma</p>
-          <p className="text-sm font-semibold text-gray-900 dark:text-white">
+        <div className="rounded-lg border border-gray-200/50 bg-white/60 p-3 shadow-sm dark:border-gray-700/50 dark:bg-gray-800/60">
+          <p className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
+            Oluşturulma
+          </p>
+          <p className="text-sm font-bold text-gray-900 dark:text-white">
             {formatDate(task.created_at) || "-"}
           </p>
         </div>
 
         {/* Katılımcı Sayısı */}
-        <div className="rounded-lg bg-gray-100/50 p-2 dark:bg-gray-800/50">
-          <p className="text-xs text-gray-500 dark:text-gray-400">
+        <div className="rounded-lg border border-gray-200/50 bg-white/60 p-3 shadow-sm dark:border-gray-700/50 dark:bg-gray-800/60">
+          <p className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
             Katılımcı
           </p>
-          <p className="text-sm font-semibold text-gray-900 dark:text-white">
-            {loadingVotes ? "..." : votes.length}
+          <p className="text-sm font-bold text-gray-900 dark:text-white">
+            {loadingVotes ? (
+              <span className="inline-block h-4 w-4 animate-pulse rounded bg-gray-300 dark:bg-gray-600" />
+            ) : (
+              votes.length
+            )}
           </p>
         </div>
 
         {/* Ortalama Puan (sadece completed veya active task'larda) */}
         {(task.status === "completed" || task.status === "active") && (
-          <div className="rounded-lg bg-gray-100/50 p-2 dark:bg-gray-800/50">
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+          <div className="rounded-lg border border-gray-200/50 bg-white/60 p-3 shadow-sm dark:border-gray-700/50 dark:bg-gray-800/60">
+            <p className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
               Ortalama
             </p>
-            <p className="text-sm font-semibold text-gray-900 dark:text-white">
-              {loadingVotes ? "..." : avgPoint > 0 ? avgPoint : "-"}
-            </p>
+            {isAdmin &&
+            task.status === "completed" &&
+            task.jira_key &&
+            task.jira_id ? (
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.5"
+                    value={storyPointsInput || ""}
+                    onChange={(e) => {
+                      e.stopPropagation();
+                      const value = parseFloat(e.target.value);
+                      if (!isNaN(value) && value >= 0) {
+                        setStoryPointsInput(value);
+                        setSelectedSource("manual");
+                      } else if (e.target.value === "") {
+                        setStoryPointsInput(0);
+                        setSelectedSource("manual");
+                      }
+                    }}
+                    onFocus={(e) => {
+                      e.stopPropagation();
+                      setInputFocused(true);
+                      // Input'u seç
+                      const input = e.target as HTMLInputElement;
+                      requestAnimationFrame(() => {
+                        input.select();
+                      });
+                    }}
+                    onBlur={() => {
+                      setInputFocused(false);
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                    className="w-20 rounded-md border-2 border-blue-300 bg-white px-2 py-1 text-sm font-bold text-gray-900 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:border-blue-600 dark:bg-gray-800 dark:text-white dark:focus:ring-blue-800"
+                    placeholder="0"
+                  />
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    Story Point
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {jiraStoryPoints !== null && jiraStoryPoints > 0 && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSourceSelect("jira");
+                      }}
+                      className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all ${
+                        selectedSource === "jira"
+                          ? "bg-blue-100 text-blue-700 ring-2 ring-blue-300 dark:bg-blue-900/40 dark:text-blue-300 dark:ring-blue-600"
+                          : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                      }`}
+                    >
+                      Jira&apos;da: {jiraStoryPoints}
+                    </button>
+                  )}
+                  {avgPoint > 0 && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSourceSelect("average");
+                      }}
+                      className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all ${
+                        selectedSource === "average"
+                          ? "bg-blue-100 text-blue-700 ring-2 ring-blue-300 dark:bg-blue-900/40 dark:text-blue-300 dark:ring-blue-600"
+                          : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                      }`}
+                    >
+                      Ortalama: {avgPoint}
+                    </button>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <p className="text-sm font-bold text-gray-900 dark:text-white">
+                {loadingVotes ? (
+                  <span className="inline-block h-4 w-4 animate-pulse rounded bg-gray-300 dark:bg-gray-600" />
+                ) : avgPoint > 0 ? (
+                  avgPoint
+                ) : (
+                  "-"
+                )}
+              </p>
+            )}
           </div>
         )}
       </div>
@@ -200,20 +648,20 @@ const TaskCard = memo(function TaskCard({
       {isAdmin &&
         (task.status === "completed" || task.status === "active") &&
         votes.length > 0 && (
-          <div className="mb-4 rounded-lg border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-800">
-            <p className="mb-2 text-xs font-semibold text-gray-600 dark:text-gray-400">
+          <div className="mb-5 rounded-lg border border-gray-200/60 bg-white/80 p-4 shadow-sm dark:border-gray-700/60 dark:bg-gray-800/80">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
               Katılımcı Puanları
             </p>
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               {votes.map((vote) => (
                 <div
                   key={vote.user_key || vote.user_name}
-                  className="flex items-center justify-between text-xs"
+                  className="flex items-center justify-between rounded-md bg-gray-50 px-3 py-2 dark:bg-gray-900/50"
                 >
-                  <span className="text-gray-700 dark:text-gray-300">
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                     {vote.user_name}
                   </span>
-                  <span className="font-semibold text-gray-900 dark:text-white">
+                  <span className="rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-bold text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
                     {vote.point ?? "Girilmedi"}
                   </span>
                 </div>
@@ -223,27 +671,113 @@ const TaskCard = memo(function TaskCard({
         )}
 
       {/* Action Button */}
-      <div className="flex justify-end">
+      <div className="flex items-center justify-between gap-3 border-t border-gray-200/50 pt-4 dark:border-gray-700/50">
         {task.status === "completed" ? (
-          <span className="text-xs text-gray-500 dark:text-gray-400">
-            Bu task tamamlandı
-          </span>
+          <>
+            <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
+              Bu task tamamlandı
+            </span>
+            <div className="flex items-center gap-2">
+              {isAdmin && task.jira_key && task.jira_id && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSendStoryPoints();
+                  }}
+                  disabled={
+                    sendingStoryPoints ||
+                    storyPointsInput < 0 ||
+                    !hasInputChanged
+                  }
+                  className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-2 text-sm font-semibold text-white shadow-md transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-lg hover:scale-105 disabled:scale-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-md"
+                  title={
+                    jiraStoryPoints !== null && jiraStoryPoints > 0
+                      ? "Jira'daki Story Point'i Güncelle"
+                      : "Jira'ya Story Point Gönder"
+                  }
+                >
+                  {sendingStoryPoints ? (
+                    <>
+                      <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                      <span>Gönderiliyor...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>📊</span>
+                      <span>
+                        {jiraStoryPoints !== null && jiraStoryPoints > 0
+                          ? "Güncelle"
+                          : "Jira'ya Gönder"}
+                      </span>
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
+          </>
         ) : task.status === "active" ? (
-          <span className="text-xs text-blue-600 dark:text-blue-400">
-            🔄 Şu anda puanlama yapılıyor
+          <span className="inline-flex items-center gap-2 rounded-lg bg-blue-100 px-3 py-1.5 text-xs font-semibold text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
+            <span>🔄</span>
+            <span>Şu anda puanlama yapılıyor</span>
           </span>
         ) : (
           <button
-            onClick={() => onSetActive(task.id)}
-            className="rounded-md bg-gray-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
+            onClick={(e) => {
+              e.stopPropagation(); // Card click event'ini durdur
+              setShowConfirmModal(true);
+            }}
+            className="ml-auto rounded-lg bg-gradient-to-r from-gray-900 to-gray-800 px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:from-gray-800 hover:to-gray-700 hover:shadow-lg hover:scale-105 dark:from-white dark:to-gray-100 dark:text-gray-900 dark:hover:from-gray-100 dark:hover:to-white"
           >
             Puanlamaya Gönder
           </button>
         )}
       </div>
+
+      {/* Onay Modal - Puanlamaya Gönder */}
+      {task.status === "pending" && isAdmin && (
+        <Modal
+          open={showConfirmModal}
+          onClose={() => setShowConfirmModal(false)}
+          title="Task'ı Puanlamaya Gönder"
+        >
+          <div className="space-y-4">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              <strong className="font-semibold text-gray-900 dark:text-white">
+                {task.title}
+              </strong>{" "}
+              task&apos;ını puanlamaya göndermek istediğinizden emin misiniz?
+            </p>
+            {task.description && (
+              <div className="rounded-lg bg-gray-50 p-3 dark:bg-gray-800">
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  Açıklama:
+                </p>
+                <p className="text-sm text-gray-700 dark:text-gray-300">
+                  {task.description}
+                </p>
+              </div>
+            )}
+            <div className="flex items-center justify-end gap-3 pt-4">
+              <button
+                type="button"
+                onClick={() => setShowConfirmModal(false)}
+                className="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+              >
+                İptal
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmSetActive}
+                className="inline-flex h-10 items-center justify-center rounded-md bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700"
+              >
+                Puanlamaya Gönder
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 });
 
 export default TaskCard;
-

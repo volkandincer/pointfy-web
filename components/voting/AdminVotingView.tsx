@@ -39,10 +39,10 @@ const AdminVotingView = memo(function AdminVotingView({
         .update({ status: "completed" })
         .eq("id", activeTask.id);
       if (error) throw error;
-      
+
       // Task başarıyla tamamlandı
       setTaskCompleted(true);
-      
+
       // Web'de zaten room detail sayfasındayız, yönlendirme yapmaya gerek yok
       // Realtime subscription sayesinde activeTask null olacak ve "Aktif Task Yok" ekranı gösterilecek
     } catch (err) {
@@ -50,26 +50,16 @@ const AdminVotingView = memo(function AdminVotingView({
       alert("Task tamamlanamadı. Lütfen tekrar deneyin.");
     }
   }, [activeTask.id, isAdmin]);
-  
-  // Task completed olduğunda otomatik olarak algıla (realtime subscription'dan)
-  useEffect(() => {
-    if (activeTask.status === "completed" && !taskCompleted) {
-      setTaskCompleted(true);
-      // Web'de zaten room detail sayfasındayız, yönlendirme yapmaya gerek yok
-      // Realtime subscription sayesinde activeTask null olacak ve "Aktif Task Yok" ekranı gösterilecek
-    }
-  }, [activeTask.status, taskCompleted]);
 
   const validVotes = votes.filter(
     (v) => v.point !== null && v.point !== undefined
   );
-  const avgPoint =
+  const avgPointRaw =
     validVotes.length > 0
-      ? Math.round(
-          validVotes.reduce((sum, v) => sum + (v.point || 0), 0) /
-            validVotes.length
-        )
+      ? validVotes.reduce((sum, v) => sum + (v.point || 0), 0) /
+        validVotes.length
       : 0;
+  const avgPoint = Math.round(avgPointRaw);
   const maxPoint =
     validVotes.length > 0
       ? Math.max(...validVotes.map((v) => v.point || 0))
@@ -78,6 +68,13 @@ const AdminVotingView = memo(function AdminVotingView({
     validVotes.length > 0
       ? Math.min(...validVotes.map((v) => v.point || 0))
       : 0;
+
+  // Task completed olduğunda otomatik olarak algıla (realtime subscription'dan)
+  useEffect(() => {
+    if (activeTask.status === "completed" && !taskCompleted) {
+      setTaskCompleted(true);
+    }
+  }, [activeTask.status, taskCompleted]);
 
   return (
     <div className="space-y-6">
