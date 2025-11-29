@@ -19,6 +19,9 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
+  // LocalStorage key for last selected board
+  const STORAGE_KEY = `jira_last_board_${jiraBaseUrl || "default"}`;
+
   // ADF description'ı string'e çevir
   const extractDescription = useCallback((
     desc: JiraAdfDocument | string | undefined | { type?: string; version?: number; content?: unknown }
@@ -86,7 +89,25 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
           throw new Error(data.error || "Board'lar yüklenemedi");
         }
 
-        setBoards(data.boards || []);
+        const boardsData = data.boards || [];
+        setBoards(boardsData);
+
+        // Son seçilen board'u yükle (eğer varsa)
+        if (mounted && boardsData.length > 0) {
+          try {
+            const lastBoardId = localStorage.getItem(STORAGE_KEY);
+            if (lastBoardId) {
+              const boardIdNum = Number(lastBoardId);
+              const lastBoard = boardsData.find((b) => b.id === boardIdNum);
+              if (lastBoard) {
+                setSelectedBoardId(boardIdNum);
+                setSelectedProjectKey(lastBoard.location.projectKey);
+              }
+            }
+          } catch (storageError) {
+            console.warn("LocalStorage read error:", storageError);
+          }
+        }
       } catch (err) {
         if (!mounted) return;
         console.error("Fetch boards error:", err);
@@ -101,7 +122,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
     return () => {
       mounted = false;
     };
-  }, [jiraBaseUrl]);
+  }, [jiraBaseUrl, STORAGE_KEY]);
 
   // Seçilen board'un issue'larını yükle (projectKey kullanarak - Agile API gerektirmez)
   useEffect(() => {
@@ -229,9 +250,17 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
 
   const handleTaskSelect = useCallback(
     (task: JiraTask) => {
+      // Task seçildiğinde board ID'yi kaydet (zaten kayıtlı olmalı ama emin olmak için)
+      if (selectedBoardId) {
+        try {
+          localStorage.setItem(STORAGE_KEY, selectedBoardId.toString());
+        } catch (storageError) {
+          console.warn("LocalStorage write error:", storageError);
+        }
+      }
       onTaskSelect(task);
     },
-    [onTaskSelect]
+    [onTaskSelect, selectedBoardId, STORAGE_KEY]
   );
 
   return (
@@ -270,6 +299,21 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
               // Seçilen board'un projectKey'ini bul
               const selectedBoard = boards.find((b) => b.id === boardId);
               setSelectedProjectKey(selectedBoard?.location.projectKey || null);
+              
+              // LocalStorage'a kaydet
+              if (boardId) {
+                try {
+                  localStorage.setItem(STORAGE_KEY, boardId.toString());
+                } catch (storageError) {
+                  console.warn("LocalStorage write error:", storageError);
+                }
+              } else {
+                try {
+                  localStorage.removeItem(STORAGE_KEY);
+                } catch (storageError) {
+                  console.warn("LocalStorage remove error:", storageError);
+                }
+              }
             }}
             className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           >
