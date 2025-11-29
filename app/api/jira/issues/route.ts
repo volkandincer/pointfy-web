@@ -630,9 +630,10 @@ async function handleJiraIssuesRequestWithJiraToken(
   const tasks: JiraTask[] = data.issues
     .filter((issue) => issue.fields !== undefined)
     .map((issue) => {
+      // TypeScript guard - filter'den geçtiği için fields var olmalı
       if (!issue.fields) {
-        // TypeScript guard - bu noktaya asla gelmemeli
-        throw new Error("Issue missing fields");
+        // Bu noktaya asla gelmemeli ama güvenlik için kontrol
+        throw new Error("Issue missing fields after filter");
       }
       // Helper function: ADF format description'ı string'e çevir
       const extractDescription = (
