@@ -272,13 +272,7 @@ async function handleJiraRequestWithJiraToken(
         // JSON parse failed
       }
 
-      console.error("❌ Accessible resources hatası:", {
-        status: accessibleResourcesResponse.status,
-        statusText: accessibleResourcesResponse.statusText,
-        errorDetails,
-        tokenLength: jiraToken?.length,
-        tokenPreview: jiraToken?.substring(0, 20) + "...",
-      });
+      // Accessible resources hatası
 
       if (accessibleResourcesResponse.status === 401) {
         if (userRow.jira_refresh_token) {
@@ -463,21 +457,7 @@ async function handleJiraRequestWithJiraToken(
       // JSON parse başarısız, text olarak kullan
     }
 
-    // Jira'dan gelen GERÇEK hatayı logla
-    console.error(
-      "❌ Jira Projects API Error - Jira'dan gelen GERÇEK hata (Agile API yerine REST API v3 kullanılıyor):",
-      {
-        status: response.status,
-        statusText: response.statusText,
-        apiUrl,
-        endpoint: `${apiUrl}/rest/api/3/project`,
-        rawErrorText: errorText,
-        parsedErrorJson: errorJson,
-        cloudId: cloudId || "not found",
-        responseUrl: response.url,
-        headers: Object.fromEntries(response.headers.entries()),
-      }
-    );
+    // Jira Projects API Error
 
     if (response.status === 401) {
       if (userRow.jira_refresh_token) {
@@ -536,13 +516,7 @@ async function handleJiraRequestWithJiraToken(
             } else {
               // Retry başarısız, hata detaylarını logla
               const retryErrorText = await retryResponse.text();
-              console.error("❌ Token refresh sonrası projects API hala 401:", {
-                status: retryResponse.status,
-                statusText: retryResponse.statusText,
-                errorText: retryErrorText,
-                apiUrl,
-                endpoint: `${apiUrl}/rest/api/3/project`,
-              });
+              // Token refresh sonrası projects API hala 401
               throw new Error(
                 `Token refresh sonrası projects API hala ${retryResponse.status} hatası: ${retryErrorText}`
               );

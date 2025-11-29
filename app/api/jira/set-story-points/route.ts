@@ -162,7 +162,7 @@ async function handleSetStoryPoints(
         })
         .eq("id", userId);
     } catch (refreshError) {
-      console.error("❌ Jira token refresh error:", refreshError);
+      // Jira token refresh error
       return NextResponse.json(
         { error: "Jira token expired and refresh failed. Please reconnect Jira." },
         { status: 401 }
