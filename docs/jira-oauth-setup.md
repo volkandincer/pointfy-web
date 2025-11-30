@@ -54,6 +54,9 @@ https://yourdomain.com/api/auth/jira/callback
 - ✅ `read:jira-work` - Jira verilerini okuma
 - ✅ `write:jira-work` - Jira verilerini güncelleme
 - ✅ `offline_access` - Refresh token almak için
+- ✅ `read:board-scope:jira-software` - **ÖNEMLİ:** Agile API (board'lar ve sprint'ler) için erişim
+
+**Önemli:** `read:board-scope:jira-software` scope'u eklenmezse board'lar görüntülenemez ve hata alırsınız.
 
 ### 5. OAuth Uygulamasını Jira Instance'ına Yükleyin
 

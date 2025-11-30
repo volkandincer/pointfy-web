@@ -20,7 +20,7 @@ export default function JiraPage() {
   const [activeTab, setActiveTab] = useState<TabType>("projects");
   const [jiraConnected, setJiraConnected] = useState<boolean>(false);
   const [jiraBaseUrl, setJiraBaseUrl] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
+  const [connectionChecked, setConnectionChecked] = useState<boolean>(false);
 
   // Projects state
   const [projects, setProjects] = useState<JiraBoard[]>([]);
@@ -40,7 +40,7 @@ export default function JiraPage() {
         const supabase = getSupabase();
         const { data: userData } = await supabase.auth.getUser();
         if (!mounted || !userData.user) {
-          setLoading(false);
+          setConnectionChecked(true);
           return;
         }
 
@@ -51,16 +51,19 @@ export default function JiraPage() {
           .maybeSingle();
 
         if (mounted) {
-          setJiraConnected(!!userRow?.jira_access_token);
+          // State'leri aynı anda güncelle - React'in state batching'i için
+          const isConnected = !!userRow?.jira_access_token;
+          setJiraConnected(isConnected);
           if (userRow?.jira_base_url) {
             setJiraBaseUrl(userRow.jira_base_url);
           }
-          setLoading(false);
+          // connectionChecked'i en son set et - böylece jiraConnected kesinlikle set edilmiş olur
+          setConnectionChecked(true);
         }
       } catch (err) {
         // Jira connection check error
         if (mounted) {
-          setLoading(false);
+          setConnectionChecked(true);
         }
       }
     }
@@ -163,34 +166,85 @@ export default function JiraPage() {
     }
   }, [jiraBaseUrl]);
 
-  // Tab değiştiğinde ilgili datayı yükle
+  // Bağlantı kurulduğunda ve tab değiştiğinde ilgili datayı yükle
   useEffect(() => {
-    if (!jiraConnected || !jiraBaseUrl) return;
+    if (!jiraConnected || !jiraBaseUrl || !connectionChecked) return;
 
     if (activeTab === "projects") {
-      fetchProjects();
+      // Projeler tab'ı aktifse ve veriler yüklenmemişse yükle
+      if (projects.length === 0 && !projectsLoading && !projectsError) {
+        fetchProjects();
+      }
     } else if (activeTab === "issues") {
-      fetchIssues();
+      // Issues tab'ı aktifse ve veriler yüklenmemişse yükle
+      if (issues.length === 0 && !issuesLoading && !issuesError) {
+        fetchIssues();
+      }
     }
-  }, [activeTab, jiraConnected, jiraBaseUrl, fetchProjects, fetchIssues]);
+  }, [activeTab, jiraConnected, jiraBaseUrl, connectionChecked, fetchProjects, fetchIssues]);
 
-  if (loading) {
+  // Skeleton Loader Component
+  const SkeletonLoader = () => (
+    <div className="container mx-auto px-4 py-12">
+      <div className="mx-auto max-w-7xl">
+        {/* Header Skeleton */}
+        <div className="mb-8">
+          <div className="mb-6">
+            <div className="mb-3 h-12 w-48 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800" />
+            <div className="h-6 w-96 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800" />
+          </div>
+          {/* Tab Buttons Skeleton */}
+          <div className="inline-flex rounded-lg border border-gray-200 bg-white p-1 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+            <div className="h-10 w-24 animate-pulse rounded-md bg-gray-200 dark:bg-gray-800" />
+            <div className="ml-1 h-10 w-28 animate-pulse rounded-md bg-gray-200 dark:bg-gray-800" />
+          </div>
+        </div>
+
+        {/* Content Skeleton */}
+        <div className="rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <div className="p-6">
+            <div className="mb-4 flex items-center justify-between">
+              <div className="h-7 w-32 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800" />
+              <div className="h-9 w-20 animate-pulse rounded-md bg-gray-200 dark:bg-gray-800" />
+            </div>
+
+            {/* Grid Skeleton for Projects/Issues */}
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div
+                  key={i}
+                  className="animate-pulse rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800"
+                >
+                  <div className="mb-2 h-6 w-3/4 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                  <div className="h-4 w-1/2 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Bağlantı kontrolü tamamlanana kadar skeleton göster
+  // connectionChecked false ise kesinlikle skeleton göster, bağlantı ekranı gösterme
+  // Ayrıca connectionChecked true ama jiraConnected henüz set edilmemişse de skeleton göster
+  if (!connectionChecked) {
     return (
       <RequireAuth>
         <Header navigationItems={navigationItems} />
         <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
-          <div className="container mx-auto px-4 py-16">
-            <div className="flex items-center justify-center">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
-            </div>
-          </div>
+          <SkeletonLoader />
         </main>
         <Footer navigationItems={navigationItems} />
       </RequireAuth>
     );
   }
 
-  if (!jiraConnected) {
+  // Kontrol tamamlandıktan sonra (connectionChecked true) bağlantı durumuna göre içerik göster
+  // Sadece kontrol tamamlandığında ve jiraConnected kesinlikle set edildiğinde buraya gelir
+  // connectionChecked true ama jiraConnected false ise bağlantı yok demektir
+  if (connectionChecked && !jiraConnected) {
     return (
       <RequireAuth>
         <Header navigationItems={navigationItems} />
@@ -300,9 +354,18 @@ export default function JiraPage() {
                     </div>
                   )}
 
-                  {projectsLoading ? (
-                    <div className="flex items-center justify-center py-12">
-                      <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+                  {/* İlk yükleme sırasında skeleton göster */}
+                  {projectsLoading && projects.length === 0 ? (
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                      {[1, 2, 3, 4, 5, 6].map((i) => (
+                        <div
+                          key={i}
+                          className="animate-pulse rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800"
+                        >
+                          <div className="mb-2 h-6 w-3/4 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                          <div className="h-4 w-1/2 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                        </div>
+                      ))}
                     </div>
                   ) : projects.length > 0 ? (
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -351,9 +414,24 @@ export default function JiraPage() {
                     </div>
                   )}
 
-                  {issuesLoading ? (
-                    <div className="flex items-center justify-center py-12">
-                      <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+                  {/* İlk yükleme sırasında skeleton göster */}
+                  {issuesLoading && issues.length === 0 ? (
+                    <div className="space-y-4">
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <div
+                          key={i}
+                          className="animate-pulse rounded-xl border-2 border-l-4 border-l-blue-500/20 border-blue-400/10 bg-white p-5 dark:border-blue-500/10 dark:bg-gray-900"
+                        >
+                          <div className="mb-3 flex flex-wrap items-center gap-2">
+                            <div className="h-5 w-20 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                            <div className="h-6 w-16 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
+                            <div className="h-6 w-16 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
+                          </div>
+                          <div className="mb-2 h-6 w-full animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                          <div className="mb-2 h-4 w-3/4 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                          <div className="h-4 w-1/2 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                        </div>
+                      ))}
                     </div>
                   ) : issues.length > 0 ? (
                     <div className="space-y-4">

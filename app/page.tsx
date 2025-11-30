@@ -9,6 +9,7 @@ import Features from "@/components/sections/Features";
 import CTA from "@/components/sections/CTA";
 import RecentRooms from "@/components/sections/RecentRooms";
 import HomeWelcome from "@/components/sections/HomeWelcome";
+import JiraSection from "@/components/sections/JiraSection";
 import GlobalNoteFab from "@/components/notes/GlobalNoteFab";
 import ToastContainer from "@/components/ui/ToastContainer";
 import { ToastProvider, useToastContext } from "@/contexts/ToastContext";
@@ -26,6 +27,7 @@ function HomePageContent() {
   const [userId, setUserId] = useState<string | null>(null);
   const [checkingAuth, setCheckingAuth] = useState<boolean>(true);
   const [jiraConnected, setJiraConnected] = useState<boolean>(false);
+  const [jiraBaseUrl, setJiraBaseUrl] = useState<string>("");
   const { toasts, removeToast } = useToastContext();
 
   useEffect(() => {
@@ -42,19 +44,22 @@ function HomePageContent() {
           // Get username and Jira connection status
           const { data: userRow } = await supabase
             .from("users")
-            .select("username, jira_access_token")
+            .select("username, jira_access_token, jira_base_url")
             .eq("id", sessionData.session.user.id)
             .single();
           if (!mounted) return;
           setJiraConnected(!!userRow?.jira_access_token);
+          setJiraBaseUrl(userRow?.jira_base_url || "");
         } else {
           setUserId(null);
           setJiraConnected(false);
+          setJiraBaseUrl("");
         }
       } catch {
         if (!mounted) return;
         setUserId(null);
         setJiraConnected(false);
+        setJiraBaseUrl("");
       } finally {
         if (mounted) setCheckingAuth(false);
       }
@@ -162,29 +167,8 @@ function HomePageContent() {
         href: "/app/rooms/create?type=retro",
         icon: "🔁",
       },
-      {
-        id: "jira",
-        title: jiraConnected ? "Jira" : "Jira'yı Bağla",
-        description: jiraConnected
-          ? "Jira projelerinizi ve issue&apos;larınızı görüntüleyin"
-          : "Jira hesabınızı bağlayın ve projelerinizi yönetin",
-        href: jiraConnected ? "/app/jira" : "#",
-        icon: "🔗",
-        onClick: jiraConnected
-          ? undefined
-          : async () => {
-              if (!userId) return;
-              try {
-                const returnUrl = encodeURIComponent("/");
-                const encodedUserId = encodeURIComponent(userId);
-                window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
-              } catch (err) {
-                // Jira OAuth error
-              }
-            },
-      },
     ],
-    [jiraConnected, userId]
+    []
   );
 
   // Show loading state briefly to prevent flash
@@ -208,6 +192,13 @@ function HomePageContent() {
       <main>
         {userId ? <HomeWelcome /> : <Hero />}
         <QuickActions actions={actions} />
+        {userId && (
+          <JiraSection
+            jiraConnected={jiraConnected}
+            userId={userId}
+            jiraBaseUrl={jiraBaseUrl}
+          />
+        )}
         <RecentRooms />
         <Features features={features} />
         <CTA />

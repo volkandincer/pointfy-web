@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import RequireAuth from "@/components/auth/RequireAuth";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import Modal from "@/components/ui/Modal";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import { getSupabase } from "@/lib/supabase";
@@ -24,6 +25,7 @@ export default function AccountPage() {
   const [newUsername, setNewUsername] = useState<string>("");
   const [saving, setSaving] = useState<boolean>(false);
   const [jiraConnected, setJiraConnected] = useState<boolean>(false);
+  const [showJiraPermissionModal, setShowJiraPermissionModal] = useState<boolean>(false);
 
   useEffect(() => {
     let mounted = true;
@@ -229,7 +231,12 @@ export default function AccountPage() {
     }
   };
 
-  const handleConnectJira = async () => {
+  const handleConnectJira = () => {
+    // Önce bilgilendirme modal'ını göster
+    setShowJiraPermissionModal(true);
+  };
+
+  const handleConfirmJiraConnection = async () => {
     // Önce user ID'yi al (eğer userKey boşsa)
     let userId = userKey;
     if (!userId) {
@@ -242,16 +249,19 @@ export default function AccountPage() {
       } catch (err) {
         // User ID alınamadı
         alert("Kullanıcı bilgileri alınamadı. Lütfen sayfayı yenileyin.");
+        setShowJiraPermissionModal(false);
         return;
       }
     }
 
     if (!userId) {
       alert("Kullanıcı bilgileri alınamadı. Lütfen sayfayı yenileyin.");
+      setShowJiraPermissionModal(false);
       return;
     }
 
-    // OAuth akışını başlat - returnUrl ve userId ile account sayfasına dön
+    // Modal'ı kapat ve OAuth akışını başlat
+    setShowJiraPermissionModal(false);
     const returnUrl = encodeURIComponent("/app/account");
     const encodedUserId = encodeURIComponent(userId);
     window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
@@ -472,6 +482,123 @@ export default function AccountPage() {
           </div>
         </main>
         <Footer navigationItems={navigationItems} />
+
+        {/* Jira İzinleri Bilgilendirme Modal'ı */}
+        <Modal
+          open={showJiraPermissionModal}
+          onClose={() => setShowJiraPermissionModal(false)}
+          title="Jira Bağlantısı İçin Gerekli İzinler"
+        >
+          <div className="space-y-4">
+            <div className="rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-800 dark:bg-blue-900/20">
+              <p className="text-sm text-blue-800 dark:text-blue-200">
+                <strong>Neden bu izinler gerekli?</strong> Jira hesabınızı bağlamak için bu izinlere
+                ihtiyacımız var. Bu sayede projelerinizi, issue&apos;larınızı ve board&apos;larınızı
+                görüntüleyebilir, story point&apos;leri yönetebilirsiniz.
+              </p>
+            </div>
+
+            <div className="space-y-3 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                  <span className="text-xs font-semibold">1</span>
+                </div>
+                <div className="flex-1">
+                  <h4 className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">
+                    Jira Verilerini Okuma
+                  </h4>
+                  <p className="mb-1 text-xs text-gray-600 dark:text-gray-400">
+                    <strong>Ne için:</strong> Projelerinizi, issue&apos;larınızı ve board&apos;larınızı
+                    görüntüleyebilmek için
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-500">
+                    Bu izin sayesinde Jira&apos;daki tüm projelerinizi ve size atanan görevleri
+                    Pointfy&apos;de görüntüleyebilirsiniz.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                  <span className="text-xs font-semibold">2</span>
+                </div>
+                <div className="flex-1">
+                  <h4 className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">
+                    Jira Verilerini Güncelleme
+                  </h4>
+                  <p className="mb-1 text-xs text-gray-600 dark:text-gray-400">
+                    <strong>Ne için:</strong> Poker planning sonuçlarını Jira&apos;daki issue&apos;lara
+                    story point olarak kaydedebilmek için
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-500">
+                    Takımınızla yaptığınız oylamaların sonuçlarını otomatik olarak Jira&apos;daki
+                    ilgili issue&apos;lara aktarabiliriz.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                  <span className="text-xs font-semibold">3</span>
+                </div>
+                <div className="flex-1">
+                  <h4 className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">
+                    Board ve Sprint Erişimi
+                  </h4>
+                  <p className="mb-1 text-xs text-gray-600 dark:text-gray-400">
+                    <strong>Ne için:</strong> Agile board&apos;larınızı ve sprint&apos;lerinizi
+                    görüntüleyebilmek için
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-500">
+                    Scrum ve Kanban board&apos;larınızı, aktif sprint&apos;lerinizi ve sprint
+                    içindeki görevleri Pointfy&apos;de görebilirsiniz.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400">
+                  <span className="text-xs font-semibold">✓</span>
+                </div>
+                <div className="flex-1">
+                  <h4 className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">
+                    Otomatik Yenileme
+                  </h4>
+                  <p className="mb-1 text-xs text-gray-600 dark:text-gray-400">
+                    <strong>Ne için:</strong> Bağlantınızın sürekli aktif kalması için
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-500">
+                    Her seferinde yeniden bağlanmanıza gerek kalmadan, bağlantınız otomatik olarak
+                    yenilenir ve kesintisiz çalışır.
+                </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-green-200 bg-green-50 p-3 dark:border-green-800 dark:bg-green-900/20">
+              <p className="text-xs text-green-800 dark:text-green-200">
+                <strong>🔒 Güvenlik:</strong> Bu izinler sadece Jira verilerinize erişim sağlar. Hesap
+                şifreniz, kişisel bilgileriniz veya diğer hassas verileriniz saklanmaz. İstediğiniz
+                zaman hesap ayarlarından bağlantıyı kaldırabilirsiniz.
+              </p>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowJiraPermissionModal(false)}
+                className="flex-1 rounded-lg border-2 border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+              >
+                İptal
+              </button>
+              <button
+                onClick={handleConfirmJiraConnection}
+                className="flex-1 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-lg"
+              >
+                Devam Et
+              </button>
+            </div>
+          </div>
+        </Modal>
       </>
     </RequireAuth>
   );
