@@ -9,7 +9,6 @@ import Features from "@/components/sections/Features";
 import CTA from "@/components/sections/CTA";
 import RecentRooms from "@/components/sections/RecentRooms";
 import HomeWelcome from "@/components/sections/HomeWelcome";
-import JiraSection from "@/components/sections/JiraSection";
 import GlobalNoteFab from "@/components/notes/GlobalNoteFab";
 import ToastContainer from "@/components/ui/ToastContainer";
 import { ToastProvider, useToastContext } from "@/contexts/ToastContext";
@@ -26,8 +25,6 @@ function HomePageContent() {
   );
   const [userId, setUserId] = useState<string | null>(null);
   const [checkingAuth, setCheckingAuth] = useState<boolean>(true);
-  const [jiraConnected, setJiraConnected] = useState<boolean>(false);
-  const [jiraBaseUrl, setJiraBaseUrl] = useState<string>("");
   const { toasts, removeToast } = useToastContext();
 
   useEffect(() => {
@@ -41,40 +38,18 @@ function HomePageContent() {
 
         if (sessionData.session?.user) {
           setUserId(sessionData.session.user.id);
-          // Get username and Jira connection status
-          const { data: userRow } = await supabase
-            .from("users")
-            .select("username, jira_access_token, jira_base_url")
-            .eq("id", sessionData.session.user.id)
-            .single();
-          if (!mounted) return;
-          setJiraConnected(!!userRow?.jira_access_token);
-          setJiraBaseUrl(userRow?.jira_base_url || "");
         } else {
           setUserId(null);
-          setJiraConnected(false);
-          setJiraBaseUrl("");
         }
       } catch {
         if (!mounted) return;
         setUserId(null);
-        setJiraConnected(false);
-        setJiraBaseUrl("");
       } finally {
         if (mounted) setCheckingAuth(false);
       }
     }
 
     checkAuthAndJira();
-
-    // Jira OAuth callback'ten döndükten sonra durumu kontrol et
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get("jira_connected") === "true") {
-      // OAuth callback'ten döndük, durumu yeniden kontrol et
-      setTimeout(() => {
-        checkAuthAndJira();
-      }, 1000);
-    }
 
     return () => {
       mounted = false;
@@ -131,6 +106,13 @@ function HomePageContent() {
         description: "Yeni bir oda oluşturun",
         href: "/app/rooms/create",
         icon: "⚡",
+      },
+      {
+        id: "jira",
+        title: "Jira",
+        description: "Jira projelerinizi ve issue'larınızı yönetin",
+        href: "/app/jira",
+        icon: "🔗",
       },
       {
         id: "boards",
@@ -192,13 +174,6 @@ function HomePageContent() {
       <main>
         {userId ? <HomeWelcome /> : <Hero />}
         <QuickActions actions={actions} />
-        {userId && (
-          <JiraSection
-            jiraConnected={jiraConnected}
-            userId={userId}
-            jiraBaseUrl={jiraBaseUrl}
-          />
-        )}
         <RecentRooms />
         <Features features={features} />
         <CTA />
