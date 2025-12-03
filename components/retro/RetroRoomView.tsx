@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useState, useCallback, useMemo } from "react";
+import { memo, useState, useCallback, useMemo, useRef } from "react";
 import { getSupabase } from "@/lib/supabase";
 import { useRetroCards } from "@/hooks/useRetroCards";
 import type { RetroCategory, RetroCard } from "@/interfaces/Retro.interface";
@@ -33,9 +33,11 @@ const RetroRoomView = memo(function RetroRoomView({
 }: RetroRoomViewProps) {
   const { cards, loading } = useRetroCards(roomId);
   const [activeTab, setActiveTab] = useState<RetroCategory>("glad");
-  const [showAddModal, setShowAddModal] = useState<boolean>(false);
   const [editingCard, setEditingCard] = useState<RetroCard | null>(null);
   const [isRevealing, setIsRevealing] = useState<boolean>(false);
+  const [cardContent, setCardContent] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const cardsRevealed = useMemo(
     () => cards.length > 0 && cards.every((card) => card.is_revealed),
@@ -64,6 +66,12 @@ const RetroRoomView = memo(function RetroRoomView({
         return;
       }
 
+      if (!content.trim()) {
+        alert("Lütfen kart içeriğini girin.");
+        return;
+      }
+
+      setIsSubmitting(true);
       try {
         const supabase = getSupabase();
         const { error } = await supabase.from("retro_cards").insert({
@@ -76,13 +84,33 @@ const RetroRoomView = memo(function RetroRoomView({
         });
 
         if (error) throw error;
-        setShowAddModal(false);
+        setCardContent("");
+        textareaRef.current?.focus();
       } catch (err) {
-        // Kart ekleme hatası
         alert("Kart eklenirken bir hata oluştu.");
+      } finally {
+        setIsSubmitting(false);
       }
     },
     [roomId, userKey, username, cardsRevealed]
+  );
+
+  const handleSubmitCard = useCallback(
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      await handleAddCard(activeTab, cardContent);
+    },
+    [activeTab, cardContent, handleAddCard]
+  );
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        handleSubmitCard(e as unknown as React.FormEvent<HTMLFormElement>);
+      }
+    },
+    [handleSubmitCard]
   );
 
   const handleEditCard = useCallback(
@@ -172,36 +200,51 @@ const RetroRoomView = memo(function RetroRoomView({
   return (
     <div className="space-y-6">
       {/* Category Tabs */}
-      <div className="flex gap-3 overflow-x-auto pb-2">
-        {(["mad", "sad", "glad"] as RetroCategory[]).map((category) => {
-          const info = getCategoryInfo(category);
-          const isActive = activeTab === category;
-          const activeGradient =
-            info.color === "red"
-              ? "bg-gradient-to-r from-red-600 to-red-500 text-white shadow-lg shadow-red-500/30"
-              : info.color === "blue"
-              ? "bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/30"
-              : "bg-gradient-to-r from-green-600 to-green-500 text-white shadow-lg shadow-green-500/30";
-          return (
-            <button
-              key={category}
-              onClick={() => setActiveTab(category)}
-              className={`rounded-xl px-6 py-3 font-semibold transition-all ${
-                isActive
-                  ? `${activeGradient} scale-105`
-                  : "bg-white text-gray-700 shadow-sm hover:bg-gray-50 hover:shadow-md dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-              }`}
-            >
-              <span className="mr-2 text-lg">{info.emoji}</span>
-              {info.title.split(" ")[0]}
-              {isActive && (
-                <span className="ml-2 text-xs opacity-80">
-                  ({categoryCards.length})
-                </span>
-              )}
-            </button>
-          );
-        })}
+      <div className="border-b border-gray-200 dark:border-gray-700">
+        <div className="flex gap-1">
+          {(["mad", "sad", "glad"] as RetroCategory[]).map((category) => {
+            const info = getCategoryInfo(category);
+            const isActive = activeTab === category;
+            const categoryCount = cards.filter((c) => c.category === category).length;
+            
+            // Aktif tab için stil
+            const activeStyles =
+              info.color === "red"
+                ? "border-b-2 border-red-600 text-red-600 dark:text-red-400"
+                : info.color === "blue"
+                ? "border-b-2 border-blue-600 text-blue-600 dark:text-blue-400"
+                : "border-b-2 border-green-600 text-green-600 dark:text-green-400";
+
+            // Pasif tab için stil
+            const inactiveStyles = "text-gray-600 hover:text-gray-900 hover:border-b-2 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:border-gray-600";
+
+            return (
+              <button
+                key={category}
+                onClick={() => setActiveTab(category)}
+                className={`flex items-center gap-2 px-6 py-3 font-semibold transition-all ${
+                  isActive ? activeStyles : inactiveStyles
+                }`}
+              >
+                <span className="text-lg">{info.emoji}</span>
+                <span>{info.title.split(" ")[0]}</span>
+                {categoryCount > 0 && (
+                  <span className={`ml-1 rounded-full px-2 py-0.5 text-xs font-bold ${
+                    isActive 
+                      ? info.color === "red"
+                        ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                        : info.color === "blue"
+                        ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+                        : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                      : "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400"
+                  }`}>
+                    {categoryCount}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Status and Reveal Button */}
@@ -259,6 +302,94 @@ const RetroRoomView = memo(function RetroRoomView({
         </div>
       )}
 
+      {/* Add Card Form */}
+      {!cardsRevealed && (
+        <form
+          onSubmit={handleSubmitCard}
+          className="rounded-xl border-2 border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900"
+        >
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+            {/* Category Selector */}
+            <div className="flex gap-2">
+              {(["mad", "sad", "glad"] as RetroCategory[]).map((category) => {
+                const info = getCategoryInfo(category);
+                const isActive = activeTab === category;
+                const activeColor =
+                  info.color === "red"
+                    ? "bg-red-100 border-red-500 text-red-700 dark:bg-red-900/30 dark:border-red-600 dark:text-red-400"
+                    : info.color === "blue"
+                    ? "bg-blue-100 border-blue-500 text-blue-700 dark:bg-blue-900/30 dark:border-blue-600 dark:text-blue-400"
+                    : "bg-green-100 border-green-500 text-green-700 dark:bg-green-900/30 dark:border-green-600 dark:text-green-400";
+
+                return (
+                  <button
+                    key={category}
+                    type="button"
+                    onClick={() => setActiveTab(category)}
+                    className={`flex items-center gap-1.5 rounded-lg border-2 px-3 py-2 text-sm font-semibold transition-all ${
+                      isActive
+                        ? activeColor
+                        : "border-gray-300 bg-gray-50 text-gray-600 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
+                    }`}
+                  >
+                    <span>{info.emoji}</span>
+                    <span className="hidden sm:inline">{info.title.split(" ")[0]}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Text Input */}
+            <div className="flex-1">
+              <textarea
+                ref={textareaRef}
+                value={cardContent}
+                onChange={(e) => setCardContent(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder={`${getCategoryInfo(activeTab).emoji} ${getCategoryInfo(activeTab).title} kategorisine kart ekle...`}
+                className="w-full resize-none rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder-gray-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-indigo-400"
+                rows={2}
+                disabled={isSubmitting}
+              />
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={isSubmitting || !cardContent.trim()}
+              className="flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-3 text-sm font-bold text-white shadow-md transition-all hover:from-indigo-700 hover:to-purple-700 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
+            >
+              {isSubmitting ? (
+                <>
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  <span>Gönderiliyor...</span>
+                </>
+              ) : (
+                <>
+                  <svg
+                    className="h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
+                  </svg>
+                  <span>Gönder</span>
+                </>
+              )}
+            </button>
+          </div>
+          <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+            💡 İpucu: Göndermek için Cmd/Ctrl + Enter tuşlarına basın
+          </p>
+        </form>
+      )}
+
       {/* Cards List */}
       <div className="space-y-3">
         {categoryCards.length === 0 ? (
@@ -268,8 +399,9 @@ const RetroRoomView = memo(function RetroRoomView({
               Henüz kart yok
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Bu kategoriye ilk kartı eklemek için aşağıdaki butonu
-              kullanabilirsiniz.
+              {cardsRevealed
+                ? "Kartlar açıldı, yeni kart eklenemez."
+                : "Yukarıdaki formu kullanarak ilk kartı ekleyebilirsiniz."}
             </p>
           </div>
         ) : (
@@ -374,24 +506,6 @@ const RetroRoomView = memo(function RetroRoomView({
         )}
       </div>
 
-      {/* Add Card FAB */}
-      {!cardsRevealed && (
-        <button
-          onClick={() => setShowAddModal(true)}
-          className="fixed bottom-8 right-8 z-10 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-indigo-600 to-purple-600 text-2xl font-bold text-white shadow-xl shadow-indigo-500/50 transition-all hover:scale-110 hover:shadow-2xl hover:shadow-indigo-500/60 active:scale-95 dark:from-indigo-500 dark:to-purple-500"
-          title="Yeni Kart Ekle"
-        >
-          <span className="drop-shadow-lg">+</span>
-        </button>
-      )}
-
-      {/* Add Card Modal */}
-      <RetroCardModal
-        open={showAddModal}
-        onClose={() => setShowAddModal(false)}
-        onSubmit={(category, content) => handleAddCard(category, content)}
-        initialCategory={activeTab}
-      />
 
       {/* Edit Card Modal */}
       {editingCard && (

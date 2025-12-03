@@ -12,6 +12,7 @@ import TaskFormModal from "@/components/rooms/TaskFormModal";
 import TaskCard from "@/components/rooms/TaskCard";
 import RoomPinModal from "@/components/rooms/RoomPinModal";
 import RoomParticipants from "@/components/rooms/RoomParticipants";
+import ShareRoomButton from "@/components/rooms/ShareRoomButton";
 import RetroRoomView from "@/components/retro/RetroRoomView";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
@@ -188,12 +189,10 @@ export default function RoomDetailPage() {
           
           // Kullanıcı odada değilse ekle
           if (!participantData) {
-            if (userRow?.username) {
-              await addUserToRoom(roomData.code, userData.user.id, userRow.username);
-            } else {
-              const emailUsername = userData.user.email?.split("@")[0] || "User";
-              await addUserToRoom(roomData.code, userData.user.id, emailUsername);
-            }
+            const usernameToUse = userRow?.username || userData.user.email?.split("@")[0] || "User";
+            await addUserToRoom(roomData.code, userData.user.id, usernameToUse);
+            // Yeni katılan kullanıcıya hoş geldin mesajı göster
+            showToast(`Hoş geldiniz! ${roomData.name} odasına katıldınız.`, "success", 4000);
           }
         }
         // Admin kontrolü useRoomAdmin hook'u tarafından yapılıyor
@@ -351,12 +350,21 @@ export default function RoomDetailPage() {
                   Kod: {room?.code}
                 </p>
               </div>
-              <button
-                onClick={() => router.back()}
-                className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
-              >
-                ← Geri
-              </button>
+              <div className="flex items-center gap-2">
+                {room && (
+                  <ShareRoomButton
+                    roomId={roomId}
+                    roomCode={room.code}
+                    roomName={room.name || "Oda"}
+                  />
+                )}
+                <button
+                  onClick={() => router.back()}
+                  className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                >
+                  ← Geri
+                </button>
+              </div>
             </div>
 
             {/* Katılımcılar - Hem admin hem user için görünür */}
