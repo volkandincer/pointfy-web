@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import type {
@@ -1101,9 +1101,6 @@ export default function JiraProjectDetailPage() {
                 )}
               </div>
             </div>
-          </div>
-        </div>
-      </div>
       <JiraIssueModal
         issue={selectedIssue}
         isOpen={isModalOpen}
