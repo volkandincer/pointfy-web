@@ -161,8 +161,13 @@ async function handleJiraIssuesRequestWithJiraToken(
     ? new Date(userRow.jira_token_expires_at)
     : null;
 
-  // Token süresi dolmuşsa refresh et
-  if (tokenExpiresAt && tokenExpiresAt < new Date()) {
+  // Token süresi kontrolü: sadece expires_at set edilmişse ve süresi dolmuşsa refresh yap
+  // expires_at null ise token'ı direkt kullan (eski token'lar için backward compatibility)
+  // Sadece token süresi gerçekten dolmuşsa refresh yap (buffer kaldırıldı - gereksiz refresh'i önlemek için)
+  const shouldRefresh =
+    tokenExpiresAt && tokenExpiresAt <= new Date(); // Sadece süresi dolmuşsa refresh yap
+
+  if (shouldRefresh) {
     if (!userRow.jira_refresh_token) {
       return NextResponse.json(
         { error: "Jira token expired and no refresh token available. Please reconnect Jira." },

@@ -120,3 +120,43 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Print Styles for Retro Action Items */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .print-section,
+  .print-section * {
+    visibility: visible;
+  }
+  
+  .print-section {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .print-header {
+    display: block !important;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-section button {
+    display: none !important;
+  }
+  
+  .print-section .rounded-lg {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  
+  @page {
+    margin: 1cm;
+  }
+}

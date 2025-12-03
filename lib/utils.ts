@@ -9,6 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 export function getDefaultNavigationItems(): NavigationItem[] {
   return [
     { label: "Ana Sayfa", href: "/" },
+    { label: "Jira", href: "/app/jira" },
     { label: "Özellikler", href: "/#features" },
     { label: "İndir", href: "/#download" },
     { label: "Hakkında", href: "/about" },

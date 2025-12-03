@@ -3,11 +3,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import RequireAuth from "@/components/auth/RequireAuth";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import { getDefaultNavigationItems } from "@/lib/utils";
-import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type {
   JiraAdfDocument,
   JiraAdfNode,
@@ -18,16 +13,10 @@ import JiraIssueModal from "@/components/jira/JiraIssueModal";
 import MobileSelect from "@/components/jira/MobileSelect";
 
 export default function JiraProjectDetailPage() {
-  const navigationItems: NavigationItem[] = useMemo(
-    () => getDefaultNavigationItems(),
-    []
-  );
-
   const params = useParams<{ projectKey: string }>();
   const router = useRouter();
   const projectKey = String(params?.projectKey);
 
-  const [jiraConnected, setJiraConnected] = useState<boolean>(false);
   const [jiraBaseUrl, setJiraBaseUrl] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [projectName, setProjectName] = useState<string>("");
@@ -50,10 +39,10 @@ export default function JiraProjectDetailPage() {
   const [selectedIssue, setSelectedIssue] = useState<JiraTask | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  // Jira bağlantı durumunu kontrol et
+  // Jira base URL'i al (layout'ta connection check yapılıyor)
   useEffect(() => {
     let mounted = true;
-    async function checkJiraConnection() {
+    async function getJiraBaseUrl() {
       try {
         const supabase = getSupabase();
         const { data: userData } = await supabase.auth.getUser();
@@ -64,26 +53,25 @@ export default function JiraProjectDetailPage() {
 
         const { data: userRow } = await supabase
           .from("users")
-          .select("jira_access_token, jira_base_url")
+          .select("jira_base_url")
           .eq("id", userData.user.id)
           .maybeSingle();
 
         if (mounted) {
-          setJiraConnected(!!userRow?.jira_access_token);
           if (userRow?.jira_base_url) {
             setJiraBaseUrl(userRow.jira_base_url);
           }
           setLoading(false);
         }
       } catch (err) {
-        // Jira connection check error
+        // Jira base URL fetch error
         if (mounted) {
           setLoading(false);
         }
       }
     }
 
-    checkJiraConnection();
+    getJiraBaseUrl();
 
     return () => {
       mounted = false;
@@ -92,8 +80,7 @@ export default function JiraProjectDetailPage() {
 
   // Project issues fetch
   const fetchProjectIssues = useCallback(async () => {
-    if (!jiraBaseUrl || !projectKey) {
-      setIssuesError("Jira URL'i veya proje key'i bulunamadı.");
+    if (!jiraBaseUrl || !projectKey || loading) {
       return;
     }
 
@@ -217,9 +204,9 @@ export default function JiraProjectDetailPage() {
 
   // Proje issue'larını yükle
   useEffect(() => {
-    if (!jiraConnected || !jiraBaseUrl || !projectKey) return;
+    if (!jiraBaseUrl || !projectKey || loading) return;
     fetchProjectIssues();
-  }, [jiraConnected, jiraBaseUrl, projectKey, fetchProjectIssues]);
+  }, [jiraBaseUrl, projectKey, loading, fetchProjectIssues]);
 
   // Filtreleme ve arama
   const filteredIssues = useMemo(() => {
@@ -305,104 +292,48 @@ export default function JiraProjectDetailPage() {
 
   if (loading) {
     return (
-      <RequireAuth>
-        <Header navigationItems={navigationItems} />
-        <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
-          <div className="container mx-auto px-4 py-16">
-            <div className="flex items-center justify-center">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
-            </div>
-          </div>
-        </main>
-        <Footer navigationItems={navigationItems} />
-      </RequireAuth>
-    );
-  }
-
-  if (!jiraConnected) {
-    return (
-      <RequireAuth>
-        <Header navigationItems={navigationItems} />
-        <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
-          <div className="container mx-auto px-4 py-16">
-            <div className="mx-auto max-w-2xl">
-              <div className="rounded-2xl border border-blue-200/70 bg-white p-8 shadow-lg dark:border-blue-800/70 dark:bg-gray-900">
-                <div className="mb-6 text-center">
-                  <div className="mb-4 text-6xl">🔗</div>
-                  <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
-                    Jira Bağlantısı Gerekli
-                  </h2>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    Jira projelerinizi görüntülemek için Jira hesabınızı bağlamanız gerekiyor.
-                  </p>
-                </div>
-                <button
-                  onClick={async () => {
-                    try {
-                      const supabase = getSupabase();
-                      const { data: userData } = await supabase.auth.getUser();
-                      if (!userData.user) return;
-
-                      const returnUrl = encodeURIComponent(`/app/jira/${projectKey}`);
-                      const encodedUserId = encodeURIComponent(userData.user.id);
-                      window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
-                    } catch (err) {
-                      // Jira OAuth error
-                    }
-                  }}
-                  className="w-full rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-base font-semibold text-white shadow-md transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-lg"
-                >
-                  Jira&apos;yı Bağla
-                </button>
-              </div>
-            </div>
-          </div>
-        </main>
-        <Footer navigationItems={navigationItems} />
-      </RequireAuth>
+      <div className="flex items-center justify-center py-16">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+      </div>
     );
   }
 
   return (
-    <RequireAuth>
-      <Header navigationItems={navigationItems} />
-      <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
-        <div className="container mx-auto px-4 py-12">
-          <div className="mx-auto max-w-7xl">
-            {/* Header Section */}
-            <div className="mb-8">
-              <button
-                onClick={() => router.push("/app/jira")}
-                className="mb-4 flex items-center text-sm text-gray-600 transition hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
-              >
-                <svg
-                  className="mr-2 h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-                Jira&apos;ya Dön
-              </button>
-              <div className="mb-6">
-                <div className="flex items-center gap-3">
-                  <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
-                    {projectName || projectKey}
-                  </h1>
-                  {projectKey && (
-                    <span className="rounded-lg bg-blue-100 px-3 py-1.5 font-mono text-sm font-bold text-blue-700 shadow-sm dark:bg-blue-900/30 dark:text-blue-400">
-                      {projectKey}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
+    <div>
+      {/* Header Section */}
+      <div className="mb-8">
+        <button
+          onClick={() => router.push("/app/jira")}
+          className="mb-4 flex items-center text-sm text-gray-600 transition hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+        >
+          <svg
+            className="mr-2 h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+          Jira&apos;ya Dön
+        </button>
+        <div className="mb-6">
+          <div className="flex items-center gap-3">
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+              {projectName || projectKey}
+            </h1>
+            {projectKey && (
+              <span className="rounded-lg bg-blue-100 px-3 py-1.5 font-mono text-sm font-bold text-blue-700 shadow-sm dark:bg-blue-900/30 dark:text-blue-400">
+                {projectKey}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
 
             {/* Dashboard Stats */}
             {issuesLoading && allIssues.length === 0 ? (
@@ -1170,10 +1101,6 @@ export default function JiraProjectDetailPage() {
                 )}
               </div>
             </div>
-          </div>
-        </div>
-      </main>
-      <Footer navigationItems={navigationItems} />
       <JiraIssueModal
         issue={selectedIssue}
         isOpen={isModalOpen}
@@ -1182,7 +1109,7 @@ export default function JiraProjectDetailPage() {
           setSelectedIssue(null);
         }}
       />
-    </RequireAuth>
+    </div>
   );
 }
 
