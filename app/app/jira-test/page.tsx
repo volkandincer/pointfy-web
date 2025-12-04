@@ -9,7 +9,20 @@ import Footer from "@/components/layout/Footer";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import { logger } from "@/lib/logger";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
-import type { JiraBoard, JiraTask } from "@/interfaces/Jira.interface";
+import type {
+  JiraBoard,
+  JiraTask,
+  JiraIssue,
+  JiraBoardsApiResponse,
+  JiraIssuesApiResponse,
+  JiraProjectsApiResponse,
+  JiraMyselfApiResponse,
+  JiraSearchResponse,
+  JiraTestConnectionResponse,
+  JiraAdfNode,
+  JiraProjectSummary,
+  ApiResponseWithStatus,
+} from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
 
 type TabType = "boards" | "issues" | "projects" | "myself" | "search" | "test" | "settings";
@@ -32,36 +45,36 @@ export default function JiraTestPage() {
   const [boards, setBoards] = useState<JiraBoard[]>([]);
   const [boardsLoading, setBoardsLoading] = useState<boolean>(false);
   const [boardsError, setBoardsError] = useState<string | null>(null);
-  const [boardsResponse, setBoardsResponse] = useState<any>(null);
+  const [boardsResponse, setBoardsResponse] = useState<ApiResponseWithStatus<JiraBoardsApiResponse> | null>(null);
 
   // Issues state
   const [issues, setIssues] = useState<JiraTask[]>([]);
   const [issuesLoading, setIssuesLoading] = useState<boolean>(false);
   const [issuesError, setIssuesError] = useState<string | null>(null);
-  const [issuesResponse, setIssuesResponse] = useState<any>(null);
+  const [issuesResponse, setIssuesResponse] = useState<ApiResponseWithStatus<JiraIssuesApiResponse> | null>(null);
 
   // Test state
   const [testLoading, setTestLoading] = useState<boolean>(false);
   const [testError, setTestError] = useState<string | null>(null);
-  const [testResponse, setTestResponse] = useState<any>(null);
+  const [testResponse, setTestResponse] = useState<ApiResponseWithStatus<JiraTestConnectionResponse> | null>(null);
 
-  // Projects state
-  const [projects, setProjects] = useState<any[]>([]);
+  // Projects state (API returns boards, not projects)
+  const [projects, setProjects] = useState<JiraBoard[]>([]);
   const [projectsLoading, setProjectsLoading] = useState<boolean>(false);
   const [projectsError, setProjectsError] = useState<string | null>(null);
-  const [projectsResponse, setProjectsResponse] = useState<any>(null);
+  const [projectsResponse, setProjectsResponse] = useState<ApiResponseWithStatus<JiraBoardsApiResponse> | null>(null);
 
   // Myself state
-  const [myself, setMyself] = useState<any>(null);
+  const [myself, setMyself] = useState<JiraMyselfApiResponse | null>(null);
   const [myselfLoading, setMyselfLoading] = useState<boolean>(false);
   const [myselfError, setMyselfError] = useState<string | null>(null);
-  const [myselfResponse, setMyselfResponse] = useState<any>(null);
+  const [myselfResponse, setMyselfResponse] = useState<ApiResponseWithStatus<JiraMyselfApiResponse> | null>(null);
 
   // Search state
   const [searchResults, setSearchResults] = useState<JiraTask[]>([]);
   const [searchLoading, setSearchLoading] = useState<boolean>(false);
   const [searchError, setSearchError] = useState<string | null>(null);
-  const [searchResponse, setSearchResponse] = useState<any>(null);
+  const [searchResponse, setSearchResponse] = useState<ApiResponseWithStatus<JiraSearchResponse> | null>(null);
   const [searchJql, setSearchJql] = useState<string>("assignee=currentuser()");
   const [searchMaxResults, setSearchMaxResults] = useState<number>(50);
 
@@ -334,11 +347,11 @@ export default function JiraTestPage() {
       }
 
       // Helper function: ADF format description'ı string'e çevir
-      const extractDescription = (desc: any): string | undefined => {
+      const extractDescription = (desc: string | JiraAdfNode | undefined): string | undefined => {
         if (!desc) return undefined;
         if (typeof desc === "string") return desc;
         if (typeof desc === "object" && desc.content) {
-          const extractText = (node: any): string => {
+          const extractText = (node: string | JiraAdfNode): string => {
             if (typeof node === "string") return node;
             if (node.text) return node.text;
             if (node.content && Array.isArray(node.content)) {
@@ -352,7 +365,7 @@ export default function JiraTestPage() {
       };
 
       // Issues'ları JiraTask formatına çevir
-      const tasks: JiraTask[] = (data.issues || []).map((issue: any) => ({
+      const tasks: JiraTask[] = (data.issues || []).map((issue: JiraIssue) => ({
         id: issue.id,
         key: issue.key,
         summary: issue.fields?.summary || "",
@@ -837,7 +850,7 @@ export default function JiraTestPage() {
                   </div>
                 ) : projects.length > 0 ? (
                   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {projects.map((project: any) => (
+                    {projects.map((project: JiraBoard) => (
                       <div
                         key={project.id}
                         className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800"

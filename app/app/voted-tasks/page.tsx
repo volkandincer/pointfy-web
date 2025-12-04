@@ -6,6 +6,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
+import type { VoteWithTaskAndRoom } from "@/interfaces/Vote.interface";
 import { getSupabase } from "@/lib/supabase";
 
 interface VotedTask {
@@ -83,11 +84,14 @@ export default function VotedTasksPage() {
         if (!mounted) return;
 
         // Her vote için task'ın istatistiklerini hesapla
-        const tasksWithStats = await Promise.all(
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (votesData || []).map(async (vote: any) => {
-            const task = Array.isArray(vote.tasks) ? vote.tasks[0] : vote.tasks;
-            const room = task.rooms;
+        const tasksWithStats: (VotedTask | null)[] = await Promise.all(
+          (votesData || []).map(async (vote): Promise<VotedTask | null> => {
+            // Supabase returns tasks as array or single object, rooms as array or single object
+            const voteData = vote as unknown as VoteWithTaskAndRoom;
+            const task = Array.isArray(voteData.tasks) ? voteData.tasks[0] : voteData.tasks;
+            if (!task) return null;
+            const room = Array.isArray(task.rooms) ? task.rooms[0] : task.rooms;
+            if (!room) return null;
 
             // Bu task için tüm oyları getir
             const { data: allVotes } = await supabase
@@ -111,7 +115,7 @@ export default function VotedTasksPage() {
                 : 0;
 
             return {
-              id: vote.id,
+              id: voteData.id,
               task_id: task.id,
               task_title: task.title,
               task_description: task.description,
@@ -119,17 +123,17 @@ export default function VotedTasksPage() {
               room_id: room.id,
               room_name: room.name,
               room_code: room.code,
-              user_point: vote.point,
+              user_point: voteData.point,
               average_point: averagePoint,
               total_votes: validPoints.length,
-              created_at: vote.created_at,
+              created_at: voteData.created_at,
               task_created_at: task.created_at,
             };
           })
         );
 
         if (mounted) {
-          setVotedTasks(tasksWithStats);
+          setVotedTasks(tasksWithStats.filter((task): task is VotedTask => task !== null));
           setLoading(false);
         }
 

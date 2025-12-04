@@ -160,3 +160,57 @@ export interface JiraAdfNode {
 export interface JiraAdfDocument {
   content?: JiraAdfNode[];
 }
+
+// API Response types for test page
+export interface JiraBoardsApiResponse {
+  maxResults: number;
+  startAt: number;
+  total: number;
+  isLast: boolean;
+  values: JiraBoard[];
+}
+
+export interface JiraIssuesApiResponse {
+  expand: string;
+  startAt: number;
+  maxResults: number;
+  total: number;
+  issues: JiraIssue[];
+}
+
+export interface JiraProjectsApiResponse {
+  [key: string]: JiraProjectSummary[];
+}
+
+export interface JiraMyselfApiResponse {
+  accountId: string;
+  accountType: string;
+  emailAddress: string;
+  displayName: string;
+  avatarUrls: {
+    "16x16": string;
+    "24x24": string;
+    "32x32": string;
+    "48x48": string;
+  };
+  active: boolean;
+  timeZone: string;
+  locale?: string;
+}
+
+export interface JiraTestConnectionResponse {
+  success: boolean;
+  message?: string;
+  jiraUrl?: string;
+  cloudId?: string;
+  error?: string;
+}
+
+// HTTP Response wrapper types for test page
+export interface ApiResponseWithStatus<T> {
+  status: number;
+  ok: boolean;
+  data?: T;
+  error?: string;
+  [key: string]: unknown;
+}
