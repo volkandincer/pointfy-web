@@ -7,13 +7,14 @@
 -- =====================================================
 -- 1. rooms Tablosuna Timer Alanları Ekleme
 -- =====================================================
+-- NOT: retro_timer_duration saniye cinsinden saklanır (örn: 15, 60, 180, 300, 600)
 
 ALTER TABLE public.rooms
 ADD COLUMN IF NOT EXISTS retro_timer_duration INTEGER DEFAULT NULL,
 ADD COLUMN IF NOT EXISTS retro_timer_started_at TIMESTAMPTZ DEFAULT NULL,
 ADD COLUMN IF NOT EXISTS retro_timer_ended_at TIMESTAMPTZ DEFAULT NULL;
 
--- Constraint: Duration pozitif olmalı
+-- Constraint: Duration pozitif olmalı (saniye cinsinden)
 ALTER TABLE public.rooms
 ADD CONSTRAINT retro_timer_duration_positive CHECK (retro_timer_duration IS NULL OR retro_timer_duration > 0);
 

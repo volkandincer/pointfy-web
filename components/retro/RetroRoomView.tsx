@@ -48,9 +48,17 @@ const RetroRoomView = memo(function RetroRoomView({
   const [cardContent, setCardContent] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [showTimerModal, setShowTimerModal] = useState<boolean>(false);
-  const [timerDuration, setTimerDuration] = useState<number>(5);
+  const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
   const [warningShown, setWarningShown] = useState<boolean>(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const timerOptions = [
+    { label: "15 Saniye", seconds: 15, minutes: 0.25 },
+    { label: "1 Dakika", seconds: 60, minutes: 1 },
+    { label: "3 Dakika", seconds: 180, minutes: 3 },
+    { label: "5 Dakika", seconds: 300, minutes: 5 },
+    { label: "10 Dakika", seconds: 600, minutes: 10 },
+  ];
 
   const cardsRevealed = useMemo(
     () => cards.length > 0 && cards.every((card) => card.is_revealed),
@@ -132,10 +140,18 @@ const RetroRoomView = memo(function RetroRoomView({
   );
 
   const handleStartTimer = useCallback(async () => {
-    await startTimer(timerDuration);
+    if (selectedDuration === null) {
+      showToast("Lütfen bir süre seçin!", "error");
+      return;
+    }
+    const option = timerOptions.find((opt) => opt.minutes === selectedDuration);
+    if (!option) return;
+    
+    await startTimer(option.seconds); // Artık saniye cinsinden gönderiyoruz
     setShowTimerModal(false);
-    showToast(`⏱️ ${timerDuration} dakikalık timer başlatıldı!`, "success");
-  }, [startTimer, timerDuration, showToast]);
+    setSelectedDuration(null);
+    showToast(`⏱️ ${option.label} timer başlatıldı!`, "success");
+  }, [startTimer, selectedDuration, showToast, timerOptions]);
 
   const handleSubmitCard = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -522,33 +538,62 @@ const RetroRoomView = memo(function RetroRoomView({
       {/* Timer Start Modal */}
       {showTimerModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-md rounded-xl border-2 border-gray-200 bg-white p-6 shadow-xl dark:border-gray-800 dark:bg-gray-900">
+          <div className="w-full max-w-2xl rounded-xl border-2 border-gray-200 bg-white p-6 shadow-xl dark:border-gray-800 dark:bg-gray-900">
             <h3 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
               ⏱️ Timer Başlat
             </h3>
-            <div className="mb-4">
-              <label className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300">
-                Süre (dakika)
-              </label>
-              <input
-                type="number"
-                min="1"
-                max="60"
-                value={timerDuration}
-                onChange={(e) => setTimerDuration(Math.max(1, Math.min(60, parseInt(e.target.value) || 1)))}
-                className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2 text-gray-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-              />
+            <p className="mb-6 text-sm text-gray-600 dark:text-gray-400">
+              Kart gönderme süresini seçin
+            </p>
+            
+            {/* Timer Seçenekleri - Kartlar */}
+            <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {timerOptions.map((option) => {
+                const isSelected = selectedDuration === option.minutes;
+                return (
+                  <button
+                    key={option.minutes}
+                    type="button"
+                    onClick={() => setSelectedDuration(option.minutes)}
+                    className={`rounded-xl border-2 p-4 text-center transition-all ${
+                      isSelected
+                        ? "border-purple-500 bg-gradient-to-br from-purple-50 to-indigo-50 shadow-lg scale-105 dark:from-purple-950/30 dark:to-indigo-950/30 dark:border-purple-400"
+                        : "border-gray-200 bg-white hover:border-purple-300 hover:bg-purple-50/50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-purple-600 dark:hover:bg-purple-950/20"
+                    }`}
+                  >
+                    <div className={`text-2xl font-bold ${
+                      isSelected
+                        ? "text-purple-600 dark:text-purple-400"
+                        : "text-gray-700 dark:text-gray-300"
+                    }`}>
+                      {option.label}
+                    </div>
+                    <div className={`mt-1 text-xs ${
+                      isSelected
+                        ? "text-purple-500 dark:text-purple-400"
+                        : "text-gray-500 dark:text-gray-400"
+                    }`}>
+                      {option.seconds} saniye
+                    </div>
+                  </button>
+                );
+              })}
             </div>
+
             <div className="flex gap-3">
               <button
-                onClick={() => setShowTimerModal(false)}
+                onClick={() => {
+                  setShowTimerModal(false);
+                  setSelectedDuration(null);
+                }}
                 className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
               >
                 İptal
               </button>
               <button
                 onClick={handleStartTimer}
-                className="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:from-purple-700 hover:to-indigo-700 hover:shadow-lg active:scale-95"
+                disabled={selectedDuration === null}
+                className="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:from-purple-700 hover:to-indigo-700 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
               >
                 Başlat
               </button>

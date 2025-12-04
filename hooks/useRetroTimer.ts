@@ -7,7 +7,7 @@ interface UseRetroTimerResult {
   remainingSeconds: number;
   isActive: boolean;
   isWarning: boolean; // 10 saniye veya daha az kaldığında true
-  startTimer: (durationMinutes: number) => Promise<void>;
+  startTimer: (durationSeconds: number) => Promise<void>;
   stopTimer: () => Promise<void>;
   loading: boolean;
   error: string | null;
@@ -55,7 +55,7 @@ export function useRetroTimer(roomId: string, isAdmin: boolean): UseRetroTimerRe
           !roomData.retro_timer_ended_at
         ) {
           const startTime = new Date(roomData.retro_timer_started_at).getTime();
-          const durationSeconds = roomData.retro_timer_duration * 60;
+          const durationSeconds = roomData.retro_timer_duration; // Artık saniye cinsinden
           const now = Date.now();
           const elapsedSeconds = Math.floor((now - startTime) / 1000);
           const remaining = Math.max(0, durationSeconds - elapsedSeconds);
@@ -74,27 +74,37 @@ export function useRetroTimer(roomId: string, isAdmin: boolean): UseRetroTimerRe
               setRemainingSeconds(currentRemaining);
               setIsActive(currentRemaining > 0);
 
-              // Timer dolduysa veritabanını güncelle
+              // Timer dolduysa veritabanını güncelle ve timer değerlerini temizle
               if (currentRemaining === 0) {
                 const supabase = getSupabase();
                 supabase
                   .from("rooms")
-                  .update({ retro_timer_ended_at: new Date().toISOString() })
+                  .update({ 
+                    retro_timer_ended_at: new Date().toISOString(),
+                    retro_timer_duration: null,
+                    retro_timer_started_at: null,
+                  })
                   .eq("id", roomId)
                   .then(() => {
                     if (mounted) {
                       setIsActive(false);
+                      setRemainingSeconds(0);
                     }
                   });
                 if (intervalRef) clearInterval(intervalRef);
+                intervalRef = null;
               }
             }, 1000);
           } else {
-            // Timer zaten dolmuş, ended_at'i güncelle
+            // Timer zaten dolmuş, ended_at'i güncelle ve timer değerlerini temizle
             if (!roomData.retro_timer_ended_at) {
               await supabase
                 .from("rooms")
-                .update({ retro_timer_ended_at: new Date().toISOString() })
+                .update({ 
+                  retro_timer_ended_at: new Date().toISOString(),
+                  retro_timer_duration: null,
+                  retro_timer_started_at: null,
+                })
                 .eq("id", roomId);
             }
             setIsActive(false);
@@ -143,13 +153,25 @@ export function useRetroTimer(roomId: string, isAdmin: boolean): UseRetroTimerRe
             retro_timer_ended_at?: string | null;
           };
 
+          // Timer bitmişse veya değerler temizlenmişse durumu sıfırla
+          if (newData.retro_timer_ended_at || !newData.retro_timer_started_at || !newData.retro_timer_duration) {
+            setIsActive(false);
+            setRemainingSeconds(0);
+            if (intervalRef) {
+              clearInterval(intervalRef);
+              intervalRef = null;
+            }
+            return;
+          }
+
+          // Yeni timer başlatılıyor
           if (
             newData.retro_timer_started_at &&
             newData.retro_timer_duration &&
             !newData.retro_timer_ended_at
           ) {
             const startTime = new Date(newData.retro_timer_started_at).getTime();
-            const durationSeconds = newData.retro_timer_duration * 60;
+            const durationSeconds = newData.retro_timer_duration; // Artık saniye cinsinden
             const now = Date.now();
             const elapsedSeconds = Math.floor((now - startTime) / 1000);
             const remaining = Math.max(0, durationSeconds - elapsedSeconds);
@@ -168,19 +190,25 @@ export function useRetroTimer(roomId: string, isAdmin: boolean): UseRetroTimerRe
                 setRemainingSeconds(currentRemaining);
                 setIsActive(currentRemaining > 0);
 
-                // Timer dolduysa veritabanını güncelle
+                // Timer dolduysa veritabanını güncelle ve timer değerlerini temizle
                 if (currentRemaining === 0) {
                   const supabase = getSupabase();
                   supabase
                     .from("rooms")
-                    .update({ retro_timer_ended_at: new Date().toISOString() })
+                    .update({ 
+                      retro_timer_ended_at: new Date().toISOString(),
+                      retro_timer_duration: null,
+                      retro_timer_started_at: null,
+                    })
                     .eq("id", roomId)
                     .then(() => {
                       if (mounted) {
                         setIsActive(false);
+                        setRemainingSeconds(0);
                       }
                     });
                   if (intervalRef) clearInterval(intervalRef);
+                  intervalRef = null;
                 }
               }, 1000);
             }
@@ -200,9 +228,14 @@ export function useRetroTimer(roomId: string, isAdmin: boolean): UseRetroTimerRe
   }, [roomId]);
 
   const startTimer = useCallback(
-    async (durationMinutes: number) => {
+    async (durationSeconds: number) => {
       if (!isAdmin) {
         setError("Sadece admin timer başlatabilir.");
+        return;
+      }
+
+      if (durationSeconds <= 0) {
+        setError("Timer süresi 0'dan büyük olmalıdır.");
         return;
       }
 
@@ -212,7 +245,7 @@ export function useRetroTimer(roomId: string, isAdmin: boolean): UseRetroTimerRe
         const { error: updateError } = await supabase
           .from("rooms")
           .update({
-            retro_timer_duration: durationMinutes,
+            retro_timer_duration: durationSeconds, // Artık saniye cinsinden kaydediyoruz
             retro_timer_started_at: startedAt,
             retro_timer_ended_at: null,
           })
@@ -221,7 +254,7 @@ export function useRetroTimer(roomId: string, isAdmin: boolean): UseRetroTimerRe
         if (updateError) throw updateError;
 
         setIsActive(true);
-        setRemainingSeconds(durationMinutes * 60);
+        setRemainingSeconds(durationSeconds);
         setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Timer başlatılamadı.");
@@ -242,6 +275,8 @@ export function useRetroTimer(roomId: string, isAdmin: boolean): UseRetroTimerRe
         .from("rooms")
         .update({
           retro_timer_ended_at: new Date().toISOString(),
+          retro_timer_duration: null,
+          retro_timer_started_at: null,
         })
         .eq("id", roomId);
 
