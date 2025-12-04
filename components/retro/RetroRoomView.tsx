@@ -484,7 +484,7 @@ const RetroRoomView = memo(function RetroRoomView({
                 )}
 
                 {/* Action Buttons */}
-                {isOwnCard && (
+                {isOwnCard && !cardsRevealed && (
                   <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
                     <button
                       onClick={() => handleOpenEdit(card)}

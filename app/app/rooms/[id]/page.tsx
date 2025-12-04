@@ -58,14 +58,16 @@ export default function RoomDetailPage() {
   const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
   
   // Auth state değişikliğini dinle - logout olduğunda anasayfaya yönlendir
+  // Ama RequireAuth zaten login'e yönlendirecek, bu yüzden burada sadece logout durumunu handle ediyoruz
   useEffect(() => {
     let mounted = true;
     const supabase = getSupabase();
     const { data: listener } = supabase.auth.onAuthStateChange(
       (event, session) => {
         if (!mounted) return;
-        // Logout olduğunda anasayfaya yönlendir
-        if (event === "SIGNED_OUT" || !session) {
+        // Sadece explicit logout durumunda anasayfaya yönlendir
+        // RequireAuth zaten login olmamış kullanıcıları login'e yönlendirecek
+        if (event === "SIGNED_OUT") {
           router.replace("/");
         }
       }
@@ -125,24 +127,31 @@ export default function RoomDetailPage() {
       try {
         const supabase = getSupabase();
         const { data: userData } = await supabase.auth.getUser();
-        // Don't redirect here - RequireAuth already handles auth
-        // Just set user data or return if no user
-        if (!mounted || !userData.user) {
-          return;
+        
+        // Önce odayı yükle (kullanıcı giriş yapmamış olsa bile)
+        // RequireAuth zaten login'e yönlendirecek
+        
+        // Kullanıcı varsa user bilgilerini set et
+        if (userData.user) {
+          setUserKey(userData.user.id);
         }
-        setUserKey(userData.user.id);
 
-        const { data: userRow } = await supabase
-          .from("users")
-          .select("username")
-          .eq("id", userData.user.id)
-          .single();
-        if (!mounted) return;
-        setUsername(
-          userRow?.username || userData.user.email?.split("@")[0] || "User"
-        );
+        // Kullanıcı varsa username'i al
+        let userRow: { username?: string } | null = null;
+        if (userData.user) {
+          const { data: userRowData } = await supabase
+            .from("users")
+            .select("username")
+            .eq("id", userData.user.id)
+            .single();
+          if (!mounted) return;
+          userRow = userRowData;
+          setUsername(
+            userRowData?.username || userData.user.email?.split("@")[0] || "User"
+          );
+        }
 
-        const { data: roomData } = await supabase
+        const { data: roomData, error: roomError } = await supabase
           .from("rooms")
           .select(
             "id, name, code, created_by_key, created_by_username, is_active, room_type, is_private, room_password"
@@ -150,14 +159,32 @@ export default function RoomDetailPage() {
           .eq("id", roomId)
           .single();
         if (!mounted) return;
-        if (!roomData) {
-          router.replace("/app/rooms");
+        
+        if (roomError || !roomData) {
+          showToast("Oda bulunamadı veya erişilemiyor.", "error");
+          setTimeout(() => {
+            if (mounted) {
+              router.replace("/app/rooms");
+            }
+          }, 2000);
           return;
         }
+        
+        // Oda aktif değilse
+        if (!roomData.is_active) {
+          showToast("Bu oda kapatılmış ve artık erişilemez.", "error");
+          setTimeout(() => {
+            if (mounted) {
+              router.replace("/app/rooms");
+            }
+          }, 2000);
+          return;
+        }
+        
         setRoom(roomData);
 
-        // PIN kontrolü - eğer oda şifreli ise ve kullanıcı odada değilse PIN iste
-        if (roomData.is_private && userData.user) {
+        // Kullanıcı varsa odaya katılma işlemini yap
+        if (userData.user) {
           // Kullanıcının odada olup olmadığını kontrol et
           const { data: participantData } = await supabase
             .from("room_participants")
@@ -168,27 +195,15 @@ export default function RoomDetailPage() {
           
           if (!mounted) return;
           
-          // Kullanıcı odada değilse PIN iste
-          if (!participantData) {
+          // PIN kontrolü - eğer oda şifreli ise ve kullanıcı odada değilse PIN iste
+          if (roomData.is_private && !participantData) {
             setCheckingPin(false);
             setShowPinModal(true);
             return;
           }
-        }
 
-        // Şifresiz oda veya kullanıcı zaten odada - kullanıcıyı odaya ekle (eğer değilse)
-        if (userData.user && !roomData.is_private) {
-          const { data: participantData } = await supabase
-            .from("room_participants")
-            .select("user_key")
-            .eq("room_code", roomData.code)
-            .eq("user_key", userData.user.id)
-            .single();
-          
-          if (!mounted) return;
-          
-          // Kullanıcı odada değilse ekle
-          if (!participantData) {
+          // Şifresiz oda veya kullanıcı zaten odada - kullanıcıyı odaya ekle (eğer değilse)
+          if (!roomData.is_private && !participantData) {
             const usernameToUse = userRow?.username || userData.user.email?.split("@")[0] || "User";
             await addUserToRoom(roomData.code, userData.user.id, usernameToUse);
             // Yeni katılan kullanıcıya hoş geldin mesajı göster
@@ -199,8 +214,15 @@ export default function RoomDetailPage() {
       } catch (err) {
         // Room detail fetch error
         if (mounted) {
-          // If room not found or error, go back to rooms list
-          router.replace("/app/rooms");
+          const errorMessage = err instanceof Error ? err.message : "Bilinmeyen hata";
+          console.error("Oda yükleme hatası:", errorMessage);
+          showToast("Oda yüklenirken bir hata oluştu.", "error");
+          // Hata durumunda kısa bir süre bekle ve sonra yönlendir
+          setTimeout(() => {
+            if (mounted) {
+              router.replace("/app/rooms");
+            }
+          }, 2000);
         }
       } finally {
         if (mounted) {
