@@ -42,9 +42,6 @@ const ShareRoomButton = memo(function ShareRoomButton({
       return;
     }
 
-    // Debug: Link'i console'a yazdır
-    console.log("Paylaşılacak link:", shareUrl);
-
     try {
       // Web Share API varsa kullan
       if (typeof navigator !== "undefined" && navigator.share) {

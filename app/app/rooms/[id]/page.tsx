@@ -214,8 +214,6 @@ export default function RoomDetailPage() {
       } catch (err) {
         // Room detail fetch error
         if (mounted) {
-          const errorMessage = err instanceof Error ? err.message : "Bilinmeyen hata";
-          console.error("Oda yükleme hatası:", errorMessage);
           showToast("Oda yüklenirken bir hata oluştu.", "error");
           // Hata durumunda kısa bir süre bekle ve sonra yönlendir
           setTimeout(() => {

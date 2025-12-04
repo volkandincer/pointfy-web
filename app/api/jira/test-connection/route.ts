@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
 import { resolveEnvValue } from "@/lib/appEnvironment";
+import { logger } from "@/lib/logger";
 import type {
   JiraAccessibleResource,
   JiraApiErrorResponse,
@@ -31,7 +32,7 @@ export async function GET(request: Request) {
               userId = payload.sub;
             }
           } catch (error) {
-            console.warn("JWT decode başarısız:", error);
+            logger.warn("JWT decode başarısız:", error);
           }
         }
         
@@ -56,11 +57,11 @@ export async function GET(request: Request) {
               userId = userData.id;
             }
           } catch (apiError) {
-            console.error("Supabase API error:", apiError);
+            logger.error("Supabase API error:", apiError);
           }
         }
       } catch (authError) {
-        console.error("Auth error:", authError);
+        logger.error("Auth error:", authError);
       }
     }
 
@@ -117,7 +118,7 @@ export async function GET(request: Request) {
     }
 
     // 3. Jira token ile Jira API'ye test isteği yap
-    console.log("🔍 Jira Connection Test başladı:", {
+    logger.debug("🔍 Jira Connection Test başladı:", {
       userId: userId?.substring(0, 20) + "...",
       jiraUrl,
       hasToken: !!userRow.jira_access_token,

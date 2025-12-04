@@ -8,6 +8,7 @@ import RequireAuth from "@/components/auth/RequireAuth";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getDefaultNavigationItems } from "@/lib/utils";
+import { logger } from "@/lib/logger";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type { JiraBoard, JiraTask } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
@@ -93,7 +94,7 @@ export default function JiraTestPage() {
           setLoading(false);
         }
       } catch (err) {
-        console.error("Jira connection check error:", err);
+        logger.error("Jira connection check error:", err);
         if (mounted) {
           setLoading(false);
         }
@@ -145,7 +146,7 @@ export default function JiraTestPage() {
 
       setBoards(data.boards || []);
     } catch (err) {
-      console.error("Fetch boards error:", err);
+      logger.error("Fetch boards error:", err);
       setBoardsError(err instanceof Error ? err.message : "Failed to load boards");
     } finally {
       setBoardsLoading(false);
@@ -191,7 +192,7 @@ export default function JiraTestPage() {
 
       setIssues(data.issues || []);
     } catch (err) {
-      console.error("Fetch issues error:", err);
+      logger.error("Fetch issues error:", err);
       setIssuesError(err instanceof Error ? err.message : "Failed to load issues");
     } finally {
       setIssuesLoading(false);
@@ -237,7 +238,7 @@ export default function JiraTestPage() {
 
       setProjects(data.boards || []);
     } catch (err) {
-      console.error("Fetch projects error:", err);
+      logger.error("Fetch projects error:", err);
       setProjectsError(err instanceof Error ? err.message : "Failed to load projects");
     } finally {
       setProjectsLoading(false);
@@ -282,7 +283,7 @@ export default function JiraTestPage() {
 
       setMyself(data);
     } catch (err) {
-      console.error("Fetch myself error:", err);
+      logger.error("Fetch myself error:", err);
       setMyselfError(err instanceof Error ? err.message : "Failed to load user info");
     } finally {
       setMyselfLoading(false);
@@ -381,7 +382,7 @@ export default function JiraTestPage() {
 
       setSearchResults(tasks);
     } catch (err) {
-      console.error("Search error:", err);
+      logger.error("Search error:", err);
       setSearchError(err instanceof Error ? err.message : "Failed to search");
     } finally {
       setSearchLoading(false);
@@ -425,7 +426,7 @@ export default function JiraTestPage() {
         throw new Error(data.error || "Failed to test connection");
       }
     } catch (err) {
-      console.error("Test connection error:", err);
+      logger.error("Test connection error:", err);
       setTestError(err instanceof Error ? err.message : "Failed to test connection");
     } finally {
       setTestLoading(false);
@@ -475,7 +476,7 @@ export default function JiraTestPage() {
 
       setJiraBaseUrl(normalizedUrl);
     } catch (err) {
-      console.error("Save URL error:", err);
+      logger.error("Save URL error:", err);
     } finally {
       setSavingUrl(false);
     }
@@ -535,7 +536,7 @@ export default function JiraTestPage() {
                     const encodedUserId = encodeURIComponent(userData.user.id);
                     window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
                   } catch (err) {
-                    console.error("Jira OAuth error:", err);
+                    logger.error("Jira OAuth error:", err);
                   }
                 }}
                 className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
@@ -631,7 +632,7 @@ export default function JiraTestPage() {
                               const encodedUserId = encodeURIComponent(userData.user.id);
                               window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
                             } catch (err) {
-                              console.error("Jira OAuth error:", err);
+                              logger.error("Jira OAuth error:", err);
                             }
                           }}
                           className="rounded-md bg-blue-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-blue-700"
@@ -720,7 +721,7 @@ export default function JiraTestPage() {
                               const encodedUserId = encodeURIComponent(userData.user.id);
                               window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
                             } catch (err) {
-                              console.error("Jira OAuth error:", err);
+                              logger.error("Jira OAuth error:", err);
                             }
                           }}
                           className="rounded-md bg-blue-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-blue-700"

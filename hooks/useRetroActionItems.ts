@@ -62,19 +62,11 @@ export function useRetroActionItems(roomId: string): UseRetroActionItemsResult {
       (payload: { eventType: string; new?: { id: string; [key: string]: unknown }; old?: { id: string } }) => {
         if (!mounted) return;
         
-        // Debug: Payload'ı console'a yazdır (geliştirme için)
-        if (process.env.NODE_ENV === "development") {
-          console.log("[RetroActionItems] Realtime event:", payload.eventType, payload);
-        }
-        
         if (payload.eventType === "INSERT" && payload.new) {
           const newItem = payload.new as unknown as RetroActionItem;
           
           // Veri eksikse direkt fetch et (daha güvenilir)
           if (newItem.position === undefined || newItem.position === null || !newItem.created_at) {
-            if (process.env.NODE_ENV === "development") {
-              console.log("[RetroActionItems] Incomplete payload, fetching...");
-            }
             fetchRetroActionItems();
             return;
           }
@@ -83,9 +75,6 @@ export function useRetroActionItems(roomId: string): UseRetroActionItemsResult {
           setActionItems((prev) => {
             const exists = prev.some((item) => item.id === newItem.id);
             if (exists) {
-              if (process.env.NODE_ENV === "development") {
-                console.log("[RetroActionItems] Duplicate item, skipping:", newItem.id);
-              }
               return prev;
             }
             
@@ -111,11 +100,7 @@ export function useRetroActionItems(roomId: string): UseRetroActionItemsResult {
       }
     );
     
-    channel.subscribe((status) => {
-      if (process.env.NODE_ENV === "development") {
-        console.log("[RetroActionItems] Subscription status:", status);
-      }
-    });
+    channel.subscribe();
 
     return () => {
       mounted = false;
