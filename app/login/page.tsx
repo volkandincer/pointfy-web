@@ -59,6 +59,7 @@ function LoginPageContent() {
   const [username, setUsername] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
+  const [checkingAuth, setCheckingAuth] = useState<boolean>(true);
 
   useEffect(() => {
     let mounted = true;
@@ -68,6 +69,7 @@ function LoginPageContent() {
         const supabase = getSupabase();
         const { data } = await supabase.auth.getUser();
         if (!mounted) return;
+        setCheckingAuth(false);
         if (data.user) {
           // Use the cleaned returnUrl directly (already decoded)
           const targetUrl =
@@ -79,7 +81,9 @@ function LoginPageContent() {
           }, 300);
         }
       } catch {
-        // ignore
+        if (mounted) {
+          setCheckingAuth(false);
+        }
       }
     })();
     // Also listen for auth state changes to catch fresh logins
@@ -107,9 +111,31 @@ function LoginPageContent() {
     } catch {
       return () => {
         mounted = false;
+        setCheckingAuth(false);
       };
     }
   }, [router, returnUrl]);
+
+  // Show loading state while checking authentication
+  if (checkingAuth) {
+    return (
+      <>
+        <Header navigationItems={navigationItems} />
+        <main className="relative min-h-[calc(100vh-4rem)] overflow-hidden">
+          <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-blue-50 via-white to-white dark:from-gray-950/40 dark:via-gray-950 dark:to-gray-950" />
+          <div className="container mx-auto flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-16">
+            <div className="text-center">
+              <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-blue-600 border-t-transparent dark:border-blue-400" />
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                Kontrol ediliyor...
+              </p>
+            </div>
+          </div>
+        </main>
+        <Footer navigationItems={navigationItems} />
+      </>
+    );
+  }
 
   async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

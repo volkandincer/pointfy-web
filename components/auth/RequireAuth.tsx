@@ -13,6 +13,7 @@ export default function RequireAuth({
   const pathname = usePathname();
   const [checked, setChecked] = useState<boolean>(false);
   const [isAuthed, setIsAuthed] = useState<boolean>(false);
+  const [isRedirecting, setIsRedirecting] = useState<boolean>(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -40,7 +41,11 @@ export default function RequireAuth({
             !currentPath.includes("returnUrl")
           ) {
             const returnUrl = encodeURIComponent(currentPath);
-            router.replace(`${redirectTo}?returnUrl=${returnUrl}`);
+            setIsRedirecting(true);
+            // router.replace async olabilir, setTimeout ile state'i güncelle
+            setTimeout(() => {
+              router.replace(`${redirectTo}?returnUrl=${returnUrl}`);
+            }, 0);
           } else {
             // Don't redirect if already going to login
             return;
@@ -62,7 +67,11 @@ export default function RequireAuth({
             !currentPath.includes("returnUrl")
           ) {
             const returnUrl = encodeURIComponent(currentPath);
-            router.replace(`${redirectTo}?returnUrl=${returnUrl}`);
+            setIsRedirecting(true);
+            // router.replace async olabilir, setTimeout ile state'i güncelle
+            setTimeout(() => {
+              router.replace(`${redirectTo}?returnUrl=${returnUrl}`);
+            }, 0);
           } else {
             // Don't redirect if already going to login
             return;
@@ -78,11 +87,27 @@ export default function RequireAuth({
     try {
       const supabase = getSupabase();
       const { data: listener } = supabase.auth.onAuthStateChange(
-        (_event, session) => {
+        (event, session) => {
           if (!isMounted) return;
           const authed = Boolean(session);
           setIsAuthed(authed);
           setChecked(true);
+
+          // Login sonrası otomatik redirect yap
+          if (
+            event === "SIGNED_IN" &&
+            authed &&
+            pathname?.startsWith("/login")
+          ) {
+            // Login sayfasındayken login olduysa returnUrl'e yönlendir
+            const urlParams = new URLSearchParams(window.location.search);
+            const returnUrl = urlParams.get("returnUrl");
+            const targetUrl = returnUrl ? decodeURIComponent(returnUrl) : "/";
+            // Login sayfasından çık
+            if (targetUrl !== "/login" && targetUrl.startsWith("/")) {
+              router.replace(targetUrl);
+            }
+          }
         }
       );
       unsubscribe = () => listener.subscription.unsubscribe();
@@ -96,11 +121,33 @@ export default function RequireAuth({
     };
   }, [redirectTo, router, pathname]);
 
-  if (!checked) {
-    return null;
+  // Loading state - show loading UI instead of white screen
+  if (!checked || isRedirecting) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-white to-white dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+        <div className="text-center">
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-blue-600 border-t-transparent dark:border-blue-400" />
+          <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+            {isRedirecting ? "Yönlendiriliyor..." : "Yükleniyor..."}
+          </p>
+        </div>
+      </div>
+    );
   }
+
+  // Not authenticated - show loading while redirecting
   if (!isAuthed) {
-    return null;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-white to-white dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+        <div className="text-center">
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-blue-600 border-t-transparent dark:border-blue-400" />
+          <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+            Giriş sayfasına yönlendiriliyor...
+          </p>
+        </div>
+      </div>
+    );
   }
+
   return children as unknown as React.ReactElement;
 }
