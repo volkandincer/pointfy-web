@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import RequireAuth from "@/components/auth/RequireAuth";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getDefaultNavigationItems } from "@/lib/utils";
@@ -111,9 +110,8 @@ export default function PersonalTasksPage() {
   }, []);
 
   return (
-    <RequireAuth>
-      <>
-        <Header navigationItems={navigationItems} />
+    <>
+      <Header navigationItems={navigationItems} />
         <main className="container mx-auto px-4 py-16">
           <div className="mx-auto max-w-5xl">
             <div className="mb-6 flex items-center justify-between">
@@ -184,7 +182,6 @@ export default function PersonalTasksPage() {
           initialTask={editingTask ?? undefined}
         />
         <Footer navigationItems={navigationItems} />
-      </>
-    </RequireAuth>
+    </>
   );
 }

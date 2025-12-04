@@ -4,7 +4,6 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import RequireAuth from "@/components/auth/RequireAuth";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getDefaultNavigationItems } from "@/lib/utils";
@@ -500,7 +499,7 @@ export default function JiraTestPage() {
 
   if (loading) {
     return (
-      <RequireAuth>
+      <>
         <Header navigationItems={navigationItems} />
         <main className="container mx-auto px-4 py-16">
           <div className="flex items-center justify-center">
@@ -508,13 +507,13 @@ export default function JiraTestPage() {
           </div>
         </main>
         <Footer navigationItems={navigationItems} />
-      </RequireAuth>
+      </>
     );
   }
 
   if (!jiraConnected) {
     return (
-      <RequireAuth>
+      <>
         <Header navigationItems={navigationItems} />
         <main className="container mx-auto px-4 py-16">
           <div className="mx-auto max-w-3xl">
@@ -547,7 +546,7 @@ export default function JiraTestPage() {
           </div>
         </main>
         <Footer navigationItems={navigationItems} />
-      </RequireAuth>
+      </>
     );
   }
 
@@ -562,7 +561,7 @@ export default function JiraTestPage() {
   ];
 
   return (
-    <RequireAuth>
+    <>
       <Header navigationItems={navigationItems} />
       <main className="container mx-auto px-4 py-16">
         <div className="mx-auto max-w-7xl">
@@ -1179,7 +1178,7 @@ export default function JiraTestPage() {
         </div>
       </main>
       <Footer navigationItems={navigationItems} />
-    </RequireAuth>
+    </>
   );
 }
 

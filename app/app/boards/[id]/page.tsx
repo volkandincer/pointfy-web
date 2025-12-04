@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import RequireAuth from "@/components/auth/RequireAuth";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import PersonalTaskList from "@/components/tasks/PersonalTaskList";
@@ -351,33 +350,29 @@ export default function BoardDetailPage() {
 
   if (loading) {
     return (
-      <RequireAuth>
-        <>
-          <Header navigationItems={navigationItems} />
-          <main className="container mx-auto px-4 py-16">
-            <div className="h-40 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800" />
-          </main>
-          <Footer navigationItems={navigationItems} />
-        </>
-      </RequireAuth>
+      <>
+        <Header navigationItems={navigationItems} />
+        <main className="container mx-auto px-4 py-16">
+          <div className="h-40 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800" />
+        </main>
+        <Footer navigationItems={navigationItems} />
+      </>
     );
   }
 
   if (!board) {
     return (
-      <RequireAuth>
-        <>
-          <Header navigationItems={navigationItems} />
-          <main className="container mx-auto px-4 py-16">
-            <div className="rounded-xl border border-gray-200 bg-white p-8 text-center dark:border-gray-800 dark:bg-gray-900">
-              <p className="text-gray-600 dark:text-gray-400">
-                Board bulunamadı.
-              </p>
-            </div>
-          </main>
-          <Footer navigationItems={navigationItems} />
-        </>
-      </RequireAuth>
+      <>
+        <Header navigationItems={navigationItems} />
+        <main className="container mx-auto px-4 py-16">
+          <div className="rounded-xl border border-gray-200 bg-white p-8 text-center dark:border-gray-800 dark:bg-gray-900">
+            <p className="text-gray-600 dark:text-gray-400">
+              Board bulunamadı.
+            </p>
+          </div>
+        </main>
+        <Footer navigationItems={navigationItems} />
+      </>
     );
   }
 
@@ -385,8 +380,7 @@ export default function BoardDetailPage() {
   const boardIcon = board.icon || "📋";
 
   return (
-    <RequireAuth>
-      <>
+    <>
         <Header navigationItems={navigationItems} />
         <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
           <div className="container mx-auto px-4 py-12">
@@ -581,8 +575,7 @@ export default function BoardDetailPage() {
         />
 
         <Footer navigationItems={navigationItems} />
-      </>
-    </RequireAuth>
+    </>
   );
 }
 

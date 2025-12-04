@@ -3,7 +3,6 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import RequireAuth from "@/components/auth/RequireAuth";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getDefaultNavigationItems } from "@/lib/utils";
@@ -78,7 +77,7 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
   // jiraConnected null ise henüz kontrol edilmedi demektir
   if (jiraConnected === null) {
     return (
-      <RequireAuth>
+      <>
         <Header navigationItems={navigationItems} />
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
           <div className="container mx-auto px-4 py-6">
@@ -117,7 +116,7 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
           </div>
         </div>
         <Footer navigationItems={navigationItems} />
-      </RequireAuth>
+      </>
     );
   }
 
@@ -125,7 +124,7 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
   // jiraConnected false ise bağlı değil demektir (null değil, yani kontrol tamamlandı)
   if (jiraConnected === false) {
     return (
-      <RequireAuth>
+      <>
         <Header navigationItems={navigationItems} />
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
           <div className="container mx-auto px-4 py-16">
@@ -163,7 +162,7 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
           </div>
         </div>
         <Footer navigationItems={navigationItems} />
-      </RequireAuth>
+      </>
     );
   }
 
@@ -176,7 +175,7 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
   };
 
   return (
-    <RequireAuth>
+    <>
       <Header navigationItems={navigationItems} />
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
         <div className="container mx-auto px-4 py-6">
@@ -247,7 +246,7 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
         </div>
       </div>
       <Footer navigationItems={navigationItems} />
-    </RequireAuth>
+    </>
   );
 }
 

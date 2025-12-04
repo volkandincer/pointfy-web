@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import RequireAuth from "@/components/auth/RequireAuth";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getDefaultNavigationItems } from "@/lib/utils";
@@ -57,9 +56,8 @@ export default function NotesPage() {
   }, [notes, selectedCategory]);
 
   return (
-    <RequireAuth>
-      <>
-        <Header navigationItems={navigationItems} />
+    <>
+      <Header navigationItems={navigationItems} />
         <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
           <div className="container mx-auto px-4 py-12">
             <div className="mx-auto max-w-7xl">
@@ -195,7 +193,6 @@ export default function NotesPage() {
         />
 
         <Footer navigationItems={navigationItems} />
-      </>
-    </RequireAuth>
+    </>
   );
 }
