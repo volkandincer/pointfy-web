@@ -1,6 +1,6 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useState } from "react";
 import { useRoomParticipants } from "@/hooks/useRoomParticipants";
 import type { RoomParticipant } from "@/hooks/useRoomParticipants";
 
@@ -15,20 +15,14 @@ const RoomParticipants = memo(function RoomParticipants({
   currentUserKey,
 }: RoomParticipantsProps) {
   const { participants, loading, error } = useRoomParticipants(roomCode);
+  const [showAll, setShowAll] = useState<boolean>(false);
 
   if (loading) {
     return (
-      <div className="rounded-2xl border border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
-        <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-          👥 Katılımcılar
-        </h3>
-        <div className="space-y-2">
-          {Array.from({ length: 3 }).map((_, idx) => (
-            <div
-              key={idx}
-              className="h-12 animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800"
-            />
-          ))}
+      <div className="rounded-xl border border-gray-200/70 bg-white p-4 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
+        <div className="flex items-center gap-2">
+          <div className="h-8 w-8 animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800" />
+          <div className="h-4 w-24 animate-pulse rounded bg-gray-100 dark:bg-gray-800" />
         </div>
       </div>
     );
@@ -36,8 +30,8 @@ const RoomParticipants = memo(function RoomParticipants({
 
   if (error) {
     return (
-      <div className="rounded-2xl border border-red-200/70 bg-red-50/50 p-6 shadow-sm dark:border-red-800/70 dark:bg-red-900/10">
-        <p className="text-sm text-red-600 dark:text-red-400">
+      <div className="rounded-xl border border-red-200/70 bg-red-50/50 p-4 shadow-sm dark:border-red-800/70 dark:bg-red-900/10">
+        <p className="text-xs text-red-600 dark:text-red-400">
           Katılımcılar yüklenirken hata oluştu: {error}
         </p>
       </div>
@@ -45,45 +39,100 @@ const RoomParticipants = memo(function RoomParticipants({
   }
 
   return (
-    <div className="rounded-2xl border-2 border-blue-400/20 bg-gradient-to-br from-white to-blue-50/30 p-6 shadow-[0_4px_16px_rgba(59,130,246,0.1)] dark:border-blue-500/20 dark:from-gray-900 dark:to-blue-900/10">
-      <div className="mb-5 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md dark:bg-blue-500">
-            <span className="text-lg">👥</span>
+    <div className="rounded-xl border border-gray-200/70 bg-white shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
+      {/* Accordion Header - Tıklanabilir */}
+      <button
+        onClick={() => participants.length > 0 && setShowAll(!showAll)}
+        disabled={participants.length === 0}
+        className="w-full p-4 text-left transition-colors hover:bg-gray-50/50 disabled:cursor-default disabled:hover:bg-white dark:hover:bg-gray-800/50 dark:disabled:hover:bg-gray-900"
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 text-sm font-bold text-white shadow-sm dark:from-blue-500 dark:to-blue-600">
+              👥
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-gray-900 dark:text-white">
+                Katılımcılar
+              </h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {participants.length} kişi
+              </p>
+            </div>
           </div>
-          <div>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-              Odadaki Katılımcılar
-            </h3>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              {participants.length} kişi bu odada
-            </p>
-          </div>
+          {participants.length > 0 && (
+            <div className="flex items-center gap-2">
+              {/* Avatar Stack */}
+              <div className="flex -space-x-2">
+                {participants.slice(0, 3).map((participant, idx) => (
+                  <div
+                    key={participant.user_key}
+                    className={`flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-xs font-bold text-white shadow-sm dark:border-gray-900 ${
+                      participant.user_key === currentUserKey
+                        ? "bg-gradient-to-br from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600"
+                        : "bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500"
+                    }`}
+                    style={{ zIndex: 3 - idx }}
+                    title={participant.username}
+                  >
+                    {participant.username.charAt(0).toUpperCase()}
+                  </div>
+                ))}
+              </div>
+              {/* Accordion Toggle Icon */}
+              <div
+                className={`flex h-8 w-8 items-center justify-center rounded-lg border border-gray-300 bg-gray-50 text-gray-600 transition-all duration-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 ${
+                  showAll
+                    ? "rotate-180 bg-blue-50 border-blue-300 dark:bg-blue-900/20 dark:border-blue-500"
+                    : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                }`}
+              >
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+            </div>
+          )}
         </div>
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white shadow-md dark:bg-blue-500">
-          {participants.length}
+      </button>
+
+      {/* Accordion Content - Animasyonlu */}
+      <div
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+          showAll && participants.length > 0
+            ? "max-h-96 opacity-100"
+            : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="border-t border-gray-200/70 px-4 pb-4 pt-3 dark:border-gray-800/70">
+          <div className="space-y-1.5 overflow-y-auto pr-2 max-h-80">
+            {participants.map((participant) => (
+              <CompactParticipantCard
+                key={participant.user_key}
+                participant={participant}
+                isCurrentUser={participant.user_key === currentUserKey}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
-      {participants.length === 0 ? (
-        <div className="py-6 text-center">
-          <p className="mb-2 text-4xl">👤</p>
-          <p className="text-sm font-medium text-gray-900 dark:text-white">
+      {/* Empty State */}
+      {participants.length === 0 && (
+        <div className="px-4 py-3 text-center">
+          <p className="text-xs text-gray-500 dark:text-gray-400">
             Henüz katılımcı yok
           </p>
-          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-            Odada henüz kimse yok
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-2">
-          {participants.map((participant) => (
-            <ParticipantCard
-              key={participant.user_key}
-              participant={participant}
-              isCurrentUser={participant.user_key === currentUserKey}
-            />
-          ))}
         </div>
       )}
     </div>
@@ -95,7 +144,8 @@ interface ParticipantCardProps {
   isCurrentUser: boolean;
 }
 
-const ParticipantCard = memo(function ParticipantCard({
+// Kompakt katılımcı kartı (scroll edilebilir listede kullanılır)
+const CompactParticipantCard = memo(function CompactParticipantCard({
   participant,
   isCurrentUser,
 }: ParticipantCardProps) {
@@ -105,36 +155,30 @@ const ParticipantCard = memo(function ParticipantCard({
     const diffMs = now.getTime() - date.getTime();
     const diffMins = Math.floor(diffMs / 60000);
 
-    // Mevcut kullanıcı her zaman aktif
-    if (isCurrent) {
-      return "Aktif";
-    }
-
-    // Son 5 dakika içinde katılanlar aktif sayılır
-    if (diffMins < 5) {
-      return "Aktif";
-    }
-
-    // Diğerleri için katılım zamanını göster
-    if (diffMins < 60) return `${diffMins} dakika önce katıldı`;
+    if (isCurrent) return "Aktif";
+    if (diffMins < 5) return "Aktif";
+    if (diffMins < 60) return `${diffMins} dk önce`;
     const diffHours = Math.floor(diffMins / 60);
-    if (diffHours < 24) return `${diffHours} saat önce katıldı`;
+    if (diffHours < 24) return `${diffHours} sa önce`;
     const diffDays = Math.floor(diffHours / 24);
-    return `${diffDays} gün önce katıldı`;
+    return `${diffDays} gün önce`;
   };
+
+  const status = formatJoinedDate(participant.joined_at, isCurrentUser);
+  const isActive = status === "Aktif";
 
   return (
     <div
-      className={`group relative flex items-center gap-4 rounded-xl border-2 p-4 transition-all hover:-translate-y-0.5 hover:shadow-md ${
+      className={`group flex items-center gap-2 rounded-lg border p-2 transition-all hover:shadow-sm ${
         isCurrentUser
-          ? "border-blue-400/60 bg-gradient-to-br from-blue-50 to-blue-100/50 shadow-sm dark:border-blue-500/60 dark:from-blue-900/20 dark:to-blue-800/10"
-          : "border-gray-200/70 bg-white hover:border-blue-300/50 hover:bg-blue-50/30 dark:border-gray-700/70 dark:bg-gray-800/50 dark:hover:border-blue-500/30 dark:hover:bg-blue-900/10"
+          ? "border-blue-300/60 bg-blue-50/50 dark:border-blue-500/60 dark:bg-blue-900/20"
+          : "border-gray-200/70 bg-gray-50/50 hover:border-blue-300/50 hover:bg-blue-50/30 dark:border-gray-700/70 dark:bg-gray-800/30 dark:hover:border-blue-500/30 dark:hover:bg-blue-900/10"
       }`}
     >
-      {/* Avatar */}
-      <div className="relative">
+      {/* Kompakt Avatar */}
+      <div className="relative shrink-0">
         <div
-          className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-base font-bold text-white shadow-md transition-transform group-hover:scale-110 ${
+          className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold text-white shadow-sm ${
             isCurrentUser
               ? "bg-gradient-to-br from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600"
               : "bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500"
@@ -143,17 +187,17 @@ const ParticipantCard = memo(function ParticipantCard({
           {participant.username.charAt(0).toUpperCase()}
         </div>
         {isCurrentUser && (
-          <div className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-green-500 text-[10px] font-bold text-white shadow-sm dark:border-gray-900">
+          <div className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full border border-white bg-green-500 text-[8px] font-bold text-white dark:border-gray-900">
             ✓
           </div>
         )}
       </div>
 
-      {/* Info */}
+      {/* Kompakt Info */}
       <div className="min-w-0 flex-1">
-        <div className="mb-1 flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-1.5">
           <p
-            className={`truncate text-base font-bold ${
+            className={`truncate text-xs font-semibold ${
               isCurrentUser
                 ? "text-blue-900 dark:text-blue-100"
                 : "text-gray-900 dark:text-white"
@@ -161,35 +205,23 @@ const ParticipantCard = memo(function ParticipantCard({
           >
             {participant.username}
           </p>
-          <div className="flex items-center gap-1.5 flex-wrap">
-            {participant.is_admin && (
-              <span className="shrink-0 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-2.5 py-1 text-[10px] font-bold text-white shadow-sm">
-                👑 Admin
-              </span>
-            )}
-            {isCurrentUser && (
-              <span className="shrink-0 rounded-full bg-blue-600 px-2.5 py-1 text-[10px] font-semibold text-white shadow-sm dark:bg-blue-500">
-                Sen
-              </span>
-            )}
-          </div>
+          {participant.is_admin && (
+            <span className="shrink-0 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-1.5 py-0.5 text-[9px] font-bold text-white">
+              👑
+            </span>
+          )}
         </div>
-        <div className="flex items-center gap-2">
-          {(() => {
-            const status = formatJoinedDate(participant.joined_at, isCurrentUser);
-            const isActive = status === "Aktif";
-            
-            return isActive ? (
-              <span className="flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-700 dark:bg-green-900/30 dark:text-green-400">
-                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-500"></span>
-                {status}
-              </span>
-            ) : (
-              <span className="text-xs text-gray-500 dark:text-gray-400">
-                🕐 {status}
-              </span>
-            );
-          })()}
+        <div className="flex items-center gap-1.5">
+          {isActive ? (
+            <span className="flex items-center gap-1 rounded-full bg-green-100 px-1.5 py-0.5 text-[10px] font-semibold text-green-700 dark:bg-green-900/30 dark:text-green-400">
+              <span className="h-1 w-1 animate-pulse rounded-full bg-green-500"></span>
+              {status}
+            </span>
+          ) : (
+            <span className="text-[10px] text-gray-500 dark:text-gray-400">
+              {status}
+            </span>
+          )}
         </div>
       </div>
     </div>
