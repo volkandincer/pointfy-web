@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import RequireAuth from "@/components/auth/RequireAuth";
 import GlobalNoteFab from "@/components/notes/GlobalNoteFab";
 import ToastContainer from "@/components/ui/ToastContainer";
 import { ToastProvider, useToastContext } from "@/contexts/ToastContext";
@@ -39,7 +40,9 @@ export default function AppLayout({
 }) {
   return (
     <ToastProvider>
-      <AppLayoutContent>{children}</AppLayoutContent>
+      <RequireAuth>
+        <AppLayoutContent>{children}</AppLayoutContent>
+      </RequireAuth>
     </ToastProvider>
   );
 }

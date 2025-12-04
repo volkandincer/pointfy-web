@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import RequireAuth from "@/components/auth/RequireAuth";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Modal from "@/components/ui/Modal";
@@ -299,21 +298,18 @@ export default function AccountPage() {
 
   if (loading) {
     return (
-      <RequireAuth>
-        <>
-          <Header navigationItems={navigationItems} />
-          <main className="container mx-auto px-4 py-16">
-            <div className="h-40 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800" />
-          </main>
-          <Footer navigationItems={navigationItems} />
-        </>
-      </RequireAuth>
+      <>
+        <Header navigationItems={navigationItems} />
+        <main className="container mx-auto px-4 py-16">
+          <div className="h-40 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800" />
+        </main>
+        <Footer navigationItems={navigationItems} />
+      </>
     );
   }
 
   return (
-    <RequireAuth>
-      <>
+    <>
         <Header navigationItems={navigationItems} />
         <main className="container mx-auto px-4 py-16">
           <div className="mx-auto max-w-3xl">
@@ -599,7 +595,6 @@ export default function AccountPage() {
             </div>
           </div>
         </Modal>
-      </>
-    </RequireAuth>
+    </>
   );
 }

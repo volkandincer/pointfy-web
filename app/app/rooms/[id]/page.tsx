@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import RequireAuth from "@/components/auth/RequireAuth";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import UserVotingView from "@/components/voting/UserVotingView";
@@ -343,22 +342,19 @@ export default function RoomDetailPage() {
 
   if (loading || activeTaskLoading || adminLoading || checkingPin) {
     return (
-      <RequireAuth>
-        <>
-          <Header navigationItems={navigationItems} />
-          <main className="container mx-auto px-4 py-16">
-            <div className="h-40 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800" />
-          </main>
-          <Footer navigationItems={navigationItems} />
-        </>
-      </RequireAuth>
+      <>
+        <Header navigationItems={navigationItems} />
+        <main className="container mx-auto px-4 py-16">
+          <div className="h-40 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800" />
+        </main>
+        <Footer navigationItems={navigationItems} />
+      </>
     );
   }
 
   return (
-    <RequireAuth>
-      <>
-        <Header navigationItems={navigationItems} />
+    <>
+      <Header navigationItems={navigationItems} />
         <main className="container mx-auto px-4 py-16">
           <div className="mx-auto max-w-5xl">
             <div className="mb-6 flex items-center justify-between">
@@ -554,7 +550,6 @@ export default function RoomDetailPage() {
           error={pinError}
         />
         <Footer navigationItems={navigationItems} />
-      </>
-    </RequireAuth>
+    </>
   );
 }

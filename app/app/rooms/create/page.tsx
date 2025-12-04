@@ -2,7 +2,6 @@
 
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import RequireAuth from "@/components/auth/RequireAuth";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CreateRoomForm from "@/components/rooms/CreateRoomForm";
@@ -131,48 +130,44 @@ function CreateRoomPageContent() {
   );
 
   return (
-    <RequireAuth>
-      <>
-        <Header navigationItems={navigationItems} />
-        <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
-          <div className="container mx-auto px-4 py-12">
-            <div className="mx-auto max-w-3xl">
-              <div className="mb-8">
-                <h1 className="mb-3 text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
-                  Yeni Oda Oluştur
-                </h1>
-                <p className="text-lg text-gray-600 dark:text-gray-400">
-                  Takımınızla birlikte çalışmak için bir oda oluşturun
-                </p>
-              </div>
-              <div className="rounded-2xl border-2 border-gray-200/70 bg-white p-8 shadow-lg dark:border-gray-800/70 dark:bg-gray-900">
-                <CreateRoomForm
-                  onSubmit={handleCreate}
-                  loading={loading}
-                  initialRoomType={roomTypeFromQuery || undefined}
-                />
-              </div>
+    <>
+      <Header navigationItems={navigationItems} />
+      <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+        <div className="container mx-auto px-4 py-12">
+          <div className="mx-auto max-w-3xl">
+            <div className="mb-8">
+              <h1 className="mb-3 text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+                Yeni Oda Oluştur
+              </h1>
+              <p className="text-lg text-gray-600 dark:text-gray-400">
+                Takımınızla birlikte çalışmak için bir oda oluşturun
+              </p>
+            </div>
+            <div className="rounded-2xl border-2 border-gray-200/70 bg-white p-8 shadow-lg dark:border-gray-800/70 dark:bg-gray-900">
+              <CreateRoomForm
+                onSubmit={handleCreate}
+                loading={loading}
+                initialRoomType={roomTypeFromQuery || undefined}
+              />
             </div>
           </div>
-        </main>
-        <Footer navigationItems={navigationItems} />
-      </>
-    </RequireAuth>
+        </div>
+      </main>
+      <Footer navigationItems={navigationItems} />
+    </>
   );
 }
 
 export default function CreateRoomPage() {
   return (
     <Suspense fallback={
-      <RequireAuth>
-        <>
-          <Header navigationItems={getDefaultNavigationItems()} />
-          <main className="container mx-auto px-4 py-16">
-            <div className="h-40 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800" />
-          </main>
-          <Footer navigationItems={getDefaultNavigationItems()} />
-        </>
-      </RequireAuth>
+      <>
+        <Header navigationItems={getDefaultNavigationItems()} />
+        <main className="container mx-auto px-4 py-16">
+          <div className="h-40 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800" />
+        </main>
+        <Footer navigationItems={getDefaultNavigationItems()} />
+      </>
     }>
       <CreateRoomPageContent />
     </Suspense>
