@@ -94,24 +94,24 @@ const RetroRoomView = memo(function RetroRoomView({
   const handleAddCard = useCallback(
     async (category: RetroCategory, content: string) => {
       if (cardsRevealed) {
-        alert("❌ Kartlar açıldıktan sonra yeni kart eklenemez!");
+        showToast("❌ Kartlar açıldıktan sonra yeni kart eklenemez!", "error");
         return;
       }
 
       // Admin için timer başlatmadan kart göndermeyi engelle
       if (isAdmin && !timerActive) {
-        alert("⏱️ Lütfen önce timer'ı başlatın!");
+        showToast("⏱️ Lütfen önce timer'ı başlatın!", "error");
         return;
       }
 
       // Timer aktifse ve süre dolmuşsa engelle
       if (timerActive && remainingSeconds === 0) {
-        alert("❌ Süre doldu! Artık kart eklenemez.");
+        showToast("❌ Süre doldu! Artık kart eklenemez.", "error");
         return;
       }
 
       if (!content.trim()) {
-        alert("Lütfen kart içeriğini girin.");
+        showToast("Lütfen kart içeriğini girin.", "error");
         return;
       }
 
@@ -130,13 +130,14 @@ const RetroRoomView = memo(function RetroRoomView({
         if (error) throw error;
         setCardContent("");
         textareaRef.current?.focus();
+        showToast("✅ Kart başarıyla eklendi!", "success");
       } catch (err) {
-        alert("Kart eklenirken bir hata oluştu.");
+        showToast("Kart eklenirken bir hata oluştu.", "error");
       } finally {
         setIsSubmitting(false);
       }
     },
-    [roomId, userKey, username, cardsRevealed, timerActive, remainingSeconds, isAdmin]
+    [roomId, userKey, username, cardsRevealed, timerActive, remainingSeconds, isAdmin, showToast]
   );
 
   const handleStartTimer = useCallback(async () => {
@@ -185,18 +186,18 @@ const RetroRoomView = memo(function RetroRoomView({
 
         if (error) throw error;
         setEditingCard(null);
+        showToast("✅ Kart başarıyla güncellendi!", "success");
       } catch (err) {
-        // Kart güncelleme hatası
-        alert("Kart güncellenirken bir hata oluştu.");
+        showToast("Kart güncellenirken bir hata oluştu.", "error");
       }
     },
-    []
+    [showToast]
   );
 
   const handleDeleteCard = useCallback(
     async (card: RetroCard) => {
       if (card.user_key !== userKey) {
-        alert("Sadece kendi kartlarınızı silebilirsiniz.");
+        showToast("Sadece kendi kartlarınızı silebilirsiniz.", "error");
         return;
       }
 
@@ -210,12 +211,12 @@ const RetroRoomView = memo(function RetroRoomView({
           .eq("id", card.id);
 
         if (error) throw error;
+        showToast("✅ Kart başarıyla silindi!", "success");
       } catch (err) {
-        // Kart silme hatası
-        alert("Kart silinirken bir hata oluştu.");
+        showToast("Kart silinirken bir hata oluştu.", "error");
       }
     },
-    [userKey]
+    [userKey, showToast]
   );
 
   const handleRevealAll = useCallback(async () => {
@@ -227,24 +228,23 @@ const RetroRoomView = memo(function RetroRoomView({
         room_id_param: roomId,
       });
       if (error) throw error;
-      alert("🎉 Tüm kartlar açıldı!");
+      showToast("🎉 Tüm kartlar açıldı!", "success");
     } catch (err) {
-      // Kart açma hatası
-      alert("Kartlar açılırken bir hata oluştu.");
+      showToast("Kartlar açılırken bir hata oluştu.", "error");
     } finally {
       setIsRevealing(false);
     }
-  }, [roomId, isAdmin]);
+  }, [roomId, isAdmin, showToast]);
 
   const handleOpenEdit = useCallback(
     (card: RetroCard) => {
       if (card.user_key !== userKey) {
-        alert("Sadece kendi kartlarınızı düzenleyebilirsiniz.");
+        showToast("Sadece kendi kartlarınızı düzenleyebilirsiniz.", "error");
         return;
       }
       setEditingCard(card);
     },
-    [userKey]
+    [userKey, showToast]
   );
 
   if (loading) {

@@ -2,6 +2,7 @@
 
 import { memo, useState, useEffect, useCallback } from "react";
 import Modal from "@/components/ui/Modal";
+import { useToastContext } from "@/contexts/ToastContext";
 import type { RetroCategory } from "@/interfaces/Retro.interface";
 
 interface RetroCardModalProps {
@@ -32,6 +33,7 @@ const RetroCardModal = memo(function RetroCardModal({
   initialContent = "",
   isEdit = false,
 }: RetroCardModalProps) {
+  const { showToast } = useToastContext();
   const [category, setCategory] = useState<RetroCategory>(initialCategory);
   const [content, setContent] = useState<string>(initialContent);
   const [loading, setLoading] = useState<boolean>(false);
@@ -47,7 +49,7 @@ const RetroCardModal = memo(function RetroCardModal({
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (!content.trim()) {
-        alert("Lütfen kart içeriğini girin.");
+        showToast("Lütfen kart içeriğini girin.", "error");
         return;
       }
       setLoading(true);
@@ -55,13 +57,17 @@ const RetroCardModal = memo(function RetroCardModal({
         await onSubmit(category, content);
         setContent("");
         onClose();
+        showToast(
+          isEdit ? "✅ Kart başarıyla güncellendi!" : "✅ Kart başarıyla eklendi!",
+          "success"
+        );
       } catch (err) {
-        // Modal submit error
+        showToast("Kart kaydedilirken bir hata oluştu.", "error");
       } finally {
         setLoading(false);
       }
     },
-    [category, content, onSubmit, onClose]
+    [category, content, onSubmit, onClose, isEdit, showToast]
   );
 
   return (

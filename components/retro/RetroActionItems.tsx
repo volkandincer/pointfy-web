@@ -4,6 +4,7 @@ import { memo, useState, useCallback, useMemo } from "react";
 import { getSupabase } from "@/lib/supabase";
 import { useRetroActionItems } from "@/hooks/useRetroActionItems";
 import { useRoomCustomFlags } from "@/hooks/useRoomCustomFlags";
+import { useToastContext } from "@/contexts/ToastContext";
 import type {
   RetroActionItem,
   RetroActionItemInput,
@@ -27,6 +28,7 @@ const RetroActionItems = memo(function RetroActionItems({
 }: RetroActionItemsProps) {
   const { actionItems, loading } = useRetroActionItems(roomId);
   const { customFlags, addCustomFlag } = useRoomCustomFlags(roomId, isAdmin);
+  const { showToast } = useToastContext();
   const [showAddModal, setShowAddModal] = useState<boolean>(false);
   const [editingItem, setEditingItem] = useState<RetroActionItem | null>(null);
 
@@ -52,11 +54,11 @@ const RetroActionItems = memo(function RetroActionItems({
   const handleAddItem = useCallback(
     async (data: RetroActionItemInput) => {
       if (!isAdmin) {
-        alert("Sadece admin aksiyon maddesi ekleyebilir.");
+        showToast("Sadece admin aksiyon maddesi ekleyebilir.", "error");
         return;
       }
       if (!cardsRevealed) {
-        alert("❌ Önce kartları açmanız gerekiyor!");
+        showToast("❌ Önce kartları açmanız gerekiyor!", "error");
         return;
       }
 
@@ -75,17 +77,18 @@ const RetroActionItems = memo(function RetroActionItems({
 
         if (error) throw error;
         setShowAddModal(false);
+        showToast("✅ Aksiyon maddesi başarıyla eklendi!", "success");
       } catch (err) {
-        alert("Aksiyon maddesi eklenirken bir hata oluştu.");
+        showToast("Aksiyon maddesi eklenirken bir hata oluştu.", "error");
       }
     },
-    [roomId, userKey, username, isAdmin, actionItems.length, cardsRevealed]
+    [roomId, userKey, username, isAdmin, actionItems.length, cardsRevealed, showToast]
   );
 
   const handleEditItem = useCallback(
     async (itemId: string, data: RetroActionItemInput) => {
       if (!isAdmin) {
-        alert("Sadece admin aksiyon maddelerini düzenleyebilir.");
+        showToast("Sadece admin aksiyon maddelerini düzenleyebilir.", "error");
         return;
       }
 
@@ -103,17 +106,18 @@ const RetroActionItems = memo(function RetroActionItems({
 
         if (error) throw error;
         setEditingItem(null);
+        showToast("✅ Aksiyon maddesi başarıyla güncellendi!", "success");
       } catch (err) {
-        alert("Aksiyon maddesi güncellenirken bir hata oluştu.");
+        showToast("Aksiyon maddesi güncellenirken bir hata oluştu.", "error");
       }
     },
-    [isAdmin]
+    [isAdmin, showToast]
   );
 
   const handleDeleteItem = useCallback(
     async (item: RetroActionItem) => {
       if (!isAdmin) {
-        alert("Sadece admin aksiyon maddelerini silebilir.");
+        showToast("Sadece admin aksiyon maddelerini silebilir.", "error");
         return;
       }
 
@@ -128,17 +132,18 @@ const RetroActionItems = memo(function RetroActionItems({
           .eq("id", item.id);
 
         if (error) throw error;
+        showToast("✅ Aksiyon maddesi başarıyla silindi!", "success");
       } catch (err) {
-        alert("Aksiyon maddesi silinirken bir hata oluştu.");
+        showToast("Aksiyon maddesi silinirken bir hata oluştu.", "error");
       }
     },
-    [isAdmin]
+    [isAdmin, showToast]
   );
 
   const handleToggleComplete = useCallback(
     async (item: RetroActionItem) => {
       if (!isAdmin) {
-        alert("Sadece admin aksiyon maddelerini tamamlayabilir.");
+        showToast("Sadece admin aksiyon maddelerini tamamlayabilir.", "error");
         return;
       }
 
@@ -154,22 +159,28 @@ const RetroActionItems = memo(function RetroActionItems({
           .eq("id", item.id);
 
         if (error) throw error;
+        showToast(
+          item.is_completed
+            ? "✅ Aksiyon maddesi beklemeye alındı!"
+            : "✅ Aksiyon maddesi tamamlandı!",
+          "success"
+        );
       } catch (err) {
-        alert("Aksiyon maddesi güncellenirken bir hata oluştu.");
+        showToast("Aksiyon maddesi güncellenirken bir hata oluştu.", "error");
       }
     },
-    [isAdmin]
+    [isAdmin, showToast]
   );
 
   const handleOpenEdit = useCallback(
     (item: RetroActionItem) => {
       if (!isAdmin) {
-        alert("Sadece admin aksiyon maddelerini düzenleyebilir.");
+        showToast("Sadece admin aksiyon maddelerini düzenleyebilir.", "error");
         return;
       }
       setEditingItem(item);
     },
-    [isAdmin]
+    [isAdmin, showToast]
   );
 
   if (loading) {

@@ -272,7 +272,7 @@ export default function RoomDetailPage() {
     async (taskId: string) => {
       // Admin kontrolü - sadece admin task'ı aktif yapabilir
       if (!isAdmin) {
-        alert("Bu işlem için admin yetkisi gereklidir.");
+        showToast("Bu işlem için admin yetkisi gereklidir.", "error");
         return;
       }
 
@@ -292,12 +292,12 @@ export default function RoomDetailPage() {
           })
           .eq("id", taskId);
         if (error) throw error;
+        showToast("✅ Task başarıyla aktif yapıldı!", "success");
       } catch (err) {
-        // Set active task error
-        alert("Task aktif yapılamadı.");
+        showToast("Task aktif yapılamadı.", "error");
       }
     },
-    [roomId, isAdmin]
+    [roomId, isAdmin, showToast]
   );
 
   const handleCreateTask = useCallback(
@@ -310,7 +310,7 @@ export default function RoomDetailPage() {
     ) => {
       // Admin kontrolü - sadece admin task oluşturabilir
       if (!isAdmin) {
-        alert("Bu işlem için admin yetkisi gereklidir.");
+        showToast("Bu işlem için admin yetkisi gereklidir.", "error");
         return;
       }
 
@@ -332,15 +332,15 @@ export default function RoomDetailPage() {
           jira_id: jiraId || null,
         });
         if (error) throw error;
+        showToast("✅ Task başarıyla oluşturuldu!", "success");
       } catch (err) {
-        // Create task error
-        alert("Task oluşturulamadı.");
+        showToast("Task oluşturulamadı.", "error");
         throw err;
       } finally {
         setCreatingTask(false);
       }
     },
-    [roomId, userKey, username, isAdmin]
+    [roomId, userKey, username, isAdmin, showToast]
   );
 
   if (loading || activeTaskLoading || adminLoading || checkingPin) {

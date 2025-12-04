@@ -2,6 +2,7 @@
 
 import { memo, useState, useEffect, useCallback } from "react";
 import Modal from "@/components/ui/Modal";
+import { useToastContext } from "@/contexts/ToastContext";
 import type {
   RetroActionItemFlag,
   RetroActionItemInput,
@@ -44,6 +45,7 @@ const RetroActionItemModal = memo(function RetroActionItemModal({
   customFlags = [],
   onAddCustomFlag,
 }: RetroActionItemModalProps) {
+  const { showToast } = useToastContext();
   const [content, setContent] = useState<string>(initialContent);
   const [selectedFlag, setSelectedFlag] = useState<RetroActionItemFlag | null>(
     initialFlag
@@ -67,7 +69,7 @@ const RetroActionItemModal = memo(function RetroActionItemModal({
 
   const handleAddCustomFlag = useCallback(async () => {
     if (!newCustomFlagName.trim()) {
-      alert("Lütfen flag adını girin.");
+      showToast("Lütfen flag adını girin.", "error");
       return;
     }
     if (!onAddCustomFlag) return;
@@ -76,16 +78,17 @@ const RetroActionItemModal = memo(function RetroActionItemModal({
       await onAddCustomFlag(newCustomFlagName.trim());
       setNewCustomFlagName("");
       setShowCustomFlagInput(false);
+      showToast("✅ Custom flag başarıyla eklendi!", "success");
     } catch (err) {
-      alert("Custom flag eklenirken bir hata oluştu.");
+      showToast("Custom flag eklenirken bir hata oluştu.", "error");
     }
-  }, [newCustomFlagName, onAddCustomFlag]);
+  }, [newCustomFlagName, onAddCustomFlag, showToast]);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (!content.trim()) {
-        alert("Lütfen aksiyon maddesi içeriğini girin.");
+        showToast("Lütfen aksiyon maddesi içeriğini girin.", "error");
         return;
       }
       setLoading(true);
@@ -99,13 +102,19 @@ const RetroActionItemModal = memo(function RetroActionItemModal({
         setSelectedFlag(null);
         setSelectedCustomFlag(null);
         onClose();
+        showToast(
+          isEdit
+            ? "✅ Aksiyon maddesi başarıyla güncellendi!"
+            : "✅ Aksiyon maddesi başarıyla eklendi!",
+          "success"
+        );
       } catch (err) {
-        // Modal submit error
+        showToast("Aksiyon maddesi kaydedilirken bir hata oluştu.", "error");
       } finally {
         setLoading(false);
       }
     },
-    [content, selectedFlag, selectedCustomFlag, onSubmit, onClose]
+    [content, selectedFlag, selectedCustomFlag, onSubmit, onClose, isEdit, showToast]
   );
 
   const handleFlagSelect = useCallback(

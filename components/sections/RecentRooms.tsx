@@ -4,6 +4,7 @@ import { memo, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import AllRoomsModal from "@/components/rooms/AllRoomsModal";
 import RoomPinModal from "@/components/rooms/RoomPinModal";
+import { useToastContext } from "@/contexts/ToastContext";
 import type { RoomInfo } from "@/interfaces/Room.interface";
 import { getSupabase } from "@/lib/supabase";
 import {
@@ -14,6 +15,7 @@ import {
 
 const RecentRooms = memo(function RecentRooms() {
   const router = useRouter();
+  const { showToast } = useToastContext();
   const [rooms, setRooms] = useState<RoomInfo[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [showAllRoomsModal, setShowAllRoomsModal] = useState<boolean>(false);
@@ -81,7 +83,7 @@ const RecentRooms = memo(function RecentRooms() {
       const result = await checkRoomEntry(roomId);
       
       if (result.error) {
-        alert(result.error);
+        showToast(result.error, "error");
         return;
       }
 
@@ -101,8 +103,7 @@ const RecentRooms = memo(function RecentRooms() {
       }
       router.push(`/app/rooms/${roomId}`);
     } catch (err) {
-      // Room entry error
-      alert("Odaya giriş yapılırken bir hata oluştu.");
+      showToast("Odaya giriş yapılırken bir hata oluştu.", "error");
     }
   };
 

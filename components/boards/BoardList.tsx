@@ -5,6 +5,7 @@ import BoardCard from "./BoardCard";
 import CreateBoardModal from "./CreateBoardModal";
 import EditBoardModal from "./EditBoardModal";
 import { useBoards } from "@/hooks/useBoards";
+import { useToastContext } from "@/contexts/ToastContext";
 import type { Board, BoardInput } from "@/interfaces/Board.interface";
 
 interface BoardListProps {
@@ -23,6 +24,7 @@ const BoardList = memo(function BoardList({
     deleteBoard,
     archiveBoard,
   } = useBoards();
+  const { showToast } = useToastContext();
   const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [editingBoard, setEditingBoard] = useState<Board | null>(null);
@@ -40,16 +42,17 @@ const BoardList = memo(function BoardList({
       try {
         await addBoard(input);
         setShowCreateModal(false);
+        showToast("✅ Board başarıyla oluşturuldu!", "success");
       } catch (err) {
-        // Board oluşturma hatası
-        alert(
-          err instanceof Error ? err.message : "Board oluşturulamadı."
+        showToast(
+          err instanceof Error ? err.message : "Board oluşturulamadı.",
+          "error"
         );
       } finally {
         setActionLoading(false);
       }
     },
-    [addBoard]
+    [addBoard, showToast]
   );
 
   const handleEdit = useCallback((board: Board) => {
@@ -64,16 +67,17 @@ const BoardList = memo(function BoardList({
         await updateBoard(id, input);
         setShowEditModal(false);
         setEditingBoard(null);
+        showToast("✅ Board başarıyla güncellendi!", "success");
       } catch (err) {
-        // Board güncelleme hatası
-        alert(
-          err instanceof Error ? err.message : "Board güncellenemedi."
+        showToast(
+          err instanceof Error ? err.message : "Board güncellenemedi.",
+          "error"
         );
       } finally {
         setActionLoading(false);
       }
     },
-    [updateBoard]
+    [updateBoard, showToast]
   );
 
   const handleDelete = useCallback(
@@ -81,14 +85,17 @@ const BoardList = memo(function BoardList({
       setActionLoading(true);
       try {
         await deleteBoard(board.id);
+        showToast("✅ Board başarıyla silindi!", "success");
       } catch (err) {
-        // Board silme hatası
-        alert(err instanceof Error ? err.message : "Board silinemedi.");
+        showToast(
+          err instanceof Error ? err.message : "Board silinemedi.",
+          "error"
+        );
       } finally {
         setActionLoading(false);
       }
     },
-    [deleteBoard]
+    [deleteBoard, showToast]
   );
 
   const handleArchive = useCallback(
@@ -96,16 +103,22 @@ const BoardList = memo(function BoardList({
       setActionLoading(true);
       try {
         await archiveBoard(board.id, archived);
+        showToast(
+          archived
+            ? "✅ Board başarıyla arşivlendi!"
+            : "✅ Board arşivden çıkarıldı!",
+          "success"
+        );
       } catch (err) {
-        // Board arşivleme hatası
-        alert(
-          err instanceof Error ? err.message : "Board arşivlenemedi."
+        showToast(
+          err instanceof Error ? err.message : "Board arşivlenemedi.",
+          "error"
         );
       } finally {
         setActionLoading(false);
       }
     },
-    [archiveBoard]
+    [archiveBoard, showToast]
   );
 
   const handleCloseEdit = useCallback(() => {

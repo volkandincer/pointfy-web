@@ -3,6 +3,7 @@
 import { memo, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import RoomPinModal from "@/components/rooms/RoomPinModal";
+import { useToastContext } from "@/contexts/ToastContext";
 import type { RoomInfo } from "@/interfaces/Room.interface";
 import { getSupabase } from "@/lib/supabase";
 import {
@@ -13,6 +14,7 @@ import {
 
 const HomeWelcome = memo(function HomeWelcome() {
   const router = useRouter();
+  const { showToast } = useToastContext();
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [rooms, setRooms] = useState<RoomInfo[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -121,7 +123,7 @@ const HomeWelcome = memo(function HomeWelcome() {
       const result = await checkRoomEntry(roomId);
       
       if (result.error) {
-        alert(result.error);
+        showToast(result.error, "error");
         return;
       }
 
@@ -143,8 +145,7 @@ const HomeWelcome = memo(function HomeWelcome() {
       setShowResults(false);
       router.push(`/app/rooms/${roomId}`);
     } catch (err) {
-      // Room entry error
-      alert("Odaya giriş yapılırken bir hata oluştu.");
+      showToast("Odaya giriş yapılırken bir hata oluştu.", "error");
     }
   };
 

@@ -6,6 +6,7 @@ import RequireAuth from "@/components/auth/RequireAuth";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CreateRoomForm from "@/components/rooms/CreateRoomForm";
+import { useToastContext } from "@/contexts/ToastContext";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type {
@@ -29,6 +30,7 @@ function CreateRoomPageContent() {
     []
   );
   const router = useRouter();
+  const { showToast } = useToastContext();
   const searchParams = useSearchParams();
   const roomTypeFromQuery = searchParams.get("type") as RoomType | null;
   const [loading, setLoading] = useState<boolean>(false);
@@ -120,13 +122,12 @@ function CreateRoomPageContent() {
         // Odaya yönlendir
         router.replace(`/app/rooms/${roomData.id}`);
       } catch (err: unknown) {
-        // CreateRoomPage: Oda oluşturma hatası
-        alert((err as Error).message || "Oda oluşturulamadı.");
+        showToast((err as Error).message || "Oda oluşturulamadı.", "error");
       } finally {
         setLoading(false);
       }
     },
-    [userKey, username, router]
+    [userKey, username, router, showToast]
   );
 
   return (

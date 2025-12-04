@@ -6,6 +6,7 @@ import RequireAuth from "@/components/auth/RequireAuth";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Modal from "@/components/ui/Modal";
+import { useToastContext } from "@/contexts/ToastContext";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import { getSupabase } from "@/lib/supabase";
@@ -16,6 +17,7 @@ export default function AccountPage() {
     []
   );
   const router = useRouter();
+  const { showToast } = useToastContext();
   const [userKey, setUserKey] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [email, setEmail] = useState<string>("");
@@ -213,9 +215,9 @@ export default function AccountPage() {
 
       setUsername(newUsername.trim());
       setEditingUsername(false);
+      showToast("✅ Kullanıcı adı başarıyla güncellendi!", "success");
     } catch (err) {
-      // Username update error
-      alert("Kullanıcı adı güncellenemedi.");
+      showToast("Kullanıcı adı güncellenemedi.", "error");
     } finally {
       setSaving(false);
     }
@@ -247,15 +249,14 @@ export default function AccountPage() {
           userId = userData.user.id;
         }
       } catch (err) {
-        // User ID alınamadı
-        alert("Kullanıcı bilgileri alınamadı. Lütfen sayfayı yenileyin.");
+        showToast("Kullanıcı bilgileri alınamadı. Lütfen sayfayı yenileyin.", "error");
         setShowJiraPermissionModal(false);
         return;
       }
     }
 
     if (!userId) {
-      alert("Kullanıcı bilgileri alınamadı. Lütfen sayfayı yenileyin.");
+      showToast("Kullanıcı bilgileri alınamadı. Lütfen sayfayı yenileyin.", "error");
       setShowJiraPermissionModal(false);
       return;
     }
@@ -290,10 +291,9 @@ export default function AccountPage() {
       if (error) throw error;
 
       setJiraConnected(false);
-      alert("Jira hesabı bağlantıdan koparıldı.");
+      showToast("✅ Jira hesabı bağlantıdan koparıldı.", "success");
     } catch (err) {
-      // Jira disconnect error
-      alert("Jira bağlantısı koparılamadı.");
+      showToast("Jira bağlantısı koparılamadı.", "error");
     }
   };
 

@@ -4,6 +4,7 @@ import { memo, useCallback, useEffect, useState } from "react";
 import { getSupabase } from "@/lib/supabase";
 import { useVotes } from "@/hooks/useVotes";
 import { useVotingSession } from "@/hooks/useVotingSession";
+import { useToastContext } from "@/contexts/ToastContext";
 import type { TaskInfo } from "@/interfaces/Voting.interface";
 
 interface AdminVotingViewProps {
@@ -17,6 +18,7 @@ const AdminVotingView = memo(function AdminVotingView({
   activeTask,
   isAdmin = true, // Varsayılan olarak true, ama kontrol için kullanılabilir
 }: AdminVotingViewProps) {
+  const { showToast } = useToastContext();
   const { votes, loading: votesLoading } = useVotes(
     roomId,
     activeTask.id,
@@ -28,7 +30,7 @@ const AdminVotingView = memo(function AdminVotingView({
   const handleCompleteTask = useCallback(async () => {
     // Admin kontrolü - sadece admin task'ı bitirebilir
     if (!isAdmin) {
-      alert("Bu işlem için admin yetkisi gereklidir.");
+      showToast("Bu işlem için admin yetkisi gereklidir.", "error");
       return;
     }
 
@@ -42,14 +44,14 @@ const AdminVotingView = memo(function AdminVotingView({
 
       // Task başarıyla tamamlandı
       setTaskCompleted(true);
+      showToast("✅ Task başarıyla tamamlandı!", "success");
 
       // Web'de zaten room detail sayfasındayız, yönlendirme yapmaya gerek yok
       // Realtime subscription sayesinde activeTask null olacak ve "Aktif Task Yok" ekranı gösterilecek
     } catch {
-      // Complete task error
-      alert("Task tamamlanamadı. Lütfen tekrar deneyin.");
+      showToast("Task tamamlanamadı. Lütfen tekrar deneyin.", "error");
     }
-  }, [activeTask.id, isAdmin]);
+  }, [activeTask.id, isAdmin, showToast]);
 
   const validVotes = votes.filter(
     (v) => v.point !== null && v.point !== undefined
