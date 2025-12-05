@@ -1,0 +1,91 @@
+/**
+ * useCompletedTasks Hook
+ * Presentation layer hook for managing completed tasks using use cases
+ */
+
+"use client";
+
+import { useEffect, useState } from "react";
+import { UseCaseFactory } from "@/src/application/services/UseCaseFactory";
+import type { TaskInfo } from "@/interfaces/Voting.interface";
+import { container } from "@/src/infrastructure/di/Container";
+import { TaskAdapter } from "@/src/presentation/adapters/TaskAdapter";
+
+interface UseCompletedTasksResult {
+  completedTasks: TaskInfo[];
+  loading: boolean;
+  error: string | null;
+}
+
+export function useCompletedTasks(roomId: string): UseCompletedTasksResult {
+  const [completedTasks, setCompletedTasks] = useState<TaskInfo[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!roomId) {
+      setCompletedTasks([]);
+      setLoading(false);
+      return;
+    }
+
+    let mounted = true;
+    let unsubscribe: (() => void) | undefined;
+
+    (async () => {
+      try {
+        const getCompletedTasksUseCase = UseCaseFactory.getCompletedTasks();
+        const fetchedTasks = await getCompletedTasksUseCase.execute(roomId);
+
+        if (!mounted) return;
+        setCompletedTasks(TaskAdapter.toPresentationArray(fetchedTasks));
+        setLoading(false);
+
+        // Realtime subscription - repository üzerinden
+        const taskRepository = container.getTaskRepository();
+        unsubscribe = taskRepository.subscribe(
+          roomId,
+          (newTask) => {
+            if (!mounted) return;
+            if (newTask.status === "completed") {
+              const presentationTask = TaskAdapter.toPresentation(newTask);
+              setCompletedTasks((prev) => {
+                const exists = prev.some((t) => t.id === presentationTask.id);
+                if (exists) return prev;
+                return [...prev, presentationTask];
+              });
+            }
+          },
+          (updatedTask) => {
+            if (!mounted) return;
+            const presentationTask = TaskAdapter.toPresentation(updatedTask);
+            if (updatedTask.status === "completed") {
+              setCompletedTasks((prev) =>
+                prev.map((t) => (t.id === presentationTask.id ? presentationTask : t))
+              );
+            } else {
+              // Eğer task artık completed değilse, listeden çıkar
+              setCompletedTasks((prev) => prev.filter((t) => t.id !== presentationTask.id));
+            }
+          },
+          (deletedId) => {
+            if (!mounted) return;
+            setCompletedTasks((prev) => prev.filter((t) => t.id !== deletedId));
+          }
+        );
+      } catch (err) {
+        if (!mounted) return;
+        setError(err instanceof Error ? err.message : "Bilinmeyen hata");
+        setLoading(false);
+      }
+    })();
+
+    return () => {
+      mounted = false;
+      if (unsubscribe) unsubscribe();
+    };
+  }, [roomId]);
+
+  return { completedTasks, loading, error };
+}
+

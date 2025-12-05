@@ -6,10 +6,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { UseCaseFactory } from "@/src/application/services/UseCaseFactory";
+import { UseCaseFactory } from "../../application/services/UseCaseFactory";
 import type { TaskInfo } from "@/interfaces/Voting.interface";
-import { container } from "@/src/infrastructure/di/Container";
-import { TaskAdapter } from "@/src/presentation/adapters/TaskAdapter";
+import { container } from "../../infrastructure/di/Container";
+import { TaskAdapter } from "../adapters/TaskAdapter";
 
 interface CompletedTask {
   id: string;
