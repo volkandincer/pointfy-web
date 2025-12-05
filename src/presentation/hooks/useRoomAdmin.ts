@@ -6,7 +6,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { UseCaseFactory } from "@/src/application/services/UseCaseFactory";
+import { UseCaseFactory } from "../../application/services/UseCaseFactory";
 
 interface UseRoomAdminResult {
   isAdmin: boolean;

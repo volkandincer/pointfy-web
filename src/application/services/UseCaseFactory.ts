@@ -12,6 +12,7 @@ import {
   CreateRoomUseCase,
   GetRoomUseCase,
   GetRoomParticipantsUseCase,
+  CheckRoomAdminUseCase,
   StartRetroTimerUseCase,
   StopRetroTimerUseCase,
   CreateTaskUseCase,
@@ -67,6 +68,10 @@ export class UseCaseFactory {
 
   static getRoomParticipants(): GetRoomParticipantsUseCase {
     return new GetRoomParticipantsUseCase();
+  }
+
+  static checkRoomAdmin(): CheckRoomAdminUseCase {
+    return new CheckRoomAdminUseCase(container.getRoomRepository());
   }
 
   static startRetroTimer(): StartRetroTimerUseCase {
