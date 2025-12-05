@@ -60,7 +60,6 @@ export function useRetroTimer(
         setRemainingSeconds(remaining);
         setLoading(false);
 
-        // Timer aktifse gerçek zamanlı güncelle
         if (active && room.retroTimerStartedAt && room.retroTimerDuration) {
           const startTime = room.retroTimerStartedAt.getTime();
           const durationSeconds = room.retroTimerDuration;
@@ -74,7 +73,6 @@ export function useRetroTimer(
             setRemainingSeconds(currentRemaining);
             setIsActive(currentRemaining > 0);
 
-            // Timer dolduysa veritabanını güncelle
             if (currentRemaining === 0) {
               const stopRetroTimerUseCase = UseCaseFactory.stopRetroTimer();
               stopRetroTimerUseCase.execute(roomId).catch(() => {
@@ -95,12 +93,10 @@ export function useRetroTimer(
 
     loadTimer();
 
-    // Realtime subscription - repository üzerinden
     const roomRepository = container.getRoomRepository();
     const unsubscribe = roomRepository.subscribe(roomId, (updatedRoom: Room) => {
       if (!mounted) return;
 
-      // Önceki interval'ı temizle
       if (intervalRef) {
         clearInterval(intervalRef);
         intervalRef = null;
@@ -112,7 +108,6 @@ export function useRetroTimer(
       setIsActive(active);
       setRemainingSeconds(remaining);
 
-      // Timer bitmişse veya değerler temizlenmişse durumu sıfırla
       if (!active) {
         return;
       }

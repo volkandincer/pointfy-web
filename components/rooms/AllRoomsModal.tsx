@@ -40,7 +40,6 @@ const AllRoomsModal = memo(function AllRoomsModal({
 
   useEffect(() => {
     if (!open) {
-      // Modal kapandığında arama sorgusunu temizle
       setSearchQuery("");
       return;
     }
@@ -52,7 +51,6 @@ const AllRoomsModal = memo(function AllRoomsModal({
         setError(null);
         const supabase = getSupabase();
         
-        // Kullanıcı bilgilerini al
         const { data: userData } = await supabase.auth.getUser();
         if (userData.user) {
           setUserKey(userData.user.id);
@@ -106,7 +104,6 @@ const AllRoomsModal = memo(function AllRoomsModal({
       }
 
       if (result.needsPin && result.room) {
-        // PIN gerekli
         setSelectedRoom({
           id: result.room.id,
           code: result.room.code,
@@ -115,7 +112,6 @@ const AllRoomsModal = memo(function AllRoomsModal({
         return;
       }
 
-      // Şifresiz oda - direkt giriş yap
       if (result.room && userKey && username) {
         await addUserToRoom(result.room.code, userKey, username);
       }
@@ -141,7 +137,6 @@ const AllRoomsModal = memo(function AllRoomsModal({
         return;
       }
 
-      // PIN doğru - kullanıcıyı odaya ekle
       if (userKey && username) {
         await addUserToRoom(selectedRoom.code, userKey, username);
       }

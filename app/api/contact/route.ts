@@ -13,12 +13,10 @@ export async function POST(request: Request) {
       );
     }
 
-    // Honeypot check - if triggered, return success silently
     if (body.website && body.website.trim().length > 0) {
       return NextResponse.json({ success: true }, { status: 200 });
     }
 
-    // Create contact message using use case
     const createContactMessageUseCase = UseCaseFactory.createContactMessage();
     await createContactMessageUseCase.execute({
       name: body.name || "",
@@ -31,7 +29,6 @@ export async function POST(request: Request) {
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : "Beklenmeyen hata";
     
-    // Map domain errors to user-friendly messages
     let userMessage = "Beklenmeyen hata";
     if (errorMessage.includes("Name must be between")) {
       userMessage = "Ad geçersiz";
@@ -40,7 +37,6 @@ export async function POST(request: Request) {
     } else if (errorMessage.includes("Message must be between")) {
       userMessage = "Mesaj uzunluğu geçersiz";
     } else if (errorMessage.includes("Spam detected")) {
-      // Silently return success for spam
       return NextResponse.json({ success: true }, { status: 200 });
     }
 

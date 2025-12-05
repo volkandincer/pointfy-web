@@ -21,17 +21,13 @@ const ShareRoomButton = memo(function ShareRoomButton({
   const shareUrl = useMemo(() => {
     if (!roomId) return "";
     
-    // Mevcut sayfanın tam URL'ini kullan (en güvenilir yöntem)
     if (typeof window !== "undefined") {
-      // Mevcut URL'den pathname'i değiştir
       const currentUrl = new URL(window.location.href);
       currentUrl.pathname = `/app/rooms/${roomId}`;
-      // Query parametrelerini temizle
       currentUrl.search = "";
       return currentUrl.toString();
     }
     
-    // Fallback: Environment variable kullan (SSR için)
     const baseUrl = resolveEnvValue("NEXT_PUBLIC_SITE_URL") || "";
     return baseUrl ? `${baseUrl}/app/rooms/${roomId}` : "";
   }, [roomId]);
@@ -43,37 +39,30 @@ const ShareRoomButton = memo(function ShareRoomButton({
     }
 
     try {
-      // Web Share API varsa kullan
       if (typeof navigator !== "undefined" && navigator.share) {
-        // Link'i text içine de ekle (bazı platformlar url parametresini görmezden gelebilir)
         const shareData = {
           title: `Pointfy Odasına Katıl: ${roomName}`,
           text: `${roomName} odasına katılmak için linke tıklayın!\n\nOda Kodu: ${roomCode}\n\nLink: ${shareUrl}`,
           url: shareUrl,
         };
         
-        // canShare kontrolü yap (eğer destekleniyorsa)
         if (navigator.canShare && navigator.canShare(shareData)) {
           await navigator.share(shareData);
           showToast(`Paylaşım başarılı! Link: ${shareUrl}`, "success", 5000);
           return;
         } else if (!navigator.canShare) {
-          // canShare desteklenmiyorsa direkt share dene
           await navigator.share(shareData);
           showToast(`Paylaşım başarılı! Link: ${shareUrl}`, "success", 5000);
           return;
         }
       }
 
-      // Fallback: Clipboard API - Direkt link'i kopyala
       await navigator.clipboard.writeText(shareUrl);
       setCopied(true);
       showToast(`Link kopyalandı: ${shareUrl}`, "success", 5000);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      // Kullanıcı paylaşımı iptal ettiyse hata verme
       if (err instanceof Error && err.name !== "AbortError") {
-        // Fallback: Eski yöntemle kopyala
         try {
           const textArea = document.createElement("textarea");
           textArea.value = shareUrl;
@@ -87,7 +76,6 @@ const ShareRoomButton = memo(function ShareRoomButton({
           showToast(`Link kopyalandı: ${shareUrl}`, "success", 5000);
           setTimeout(() => setCopied(false), 2000);
         } catch (fallbackErr) {
-          // Son çare: Link'i toast mesajında göster
           showToast(`Link: ${shareUrl}`, "info", 10000);
         }
       }

@@ -2,7 +2,6 @@
  * Use Cases Export
  */
 
-// Notes
 export { GetNotesUseCase } from "./notes/GetNotesUseCase";
 export { CreateNoteUseCase } from "./notes/CreateNoteUseCase";
 export type { CreateNoteDTO } from "./notes/CreateNoteUseCase";
@@ -10,7 +9,6 @@ export { UpdateNoteUseCase } from "./notes/UpdateNoteUseCase";
 export type { UpdateNoteDTO } from "./notes/UpdateNoteUseCase";
 export { DeleteNoteUseCase } from "./notes/DeleteNoteUseCase";
 
-// Rooms
 export { CreateRoomUseCase } from "./rooms/CreateRoomUseCase";
 export type { CreateRoomDTO } from "./rooms/CreateRoomUseCase";
 export { GetRoomUseCase } from "./rooms/GetRoomUseCase";
@@ -21,7 +19,6 @@ export { StartRetroTimerUseCase } from "./rooms/StartRetroTimerUseCase";
 export { StopRetroTimerUseCase } from "./rooms/StopRetroTimerUseCase";
 export type { RoomParticipant } from "./rooms/GetRoomParticipantsUseCase";
 
-// Tasks
 export { CreateTaskUseCase } from "./tasks/CreateTaskUseCase";
 export type { CreateTaskDTO } from "./tasks/CreateTaskUseCase";
 export { GetTasksUseCase } from "./tasks/GetTasksUseCase";
@@ -31,7 +28,6 @@ export { DeleteTaskUseCase } from "./tasks/DeleteTaskUseCase";
 export { GetActiveTaskUseCase } from "./tasks/GetActiveTaskUseCase";
 export { GetCompletedTasksUseCase } from "./tasks/GetCompletedTasksUseCase";
 
-// Boards
 export { GetBoardsUseCase } from "./boards/GetBoardsUseCase";
 export { CreateBoardUseCase } from "./boards/CreateBoardUseCase";
 export type { CreateBoardDTO } from "./boards/CreateBoardUseCase";
@@ -43,7 +39,6 @@ export type { ArchiveBoardDTO } from "./boards/ArchiveBoardUseCase";
 export { UpdateBoardPositionsUseCase } from "./boards/UpdateBoardPositionsUseCase";
 export type { UpdateBoardPositionsDTO } from "./boards/UpdateBoardPositionsUseCase";
 
-// Retro
 export { CreateRetroCardUseCase } from "./retro/CreateRetroCardUseCase";
 export type { CreateRetroCardDTO } from "./retro/CreateRetroCardUseCase";
 export { GetRetroCardsUseCase } from "./retro/GetRetroCardsUseCase";
@@ -57,15 +52,12 @@ export { CreateRoomCustomFlagUseCase } from "./retro/CreateRoomCustomFlagUseCase
 export { DeleteRoomCustomFlagUseCase } from "./retro/DeleteRoomCustomFlagUseCase";
 export type { UpdateRetroActionItemDTO } from "./retro/UpdateRetroActionItemUseCase";
 
-// Votes
 export { GetVotesUseCase } from "./votes/GetVotesUseCase";
 export type { GetVotesDTO } from "./votes/GetVotesUseCase";
 
-// Contact
 export { CreateContactMessageUseCase } from "./contact/CreateContactMessageUseCase";
 export type { CreateContactMessageDTO } from "./contact/CreateContactMessageUseCase";
 
-// Users
 export { UpdateUserJiraBaseUrlUseCase } from "./users/UpdateUserJiraBaseUrlUseCase";
 export type { UpdateUserJiraBaseUrlDTO } from "./users/UpdateUserJiraBaseUrlUseCase";
 

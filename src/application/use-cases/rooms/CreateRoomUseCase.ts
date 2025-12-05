@@ -34,7 +34,6 @@ export class CreateRoomUseCase {
       roomType: dto.roomType,
     });
 
-    // If password provided, set it
     if (dto.password) {
       room.setPassword(dto.password);
       return this.roomRepository.update(room);

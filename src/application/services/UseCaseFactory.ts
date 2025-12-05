@@ -42,7 +42,6 @@ import {
 } from "../use-cases";
 
 export class UseCaseFactory {
-  // Notes
   static getNotes(): GetNotesUseCase {
     return new GetNotesUseCase(container.getNoteRepository());
   }
@@ -59,7 +58,6 @@ export class UseCaseFactory {
     return new DeleteNoteUseCase(container.getNoteRepository());
   }
 
-  // Rooms
   static createRoom(): CreateRoomUseCase {
     return new CreateRoomUseCase(container.getRoomRepository());
   }
@@ -84,7 +82,6 @@ export class UseCaseFactory {
     return new StopRetroTimerUseCase(container.getRoomRepository());
   }
 
-  // Tasks
   static createTask(): CreateTaskUseCase {
     return new CreateTaskUseCase(container.getTaskRepository());
   }
@@ -112,7 +109,6 @@ export class UseCaseFactory {
     );
   }
 
-  // Boards
   static getBoards(): GetBoardsUseCase {
     return new GetBoardsUseCase(container.getBoardRepository());
   }
@@ -137,7 +133,6 @@ export class UseCaseFactory {
     return new UpdateBoardPositionsUseCase(container.getBoardRepository());
   }
 
-  // Retro Cards
   static createRetroCard(): CreateRetroCardUseCase {
     return new CreateRetroCardUseCase(container.getRetroCardRepository());
   }
@@ -150,7 +145,6 @@ export class UseCaseFactory {
     return new RevealRetroCardsUseCase(container.getRetroCardRepository());
   }
 
-  // Retro Action Items
   static createRetroActionItem(): CreateRetroActionItemUseCase {
     return new CreateRetroActionItemUseCase(container.getRetroActionItemRepository());
   }
@@ -163,7 +157,6 @@ export class UseCaseFactory {
     return new UpdateRetroActionItemUseCase(container.getRetroActionItemRepository());
   }
 
-  // Room Custom Flags
   static getRoomCustomFlags(): GetRoomCustomFlagsUseCase {
     return new GetRoomCustomFlagsUseCase(container.getRoomCustomFlagRepository());
   }
@@ -176,7 +169,6 @@ export class UseCaseFactory {
     return new DeleteRoomCustomFlagUseCase(container.getRoomCustomFlagRepository());
   }
 
-  // Votes
   static getVotes(): GetVotesUseCase {
     return new GetVotesUseCase(
       container.getVoteRepository(),
@@ -185,12 +177,10 @@ export class UseCaseFactory {
     );
   }
 
-  // Contact
   static createContactMessage(): CreateContactMessageUseCase {
     return new CreateContactMessageUseCase(container.getContactMessageRepository());
   }
 
-  // Users
   static updateUserJiraBaseUrl(): UpdateUserJiraBaseUrlUseCase {
     return new UpdateUserJiraBaseUrlUseCase(container.getUserRepository());
   }

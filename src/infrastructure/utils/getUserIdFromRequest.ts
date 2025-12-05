@@ -10,7 +10,6 @@ import { resolveEnvValue } from "@/lib/appEnvironment";
 export async function getUserIdFromRequest(
   request: Request
 ): Promise<string | null> {
-  // 1. Try to get from query params
   const { searchParams } = new URL(request.url);
   let userId: string | undefined = searchParams.get("userId") || undefined;
 
@@ -18,7 +17,6 @@ export async function getUserIdFromRequest(
     return userId;
   }
 
-  // 2. Try to get from cookie (JWT decode)
   try {
     const cookieStore = await cookies();
     const accessToken = cookieStore.get("sb-access-token")?.value;
@@ -39,7 +37,6 @@ export async function getUserIdFromRequest(
         // JWT decode failed, continue
       }
 
-      // 3. Try Supabase REST API
       if (!userId) {
         try {
           const supabaseUrl = resolveEnvValue("NEXT_PUBLIC_SUPABASE_URL");
@@ -65,7 +62,6 @@ export async function getUserIdFromRequest(
       }
     }
 
-    // 4. Last resort: Supabase client
     if (!userId) {
       const supabase = getSupabase();
       const { data: { user }, error } = await supabase.auth.getUser();

@@ -41,7 +41,6 @@ export function useVotingSession(roomId: string): VotingSessionState {
         if (activeTask && activeTask.status === "active") {
           setIsVotingActive(true);
 
-          // Task'ın başlangıç zamanını kullanarak gerçek kalan süreyi hesapla
           const taskStartTime = activeTask.updatedAt.getTime();
           const now = Date.now();
           const elapsedSeconds = Math.floor((now - taskStartTime) / 1000);
@@ -51,7 +50,6 @@ export function useVotingSession(roomId: string): VotingSessionState {
 
           timer = setInterval(() => {
             if (!mounted) return;
-            // Her saniye gerçek kalan süreyi yeniden hesapla
             const currentTime = Date.now();
             const currentElapsed = Math.floor((currentTime - taskStartTime) / 1000);
             timeLeft = Math.max(0, VOTING_DURATION_SECONDS - currentElapsed);
@@ -59,7 +57,6 @@ export function useVotingSession(roomId: string): VotingSessionState {
             if (timeLeft <= 0) {
               setIsVotingActive(false);
               setRemainingTime(0);
-              // Task'ı pending durumuna çevir
               const updateTaskUseCase = UseCaseFactory.updateTask();
               updateTaskUseCase
                 .execute({
@@ -94,12 +91,10 @@ export function useVotingSession(roomId: string): VotingSessionState {
 
     checkActiveTask();
 
-    // Realtime subscription - repository üzerinden
     const taskRepository = container.getTaskRepository();
     const unsubscribe = taskRepository.subscribe(
       roomId,
       (newTask: Task) => {
-        // Yeni task eklendiğinde kontrol et
         if (newTask.status === "active") {
           checkActiveTask();
         }
@@ -108,7 +103,6 @@ export function useVotingSession(roomId: string): VotingSessionState {
         if (!mounted) return;
 
         if (updatedTask.status === "active") {
-          // Yeni active task - timer'ı başlat
           if (timer) clearInterval(timer);
 
           const taskStartTime = updatedTask.updatedAt.getTime();
@@ -128,7 +122,6 @@ export function useVotingSession(roomId: string): VotingSessionState {
             if (timeLeft <= 0) {
               setIsVotingActive(false);
               setRemainingTime(0);
-              // Task'ı pending durumuna çevir
               const updateTaskUseCase = UseCaseFactory.updateTask();
               updateTaskUseCase
                 .execute({
@@ -155,7 +148,7 @@ export function useVotingSession(roomId: string): VotingSessionState {
         }
       },
       () => {
-        // Task silindiğinde bir şey yapmaya gerek yok
+        // Task deleted
       }
     );
 

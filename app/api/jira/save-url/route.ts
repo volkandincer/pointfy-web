@@ -2,12 +2,8 @@ import { NextResponse } from "next/server";
 import { UseCaseFactory } from "@/src/application/services/UseCaseFactory";
 import { getUserIdFromRequest } from "@/src/infrastructure/utils/getUserIdFromRequest";
 
-/**
- * Jira URL'ini veritabanına kaydet
- */
 export async function POST(request: Request) {
   try {
-    // 1. Kullanıcıyı doğrula
     const userId = await getUserIdFromRequest(request);
 
     if (!userId) {
@@ -17,7 +13,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // 2. Request body'den Jira URL'ini al
     const body = await request.json();
     const jiraBaseUrl = body.jiraBaseUrl?.trim();
 
@@ -28,7 +23,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // 3. Use case ile URL'i kaydet
     const updateUserJiraBaseUrlUseCase = UseCaseFactory.updateUserJiraBaseUrl();
     const normalizedUrl = await updateUserJiraBaseUrlUseCase.execute({
       userId,
@@ -43,7 +37,6 @@ export async function POST(request: Request) {
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : "Internal server error";
     
-    // Map domain errors to user-friendly messages
     if (errorMessage.includes("User not found")) {
       return NextResponse.json(
         { error: "User not found" },

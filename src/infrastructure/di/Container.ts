@@ -37,7 +37,6 @@ class Container {
   private contactMessageRepository: IContactMessageRepository | null = null;
   private userRepository: IUserRepository | null = null;
 
-  // Repositories
   getNoteRepository(): INoteRepository {
     if (!this.noteRepository) {
       this.noteRepository = new SupabaseNoteRepository();
@@ -108,7 +107,6 @@ class Container {
     return this.userRepository;
   }
 
-  // Reset all instances (useful for testing)
   reset(): void {
     this.noteRepository = null;
     this.roomRepository = null;

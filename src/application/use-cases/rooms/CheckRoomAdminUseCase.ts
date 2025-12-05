@@ -31,16 +31,13 @@ export class CheckRoomAdminUseCase {
       throw new Error("User key is required");
     }
 
-    // Get room by code
     const room = await this.roomRepository.findByCode(roomCode);
     if (!room) {
       throw new Error("Room not found");
     }
 
-    // Check if user is room creator
     const isCreator = room.createdBy === userKey;
 
-    // Check participant status
     const supabase = getSupabase();
     const { data: participantData } = await supabase
       .from("room_participants")
@@ -52,11 +49,10 @@ export class CheckRoomAdminUseCase {
     const isParticipantAdmin = participantData?.is_admin || false;
     const finalAdminStatus = isCreator || isParticipantAdmin;
 
-    // Build permissions
     const permissions: RoomPermissions = {
       is_admin: finalAdminStatus,
       is_spectator: false,
-      can_vote: !finalAdminStatus, // Admin puanlama yapamaz
+      can_vote: !finalAdminStatus,
       can_create_tasks: finalAdminStatus,
       can_manage_room: finalAdminStatus,
     };
