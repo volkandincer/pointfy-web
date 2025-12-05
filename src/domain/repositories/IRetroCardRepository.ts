@@ -3,13 +3,22 @@
  * Domain layer abstraction for retro card data access
  */
 
-import type { RetroCard } from "../entities/RetroCard";
+import type { RetroCard, RetroCategory } from "../entities/RetroCard";
+
+export interface CreateRetroCardData {
+  roomId: string;
+  userId: string;
+  userName: string;
+  category: RetroCategory;
+  content: string;
+  isRevealed: boolean;
+}
 
 export interface IRetroCardRepository {
   findById(id: string): Promise<RetroCard | null>;
   findByRoomId(roomId: string): Promise<RetroCard[]>;
   findByRoomIdAndCategory(roomId: string, category: string): Promise<RetroCard[]>;
-  create(card: Omit<RetroCard, "id" | "createdAt" | "updatedAt">): Promise<RetroCard>;
+  create(cardData: CreateRetroCardData): Promise<RetroCard>;
   update(card: RetroCard): Promise<RetroCard>;
   delete(id: string): Promise<void>;
   

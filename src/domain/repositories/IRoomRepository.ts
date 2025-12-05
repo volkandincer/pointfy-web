@@ -3,13 +3,22 @@
  * Domain layer abstraction for room data access
  */
 
-import type { Room } from "../entities/Room";
+import type { Room, RoomType } from "../entities/Room";
+
+export interface CreateRoomData {
+  name: string;
+  createdBy: string;
+  isActive: boolean;
+  isPrivate: boolean;
+  roomPassword: string | null;
+  roomType: RoomType;
+}
 
 export interface IRoomRepository {
   findById(id: string): Promise<Room | null>;
   findByCode(code: string): Promise<Room | null>;
   findByUserId(userId: string): Promise<Room[]>;
-  create(room: Omit<Room, "id" | "code" | "createdAt">): Promise<Room>;
+  create(roomData: CreateRoomData): Promise<Room>;
   update(room: Room): Promise<Room>;
   delete(id: string): Promise<void>;
   

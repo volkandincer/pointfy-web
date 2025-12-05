@@ -5,14 +5,21 @@
 
 import type { Note } from "../entities/Note";
 
+export interface CreateNoteData {
+  userId: string;
+  content: string;
+  category: string;
+  boardId: string | null;
+}
+
 export interface INoteRepository {
   findById(id: string): Promise<Note | null>;
   findByUserId(userId: string): Promise<Note[]>;
   findByBoardId(boardId: string): Promise<Note[]>;
-  create(note: Omit<Note, "id" | "createdAt" | "updatedAt">): Promise<Note>;
+  create(noteData: CreateNoteData): Promise<Note>;
   update(note: Note): Promise<Note>;
   delete(id: string): Promise<void>;
-  
+
   // Realtime subscription
   subscribe(
     userId: string,
@@ -21,4 +28,3 @@ export interface INoteRepository {
     onDelete: (id: string) => void
   ): () => void;
 }
-

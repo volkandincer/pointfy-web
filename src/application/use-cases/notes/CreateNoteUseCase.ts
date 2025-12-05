@@ -4,7 +4,7 @@
  */
 
 import type { INoteRepository } from "../../../domain/repositories/INoteRepository";
-import type { Note } from "../../../domain/entities/Note";
+import { Note } from "../../../domain/entities/Note";
 
 export interface CreateNoteDTO {
   userId: string;
@@ -35,4 +35,3 @@ export class CreateNoteUseCase {
     });
   }
 }
-

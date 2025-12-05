@@ -71,7 +71,7 @@ export class SupabaseRetroActionItemRepository implements IRetroActionItemReposi
     );
   }
 
-  async create(itemData: Omit<RetroActionItem, "id" | "createdAt" | "updatedAt" | "position">): Promise<RetroActionItem> {
+  async create(itemData: { roomId: string; content: string; createdBy: string; createdByUsername: string; isCompleted: boolean; completedAt: Date | null; flag: "high-priority" | "medium-priority" | "low-priority" | "improvement" | "research" | "general" | "custom" | null; customFlag: string | null }): Promise<RetroActionItem> {
     // Get max position for this room
     const { data: existingItems } = await this.getClient()
       .from("retro_action_items")

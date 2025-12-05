@@ -92,7 +92,7 @@ export class SupabaseRetroCardRepository implements IRetroCardRepository {
     );
   }
 
-  async create(cardData: Omit<RetroCard, "id" | "createdAt" | "updatedAt">): Promise<RetroCard> {
+  async create(cardData: { roomId: string; userId: string; userName: string; category: "mad" | "sad" | "glad"; content: string; isRevealed: boolean }): Promise<RetroCard> {
     const now = new Date();
     const card = new RetroCard(
       crypto.randomUUID(),

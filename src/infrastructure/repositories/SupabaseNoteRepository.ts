@@ -85,7 +85,7 @@ export class SupabaseNoteRepository implements INoteRepository {
     );
   }
 
-  async create(noteData: Omit<Note, "id" | "createdAt" | "updatedAt">): Promise<Note> {
+  async create(noteData: { userId: string; content: string; category: string; boardId: string | null }): Promise<Note> {
     const now = new Date();
     const note = new Note(
       crypto.randomUUID(),

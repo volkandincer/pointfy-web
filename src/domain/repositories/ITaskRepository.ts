@@ -3,12 +3,23 @@
  * Domain layer abstraction for task data access
  */
 
-import type { Task } from "../entities/Task";
+import type { Task, TaskStatus } from "../entities/Task";
+
+export interface CreateTaskData {
+  roomId: string;
+  title: string;
+  description: string | null;
+  status: TaskStatus;
+  createdBy: string;
+  jiraKey: string | null;
+  jiraUrl: string | null;
+  jiraId: string | null;
+}
 
 export interface ITaskRepository {
   findById(id: string): Promise<Task | null>;
   findByRoomId(roomId: string): Promise<Task[]>;
-  create(task: Omit<Task, "id" | "createdAt" | "updatedAt">): Promise<Task>;
+  create(taskData: CreateTaskData): Promise<Task>;
   update(task: Task): Promise<Task>;
   delete(id: string): Promise<void>;
   

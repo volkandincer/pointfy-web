@@ -109,7 +109,7 @@ export class SupabaseRoomRepository implements IRoomRepository {
       .filter((room): room is Room => room !== null);
   }
 
-  async create(roomData: Omit<Room, "id" | "code" | "createdAt">): Promise<Room> {
+  async create(roomData: { name: string; createdBy: string; isActive: boolean; isPrivate: boolean; roomPassword: string | null; roomType: "poker" | "retro" }): Promise<Room> {
     const code = await this.generateUniqueCode();
     const now = new Date();
     const room = new Room(
