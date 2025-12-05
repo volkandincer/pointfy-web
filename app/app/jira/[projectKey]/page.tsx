@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, X, ClipboardList, Search } from "lucide-react";
+import { ArrowLeft, X, ClipboardList, Search, Clock, CheckCircle2 } from "lucide-react";
 import type {
   JiraAdfDocument,
   JiraAdfNode,
@@ -408,7 +408,7 @@ export default function JiraProjectDetailPage() {
                 {[1, 2, 3, 4].map((i) => (
                   <div
                     key={i}
-                    className="group relative overflow-hidden rounded-xl border border-gray-200/50 bg-white p-5 shadow-sm dark:border-gray-800/50 dark:bg-gray-900"
+                    className="group relative border border-gray-300 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900"
                   >
                     <div className="mb-2 h-10 w-10 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800" />
                     <div className="mb-2 h-4 w-20 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
@@ -418,23 +418,10 @@ export default function JiraProjectDetailPage() {
               </div>
             ) : (
               <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
-                <div className="group relative overflow-hidden rounded-xl border border-gray-200/50 bg-gradient-to-br from-blue-50 to-blue-100/50 p-5 shadow-sm transition-all hover:shadow-md dark:border-gray-800/50 dark:from-blue-950/30 dark:to-blue-900/20">
-                <div className="relative z-10">
+                <div className="border border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
                   <div className="mb-2 flex items-center justify-between">
-                    <div className="rounded-lg bg-blue-500/10 p-2 dark:bg-blue-500/20">
-                      <svg
-                        className="h-5 w-5 text-blue-600 dark:text-blue-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                        />
-                      </svg>
+                    <div className="border-2 border-blue-600 bg-blue-50 p-2 dark:bg-blue-900/20">
+                      <ClipboardList className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                     </div>
                   </div>
                   <div className="text-xs font-medium text-gray-600 dark:text-gray-400">
@@ -445,62 +432,33 @@ export default function JiraProjectDetailPage() {
                   </div>
                 </div>
               </div>
-              <div className="group relative overflow-hidden rounded-xl border border-gray-200/50 bg-gradient-to-br from-orange-50 to-orange-100/50 p-5 shadow-sm transition-all hover:shadow-md dark:border-gray-800/50 dark:from-orange-950/30 dark:to-orange-900/20">
-                <div className="relative z-10">
-                  <div className="mb-2 flex items-center justify-between">
-                    <div className="rounded-lg bg-orange-500/10 p-2 dark:bg-orange-500/20">
-                      <svg
-                        className="h-5 w-5 text-orange-600 dark:text-orange-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                  <div className="text-xs font-medium text-gray-600 dark:text-gray-400">Açık</div>
-                  <div className="mt-1 text-3xl font-bold text-orange-700 dark:text-orange-300">
-                    {allIssues.filter((i) => i.statusColor !== "green" && !i.resolved).length}
+              <div className="border border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
+                <div className="mb-2 flex items-center justify-between">
+                  <div className="border-2 border-orange-600 bg-orange-50 p-2 dark:bg-orange-900/20">
+                    <Clock className="h-5 w-5 text-orange-600 dark:text-orange-400" />
                   </div>
                 </div>
-              </div>
-              <div className="group relative overflow-hidden rounded-xl border border-gray-200/50 bg-gradient-to-br from-green-50 to-green-100/50 p-5 shadow-sm transition-all hover:shadow-md dark:border-gray-800/50 dark:from-green-950/30 dark:to-green-900/20">
-                <div className="relative z-10">
-                  <div className="mb-2 flex items-center justify-between">
-                    <div className="rounded-lg bg-green-500/10 p-2 dark:bg-green-500/20">
-                      <svg
-                        className="h-5 w-5 text-green-600 dark:text-green-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                  <div className="text-xs font-medium text-gray-600 dark:text-gray-400">
-                    Tamamlanan
-                  </div>
-                  <div className="mt-1 text-3xl font-bold text-green-700 dark:text-green-300">
-                    {allIssues.filter((i) => i.statusColor === "green" || i.resolved).length}
-                  </div>
+                <div className="text-xs font-medium text-gray-600 dark:text-gray-400">Açık</div>
+                <div className="mt-1 text-3xl font-bold text-orange-700 dark:text-orange-300">
+                  {allIssues.filter((i) => i.statusColor !== "green" && !i.resolved).length}
                 </div>
               </div>
-              <div className="group relative overflow-hidden rounded-xl border border-gray-200/50 bg-gradient-to-br from-purple-50 to-purple-100/50 p-5 shadow-sm transition-all hover:shadow-md dark:border-gray-800/50 dark:from-purple-950/30 dark:to-purple-900/20">
-                <div className="relative z-10">
-                  <div className="mb-2 flex items-center justify-between">
-                    <div className="rounded-lg bg-purple-500/10 p-2 dark:bg-purple-500/20">
+              <div className="border border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
+                <div className="mb-2 flex items-center justify-between">
+                  <div className="border-2 border-green-600 bg-green-50 p-2 dark:bg-green-900/20">
+                    <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
+                  </div>
+                </div>
+                <div className="text-xs font-medium text-gray-600 dark:text-gray-400">
+                  Tamamlanan
+                </div>
+                <div className="mt-1 text-3xl font-bold text-green-700 dark:text-green-300">
+                  {allIssues.filter((i) => i.statusColor === "green" || i.resolved).length}
+                </div>
+              </div>
+              <div className="border border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
+                <div className="mb-2 flex items-center justify-between">
+                  <div className="border-2 border-purple-600 bg-purple-50 p-2 dark:bg-purple-900/20">
                       <svg
                         className="h-5 w-5 text-purple-600 dark:text-purple-400"
                         fill="none"

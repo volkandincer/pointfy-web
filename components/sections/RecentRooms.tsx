@@ -161,10 +161,13 @@ const RecentRooms = memo(function RecentRooms() {
                 <button
                   key={r.id}
                   onClick={() => handleRoomClick(r.id)}
-                  className="group relative w-full flex items-center gap-4 overflow-hidden rounded-2xl border-2 border-l-4 border-l-blue-600 border-blue-400/15 bg-white p-5 text-left shadow-[0_6px_16px_rgba(59,130,246,0.12)] transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(59,130,246,0.2)] dark:border-blue-500/10 dark:bg-gray-900 dark:border-l-blue-500"
+                  className="group relative w-full flex items-center gap-4 border-l-4 border-t border-r border-b border-gray-300 bg-white p-5 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                  style={{
+                    borderLeftColor: '#2563eb',
+                  }}
                 >
                   {/* Icon Container */}
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-blue-50/80 shadow-[0_4px_8px_rgba(59,130,246,0.1)] dark:bg-blue-900/20">
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
                     <Home className="h-7 w-7 text-blue-600 dark:text-blue-400" />
                   </div>
 
@@ -186,7 +189,7 @@ const RecentRooms = memo(function RecentRooms() {
                   </div>
 
                   {/* Arrow Icon */}
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white shadow-sm transition group-hover:scale-110">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-blue-600 bg-blue-600 text-white transition-colors group-hover:bg-blue-700 group-hover:border-blue-700">
                     <ChevronRight className="h-5 w-5" />
                   </div>
                 </button>
@@ -197,7 +200,7 @@ const RecentRooms = memo(function RecentRooms() {
             {hasMoreRooms && (
               <button
                 onClick={() => setShowAllRoomsModal(true)}
-                className="group mt-4 w-full flex items-center justify-center gap-2 rounded-2xl border border-blue-400/20 bg-white p-5 shadow-[0_6px_16px_rgba(59,130,246,0.08)] transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(59,130,246,0.15)] dark:border-blue-500/20 dark:bg-gray-900"
+                className="group mt-4 w-full flex items-center justify-center gap-2 border-2 border-blue-600 bg-white p-5 shadow-sm transition-all hover:border-blue-700 hover:shadow-md hover:bg-blue-50 dark:border-blue-500 dark:bg-gray-900 dark:hover:bg-blue-900/20"
               >
                 <ClipboardList className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                 <span className="text-sm font-semibold text-gray-900 dark:text-white">

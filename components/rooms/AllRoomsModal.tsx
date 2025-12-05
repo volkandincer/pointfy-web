@@ -227,11 +227,14 @@ const AllRoomsModal = memo(function AllRoomsModal({
               <button
                 key={room.id}
                 onClick={() => handleRoomClick(room.id)}
-                className="group w-full rounded-xl border border-gray-200/70 bg-white p-4 text-left transition-all hover:-translate-y-0.5 hover:border-blue-400/50 hover:shadow-md dark:border-gray-800/70 dark:bg-gray-900 dark:hover:border-blue-500/50"
+                className="group w-full border-l-4 border-t border-r border-b border-gray-300 bg-white p-4 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                style={{
+                  borderLeftColor: '#2563eb',
+                }}
               >
                 <div className="flex items-center gap-4">
                   {/* Icon Container */}
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50/80 shadow-sm dark:bg-blue-900/20">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
                     <Home className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                   </div>
 
@@ -253,7 +256,7 @@ const AllRoomsModal = memo(function AllRoomsModal({
                   </div>
 
                   {/* Arrow Icon */}
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white shadow-sm transition group-hover:scale-110">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center border-2 border-blue-600 bg-blue-600 text-white transition-colors group-hover:bg-blue-700 group-hover:border-blue-700">
                     <ChevronRight className="h-4 w-4" />
                   </div>
                 </div>
@@ -265,7 +268,7 @@ const AllRoomsModal = memo(function AllRoomsModal({
 
       <button
         onClick={onClose}
-        className="mt-6 w-full rounded-xl border border-gray-300 bg-transparent px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+        className="mt-6 w-full border-2 border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
       >
         Kapat
       </button>
