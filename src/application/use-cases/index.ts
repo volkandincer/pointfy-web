@@ -14,6 +14,8 @@ export { DeleteNoteUseCase } from "./notes/DeleteNoteUseCase";
 export { CreateRoomUseCase } from "./rooms/CreateRoomUseCase";
 export type { CreateRoomDTO } from "./rooms/CreateRoomUseCase";
 export { GetRoomUseCase } from "./rooms/GetRoomUseCase";
+export { GetRoomParticipantsUseCase } from "./rooms/GetRoomParticipantsUseCase";
+export type { RoomParticipant } from "./rooms/GetRoomParticipantsUseCase";
 
 // Tasks
 export { CreateTaskUseCase } from "./tasks/CreateTaskUseCase";

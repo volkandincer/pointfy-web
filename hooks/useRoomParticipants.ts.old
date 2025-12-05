@@ -1,17 +1,14 @@
-/**
- * useRoomParticipants Hook
- * Presentation layer hook for managing room participants using use cases
- */
-
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { UseCaseFactory } from "@/src/application/services/UseCaseFactory";
-import type { RoomParticipant } from "@/src/application/use-cases/rooms/GetRoomParticipantsUseCase";
 import { getSupabase } from "@/lib/supabase";
 
-// Export RoomParticipant type for components
-export type { RoomParticipant };
+export interface RoomParticipant {
+  user_key: string;
+  username: string;
+  is_admin: boolean;
+  joined_at: string;
+}
 
 interface UseRoomParticipantsResult {
   participants: RoomParticipant[];
@@ -37,9 +34,19 @@ export function useRoomParticipants(
     setLoading(true);
     setError(null);
     try {
-      const getRoomParticipantsUseCase = UseCaseFactory.getRoomParticipants();
-      const fetchedParticipants = await getRoomParticipantsUseCase.execute(roomCode);
-      setParticipants(fetchedParticipants);
+      const supabase = getSupabase();
+      const { data, error: fetchError } = await supabase
+        .from("room_participants")
+        .select("user_key, username, is_admin, joined_at")
+        .eq("room_code", roomCode)
+        .order("joined_at", { ascending: true });
+
+      if (fetchError) {
+        setError(fetchError.message);
+        setParticipants([]);
+      } else {
+        setParticipants(data || []);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Bilinmeyen hata");
       setParticipants([]);
@@ -58,7 +65,6 @@ export function useRoomParticipants(
     let mounted = true;
     fetchParticipants();
 
-    // Realtime subscription
     const supabase = getSupabase();
     const channel = supabase
       .channel("room-participants-" + roomCode)

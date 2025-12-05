@@ -6,12 +6,9 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { UseCaseFactory } from "@/src/application/services/UseCaseFactory";
-import type { RoomParticipant } from "@/src/application/use-cases/rooms/GetRoomParticipantsUseCase";
+import { UseCaseFactory } from "../../application/services/UseCaseFactory";
+import type { RoomParticipant } from "../../application/use-cases/rooms/GetRoomParticipantsUseCase";
 import { getSupabase } from "@/lib/supabase";
-
-// Export RoomParticipant type for components
-export type { RoomParticipant };
 
 interface UseRoomParticipantsResult {
   participants: RoomParticipant[];

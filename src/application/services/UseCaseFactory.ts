@@ -11,6 +11,7 @@ import {
   DeleteNoteUseCase,
   CreateRoomUseCase,
   GetRoomUseCase,
+  GetRoomParticipantsUseCase,
   CreateTaskUseCase,
   GetTasksUseCase,
   UpdateTaskUseCase,
@@ -56,6 +57,10 @@ export class UseCaseFactory {
 
   static getRoom(): GetRoomUseCase {
     return new GetRoomUseCase(container.getRoomRepository());
+  }
+
+  static getRoomParticipants(): GetRoomParticipantsUseCase {
+    return new GetRoomParticipantsUseCase();
   }
 
   // Tasks
