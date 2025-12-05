@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import EmptyState from "@/components/jira/EmptyState";
+import JqlInput from "@/components/jira/JqlInput";
 import { getStatusColorClasses } from "@/lib/jira/colors";
 import type { JiraTask } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
@@ -185,25 +186,13 @@ export default function JiraSearchPage() {
             >
               JQL Sorgusu
             </label>
-            <div className="relative">
-              <textarea
-                id="jql"
-                value={jql}
-                onChange={(e) => setJql(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
-                    e.preventDefault();
-                    performSearch();
-                  }
-                }}
-                placeholder='örn: assignee = currentUser() AND status != Done'
-                rows={3}
-                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 font-mono"
-              />
-            </div>
-            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-              JQL sorgunuzu girin. Arama yapmak için Cmd/Ctrl + Enter tuşlarına basın.
-            </p>
+            <JqlInput
+              value={jql}
+              onChange={setJql}
+              onSearch={performSearch}
+              placeholder='örn: assignee = currentUser() AND status != Done'
+              disabled={loading}
+            />
           </div>
 
           {/* Max Results */}
