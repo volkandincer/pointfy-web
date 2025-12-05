@@ -229,11 +229,10 @@ function LoginPageContent() {
         <div className="container mx-auto flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-16">
           <div className="w-full max-w-md">
             {/* Card */}
-            <div className="rounded-2xl border border-gray-200/70 bg-white/80 p-8 shadow-xl backdrop-blur-md dark:border-gray-800/70 dark:bg-gray-900/80">
+            <div className="border border-gray-300 bg-white p-8 shadow-md dark:border-gray-700 dark:bg-gray-900">
               {/* Logo */}
               <div className="mb-8 flex justify-center">
-                <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 via-blue-500 to-purple-600 p-2 shadow-xl shadow-blue-500/30">
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/20 to-transparent" />
+                <div className="relative flex h-16 w-16 items-center justify-center border-2 border-blue-600 bg-blue-50 p-2 dark:bg-blue-900/20">
                   <svg
                     className="relative h-full w-full text-white"
                     viewBox="0 0 24 24"
@@ -271,10 +270,10 @@ function LoginPageContent() {
               {/* Tab buttons */}
               <div className="mb-8 flex gap-2 border border-gray-300 bg-gray-100 p-1 dark:border-gray-700 dark:bg-gray-800">
                 <button
-                  className={`flex-1 rounded-md px-4 py-2.5 text-sm font-semibold transition-all ${
+                  className={`flex-1 border-2 px-4 py-2.5 text-sm font-semibold transition-colors ${
                     isLogin
-                      ? "bg-white text-gray-900 shadow-sm dark:bg-gray-700 dark:text-white"
-                      : "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                      ? "border-blue-600 bg-blue-600 text-white"
+                      : "border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                   }`}
                   onClick={() => {
                     setIsLogin(true);
@@ -284,10 +283,10 @@ function LoginPageContent() {
                   Giriş Yap
                 </button>
                 <button
-                  className={`flex-1 rounded-md px-4 py-2.5 text-sm font-semibold transition-all ${
+                  className={`flex-1 border-2 px-4 py-2.5 text-sm font-semibold transition-colors ${
                     !isLogin
-                      ? "bg-white text-gray-900 shadow-sm dark:bg-gray-700 dark:text-white"
-                      : "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                      ? "border-blue-600 bg-blue-600 text-white"
+                      : "border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                   }`}
                   onClick={() => {
                     setIsLogin(false);
