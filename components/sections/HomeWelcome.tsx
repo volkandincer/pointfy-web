@@ -196,7 +196,7 @@ const HomeWelcome = memo(function HomeWelcome() {
                   if (rooms.length > 0) setShowResults(true);
                 }}
                 placeholder="Oda ara (ad, kod veya oluşturan)..."
-                className="w-full rounded-2xl border-2 border-gray-300 bg-white px-5 py-4 pl-12 pr-12 text-base outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
+                className="w-full border-2 border-gray-300 bg-white px-5 py-4 pl-12 pr-12 text-base outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
               />
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl text-gray-400">
                 🔍
@@ -216,7 +216,7 @@ const HomeWelcome = memo(function HomeWelcome() {
 
             {/* Arama Sonuçları */}
             {showResults && searchQuery && (
-              <div className="absolute z-50 mt-2 w-full rounded-2xl border-2 border-gray-200 bg-white shadow-xl dark:border-gray-700 dark:bg-gray-900">
+              <div className="absolute z-50 mt-2 w-full border-2 border-gray-300 bg-white shadow-md dark:border-gray-700 dark:bg-gray-900">
                 {loading ? (
                   <div className="p-4 text-center">
                     <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -239,10 +239,13 @@ const HomeWelcome = memo(function HomeWelcome() {
                       <button
                         key={room.id}
                         onClick={() => handleRoomClick(room.id)}
-                        className="group w-full rounded-xl border border-gray-200/70 bg-white p-4 text-left transition-all hover:-translate-y-0.5 hover:border-blue-400/50 hover:bg-blue-50/50 hover:shadow-md dark:border-gray-800/70 dark:bg-gray-900 dark:hover:border-blue-500/50 dark:hover:bg-blue-900/10"
+                        className="group w-full border-l-4 border-t border-r border-b border-gray-300 bg-white p-4 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                        style={{
+                          borderLeftColor: '#2563eb',
+                        }}
                       >
                         <div className="flex items-center gap-4">
-                          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50/80 text-xl shadow-sm dark:bg-blue-900/20">
+                          <div className="flex h-12 w-12 shrink-0 items-center justify-center border-2 border-blue-600 bg-blue-50 text-xl dark:bg-blue-900/20">
                             🏠
                           </div>
                           <div className="min-w-0 flex-1">

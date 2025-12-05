@@ -102,7 +102,7 @@ const EditBoardModal = memo(function EditBoardModal({
             maxLength={50}
             required
             disabled={loading}
-            className="w-full rounded-xl border-2 border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:border-blue-400"
+            className="w-full border-2 border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:border-blue-500"
           />
           <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
             {name.length}/50
@@ -124,7 +124,7 @@ const EditBoardModal = memo(function EditBoardModal({
             rows={2}
             maxLength={200}
             disabled={loading}
-            className="w-full rounded-xl border-2 border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:border-blue-400"
+            className="w-full border-2 border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:border-blue-500"
           />
           <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
             {description.length}/200
@@ -142,10 +142,10 @@ const EditBoardModal = memo(function EditBoardModal({
                 type="button"
                 onClick={() => setColor(c.value)}
                 disabled={loading}
-                className={`group relative h-12 w-full rounded-xl transition-all ${
+                className={`group relative h-12 w-full border-2 transition-all ${
                   color === c.value
-                    ? "ring-2 ring-offset-2 scale-105 shadow-lg"
-                    : "hover:scale-105 hover:shadow-md"
+                    ? "border-gray-900 scale-105"
+                    : "border-gray-300 hover:border-gray-400"
                 }`}
                 style={{
                   backgroundColor: c.value,
@@ -188,10 +188,10 @@ const EditBoardModal = memo(function EditBoardModal({
                 type="button"
                 onClick={() => setIcon(ic)}
                 disabled={loading}
-                className={`flex h-12 w-full items-center justify-center rounded-xl text-2xl transition-all ${
+                className={`flex h-12 w-full items-center justify-center border-2 text-2xl transition-all ${
                   icon === ic
-                    ? "bg-gradient-to-br from-blue-100 to-purple-100 ring-2 ring-blue-500 scale-105 shadow-md dark:from-blue-900/30 dark:to-purple-900/30 dark:ring-blue-400"
-                    : "bg-gray-100 hover:bg-gray-200 hover:scale-105 dark:bg-gray-800 dark:hover:bg-gray-700"
+                    ? "border-blue-600 bg-blue-50 scale-105 dark:bg-blue-900/20"
+                    : "border-gray-300 bg-white hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
                 }`}
               >
                 {ic}
@@ -205,14 +205,14 @@ const EditBoardModal = memo(function EditBoardModal({
             type="button"
             onClick={handleClose}
             disabled={loading}
-            className="flex-1 rounded-xl border-2 border-gray-300 bg-white px-5 py-3 text-sm font-semibold text-gray-700 transition-all hover:bg-gray-50 hover:border-gray-400 disabled:opacity-60 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+            className="flex-1 border-2 border-gray-300 bg-white px-5 py-3 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 disabled:opacity-60 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
           >
             İptal
           </button>
           <button
             type="submit"
             disabled={!isFormValid || loading}
-            className="flex-1 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 px-5 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-xl disabled:opacity-60 disabled:hover:shadow-lg"
+            className="flex-1 border-2 border-blue-600 bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700 disabled:opacity-60"
           >
             {loading ? (
               <span className="inline-flex items-center gap-2">
