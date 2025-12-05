@@ -15,6 +15,12 @@ import {
   GetTasksUseCase,
   UpdateTaskUseCase,
   DeleteTaskUseCase,
+  GetBoardsUseCase,
+  CreateBoardUseCase,
+  UpdateBoardUseCase,
+  DeleteBoardUseCase,
+  ArchiveBoardUseCase,
+  UpdateBoardPositionsUseCase,
   CreateRetroCardUseCase,
   GetRetroCardsUseCase,
   RevealRetroCardsUseCase,
@@ -65,6 +71,31 @@ export class UseCaseFactory {
 
   static deleteTask(): DeleteTaskUseCase {
     return new DeleteTaskUseCase(container.getTaskRepository());
+  }
+
+  // Boards
+  static getBoards(): GetBoardsUseCase {
+    return new GetBoardsUseCase(container.getBoardRepository());
+  }
+
+  static createBoard(): CreateBoardUseCase {
+    return new CreateBoardUseCase(container.getBoardRepository());
+  }
+
+  static updateBoard(): UpdateBoardUseCase {
+    return new UpdateBoardUseCase(container.getBoardRepository());
+  }
+
+  static deleteBoard(): DeleteBoardUseCase {
+    return new DeleteBoardUseCase(container.getBoardRepository());
+  }
+
+  static archiveBoard(): ArchiveBoardUseCase {
+    return new ArchiveBoardUseCase(container.getBoardRepository());
+  }
+
+  static updateBoardPositions(): UpdateBoardPositionsUseCase {
+    return new UpdateBoardPositionsUseCase(container.getBoardRepository());
   }
 
   // Retro Cards

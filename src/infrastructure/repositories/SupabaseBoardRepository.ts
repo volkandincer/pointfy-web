@@ -77,7 +77,16 @@ export class SupabaseBoardRepository implements IBoardRepository {
     );
   }
 
-  async create(boardData: Omit<Board, "id" | "createdAt" | "updatedAt">): Promise<Board> {
+  async create(boardData: {
+    userId: string;
+    name: string;
+    description: string | null;
+    color: string | null;
+    icon: string | null;
+    position: number;
+    isArchived: boolean;
+    isDeleted: boolean;
+  }): Promise<Board> {
     const now = new Date();
     const board = new Board(
       crypto.randomUUID(),

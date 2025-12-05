@@ -6,12 +6,12 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { UseCaseFactory } from "@/src/application/services/UseCaseFactory";
-import type { Board as DomainBoard } from "@/src/domain/entities/Board";
+import { UseCaseFactory } from "../../application/services/UseCaseFactory";
+import type { Board as DomainBoard } from "../../domain/entities/Board";
 import type { Board as PresentationBoard, BoardInput } from "@/interfaces/Board.interface";
 import { getSupabase } from "@/lib/supabase";
-import { container } from "@/src/infrastructure/di/Container";
-import { BoardAdapter } from "@/src/presentation/adapters/BoardAdapter";
+import { container } from "../../infrastructure/di/Container";
+import { BoardAdapter } from "../adapters/BoardAdapter";
 
 interface UseBoardsResult {
   boards: PresentationBoard[];
@@ -247,3 +247,4 @@ export function useBoards(): UseBoardsResult {
     updateBoardPositions,
   };
 }
+

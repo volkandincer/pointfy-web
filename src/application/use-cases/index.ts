@@ -23,6 +23,18 @@ export { UpdateTaskUseCase } from "./tasks/UpdateTaskUseCase";
 export type { UpdateTaskDTO } from "./tasks/UpdateTaskUseCase";
 export { DeleteTaskUseCase } from "./tasks/DeleteTaskUseCase";
 
+// Boards
+export { GetBoardsUseCase } from "./boards/GetBoardsUseCase";
+export { CreateBoardUseCase } from "./boards/CreateBoardUseCase";
+export type { CreateBoardDTO } from "./boards/CreateBoardUseCase";
+export { UpdateBoardUseCase } from "./boards/UpdateBoardUseCase";
+export type { UpdateBoardDTO } from "./boards/UpdateBoardUseCase";
+export { DeleteBoardUseCase } from "./boards/DeleteBoardUseCase";
+export { ArchiveBoardUseCase } from "./boards/ArchiveBoardUseCase";
+export type { ArchiveBoardDTO } from "./boards/ArchiveBoardUseCase";
+export { UpdateBoardPositionsUseCase } from "./boards/UpdateBoardPositionsUseCase";
+export type { UpdateBoardPositionsDTO } from "./boards/UpdateBoardPositionsUseCase";
+
 // Retro
 export { CreateRetroCardUseCase } from "./retro/CreateRetroCardUseCase";
 export type { CreateRetroCardDTO } from "./retro/CreateRetroCardUseCase";

@@ -5,10 +5,21 @@
 
 import type { Board } from "../entities/Board";
 
+export interface CreateBoardData {
+  userId: string;
+  name: string;
+  description: string | null;
+  color: string | null;
+  icon: string | null;
+  position: number;
+  isArchived: boolean;
+  isDeleted: boolean;
+}
+
 export interface IBoardRepository {
   findById(id: string): Promise<Board | null>;
   findByUserId(userId: string, includeArchived?: boolean): Promise<Board[]>;
-  create(board: Omit<Board, "id" | "createdAt" | "updatedAt">): Promise<Board>;
+  create(boardData: CreateBoardData): Promise<Board>;
   update(board: Board): Promise<Board>;
   delete(id: string): Promise<void>;
 
