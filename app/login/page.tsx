@@ -122,7 +122,7 @@ function LoginPageContent() {
       <>
         <Header navigationItems={navigationItems} />
         <main className="relative min-h-[calc(100vh-4rem)] overflow-hidden">
-          <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-blue-50 via-white to-white dark:from-gray-950/40 dark:via-gray-950 dark:to-gray-950" />
+          <div className="pointer-events-none absolute inset-0 -z-10 bg-white dark:bg-gray-950" />
           <div className="container mx-auto flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-16">
             <div className="text-center">
               <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-blue-600 border-t-transparent dark:border-blue-400" />
@@ -269,7 +269,7 @@ function LoginPageContent() {
               </div>
 
               {/* Tab buttons */}
-              <div className="mb-8 flex gap-2 rounded-lg bg-gray-100 p-1 dark:bg-gray-800">
+              <div className="mb-8 flex gap-2 border border-gray-300 bg-gray-100 p-1 dark:border-gray-700 dark:bg-gray-800">
                 <button
                   className={`flex-1 rounded-md px-4 py-2.5 text-sm font-semibold transition-all ${
                     isLogin
@@ -321,7 +321,7 @@ function LoginPageContent() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 shadow-sm outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-400"
+                    className="w-full border border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
                     placeholder="ornek@email.com"
                   />
                 </div>
@@ -338,7 +338,7 @@ function LoginPageContent() {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 shadow-sm outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-400"
+                    className="w-full border border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
                     placeholder="••••••••"
                   />
                 </div>
@@ -356,7 +356,7 @@ function LoginPageContent() {
                       required
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
-                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 shadow-sm outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-400"
+                      className="w-full border border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
                       placeholder="kullaniciadi"
                     />
                   </div>
@@ -364,7 +364,7 @@ function LoginPageContent() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:from-blue-700 hover:to-purple-700 hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="w-full border-2 border-blue-600 bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {loading
                     ? isLogin
@@ -375,7 +375,7 @@ function LoginPageContent() {
                     : "Kayıt Ol"}
                 </button>
                 {message && (
-                  <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+                  <div className="border border-red-300 bg-red-50 p-3 text-sm text-red-600 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400">
                     {message}
                   </div>
                 )}
@@ -396,7 +396,7 @@ export default function LoginPage() {
       <>
         <Header navigationItems={getDefaultNavigationItems()} />
         <main className="container mx-auto px-4 py-16">
-          <div className="h-40 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800" />
+          <div className="h-40 animate-pulse border border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
         </main>
         <Footer navigationItems={getDefaultNavigationItems()} />
       </>
