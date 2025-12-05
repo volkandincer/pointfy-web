@@ -47,3 +47,7 @@ export { GetRetroActionItemsUseCase } from "./retro/GetRetroActionItemsUseCase";
 export { UpdateRetroActionItemUseCase } from "./retro/UpdateRetroActionItemUseCase";
 export type { UpdateRetroActionItemDTO } from "./retro/UpdateRetroActionItemUseCase";
 
+// Votes
+export { GetVotesUseCase } from "./votes/GetVotesUseCase";
+export type { GetVotesDTO } from "./votes/GetVotesUseCase";
+

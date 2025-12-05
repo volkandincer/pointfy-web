@@ -28,6 +28,7 @@ import {
   CreateRetroActionItemUseCase,
   GetRetroActionItemsUseCase,
   UpdateRetroActionItemUseCase,
+  GetVotesUseCase,
 } from "../use-cases";
 
 export class UseCaseFactory {
@@ -127,6 +128,15 @@ export class UseCaseFactory {
 
   static updateRetroActionItem(): UpdateRetroActionItemUseCase {
     return new UpdateRetroActionItemUseCase(container.getRetroActionItemRepository());
+  }
+
+  // Votes
+  static getVotes(): GetVotesUseCase {
+    return new GetVotesUseCase(
+      container.getVoteRepository(),
+      container.getTaskRepository(),
+      container.getRoomRepository()
+    );
   }
 }
 

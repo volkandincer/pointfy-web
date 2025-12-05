@@ -6,11 +6,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { UseCaseFactory } from "@/src/application/services/UseCaseFactory";
+import { UseCaseFactory } from "../../application/services/UseCaseFactory";
 import type { VoteInfo } from "@/interfaces/Voting.interface";
 import { getSupabase } from "@/lib/supabase";
-import { container } from "@/src/infrastructure/di/Container";
-import { VoteAdapter } from "@/src/presentation/adapters/VoteAdapter";
+import { container } from "../../infrastructure/di/Container";
+import { VoteAdapter } from "../adapters/VoteAdapter";
 
 interface UseVotesResult {
   votes: VoteInfo[];
@@ -125,3 +125,4 @@ export function useVotes(
 
   return { votes, loading, error };
 }
+
