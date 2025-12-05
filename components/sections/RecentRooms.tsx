@@ -2,8 +2,10 @@
 
 import { memo, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Home, ClipboardList, ChevronRight } from "lucide-react";
 import AllRoomsModal from "@/components/rooms/AllRoomsModal";
 import RoomPinModal from "@/components/rooms/RoomPinModal";
+import EmptyState from "@/components/jira/EmptyState";
 import { useToastContext } from "@/contexts/ToastContext";
 import type { RoomInfo } from "@/interfaces/Room.interface";
 import { getSupabase } from "@/lib/supabase";
@@ -162,8 +164,8 @@ const RecentRooms = memo(function RecentRooms() {
                   className="group relative w-full flex items-center gap-4 overflow-hidden rounded-2xl border-2 border-l-4 border-l-blue-600 border-blue-400/15 bg-white p-5 text-left shadow-[0_6px_16px_rgba(59,130,246,0.12)] transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(59,130,246,0.2)] dark:border-blue-500/10 dark:bg-gray-900 dark:border-l-blue-500"
                 >
                   {/* Icon Container */}
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-blue-50/80 text-2xl shadow-[0_4px_8px_rgba(59,130,246,0.1)] dark:bg-blue-900/20">
-                    🏠
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-blue-50/80 shadow-[0_4px_8px_rgba(59,130,246,0.1)] dark:bg-blue-900/20">
+                    <Home className="h-7 w-7 text-blue-600 dark:text-blue-400" />
                   </div>
 
                   {/* Content */}
@@ -185,7 +187,7 @@ const RecentRooms = memo(function RecentRooms() {
 
                   {/* Arrow Icon */}
                   <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white shadow-sm transition group-hover:scale-110">
-                    <span className="text-lg font-bold">→</span>
+                    <ChevronRight className="h-5 w-5" />
                   </div>
                 </button>
               ))}
@@ -197,7 +199,7 @@ const RecentRooms = memo(function RecentRooms() {
                 onClick={() => setShowAllRoomsModal(true)}
                 className="group mt-4 w-full flex items-center justify-center gap-2 rounded-2xl border border-blue-400/20 bg-white p-5 shadow-[0_6px_16px_rgba(59,130,246,0.08)] transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(59,130,246,0.15)] dark:border-blue-500/20 dark:bg-gray-900"
               >
-                <span className="text-2xl">📋</span>
+                <ClipboardList className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                 <span className="text-sm font-semibold text-gray-900 dark:text-white">
                   Tüm odaları gör
                 </span>
@@ -208,15 +210,11 @@ const RecentRooms = memo(function RecentRooms() {
             )}
           </>
         ) : (
-          <div className="rounded-2xl border border-gray-200/70 bg-white p-8 text-center dark:border-gray-800/70 dark:bg-gray-900">
-            <p className="mb-2 text-4xl">🏠</p>
-            <p className="text-sm font-medium text-gray-900 dark:text-white">
-              Henüz oda yok
-            </p>
-            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-              İlk odanızı oluşturun
-            </p>
-          </div>
+          <EmptyState
+            icon={Home}
+            title="Henüz oda yok"
+            description="İlk odanızı oluşturun"
+          />
         )}
       </div>
       <AllRoomsModal

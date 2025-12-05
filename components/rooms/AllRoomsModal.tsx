@@ -2,8 +2,10 @@
 
 import { memo, useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import { Search, X, Home, ChevronRight } from "lucide-react";
 import Modal from "@/components/ui/Modal";
 import RoomPinModal from "@/components/rooms/RoomPinModal";
+import EmptyState from "@/components/jira/EmptyState";
 import { useToastContext } from "@/contexts/ToastContext";
 import type { RoomInfo } from "@/interfaces/Room.interface";
 import { getSupabase } from "@/lib/supabase";
@@ -176,15 +178,13 @@ const AllRoomsModal = memo(function AllRoomsModal({
             placeholder="Oda adı, kod veya oluşturan ile ara..."
             className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 pl-10 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
           />
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-            🔍
-          </span>
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
             >
-              ✕
+              <X className="h-4 w-4" />
             </button>
           )}
         </div>
@@ -210,22 +210,17 @@ const AllRoomsModal = memo(function AllRoomsModal({
             <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
           </div>
         ) : rooms.length === 0 ? (
-          <div className="py-8 text-center">
-            <p className="mb-2 text-4xl">🏠</p>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Hiç aktif oda yok.
-            </p>
-          </div>
+          <EmptyState
+            icon={Home}
+            title="Hiç aktif oda yok"
+            description="Henüz aktif bir oda bulunmuyor."
+          />
         ) : filteredRooms.length === 0 ? (
-          <div className="py-8 text-center">
-            <p className="mb-2 text-4xl">🔍</p>
-            <p className="text-sm font-medium text-gray-900 dark:text-white">
-              Arama sonucu bulunamadı
-            </p>
-            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-              &quot;{searchQuery}&quot; için sonuç yok
-            </p>
-          </div>
+          <EmptyState
+            icon={Search}
+            title="Arama sonucu bulunamadı"
+            description={`"${searchQuery}" için sonuç yok`}
+          />
         ) : (
           <div className="space-y-3">
             {filteredRooms.map((room) => (
@@ -236,8 +231,8 @@ const AllRoomsModal = memo(function AllRoomsModal({
               >
                 <div className="flex items-center gap-4">
                   {/* Icon Container */}
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50/80 text-xl shadow-sm dark:bg-blue-900/20">
-                    🏠
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50/80 shadow-sm dark:bg-blue-900/20">
+                    <Home className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                   </div>
 
                   {/* Content */}
@@ -259,7 +254,7 @@ const AllRoomsModal = memo(function AllRoomsModal({
 
                   {/* Arrow Icon */}
                   <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white shadow-sm transition group-hover:scale-110">
-                    <span className="text-sm font-bold">→</span>
+                    <ChevronRight className="h-4 w-4" />
                   </div>
                 </div>
               </button>
