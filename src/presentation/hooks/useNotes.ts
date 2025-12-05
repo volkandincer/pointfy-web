@@ -6,12 +6,12 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { UseCaseFactory } from "@/src/application/services/UseCaseFactory";
-import type { Note as DomainNote } from "@/src/domain/entities/Note";
+import { UseCaseFactory } from "../../application/services/UseCaseFactory";
+import type { Note as DomainNote } from "../../domain/entities/Note";
 import type { Note as PresentationNote } from "@/interfaces/Note.interface";
 import { getSupabase } from "@/lib/supabase";
-import { container } from "@/src/infrastructure/di/Container";
-import { NoteAdapter } from "@/src/presentation/adapters/NoteAdapter";
+import { container } from "../../infrastructure/di/Container";
+import { NoteAdapter } from "../adapters/NoteAdapter";
 
 // Legacy interface compatibility
 export interface NoteInput {
