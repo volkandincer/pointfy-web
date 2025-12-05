@@ -1,9 +1,13 @@
 "use client";
 
 import { memo, useCallback, useEffect, useState, useMemo } from "react";
+import { Search, ClipboardList } from "lucide-react";
 import { getSupabase } from "@/lib/supabase";
 import type { JiraBoard, JiraTask, JiraAdfDocument, JiraAdfNode } from "@/interfaces/Jira.interface";
 import type { JiraTaskSelectorProps } from "@/interfaces/JiraTaskSelection.interface";
+import { getStatusColorClasses, getPriorityColorClasses } from "@/lib/jira/colors";
+import FilterDropdown from "@/components/jira/FilterDropdown";
+import EmptyState from "@/components/jira/EmptyState";
 
 const JiraTaskSelector = memo(function JiraTaskSelector({
   onTaskSelect,
@@ -285,16 +289,23 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
             </p>
           </div>
         ) : boards.length === 0 ? (
-          <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 text-center dark:border-gray-700 dark:bg-gray-800">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Board bulunamadı
-            </p>
-          </div>
+          <EmptyState
+            icon={ClipboardList}
+            title="Board bulunamadı"
+            description="Jira hesabınızda board bulunmuyor."
+          />
         ) : (
-          <select
-            value={selectedBoardId || ""}
-            onChange={(e) => {
-              const boardId = Number(e.target.value) || null;
+          <FilterDropdown
+            value={selectedBoardId?.toString() || ""}
+            options={[
+              { value: "", label: "Board seçin..." },
+              ...boards.map((board) => ({
+                value: board.id.toString(),
+                label: `${board.name} (${board.location.projectKey})`,
+              })),
+            ]}
+            onChange={(value) => {
+              const boardId = value ? Number(value) : null;
               setSelectedBoardId(boardId);
               // Seçilen board'un projectKey'ini bul
               const selectedBoard = boards.find((b) => b.id === boardId);
@@ -315,15 +326,8 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
                 }
               }
             }}
-            className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          >
-            <option value="">Board seçin...</option>
-            {boards.map((board) => (
-              <option key={board.id} value={board.id}>
-                {board.name} ({board.location.projectKey})
-              </option>
-            ))}
-          </select>
+            className="w-full"
+          />
         )}
       </div>
 
@@ -343,13 +347,14 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
 
           {/* Search */}
           {issues.length > 5 && (
-            <div className="mb-3">
+            <div className="mb-3 relative">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Issue ara..."
-                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                className="w-full rounded-md border border-gray-300 bg-white pl-10 pr-3 py-2 text-sm text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
               />
             </div>
           )}
@@ -362,17 +367,11 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
               </p>
             </div>
           ) : filteredIssues.length === 0 ? (
-            <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 text-center dark:border-gray-700 dark:bg-gray-800">
-              <p className="mb-2 text-4xl">📋</p>
-              <p className="text-sm font-medium text-gray-900 dark:text-white">
-                {searchQuery ? "Arama sonucu bulunamadı" : "Issue bulunamadı"}
-              </p>
-              {searchQuery && (
-                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                  Farklı bir arama terimi deneyin
-                </p>
-              )}
-            </div>
+            <EmptyState
+              icon={ClipboardList}
+              title={searchQuery ? "Arama sonucu bulunamadı" : "Issue bulunamadı"}
+              description={searchQuery ? "Farklı bir arama terimi deneyin" : "Bu board'da issue bulunmuyor."}
+            />
           ) : (
             <div className="max-h-[400px] space-y-2 overflow-y-auto">
               {filteredIssues.map((issue) => (
@@ -387,15 +386,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
                       {issue.key}
                     </span>
                     <span
-                      className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
-                        issue.statusColor === "green"
-                          ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                          : issue.statusColor === "yellow"
-                          ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
-                          : issue.statusColor === "blue-gray"
-                          ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
-                          : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300"
-                      }`}
+                      className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${getStatusColorClasses(issue.statusColor || "gray")}`}
                     >
                       {issue.status}
                     </span>
@@ -410,7 +401,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
                   )}
                   <div className="mt-2 flex items-center gap-2">
                     {issue.priority && (
-                      <span className="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                      <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${getPriorityColorClasses(issue.priority)}`}>
                         {issue.priority}
                       </span>
                     )}

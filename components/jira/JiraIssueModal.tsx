@@ -2,7 +2,9 @@
 
 import Image from "next/image";
 import { memo, useEffect } from "react";
+import { X, ExternalLink } from "lucide-react";
 import type { JiraTask } from "@/interfaces/Jira.interface";
+import { getStatusColorClasses, getPriorityColorClasses } from "@/lib/jira/colors";
 
 interface JiraIssueModalProps {
   issue: JiraTask | null;
@@ -71,20 +73,12 @@ const JiraIssueModal = memo(function JiraIssueModal({
                   {issue.key}
                 </span>
                 <span
-                  className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                    issue.statusColor === "green"
-                      ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                      : issue.statusColor === "yellow"
-                      ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
-                      : issue.statusColor === "blue-gray"
-                      ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
-                      : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300"
-                  }`}
+                  className={`rounded-full px-3 py-1 text-xs font-semibold ${getStatusColorClasses(issue.statusColor || "gray")}`}
                 >
                   {issue.status}
                 </span>
                 {issue.priority && (
-                  <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                  <span className={`rounded-full px-3 py-1 text-xs font-medium ${getPriorityColorClasses(issue.priority)}`}>
                     {issue.priority}
                   </span>
                 )}
@@ -102,19 +96,7 @@ const JiraIssueModal = memo(function JiraIssueModal({
               onClick={onClose}
               className="ml-4 rounded-lg p-2 text-gray-400 transition hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-200"
             >
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
+              <X className="h-6 w-6" />
             </button>
           </div>
         </div>
@@ -248,19 +230,7 @@ const JiraIssueModal = memo(function JiraIssueModal({
               className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
             >
               <span>Jira&apos;da Aç</span>
-              <svg
-                className="h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                />
-              </svg>
+              <ExternalLink className="h-4 w-4" />
             </a>
             <button
               onClick={onClose}
