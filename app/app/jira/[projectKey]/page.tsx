@@ -3,14 +3,18 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
+import { ArrowLeft, X, ClipboardList, Search } from "lucide-react";
 import type {
   JiraAdfDocument,
   JiraAdfNode,
   JiraTask,
 } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
+import { getStatusColorClasses, getStatusColorClassesGradient, getPriorityColorClasses } from "@/lib/jira/colors";
 import JiraIssueModal from "@/components/jira/JiraIssueModal";
-import MobileSelect from "@/components/jira/MobileSelect";
+import FilterDropdown from "@/components/jira/FilterDropdown";
+import FilterChip from "@/components/jira/FilterChip";
+import EmptyState from "@/components/jira/EmptyState";
 
 export default function JiraProjectDetailPage() {
   const params = useParams<{ projectKey: string }>();
@@ -116,14 +120,17 @@ export default function JiraProjectDetailPage() {
 
       if (!response.ok) {
         // Project Issues API Error
-        throw new Error(data.error || "Failed to fetch project issues");
+        const errorMessage = data.error || data.message || "Failed to fetch project issues";
+        throw new Error(errorMessage);
       }
 
       // Issues'ları JiraTask formatına çevir
-      const issuesArray = data.issues || [];
+      // API response format: { issues: JiraTask[], total, startAt, maxResults }
+      const issuesArray = Array.isArray(data.issues) ? data.issues : [];
       
-      if (issuesArray.length === 0) {
-        // No issues found in response
+      if (issuesArray.length === 0 && data.total !== undefined && data.total > 0) {
+        // API'den total > 0 ama issues array boş - bu bir sorun olabilir
+        console.warn("API returned total > 0 but empty issues array", data);
       }
 
       // Helper function: ADF format description'ı string'e çevir
@@ -252,37 +259,9 @@ export default function JiraProjectDetailPage() {
     return filtered;
   }, [allIssues, searchQuery, statusFilter, priorityFilter, typeFilter, assigneeFilter]);
 
-  // Filter options
+  // Statuses array for status distribution
   const statuses = useMemo(() => {
-    const uniqueStatuses = Array.from(
-      new Set(allIssues.map((issue) => issue.status))
-    ).sort();
-    return uniqueStatuses;
-  }, [allIssues]);
-
-  const priorities = useMemo(() => {
-    const uniquePriorities = Array.from(
-      new Set(allIssues.map((issue) => issue.priority).filter((p): p is string => Boolean(p)))
-    ).sort();
-    return uniquePriorities;
-  }, [allIssues]);
-
-  const types = useMemo(() => {
-    const uniqueTypes = Array.from(
-      new Set(allIssues.map((issue) => issue.type))
-    ).sort();
-    return uniqueTypes;
-  }, [allIssues]);
-
-  const assignees = useMemo(() => {
-    const uniqueAssignees = Array.from(
-      new Set(
-        allIssues
-          .map((issue) => issue.assignee?.name)
-          .filter(Boolean) as string[]
-      )
-    ).sort();
-    return uniqueAssignees;
+    return Array.from(new Set(allIssues.map((issue) => issue.status))).sort();
   }, [allIssues]);
 
   // Filtered issues'ı set et
@@ -304,21 +283,9 @@ export default function JiraProjectDetailPage() {
       <div className="mb-8">
         <button
           onClick={() => router.push("/app/jira")}
-          className="mb-4 flex items-center text-sm text-gray-600 transition hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+          className="mb-4 flex items-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
         >
-          <svg
-            className="mr-2 h-4 w-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
+          <ArrowLeft className="h-4 w-4" />
           Jira&apos;ya Dön
         </button>
         <div className="mb-6">
@@ -589,205 +556,119 @@ export default function JiraProjectDetailPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-                {/* Status Filter */}
-                <MobileSelect
-                  value={statusFilter}
-                  onChange={setStatusFilter}
-                  label="Status"
-                  options={[
-                    { value: "all", label: "Tümü" },
-                    ...statuses.map((status) => ({ value: status, label: status })),
-                  ]}
-                />
+              <div className="space-y-3">
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+                  <FilterDropdown
+                    label="Status"
+                    value={statusFilter}
+                    options={[
+                      { value: "all", label: "Tümü" },
+                      ...statusOptions,
+                    ]}
+                    onChange={setStatusFilter}
+                    className="min-w-[140px]"
+                  />
+                  <FilterDropdown
+                    label="Priority"
+                    value={priorityFilter}
+                    options={[
+                      { value: "all", label: "Tümü" },
+                      ...priorityOptions,
+                    ]}
+                    onChange={setPriorityFilter}
+                    className="min-w-[140px]"
+                  />
+                  <FilterDropdown
+                    label="Type"
+                    value={typeFilter}
+                    options={[
+                      { value: "all", label: "Tümü" },
+                      ...typeOptions,
+                    ]}
+                    onChange={setTypeFilter}
+                    className="min-w-[140px]"
+                  />
+                  <FilterDropdown
+                    label="Assignee"
+                    value={assigneeFilter}
+                    options={[
+                      { value: "all", label: "Tümü" },
+                      { value: "unassigned", label: "Atanmamış" },
+                      ...assigneeOptions,
+                    ]}
+                    onChange={setAssigneeFilter}
+                    className="min-w-[140px]"
+                  />
+                  <FilterDropdown
+                    label="Görünüm"
+                    value={viewMode}
+                    options={[
+                      { value: "list", label: "Liste" },
+                      { value: "kanban", label: "Kanban" },
+                      { value: "compact", label: "Kompakt" },
+                    ]}
+                    onChange={(value) => setViewMode(value as "list" | "kanban" | "compact")}
+                    className="min-w-[140px]"
+                  />
+                </div>
 
-                {/* Priority Filter */}
-                <MobileSelect
-                  value={priorityFilter}
-                  onChange={setPriorityFilter}
-                  label="Priority"
-                  options={[
-                    { value: "all", label: "Tümü" },
-                    ...priorities.filter(Boolean).map((priority) => ({ value: priority, label: priority })),
-                  ]}
-                />
-
-                {/* Type Filter */}
-                <MobileSelect
-                  value={typeFilter}
-                  onChange={setTypeFilter}
-                  label="Type"
-                  options={[
-                    { value: "all", label: "Tümü" },
-                    ...types.map((type) => ({ value: type, label: type })),
-                  ]}
-                />
-
-                {/* Assignee Filter */}
-                <MobileSelect
-                  value={assigneeFilter}
-                  onChange={setAssigneeFilter}
-                  label="Assignee"
-                  options={[
-                    { value: "all", label: "Tümü" },
-                    { value: "unassigned", label: "Atanmamış" },
-                    ...assignees.map((assignee) => ({ value: assignee, label: assignee })),
-                  ]}
-                />
-
-                {/* View Mode */}
-                <MobileSelect
-                  value={viewMode}
-                  onChange={(value) => setViewMode(value as "list" | "kanban" | "compact")}
-                  label="Görünüm"
-                  options={[
-                    { value: "list", label: "Liste" },
-                    { value: "kanban", label: "Kanban" },
-                    { value: "compact", label: "Kompakt" },
-                  ]}
-                />
-              </div>
-
-              {/* Active Filters Summary */}
-              {(searchQuery ||
-                statusFilter !== "all" ||
-                priorityFilter !== "all" ||
-                typeFilter !== "all" ||
-                assigneeFilter !== "all") && (
-                <div className="mt-5 rounded-lg bg-gray-50/50 p-4 dark:bg-gray-800/50">
-                  <div className="mb-2 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <svg
-                        className="h-4 w-4 text-gray-500 dark:text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-                        />
-                      </svg>
-                      <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                        Aktif Filtreler
-                      </span>
-                    </div>
+                {/* Active Filter Chips */}
+                {activeFiltersCount > 0 && (
+                  <div className="flex flex-wrap items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800/50">
+                    <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+                      Aktif Filtreler:
+                    </span>
+                    {searchQuery.trim() && (
+                      <FilterChip
+                        label={`Arama: "${searchQuery}"`}
+                        value="search"
+                        onRemove={() => setSearchQuery("")}
+                        color="orange"
+                      />
+                    )}
+                    {statusFilter !== "all" && (
+                      <FilterChip
+                        label={`Status: ${statusOptions.find((s) => s.value === statusFilter)?.label || statusFilter}`}
+                        value={statusFilter}
+                        onRemove={() => setStatusFilter("all")}
+                        color="blue"
+                      />
+                    )}
+                    {priorityFilter !== "all" && (
+                      <FilterChip
+                        label={`Priority: ${priorityOptions.find((p) => p.value === priorityFilter)?.label || priorityFilter}`}
+                        value={priorityFilter}
+                        onRemove={() => setPriorityFilter("all")}
+                        color="green"
+                      />
+                    )}
+                    {typeFilter !== "all" && (
+                      <FilterChip
+                        label={`Type: ${typeOptions.find((t) => t.value === typeFilter)?.label || typeFilter}`}
+                        value={typeFilter}
+                        onRemove={() => setTypeFilter("all")}
+                        color="purple"
+                      />
+                    )}
+                    {assigneeFilter !== "all" && (
+                      <FilterChip
+                        label={`Assignee: ${assigneeFilter === "unassigned" ? "Atanmamış" : assigneeOptions.find((a) => a.value === assigneeFilter)?.label || assigneeFilter}`}
+                        value={assigneeFilter}
+                        onRemove={() => setAssigneeFilter("all")}
+                        color="gray"
+                      />
+                    )}
                     <button
-                      onClick={() => {
-                        setSearchQuery("");
-                        setStatusFilter("all");
-                        setPriorityFilter("all");
-                        setTypeFilter("all");
-                        setAssigneeFilter("all");
-                      }}
-                      className="rounded-lg bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700 transition hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                      onClick={clearAllFilters}
+                      className="ml-auto flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200"
                     >
+                      <X className="h-3 w-3" />
                       Tümünü Temizle
                     </button>
                   </div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    {searchQuery && (
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
-                        <span>Arama:</span>
-                        <span className="font-semibold">{searchQuery}</span>
-                        <button
-                          onClick={() => setSearchQuery("")}
-                          className="ml-1 rounded-full p-0.5 hover:bg-blue-200 dark:hover:bg-blue-900/50"
-                        >
-                          <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M6 18L18 6M6 6l12 12"
-                            />
-                          </svg>
-                        </button>
-                      </span>
-                    )}
-                    {statusFilter !== "all" && (
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-200 px-3 py-1 text-xs font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-300">
-                        <span>Status:</span>
-                        <span className="font-semibold">{statusFilter}</span>
-                        <button
-                          onClick={() => setStatusFilter("all")}
-                          className="ml-1 rounded-full p-0.5 hover:bg-gray-300 dark:hover:bg-gray-600"
-                        >
-                          <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M6 18L18 6M6 6l12 12"
-                            />
-                          </svg>
-                        </button>
-                      </span>
-                    )}
-                    {priorityFilter !== "all" && (
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-200 px-3 py-1 text-xs font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-300">
-                        <span>Priority:</span>
-                        <span className="font-semibold">{priorityFilter}</span>
-                        <button
-                          onClick={() => setPriorityFilter("all")}
-                          className="ml-1 rounded-full p-0.5 hover:bg-gray-300 dark:hover:bg-gray-600"
-                        >
-                          <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M6 18L18 6M6 6l12 12"
-                            />
-                          </svg>
-                        </button>
-                      </span>
-                    )}
-                    {typeFilter !== "all" && (
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-200 px-3 py-1 text-xs font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-300">
-                        <span>Type:</span>
-                        <span className="font-semibold">{typeFilter}</span>
-                        <button
-                          onClick={() => setTypeFilter("all")}
-                          className="ml-1 rounded-full p-0.5 hover:bg-gray-300 dark:hover:bg-gray-600"
-                        >
-                          <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M6 18L18 6M6 6l12 12"
-                            />
-                          </svg>
-                        </button>
-                      </span>
-                    )}
-                    {assigneeFilter !== "all" && (
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-200 px-3 py-1 text-xs font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-300">
-                        <span>Assignee:</span>
-                        <span className="font-semibold">
-                          {assigneeFilter === "unassigned" ? "Atanmamış" : assigneeFilter}
-                        </span>
-                        <button
-                          onClick={() => setAssigneeFilter("all")}
-                          className="ml-1 rounded-full p-0.5 hover:bg-gray-300 dark:hover:bg-gray-600"
-                        >
-                          <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M6 18L18 6M6 6l12 12"
-                            />
-                          </svg>
-                        </button>
-                      </span>
-                    )}
-                  </div>
-                </div>
-              )}
+                )}
+              </div>
+
 
               {/* Results Count */}
               <div className="mt-4 flex items-center justify-between rounded-lg bg-blue-50/50 px-4 py-2.5 dark:bg-blue-950/20">
@@ -957,13 +838,9 @@ export default function JiraProjectDetailPage() {
                               {issue.summary}
                             </span>
                             <span
-                              className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                                issue.statusColor === "green"
-                                  ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                                  : issue.statusColor === "yellow"
-                                  ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
-                                  : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300"
-                              }`}
+                              className={`rounded-full px-2 py-0.5 text-xs font-medium ${getStatusColorClasses(
+                                issue.statusColor
+                              )}`}
                             >
                               {issue.status}
                             </span>
@@ -992,20 +869,14 @@ export default function JiraProjectDetailPage() {
                                 {issue.key}
                               </span>
                               <span
-                                className={`rounded-full px-3 py-1 text-xs font-semibold shadow-sm ${
-                                  issue.statusColor === "green"
-                                    ? "bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 dark:from-green-900/30 dark:to-emerald-900/30 dark:text-green-400"
-                                    : issue.statusColor === "yellow"
-                                    ? "bg-gradient-to-r from-yellow-100 to-amber-100 text-yellow-700 dark:from-yellow-900/30 dark:to-amber-900/30 dark:text-yellow-400"
-                                    : issue.statusColor === "blue-gray"
-                                    ? "bg-gradient-to-r from-blue-100 to-cyan-100 text-blue-700 dark:from-blue-900/30 dark:to-cyan-900/30 dark:text-blue-400"
-                                    : "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 dark:from-gray-700 dark:to-gray-800 dark:text-gray-300"
-                                }`}
+                                className={`rounded-full px-3 py-1 text-xs font-semibold shadow-sm ${getStatusColorClassesGradient(
+                                  issue.statusColor
+                                )}`}
                               >
                                 {issue.status}
                               </span>
                               {issue.priority && (
-                                <span className="rounded-full bg-gradient-to-r from-orange-100 to-amber-100 px-3 py-1 text-xs font-semibold text-orange-700 shadow-sm dark:from-orange-900/30 dark:to-amber-900/30 dark:text-orange-400">
+                                <span className={`rounded-full px-3 py-1 text-xs font-semibold shadow-sm ${getPriorityColorClasses(issue.priority)}`}>
                                   {issue.priority}
                                 </span>
                               )}
@@ -1093,11 +964,29 @@ export default function JiraProjectDetailPage() {
                     )}
                   </>
                 ) : (
-                  <div className="py-12 text-center text-gray-500 dark:text-gray-400">
-                    {allIssues.length === 0
-                      ? "Bu projede issue bulunamadı"
-                      : "Filtrelere uygun issue bulunamadı"}
-                  </div>
+                  <EmptyState
+                    icon={allIssues.length === 0 ? ClipboardList : Search}
+                    title={
+                      allIssues.length === 0
+                        ? "Bu projede issue bulunamadı"
+                        : "Filtrelere uygun issue bulunamadı"
+                    }
+                    description={
+                      allIssues.length === 0
+                        ? "Bu projede henüz issue oluşturulmamış. Issue'lar oluşturulduğunda burada görünecektir."
+                        : "Arama kriterlerinize uygun issue bulunamadı. Filtreleri temizleyip tekrar deneyin."
+                    }
+                    actionLabel={
+                      allIssues.length === 0
+                        ? undefined
+                        : "Filtreleri Temizle"
+                    }
+                    onAction={
+                      allIssues.length === 0
+                        ? undefined
+                        : clearAllFilters
+                    }
+                  />
                 )}
               </div>
             </div>
