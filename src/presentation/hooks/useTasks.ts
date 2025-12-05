@@ -6,11 +6,11 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { UseCaseFactory } from "@/src/application/services/UseCaseFactory";
-import type { Task as DomainTask } from "@/src/domain/entities/Task";
+import { UseCaseFactory } from "../../application/services/UseCaseFactory";
+import type { Task as DomainTask } from "../../domain/entities/Task";
 import type { TaskInfo } from "@/interfaces/Voting.interface";
-import { container } from "@/src/infrastructure/di/Container";
-import { TaskAdapter } from "@/src/presentation/adapters/TaskAdapter";
+import { container } from "../../infrastructure/di/Container";
+import { TaskAdapter } from "../adapters/TaskAdapter";
 
 interface UseTasksResult {
   tasks: TaskInfo[];
@@ -91,3 +91,4 @@ export function useTasks(roomId: string): UseTasksResult {
 
   return { tasks, loading, error, refreshTasks };
 }
+

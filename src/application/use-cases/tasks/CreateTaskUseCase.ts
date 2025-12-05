@@ -11,6 +11,7 @@ export interface CreateTaskDTO {
   title: string;
   description?: string;
   createdBy: string;
+  createdByUsername?: string;
   status?: TaskStatus;
   jiraKey?: string;
   jiraUrl?: string;
@@ -37,6 +38,7 @@ export class CreateTaskUseCase {
       description: dto.description?.trim() || null,
       status: dto.status || "active",
       createdBy: dto.createdBy,
+      createdByUsername: dto.createdByUsername || null,
       jiraKey: dto.jiraKey || null,
       jiraUrl: dto.jiraUrl || null,
       jiraId: dto.jiraId || null,

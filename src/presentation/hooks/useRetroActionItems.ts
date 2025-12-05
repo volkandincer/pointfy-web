@@ -6,11 +6,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { UseCaseFactory } from "@/src/application/services/UseCaseFactory";
-import type { RetroActionItem as DomainRetroActionItem } from "@/src/domain/entities/RetroActionItem";
+import { UseCaseFactory } from "../../application/services/UseCaseFactory";
+import type { RetroActionItem as DomainRetroActionItem } from "../../domain/entities/RetroActionItem";
 import type { RetroActionItem as PresentationRetroActionItem } from "@/interfaces/RetroActionItem.interface";
-import { container } from "@/src/infrastructure/di/Container";
-import { RetroActionItemAdapter } from "@/src/presentation/adapters/RetroActionItemAdapter";
+import { container } from "../../infrastructure/di/Container";
+import { RetroActionItemAdapter } from "../adapters/RetroActionItemAdapter";
 
 interface UseRetroActionItemsResult {
   actionItems: PresentationRetroActionItem[];
@@ -82,3 +82,4 @@ export function useRetroActionItems(roomId: string): UseRetroActionItemsResult {
 
   return { actionItems, loading, error };
 }
+

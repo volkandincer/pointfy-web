@@ -6,11 +6,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { UseCaseFactory } from "@/src/application/services/UseCaseFactory";
-import type { RetroCard as DomainRetroCard } from "@/src/domain/entities/RetroCard";
+import { UseCaseFactory } from "../../application/services/UseCaseFactory";
+import type { RetroCard as DomainRetroCard } from "../../domain/entities/RetroCard";
 import type { RetroCard as PresentationRetroCard } from "@/interfaces/Retro.interface";
-import { container } from "@/src/infrastructure/di/Container";
-import { RetroCardAdapter } from "@/src/presentation/adapters/RetroCardAdapter";
+import { container } from "../../infrastructure/di/Container";
+import { RetroCardAdapter } from "../adapters/RetroCardAdapter";
 
 interface UseRetroCardsResult {
   cards: PresentationRetroCard[];
@@ -82,3 +82,4 @@ export function useRetroCards(roomId: string): UseRetroCardsResult {
 
   return { cards, loading, error };
 }
+

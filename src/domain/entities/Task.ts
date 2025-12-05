@@ -13,6 +13,7 @@ export class Task {
     public description: string | null,
     public status: TaskStatus,
     public readonly createdBy: string,
+    public readonly createdByUsername: string | null,
     public readonly createdAt: Date,
     public updatedAt: Date,
     public jiraKey: string | null = null,
@@ -87,7 +88,7 @@ export class Task {
     description?: string | null;
     status: TaskStatus;
     created_by_key: string;
-    created_by_username?: string;
+    created_by_username?: string | null;
     created_at: string;
     updated_at: string;
     jira_key?: string | null;
@@ -101,6 +102,7 @@ export class Task {
       row.description || null,
       row.status,
       row.created_by_key,
+      row.created_by_username || null,
       new Date(row.created_at),
       new Date(row.updated_at),
       row.jira_key || null,
@@ -117,6 +119,7 @@ export class Task {
     description: string | null;
     status: TaskStatus;
     created_by_key: string;
+    created_by_username: string | null;
     created_at: string;
     updated_at: string;
     jira_key: string | null;
@@ -130,6 +133,7 @@ export class Task {
       description: this.description,
       status: this.status,
       created_by_key: this.createdBy,
+      created_by_username: this.createdByUsername,
       created_at: this.createdAt.toISOString(),
       updated_at: this.updatedAt.toISOString(),
       jira_key: this.jiraKey,

@@ -71,7 +71,7 @@ export class SupabaseTaskRepository implements ITaskRepository {
     );
   }
 
-  async create(taskData: { roomId: string; title: string; description: string | null; status: "active" | "pending" | "completed"; createdBy: string; jiraKey: string | null; jiraUrl: string | null; jiraId: string | null }): Promise<Task> {
+  async create(taskData: { roomId: string; title: string; description: string | null; status: "active" | "pending" | "completed"; createdBy: string; createdByUsername: string | null; jiraKey: string | null; jiraUrl: string | null; jiraId: string | null }): Promise<Task> {
     const now = new Date();
     const task = new Task(
       crypto.randomUUID(),
@@ -80,6 +80,7 @@ export class SupabaseTaskRepository implements ITaskRepository {
       taskData.description,
       taskData.status,
       taskData.createdBy,
+      taskData.createdByUsername || null,
       now,
       now,
       taskData.jiraKey || null,

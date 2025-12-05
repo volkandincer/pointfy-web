@@ -11,6 +11,7 @@ export interface CreateTaskData {
   description: string | null;
   status: TaskStatus;
   createdBy: string;
+  createdByUsername: string | null;
   jiraKey: string | null;
   jiraUrl: string | null;
   jiraId: string | null;
