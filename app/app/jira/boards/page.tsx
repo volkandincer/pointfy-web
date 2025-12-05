@@ -2,7 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { Pin, BarChart3, LayoutGrid } from "lucide-react";
+import { Pin, BarChart3, LayoutGrid, X } from "lucide-react";
+import FilterDropdown from "@/components/jira/FilterDropdown";
+import FilterChip from "@/components/jira/FilterChip";
 import type { JiraBoard } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
 
@@ -92,11 +94,26 @@ export default function JiraBoardsPage() {
     }
   }, [jiraBaseUrl, fetchBoards]);
 
-  // Extract unique board types
-  const uniqueTypes = useMemo(() => {
-    const types = new Set(boards.map((board) => board.type));
-    return Array.from(types).sort();
+  // Extract unique board types with counts
+  const typeOptions = useMemo(() => {
+    const typeMap = new Map<string, number>();
+    boards.forEach((board) => {
+      typeMap.set(board.type, (typeMap.get(board.type) || 0) + 1);
+    });
+    return Array.from(typeMap.entries())
+      .map(([value, count]) => ({
+        value,
+        label: value.charAt(0).toUpperCase() + value.slice(1),
+        count,
+      }))
+      .sort((a, b) => a.label.localeCompare(b.label));
   }, [boards]);
+
+  // Clear all filters
+  const clearAllFilters = useCallback(() => {
+    setTypeFilter("all");
+    setSearchQuery("");
+  }, []);
 
   // Filter and search
   useEffect(() => {
@@ -192,44 +209,75 @@ export default function JiraBoardsPage() {
         </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap gap-3">
-          {/* Type Filter */}
-          <select
-            value={typeFilter}
-            onChange={(e) => setTypeFilter(e.target.value)}
-            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
-          >
-            <option value="all">Tüm Tipler</option>
-            {uniqueTypes.map((type) => (
-              <option key={type} value={type}>
-                {type.charAt(0).toUpperCase() + type.slice(1)}
-              </option>
-            ))}
-          </select>
+        <div className="space-y-3">
+          <div className="flex flex-wrap gap-3">
+            <FilterDropdown
+              label="Tip"
+              value={typeFilter}
+              options={[
+                { value: "all", label: "Tüm Tipler" },
+                ...typeOptions,
+              ]}
+              onChange={setTypeFilter}
+              className="min-w-[160px]"
+            />
 
-          {/* View Mode Toggle */}
-          <div className="ml-auto flex items-center gap-2 rounded-lg border border-gray-300 bg-white p-1 dark:border-gray-700 dark:bg-gray-800">
-            <button
-              onClick={() => setViewMode("list")}
-              className={`rounded-md px-3 py-1.5 text-sm transition ${
-                viewMode === "list"
-                  ? "bg-blue-600 text-white"
-                  : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
-              }`}
-            >
-              List
-            </button>
-            <button
-              onClick={() => setViewMode("grid")}
-              className={`rounded-md px-3 py-1.5 text-sm transition ${
-                viewMode === "grid"
-                  ? "bg-blue-600 text-white"
-                  : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
-              }`}
-            >
-              Grid
-            </button>
+            {/* View Mode Toggle */}
+            <div className="ml-auto flex items-center gap-2 rounded-lg border border-gray-300 bg-white p-1 dark:border-gray-700 dark:bg-gray-800">
+              <button
+                onClick={() => setViewMode("list")}
+                className={`rounded-md px-3 py-1.5 text-sm transition ${
+                  viewMode === "list"
+                    ? "bg-blue-600 text-white"
+                    : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
+                }`}
+              >
+                List
+              </button>
+              <button
+                onClick={() => setViewMode("grid")}
+                className={`rounded-md px-3 py-1.5 text-sm transition ${
+                  viewMode === "grid"
+                    ? "bg-blue-600 text-white"
+                    : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
+                }`}
+              >
+                Grid
+              </button>
+            </div>
           </div>
+
+          {/* Active Filter Chips */}
+          {(typeFilter !== "all" || searchQuery.trim()) && (
+            <div className="flex flex-wrap items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800/50">
+              <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+                Aktif Filtreler:
+              </span>
+              {typeFilter !== "all" && (
+                <FilterChip
+                  label={`Tip: ${typeOptions.find((t) => t.value === typeFilter)?.label || typeFilter}`}
+                  value={typeFilter}
+                  onRemove={() => setTypeFilter("all")}
+                  color="purple"
+                />
+              )}
+              {searchQuery.trim() && (
+                <FilterChip
+                  label={`Arama: "${searchQuery}"`}
+                  value="search"
+                  onRemove={() => setSearchQuery("")}
+                  color="orange"
+                />
+              )}
+              <button
+                onClick={clearAllFilters}
+                className="ml-auto flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200"
+              >
+                <X className="h-3 w-3" />
+                Tümünü Temizle
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

@@ -1,0 +1,120 @@
+"use client";
+
+import { memo, useState, useRef, useEffect } from "react";
+import { ChevronDown, Check } from "lucide-react";
+
+interface FilterOption {
+  value: string;
+  label: string;
+  count?: number;
+}
+
+interface FilterDropdownProps {
+  label: string;
+  value: string;
+  options: FilterOption[];
+  onChange: (value: string) => void;
+  placeholder?: string;
+  className?: string;
+}
+
+const FilterDropdown = memo(function FilterDropdown({
+  label,
+  value,
+  options,
+  onChange,
+  placeholder = "Seçiniz",
+  className = "",
+}: FilterDropdownProps) {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const selectedOption = options.find((opt) => opt.value === value);
+  const displayLabel = selectedOption ? selectedOption.label : placeholder;
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    }
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
+  return (
+    <div className={`relative ${className}`} ref={dropdownRef}>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex w-full items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition-all hover:border-blue-400 hover:bg-gray-50 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-blue-600 dark:hover:bg-gray-700"
+      >
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">
+            {label}:
+          </span>
+          <span className={value === "all" ? "text-gray-500 dark:text-gray-400" : "text-gray-900 dark:text-white"}>
+            {displayLabel}
+          </span>
+        </div>
+        <ChevronDown
+          className={`h-4 w-4 text-gray-400 transition-transform ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+
+      {isOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-10"
+            onClick={() => setIsOpen(false)}
+          />
+          <div className="absolute z-20 mt-1 w-full rounded-lg border border-gray-200 bg-white shadow-xl dark:border-gray-700 dark:bg-gray-800">
+            <div className="max-h-64 overflow-y-auto">
+              {options.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => {
+                    onChange(option.value);
+                    setIsOpen(false);
+                  }}
+                  className={`flex w-full items-center justify-between px-4 py-2.5 text-left text-sm transition-colors ${
+                    value === option.value
+                      ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+                      : "text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <span>{option.label}</span>
+                    {option.count !== undefined && (
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        ({option.count})
+                      </span>
+                    )}
+                  </div>
+                  {value === option.value && (
+                    <Check className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+});
+
+export default FilterDropdown;
+

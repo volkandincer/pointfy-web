@@ -2,7 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { ClipboardList } from "lucide-react";
+import { ClipboardList, X } from "lucide-react";
+import FilterDropdown from "@/components/jira/FilterDropdown";
+import FilterChip from "@/components/jira/FilterChip";
 import type { JiraTask } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
 
@@ -98,28 +100,66 @@ export default function JiraIssuesPage() {
     }
   }, [jiraBaseUrl, fetchIssues]);
 
-  // Extract unique values for filters
-  const uniqueStatuses = useMemo(() => {
-    const statuses = new Set(issues.map((issue) => issue.status));
-    return Array.from(statuses).sort();
+  // Extract unique values for filters with counts
+  const statusOptions = useMemo(() => {
+    const statusMap = new Map<string, number>();
+    issues.forEach((issue) => {
+      statusMap.set(issue.status, (statusMap.get(issue.status) || 0) + 1);
+    });
+    return Array.from(statusMap.entries())
+      .map(([value, count]) => ({ value, label: value, count }))
+      .sort((a, b) => a.label.localeCompare(b.label));
   }, [issues]);
 
-  const uniquePriorities = useMemo(() => {
-    const priorities = new Set(
-      issues.map((issue) => issue.priority).filter(Boolean)
-    );
-    return Array.from(priorities).sort();
+  const priorityOptions = useMemo(() => {
+    const priorityMap = new Map<string, number>();
+    issues.forEach((issue) => {
+      if (issue.priority) {
+        priorityMap.set(issue.priority, (priorityMap.get(issue.priority) || 0) + 1);
+      }
+    });
+    return Array.from(priorityMap.entries())
+      .map(([value, count]) => ({ value, label: value, count }))
+      .sort((a, b) => a.label.localeCompare(b.label));
   }, [issues]);
 
-  const uniqueProjects = useMemo(() => {
-    const projects = new Set(issues.map((issue) => issue.project.key));
-    return Array.from(projects).sort();
+  const projectOptions = useMemo(() => {
+    const projectMap = new Map<string, number>();
+    issues.forEach((issue) => {
+      projectMap.set(issue.project.key, (projectMap.get(issue.project.key) || 0) + 1);
+    });
+    return Array.from(projectMap.entries())
+      .map(([value, count]) => ({ value, label: value, count }))
+      .sort((a, b) => a.label.localeCompare(b.label));
   }, [issues]);
 
-  const uniqueTypes = useMemo(() => {
-    const types = new Set(issues.map((issue) => issue.type));
-    return Array.from(types).sort();
+  const typeOptions = useMemo(() => {
+    const typeMap = new Map<string, number>();
+    issues.forEach((issue) => {
+      typeMap.set(issue.type, (typeMap.get(issue.type) || 0) + 1);
+    });
+    return Array.from(typeMap.entries())
+      .map(([value, count]) => ({ value, label: value, count }))
+      .sort((a, b) => a.label.localeCompare(b.label));
   }, [issues]);
+
+  // Active filters count
+  const activeFiltersCount = useMemo(() => {
+    let count = 0;
+    if (statusFilter !== "all") count++;
+    if (priorityFilter !== "all") count++;
+    if (projectFilter !== "all") count++;
+    if (typeFilter !== "all") count++;
+    return count;
+  }, [statusFilter, priorityFilter, projectFilter, typeFilter]);
+
+  // Clear all filters
+  const clearAllFilters = useCallback(() => {
+    setStatusFilter("all");
+    setPriorityFilter("all");
+    setProjectFilter("all");
+    setTypeFilter("all");
+  }, []);
 
   // Filter and search
   useEffect(() => {
@@ -240,86 +280,122 @@ export default function JiraIssuesPage() {
         </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap gap-3">
-          {/* Status Filter */}
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
-          >
-            <option value="all">Tüm Durumlar</option>
-            {uniqueStatuses.map((status) => (
-              <option key={status} value={status}>
-                {status}
-              </option>
-            ))}
-          </select>
+        <div className="space-y-3">
+          {/* Filter Dropdowns */}
+          <div className="flex flex-wrap gap-3">
+            <FilterDropdown
+              label="Durum"
+              value={statusFilter}
+              options={[
+                { value: "all", label: "Tüm Durumlar" },
+                ...statusOptions,
+              ]}
+              onChange={setStatusFilter}
+              className="min-w-[160px]"
+            />
+            <FilterDropdown
+              label="Öncelik"
+              value={priorityFilter}
+              options={[
+                { value: "all", label: "Tüm Öncelikler" },
+                ...priorityOptions,
+              ]}
+              onChange={setPriorityFilter}
+              className="min-w-[160px]"
+            />
+            <FilterDropdown
+              label="Proje"
+              value={projectFilter}
+              options={[
+                { value: "all", label: "Tüm Projeler" },
+                ...projectOptions,
+              ]}
+              onChange={setProjectFilter}
+              className="min-w-[160px]"
+            />
+            <FilterDropdown
+              label="Tip"
+              value={typeFilter}
+              options={[
+                { value: "all", label: "Tüm Tipler" },
+                ...typeOptions,
+              ]}
+              onChange={setTypeFilter}
+              className="min-w-[160px]"
+            />
 
-          {/* Priority Filter */}
-          <select
-            value={priorityFilter}
-            onChange={(e) => setPriorityFilter(e.target.value)}
-            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
-          >
-            <option value="all">Tüm Öncelikler</option>
-            {uniquePriorities.map((priority) => (
-              <option key={priority} value={priority}>
-                {priority}
-              </option>
-            ))}
-          </select>
-
-          {/* Project Filter */}
-          <select
-            value={projectFilter}
-            onChange={(e) => setProjectFilter(e.target.value)}
-            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
-          >
-            <option value="all">Tüm Projeler</option>
-            {uniqueProjects.map((project) => (
-              <option key={project} value={project}>
-                {project}
-              </option>
-            ))}
-          </select>
-
-          {/* Type Filter */}
-          <select
-            value={typeFilter}
-            onChange={(e) => setTypeFilter(e.target.value)}
-            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
-          >
-            <option value="all">Tüm Tipler</option>
-            {uniqueTypes.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-
-          {/* View Mode Toggle */}
-          <div className="ml-auto flex items-center gap-2 rounded-lg border border-gray-300 bg-white p-1 dark:border-gray-700 dark:bg-gray-800">
-            <button
-              onClick={() => setViewMode("list")}
-              className={`rounded-md px-3 py-1.5 text-sm transition ${
-                viewMode === "list"
-                  ? "bg-blue-600 text-white"
-                  : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
-              }`}
-            >
-              List
-            </button>
-            <button
-              onClick={() => setViewMode("grid")}
-              className={`rounded-md px-3 py-1.5 text-sm transition ${
-                viewMode === "grid"
-                  ? "bg-blue-600 text-white"
-                  : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
-              }`}
-            >
-              Grid
-            </button>
+            {/* View Mode Toggle */}
+            <div className="ml-auto flex items-center gap-2 rounded-lg border border-gray-300 bg-white p-1 dark:border-gray-700 dark:bg-gray-800">
+              <button
+                onClick={() => setViewMode("list")}
+                className={`rounded-md px-3 py-1.5 text-sm transition ${
+                  viewMode === "list"
+                    ? "bg-blue-600 text-white"
+                    : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
+                }`}
+              >
+                List
+              </button>
+              <button
+                onClick={() => setViewMode("grid")}
+                className={`rounded-md px-3 py-1.5 text-sm transition ${
+                  viewMode === "grid"
+                    ? "bg-blue-600 text-white"
+                    : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
+                }`}
+              >
+                Grid
+              </button>
+            </div>
           </div>
+
+          {/* Active Filter Chips */}
+          {activeFiltersCount > 0 && (
+            <div className="flex flex-wrap items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800/50">
+              <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+                Aktif Filtreler:
+              </span>
+              {statusFilter !== "all" && (
+                <FilterChip
+                  label={`Durum: ${statusOptions.find((s) => s.value === statusFilter)?.label || statusFilter}`}
+                  value={statusFilter}
+                  onRemove={() => setStatusFilter("all")}
+                  color="blue"
+                />
+              )}
+              {priorityFilter !== "all" && (
+                <FilterChip
+                  label={`Öncelik: ${priorityOptions.find((p) => p.value === priorityFilter)?.label || priorityFilter}`}
+                  value={priorityFilter}
+                  onRemove={() => setPriorityFilter("all")}
+                  color="green"
+                />
+              )}
+              {projectFilter !== "all" && (
+                <FilterChip
+                  label={`Proje: ${projectFilter}`}
+                  value={projectFilter}
+                  onRemove={() => setProjectFilter("all")}
+                  color="purple"
+                />
+              )}
+              {typeFilter !== "all" && (
+                <FilterChip
+                  label={`Tip: ${typeOptions.find((t) => t.value === typeFilter)?.label || typeFilter}`}
+                  value={typeFilter}
+                  onRemove={() => setTypeFilter("all")}
+                  color="orange"
+                />
+              )}
+              <button
+                onClick={clearAllFilters}
+                className="ml-auto flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200"
+              >
+                <X className="h-3 w-3" />
+                Tümünü Temizle
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
