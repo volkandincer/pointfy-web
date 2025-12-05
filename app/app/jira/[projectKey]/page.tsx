@@ -124,16 +124,15 @@ export default function JiraProjectDetailPage() {
         throw new Error(errorMessage);
       }
 
-      // Issues'ları JiraTask formatına çevir
       // API response format: { issues: JiraTask[], total, startAt, maxResults }
+      // API route zaten JiraTask formatına çeviriyor, direkt kullanabiliriz
       const issuesArray = Array.isArray(data.issues) ? data.issues : [];
       
       if (issuesArray.length === 0 && data.total !== undefined && data.total > 0) {
-        // API'den total > 0 ama issues array boş - bu bir sorun olabilir
         console.warn("API returned total > 0 but empty issues array", data);
       }
 
-      // Helper function: ADF format description'ı string'e çevir
+      // Helper function: ADF format description'ı string'e çevir (sadece JiraIssue formatı için gerekli)
       const extractDescription = (
         desc: JiraAdfDocument | string | undefined
       ): string | undefined => {
@@ -158,36 +157,72 @@ export default function JiraProjectDetailPage() {
 
       const tasks: JiraTask[] = [];
       for (const issue of issuesArray) {
-        if (!issue || !issue.fields) continue;
-        try {
-          tasks.push({
-            id: issue.id,
-            key: issue.key,
-            summary: issue.fields?.summary || "",
-            description: extractDescription(issue.fields?.description),
-            status: issue.fields?.status?.name || "",
-            statusColor: issue.fields?.status?.statusCategory?.colorName || "gray",
-            assignee: issue.fields?.assignee
-              ? {
-                  name: issue.fields.assignee.displayName,
-                  avatar: issue.fields.assignee.avatarUrls?.["48x48"],
-                }
-              : undefined,
-            priority: issue.fields?.priority?.name,
-            type: issue.fields?.issuetype?.name || "",
+        if (!issue) {
+          console.warn("Skipping invalid issue (null/undefined)");
+          continue;
+        }
+        
+        // Eğer issue zaten JiraTask formatındaysa (API'den dönüştürülmüşse)
+        if (issue.key && issue.summary && !issue.fields) {
+          // Zaten JiraTask formatında - direkt kullan
+          // URL'i düzelt (eğer yoksa veya yanlışsa)
+          const task: JiraTask = {
+            ...issue,
+            url: issue.url || (jiraBaseUrl
+              ? `https://${jiraBaseUrl.replace(/^https?:\/\//, "")}/browse/${issue.key}`
+              : ""),
             project: {
-              key: issue.fields?.project?.key || projectKey,
-              name: issue.fields?.project?.name || projectName,
+              key: issue.project?.key || projectKey,
+              name: issue.project?.name || projectName || projectKey,
             },
-            created: issue.fields?.created || "",
-            updated: issue.fields?.updated || "",
-            resolved: issue.fields?.resolutiondate,
-            url: jiraBaseUrl
-              ? `https://${jiraBaseUrl}/browse/${issue.key}`
-              : `https://${jiraBaseUrl}/browse/${issue.key}`,
-          });
-        } catch (mapError) {
-          // Issue mapping error
+          };
+          tasks.push(task);
+          continue;
+        }
+        
+        // Eğer issue JiraIssue formatındaysa (fields var) - bu durumda API route'u düzeltilmeli
+        // Ama yine de handle edelim
+        if (issue.fields) {
+          try {
+            const task: JiraTask = {
+              id: issue.id || String(Math.random()),
+              key: issue.key || "",
+              summary: issue.fields?.summary || "",
+              description: extractDescription(issue.fields?.description),
+              status: issue.fields?.status?.name || "",
+              statusColor: issue.fields?.status?.statusCategory?.colorName || "gray",
+              assignee: issue.fields?.assignee
+                ? {
+                    name: issue.fields.assignee.displayName || issue.fields.assignee.name || "Unknown",
+                    avatar: issue.fields.assignee.avatarUrls?.["48x48"] || issue.fields.assignee.avatarUrls?.["32x32"],
+                  }
+                : undefined,
+              priority: issue.fields?.priority?.name,
+              type: issue.fields?.issuetype?.name || "",
+              project: {
+                key: issue.fields?.project?.key || projectKey,
+                name: issue.fields?.project?.name || projectName || projectKey,
+              },
+              created: issue.fields?.created || "",
+              updated: issue.fields?.updated || "",
+              resolved: issue.fields?.resolutiondate,
+              url: jiraBaseUrl
+                ? `https://${jiraBaseUrl.replace(/^https?:\/\//, "")}/browse/${issue.key}`
+                : "",
+            };
+            
+            // Validation: key ve summary olmadan issue ekleme
+            if (!task.key || !task.summary) {
+              console.warn("Skipping issue with missing key or summary", task);
+              continue;
+            }
+            
+            tasks.push(task);
+          } catch (mapError) {
+            console.error("Error mapping issue:", mapError, issue);
+          }
+        } else {
+          console.warn("Skipping issue with unknown format", issue);
         }
       }
 
