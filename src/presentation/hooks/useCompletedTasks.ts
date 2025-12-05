@@ -37,10 +37,6 @@ export function useCompletedTasks(roomId: string): UseCompletedTasksResult {
 
   useEffect(() => {
     if (!roomId) {
-      // Reset state when roomId becomes invalid
-      setCompletedTasks([]);
-      setLoading(false);
-      setError(null);
       return;
     }
 

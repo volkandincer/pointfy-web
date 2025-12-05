@@ -26,14 +26,13 @@ export function useRetroTimer(
 ): UseRetroTimerResult {
   const [remainingSeconds, setRemainingSeconds] = useState<number>(0);
   const [isActive, setIsActive] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(!!roomId);
   const [error, setError] = useState<string | null>(null);
 
   const isWarning = remainingSeconds > 0 && remainingSeconds <= 10;
 
   useEffect(() => {
     if (!roomId) {
-      setLoading(false);
       return;
     }
 

@@ -33,13 +33,11 @@ interface UseCompletedTasksResult {
 
 export function useCompletedTasks(roomId: string): UseCompletedTasksResult {
   const [completedTasks, setCompletedTasks] = useState<CompletedTask[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(!!roomId);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!roomId) {
-      setCompletedTasks([]);
-      setLoading(false);
       return;
     }
 

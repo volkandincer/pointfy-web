@@ -20,13 +20,11 @@ interface UseRetroActionItemsResult {
 
 export function useRetroActionItems(roomId: string): UseRetroActionItemsResult {
   const [actionItems, setActionItems] = useState<PresentationRetroActionItem[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(!!roomId);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!roomId) {
-      setActionItems([]);
-      setLoading(false);
       return;
     }
 

@@ -20,13 +20,11 @@ interface UseRetroCardsResult {
 
 export function useRetroCards(roomId: string): UseRetroCardsResult {
   const [cards, setCards] = useState<PresentationRetroCard[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(!!roomId);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!roomId) {
-      setCards([]);
-      setLoading(false);
       return;
     }
 
