@@ -427,15 +427,16 @@ export default function JiraIssuesPage() {
                 href={issue.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block rounded-xl border-2 border-gray-200 bg-white p-5 shadow-sm transition-all hover:border-blue-400 hover:shadow-md dark:border-gray-800 dark:bg-gray-900 dark:hover:border-blue-600"
+                className="group relative overflow-hidden rounded-2xl border border-gray-200/70 bg-gradient-to-br from-white to-gray-50/50 p-6 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-blue-300/70 hover:shadow-xl dark:border-gray-800/70 dark:from-gray-900 dark:to-gray-800/50 dark:hover:border-blue-600/70"
               >
-                <div className="mb-3 flex items-start justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400">
+                <div className="absolute right-0 top-0 h-24 w-24 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-blue-400/10 to-blue-600/10 blur-2xl transition-all group-hover:scale-150" />
+                <div className="relative mb-4 flex items-start justify-between">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="rounded-lg bg-blue-100 px-2.5 py-1 font-mono text-xs font-bold text-blue-700 shadow-sm dark:bg-blue-900/30 dark:text-blue-400">
                       {issue.key}
                     </span>
                     <span
-                      className={`rounded-full px-2 py-0.5 text-xs font-semibold ${getStatusColor(
+                      className={`rounded-full px-2.5 py-1 text-xs font-semibold shadow-sm ${getStatusColor(
                         issue.statusColor
                       )}`}
                     >
@@ -443,7 +444,7 @@ export default function JiraIssuesPage() {
                     </span>
                   </div>
                   <svg
-                    className="h-5 w-5 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100"
+                    className="h-5 w-5 shrink-0 text-blue-400 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -456,32 +457,21 @@ export default function JiraIssuesPage() {
                     />
                   </svg>
                 </div>
-                <h3 className="mb-2 line-clamp-2 text-base font-semibold text-gray-900 dark:text-white">
+                <h3 className="relative mb-4 line-clamp-2 text-base font-bold text-gray-900 dark:text-white">
                   {issue.summary}
                 </h3>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                    <span className="font-medium">Proje:</span>
-                    <span className="font-mono text-blue-600 dark:text-blue-400">
-                      {issue.project.key}
-                    </span>
-                  </div>
+                <div className="relative flex flex-wrap items-center gap-2">
+                  <span className="rounded-md bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                    {issue.project.key}
+                  </span>
                   {issue.priority && (
-                    <div className="flex items-center gap-2">
-                      <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${getPriorityColor(issue.priority)}`}>
-                        {issue.priority}
-                      </span>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
-                        {issue.type}
-                      </span>
-                    </div>
+                    <span className={`rounded-md px-2 py-1 text-xs font-semibold ${getPriorityColor(issue.priority)}`}>
+                      {issue.priority}
+                    </span>
                   )}
-                  {issue.assignee && (
-                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                      <span className="font-medium">Atanan:</span>
-                      <span>{issue.assignee.name}</span>
-                    </div>
-                  )}
+                  <span className="rounded-md bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                    {issue.type}
+                  </span>
                 </div>
               </a>
             ))}
@@ -494,16 +484,17 @@ export default function JiraIssuesPage() {
                 href={issue.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-all hover:border-blue-400 hover:shadow-md dark:border-gray-800 dark:bg-gray-900 dark:hover:border-blue-600 sm:p-5"
+                className="group relative block overflow-hidden rounded-2xl border-l-4 border-l-blue-500 border-gray-200/70 bg-gradient-to-r from-white to-gray-50/50 p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:border-l-blue-600 hover:shadow-xl dark:border-gray-800/70 dark:from-gray-900 dark:to-gray-800/50 dark:hover:border-l-blue-500"
               >
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="flex-1">
-                    <div className="mb-2 flex flex-wrap items-center gap-2">
-                      <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400">
+                <div className="absolute right-0 top-0 h-32 w-32 translate-x-16 -translate-y-16 rounded-full bg-gradient-to-br from-blue-400/10 to-blue-600/10 blur-3xl transition-all group-hover:scale-150" />
+                <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex-1 space-y-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="rounded-lg bg-blue-100 px-2.5 py-1 font-mono text-xs font-bold text-blue-700 shadow-sm dark:bg-blue-900/30 dark:text-blue-400">
                         {issue.key}
                       </span>
                       <span
-                        className={`rounded-full px-2 py-0.5 text-xs font-semibold ${getStatusColor(
+                        className={`rounded-full px-2.5 py-1 text-xs font-semibold shadow-sm ${getStatusColor(
                           issue.statusColor
                         )}`}
                       >
@@ -511,36 +502,37 @@ export default function JiraIssuesPage() {
                       </span>
                       {issue.priority && (
                         <span
-                          className={`rounded-full px-2 py-0.5 text-xs font-semibold ${getPriorityColor(
+                          className={`rounded-md px-2 py-1 text-xs font-semibold ${getPriorityColor(
                             issue.priority
                           )}`}
                         >
                           {issue.priority}
                         </span>
                       )}
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                      <span className="rounded-md bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300">
                         {issue.type}
                       </span>
                     </div>
-                    <h3 className="mb-2 text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white sm:text-xl">
                       {issue.summary}
                     </h3>
                     <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
                       <span>
-                        <span className="font-medium">Proje:</span>{" "}
-                        <span className="font-mono text-blue-600 dark:text-blue-400">
+                        <span className="font-semibold">Proje:</span>{" "}
+                        <span className="font-mono font-semibold text-blue-600 dark:text-blue-400">
                           {issue.project.key}
                         </span>
                       </span>
                       {issue.assignee && (
                         <span>
-                          <span className="font-medium">Atanan:</span> {issue.assignee.name}
+                          <span className="font-semibold">Atanan:</span>{" "}
+                          <span className="font-medium">{issue.assignee.name}</span>
                         </span>
                       )}
                     </div>
                   </div>
                   <svg
-                    className="h-5 w-5 shrink-0 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100"
+                    className="h-6 w-6 shrink-0 text-blue-400 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -549,7 +541,7 @@ export default function JiraIssuesPage() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                      d="M9 5l7 7-7 7"
                     />
                   </svg>
                 </div>

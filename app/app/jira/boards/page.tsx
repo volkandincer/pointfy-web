@@ -313,20 +313,21 @@ export default function JiraBoardsPage() {
               <Link
                 key={board.id}
                 href={`/app/jira/${board.location?.projectKey || board.id}`}
-                className="group block rounded-xl border-2 border-gray-200 bg-white p-5 shadow-sm transition-all hover:border-blue-400 hover:shadow-md dark:border-gray-800 dark:bg-gray-900 dark:hover:border-blue-600"
+                className="group relative overflow-hidden rounded-2xl border border-gray-200/70 bg-gradient-to-br from-white to-gray-50/50 p-6 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-purple-300/70 hover:shadow-xl dark:border-gray-800/70 dark:from-gray-900 dark:to-gray-800/50 dark:hover:border-purple-600/70"
               >
-                <div className="mb-3 flex items-start justify-between">
-                  <div className="flex items-center gap-2">
+                <div className="absolute right-0 top-0 h-24 w-24 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-purple-400/10 to-purple-600/10 blur-2xl transition-all group-hover:scale-150" />
+                <div className="relative mb-4 flex items-start justify-between">
+                  <div className="flex items-center gap-3">
                     {(() => {
                       const IconComponent = getBoardTypeIcon(board.type);
                       return (
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-sm">
-                          <IconComponent className="h-5 w-5" />
+                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg shadow-purple-500/30 transition-transform group-hover:scale-110">
+                          <IconComponent className="h-6 w-6" />
                         </div>
                       );
                     })()}
                     <span
-                      className={`rounded-full px-2 py-0.5 text-xs font-semibold ${getBoardTypeColor(
+                      className={`rounded-full px-2.5 py-1 text-xs font-semibold shadow-sm ${getBoardTypeColor(
                         board.type
                       )}`}
                     >
@@ -334,7 +335,7 @@ export default function JiraBoardsPage() {
                     </span>
                   </div>
                   <svg
-                    className="h-5 w-5 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100"
+                    className="h-5 w-5 shrink-0 text-purple-400 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -347,20 +348,20 @@ export default function JiraBoardsPage() {
                     />
                   </svg>
                 </div>
-                <h3 className="mb-2 text-base font-semibold text-gray-900 dark:text-white">
+                <h3 className="relative mb-3 text-lg font-bold text-gray-900 dark:text-white">
                   {board.name}
                 </h3>
-                <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
+                <div className="relative space-y-2 text-sm text-gray-600 dark:text-gray-400">
                   <div>
-                    <span className="font-medium">Proje:</span>{" "}
-                    <span className="font-mono text-blue-600 dark:text-blue-400">
+                    <span className="font-semibold">Proje:</span>{" "}
+                    <span className="font-mono font-semibold text-blue-600 dark:text-blue-400">
                       {board.location?.projectKey}
                     </span>
                   </div>
                   {board.location?.displayName && (
                     <div>
-                      <span className="font-medium">Görünen İsim:</span>{" "}
-                      {board.location.displayName}
+                      <span className="font-semibold">Görünen İsim:</span>{" "}
+                      <span className="font-medium">{board.location.displayName}</span>
                     </div>
                   )}
                 </div>
@@ -373,24 +374,25 @@ export default function JiraBoardsPage() {
               <Link
                 key={board.id}
                 href={`/app/jira/${board.location?.projectKey || board.id}`}
-                className="group block rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-all hover:border-blue-400 hover:shadow-md dark:border-gray-800 dark:bg-gray-900 dark:hover:border-blue-600 sm:p-5"
+                className="group relative block overflow-hidden rounded-2xl border-l-4 border-l-purple-500 border-gray-200/70 bg-gradient-to-r from-white to-gray-50/50 p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:border-l-purple-600 hover:shadow-xl dark:border-gray-800/70 dark:from-gray-900 dark:to-gray-800/50 dark:hover:border-l-purple-500"
               >
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="flex-1">
-                    <div className="mb-2 flex flex-wrap items-center gap-2">
+                <div className="absolute right-0 top-0 h-32 w-32 translate-x-16 -translate-y-16 rounded-full bg-gradient-to-br from-purple-400/10 to-purple-600/10 blur-3xl transition-all group-hover:scale-150" />
+                <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex-1 space-y-3">
+                    <div className="flex flex-wrap items-center gap-3">
                       {(() => {
                         const IconComponent = getBoardTypeIcon(board.type);
                         return (
-                          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-sm">
-                            <IconComponent className="h-5 w-5" />
+                          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg shadow-purple-500/30 transition-transform group-hover:scale-110">
+                            <IconComponent className="h-6 w-6" />
                           </div>
                         );
                       })()}
-                      <h3 className="text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-white sm:text-xl">
                         {board.name}
                       </h3>
                       <span
-                        className={`rounded-full px-2 py-0.5 text-xs font-semibold ${getBoardTypeColor(
+                        className={`rounded-full px-2.5 py-1 text-xs font-semibold shadow-sm ${getBoardTypeColor(
                           board.type
                         )}`}
                       >
@@ -399,21 +401,21 @@ export default function JiraBoardsPage() {
                     </div>
                     <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
                       <span>
-                        <span className="font-medium">Proje:</span>{" "}
-                        <span className="font-mono text-blue-600 dark:text-blue-400">
+                        <span className="font-semibold">Proje:</span>{" "}
+                        <span className="font-mono font-semibold text-blue-600 dark:text-blue-400">
                           {board.location?.projectKey}
                         </span>
                       </span>
                       {board.location?.displayName && (
                         <span>
-                          <span className="font-medium">Görünen İsim:</span>{" "}
-                          {board.location.displayName}
+                          <span className="font-semibold">Görünen İsim:</span>{" "}
+                          <span className="font-medium">{board.location.displayName}</span>
                         </span>
                       )}
                     </div>
                   </div>
                   <svg
-                    className="h-5 w-5 shrink-0 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100"
+                    className="h-6 w-6 shrink-0 text-purple-400 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
