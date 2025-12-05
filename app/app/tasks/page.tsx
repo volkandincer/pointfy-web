@@ -147,55 +147,51 @@ export default function PersonalTasksPage() {
 
               {/* Stats Cards */}
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <div className="group relative overflow-hidden rounded-2xl border border-blue-200/50 bg-gradient-to-br from-blue-50 via-white to-white p-6 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-blue-300/70 hover:shadow-xl dark:border-blue-800/50 dark:from-blue-950/30 dark:via-gray-900 dark:to-gray-900 dark:hover:border-blue-700/70">
-                  <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-blue-400/20 to-blue-600/20 blur-2xl transition-all group-hover:scale-150" />
-                  <div className="relative mb-4 flex items-center justify-between">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/30 transition-transform group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-blue-500/40">
-                      <ClipboardList className="h-7 w-7" />
+                <div className="border border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
+                  <div className="mb-4 flex items-center gap-3">
+                    <div className="flex h-12 w-12 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
+                      <ClipboardList className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                     </div>
-                  </div>
-                  <div className="relative">
-                    <div className="text-3xl font-bold text-gray-900 dark:text-white">{stats.totalTasks}</div>
-                    <div className="mt-1 text-sm font-medium text-gray-600 dark:text-gray-400">Toplam Task</div>
+                    <div>
+                      <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalTasks}</div>
+                      <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Toplam Task</div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="group relative overflow-hidden rounded-2xl border border-red-200/50 bg-gradient-to-br from-red-50 via-white to-white p-6 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-red-300/70 hover:shadow-xl dark:border-red-800/50 dark:from-red-950/30 dark:via-gray-900 dark:to-gray-900 dark:hover:border-red-700/70">
-                  <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-red-400/20 to-red-600/20 blur-2xl transition-all group-hover:scale-150" />
-                  <div className="relative mb-4 flex items-center justify-between">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-red-500 to-red-600 text-white shadow-lg shadow-red-500/30 transition-transform group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-red-500/40">
-                      <AlertCircle className="h-7 w-7" />
+                <div className="border border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
+                  <div className="mb-4 flex items-center gap-3">
+                    <div className="flex h-12 w-12 items-center justify-center border-2 border-red-600 bg-red-50 dark:bg-red-900/20">
+                      <AlertCircle className="h-6 w-6 text-red-600 dark:text-red-400" />
                     </div>
-                  </div>
-                  <div className="relative">
-                    <div className="text-3xl font-bold text-gray-900 dark:text-white">{stats.highPriority}</div>
-                    <div className="mt-1 text-sm font-medium text-gray-600 dark:text-gray-400">Yüksek Öncelik</div>
+                    <div>
+                      <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats.highPriority}</div>
+                      <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Yüksek Öncelik</div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="group relative overflow-hidden rounded-2xl border border-yellow-200/50 bg-gradient-to-br from-yellow-50 via-white to-white p-6 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-yellow-300/70 hover:shadow-xl dark:border-yellow-800/50 dark:from-yellow-950/30 dark:via-gray-900 dark:to-gray-900 dark:hover:border-yellow-700/70">
-                  <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-yellow-400/20 to-yellow-600/20 blur-2xl transition-all group-hover:scale-150" />
-                  <div className="relative mb-4 flex items-center justify-between">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-yellow-500 to-yellow-600 text-white shadow-lg shadow-yellow-500/30 transition-transform group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-yellow-500/40">
-                      <AlertCircle className="h-7 w-7" />
+                <div className="border border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
+                  <div className="mb-4 flex items-center gap-3">
+                    <div className="flex h-12 w-12 items-center justify-center border-2 border-yellow-600 bg-yellow-50 dark:bg-yellow-900/20">
+                      <AlertCircle className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
                     </div>
-                  </div>
-                  <div className="relative">
-                    <div className="text-3xl font-bold text-gray-900 dark:text-white">{stats.mediumPriority}</div>
-                    <div className="mt-1 text-sm font-medium text-gray-600 dark:text-gray-400">Orta Öncelik</div>
+                    <div>
+                      <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats.mediumPriority}</div>
+                      <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Orta Öncelik</div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="group relative overflow-hidden rounded-2xl border border-gray-200/50 bg-gradient-to-br from-gray-50 via-white to-white p-6 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-gray-300/70 hover:shadow-xl dark:border-gray-800/50 dark:from-gray-950/30 dark:via-gray-900 dark:to-gray-900 dark:hover:border-gray-700/70">
-                  <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-gray-400/20 to-gray-600/20 blur-2xl transition-all group-hover:scale-150" />
-                  <div className="relative mb-4 flex items-center justify-between">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-gray-500 to-gray-600 text-white shadow-lg shadow-gray-500/30 transition-transform group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-gray-500/40">
-                      <CheckCircle2 className="h-7 w-7" />
+                <div className="border border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
+                  <div className="mb-4 flex items-center gap-3">
+                    <div className="flex h-12 w-12 items-center justify-center border-2 border-gray-600 bg-gray-50 dark:bg-gray-800">
+                      <CheckCircle2 className="h-6 w-6 text-gray-600 dark:text-gray-400" />
                     </div>
-                  </div>
-                  <div className="relative">
-                    <div className="text-3xl font-bold text-gray-900 dark:text-white">{stats.lowPriority}</div>
-                    <div className="mt-1 text-sm font-medium text-gray-600 dark:text-gray-400">Düşük Öncelik</div>
+                    <div>
+                      <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats.lowPriority}</div>
+                      <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Düşük Öncelik</div>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -55,14 +55,11 @@ const PersonalTaskList = memo(function PersonalTaskList({
         return (
           <div
             key={t.id}
-            className="group relative overflow-hidden rounded-2xl border-2 border-gray-200/70 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-gray-300 hover:shadow-lg dark:border-gray-800/70 dark:bg-gray-900 dark:hover:border-gray-700"
+            className="group relative border-l-4 border-t border-r border-b border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+            style={{
+              borderLeftColor: t.priority === 3 ? '#dc2626' : t.priority === 2 ? '#2563eb' : '#6b7280',
+            }}
           >
-            {/* Priority Indicator Bar */}
-            <div
-              className={`absolute left-0 top-0 h-1 w-full ${
-                priorityInfo.bg
-              }`}
-            />
 
             {/* Content */}
             <div className="relative">
@@ -73,7 +70,10 @@ const PersonalTaskList = memo(function PersonalTaskList({
                     {t.title}
                   </h3>
                   <span
-                    className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${priorityInfo.bg} ${priorityInfo.text}`}
+                    className={`shrink-0 border-2 px-2.5 py-1 text-xs font-semibold ${priorityInfo.bg} ${priorityInfo.text}`}
+                    style={{
+                      borderColor: t.priority === 3 ? '#dc2626' : t.priority === 2 ? '#2563eb' : '#6b7280',
+                    }}
                   >
                     {priorityInfo.label}
                   </span>
@@ -88,7 +88,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
               {/* Info Grid */}
               <div className="mb-4 grid grid-cols-2 gap-3">
                 {/* Category */}
-                <div className="rounded-lg bg-gray-50 p-2.5 dark:bg-gray-800/50">
+                <div className="border border-gray-200 bg-gray-50 p-2.5 dark:border-gray-700 dark:bg-gray-800">
                   <p className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
                     Kategori
                   </p>
@@ -98,7 +98,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
                 </div>
 
                 {/* Priority */}
-                <div className="rounded-lg bg-gray-50 p-2.5 dark:bg-gray-800/50">
+                <div className="border border-gray-200 bg-gray-50 p-2.5 dark:border-gray-700 dark:bg-gray-800">
                   <p className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
                     Öncelik
                   </p>
@@ -117,10 +117,10 @@ const PersonalTaskList = memo(function PersonalTaskList({
               )}
 
               {/* Actions */}
-              <div className="flex items-center gap-2 border-t border-gray-200 pt-4 dark:border-gray-800">
+              <div className="flex items-center gap-2 border-t border-gray-300 pt-4 dark:border-gray-700">
                 <button
                   onClick={() => onEdit(t)}
-                  className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-lg"
+                  className="flex-1 inline-flex items-center justify-center gap-2 border-2 border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700"
                 >
                   <Edit className="h-4 w-4" />
                   Düzenle
@@ -131,7 +131,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
                       onDelete(t.id);
                     }
                   }}
-                  className="inline-flex items-center justify-center rounded-xl border-2 border-red-300 bg-red-50 px-4 py-2.5 text-sm font-semibold text-red-700 transition-all hover:bg-red-100 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30"
+                  className="inline-flex items-center justify-center border-2 border-red-600 bg-white px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50 dark:border-red-500 dark:bg-gray-900 dark:text-red-500 dark:hover:bg-red-900/20"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
