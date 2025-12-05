@@ -25,7 +25,10 @@ const Features = memo(function Features({ features }: FeaturesProps) {
           {memoizedFeatures.map((feature) => (
             <div
               key={feature.id}
-              className="group relative overflow-hidden rounded-2xl border-2 border-blue-400/15 bg-white p-5 shadow-[0_4px_16px_rgba(59,130,246,0.15)] transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(59,130,246,0.2)] dark:border-blue-500/10 dark:bg-gray-900"
+              className="group relative border-l-4 border-t border-r border-b border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+              style={{
+                borderLeftColor: '#2563eb',
+              }}
             >
               <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
                 {feature.title}

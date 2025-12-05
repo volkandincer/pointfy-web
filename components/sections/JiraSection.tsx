@@ -89,7 +89,7 @@ const JiraSection = memo(function JiraSection({
         {/* Ana Kategori Başlığı - Accordion Header */}
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="group mb-4 flex w-full items-center justify-between rounded-2xl border-2 border-blue-400/20 bg-white p-5 text-left transition-all hover:border-blue-400/40 hover:shadow-md dark:border-blue-500/20 dark:bg-gray-900 dark:hover:border-blue-500/40"
+          className="group mb-4 flex w-full items-center justify-between border-2 border-blue-600 bg-white p-5 text-left transition-all hover:border-blue-700 hover:shadow-md dark:bg-gray-900"
         >
           <div className="flex items-center gap-4">
             <div className="text-3xl">🔗</div>
@@ -125,14 +125,17 @@ const JiraSection = memo(function JiraSection({
 
         {/* Alt Menü - Accordion Content */}
         {isExpanded && (
-          <div className="mb-4 rounded-2xl border-2 border-blue-400/10 bg-white p-4 dark:border-blue-500/10 dark:bg-gray-900">
+          <div className="mb-4 border-2 border-blue-600 bg-white p-4 dark:bg-gray-900">
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {jiraActions.map((action) =>
                 action.onClick ? (
                   <button
                     key={action.id}
                     onClick={action.onClick}
-                    className="group relative block w-full overflow-hidden rounded-xl border-2 border-blue-400/10 bg-white p-4 text-left transition-all hover:-translate-y-0.5 hover:border-blue-400/30 hover:shadow-md dark:border-blue-500/10 dark:bg-gray-800 dark:hover:border-blue-500/30"
+                    className="group relative block w-full border-l-4 border-t border-r border-b border-gray-300 bg-white p-4 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
+                    style={{
+                      borderLeftColor: '#2563eb',
+                    }}
                   >
                     <div className="mb-2 flex items-center gap-3">
                       <span className="text-2xl">{action.icon}</span>
@@ -148,7 +151,10 @@ const JiraSection = memo(function JiraSection({
                   <Link
                     key={action.id}
                     href={action.href}
-                    className="group relative block w-full overflow-hidden rounded-xl border-2 border-blue-400/10 bg-white p-4 text-left transition-all hover:-translate-y-0.5 hover:border-blue-400/30 hover:shadow-md dark:border-blue-500/10 dark:bg-gray-800 dark:hover:border-blue-500/30"
+                    className="group relative block w-full border-l-4 border-t border-r border-b border-gray-300 bg-white p-4 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
+                    style={{
+                      borderLeftColor: '#2563eb',
+                    }}
                   >
                     <div className="mb-2 flex items-center gap-3">
                       <span className="text-2xl">{action.icon}</span>
@@ -174,7 +180,7 @@ const JiraSection = memo(function JiraSection({
         title="Jira Bağlantısı İçin Gerekli İzinler"
       >
         <div className="space-y-4">
-          <div className="rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-800 dark:bg-blue-900/20">
+          <div className="border border-blue-300 bg-blue-50 p-3 dark:border-blue-700 dark:bg-blue-900/20">
             <p className="text-sm text-blue-800 dark:text-blue-200">
               <strong>Neden bu izinler gerekli?</strong> Jira hesabınızı bağlamak için bu izinlere
               ihtiyacımız var. Bu sayede projelerinizi, issue&apos;larınızı ve board&apos;larınızı
@@ -182,7 +188,7 @@ const JiraSection = memo(function JiraSection({
             </p>
           </div>
 
-          <div className="space-y-3 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
+          <div className="space-y-3 border border-gray-300 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
             <div className="flex items-start gap-3">
               <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
                 <span className="text-xs font-semibold">1</span>
@@ -259,7 +265,7 @@ const JiraSection = memo(function JiraSection({
             </div>
           </div>
 
-          <div className="rounded-lg border border-green-200 bg-green-50 p-3 dark:border-green-800 dark:bg-green-900/20">
+          <div className="border border-green-300 bg-green-50 p-3 dark:border-green-700 dark:bg-green-900/20">
             <p className="text-xs text-green-800 dark:text-green-200">
               <strong>🔒 Güvenlik:</strong> Bu izinler sadece Jira verilerinize erişim sağlar. Hesap
               şifreniz, kişisel bilgileriniz veya diğer hassas verileriniz saklanmaz. İstediğiniz
@@ -270,7 +276,7 @@ const JiraSection = memo(function JiraSection({
           <div className="flex gap-3">
             <button
               onClick={() => setShowPermissionModal(false)}
-              className="flex-1 rounded-lg border-2 border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+              className="flex-1 border-2 border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
             >
               İptal
             </button>
@@ -286,7 +292,7 @@ const JiraSection = memo(function JiraSection({
                   // Jira OAuth error
                 }
               }}
-              className="flex-1 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-lg"
+              className="flex-1 border-2 border-blue-600 bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700"
             >
               Devam Et
             </button>

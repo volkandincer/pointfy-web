@@ -176,7 +176,7 @@ const AllRoomsModal = memo(function AllRoomsModal({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Oda adı, kod veya oluşturan ile ara..."
-            className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 pl-10 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
+            className="w-full border border-gray-300 bg-white px-4 py-3 pl-10 text-sm outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
           />
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
           {searchQuery && (
@@ -201,7 +201,7 @@ const AllRoomsModal = memo(function AllRoomsModal({
             {Array.from({ length: 3 }).map((_, idx) => (
               <div
                 key={idx}
-                className="h-20 animate-pulse rounded-xl bg-gray-100 dark:bg-gray-800"
+                className="h-20 animate-pulse border border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800"
               />
             ))}
           </div>

@@ -65,7 +65,10 @@ const QuickActions = memo(function QuickActions({ actions }: QuickActionsProps) 
               <button
                 key={action.id}
                 onClick={action.onClick}
-                className="group relative block w-full overflow-hidden rounded-2xl border-2 border-blue-400/15 bg-white p-5 text-left shadow-[0_8px_20px_rgba(59,130,246,0.15)] transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(59,130,246,0.2)] dark:border-blue-500/10 dark:bg-gray-900"
+                className="group relative block w-full border-l-4 border-t border-r border-b border-gray-300 bg-white p-5 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                style={{
+                  borderLeftColor: '#2563eb',
+                }}
               >
                 <div className="mb-3 text-4xl">{action.icon}</div>
                 <h3 className="mb-1.5 text-base font-semibold text-gray-900 dark:text-white">
