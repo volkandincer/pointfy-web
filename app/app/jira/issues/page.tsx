@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { ClipboardList } from "lucide-react";
 import type { JiraTask } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
 
@@ -482,7 +483,11 @@ export default function JiraIssuesPage() {
         )
       ) : (
         <div className="rounded-xl border border-gray-200 bg-white p-12 text-center dark:border-gray-800 dark:bg-gray-900">
-          <div className="mb-4 text-6xl">📋</div>
+          <div className="mb-4 flex justify-center">
+            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-green-500 to-green-600 text-white shadow-lg">
+              <ClipboardList className="h-10 w-10" />
+            </div>
+          </div>
           <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
             {searchQuery || statusFilter !== "all" || priorityFilter !== "all" || projectFilter !== "all" || typeFilter !== "all"
               ? "Issue bulunamadı"

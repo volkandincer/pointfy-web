@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { Pin, BarChart3, LayoutGrid } from "lucide-react";
 import type { JiraBoard } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
 
@@ -124,11 +125,11 @@ export default function JiraBoardsPage() {
   const getBoardTypeIcon = (type: string) => {
     switch (type.toLowerCase()) {
       case "scrum":
-        return "📊";
+        return BarChart3;
       case "kanban":
-        return "📋";
+        return LayoutGrid;
       default:
-        return "📌";
+        return Pin;
     }
   };
 
@@ -268,7 +269,14 @@ export default function JiraBoardsPage() {
               >
                 <div className="mb-3 flex items-start justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-2xl">{getBoardTypeIcon(board.type)}</span>
+                    {(() => {
+                      const IconComponent = getBoardTypeIcon(board.type);
+                      return (
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-sm">
+                          <IconComponent className="h-5 w-5" />
+                        </div>
+                      );
+                    })()}
                     <span
                       className={`rounded-full px-2 py-0.5 text-xs font-semibold ${getBoardTypeColor(
                         board.type
@@ -322,7 +330,14 @@ export default function JiraBoardsPage() {
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex-1">
                     <div className="mb-2 flex flex-wrap items-center gap-2">
-                      <span className="text-xl">{getBoardTypeIcon(board.type)}</span>
+                      {(() => {
+                        const IconComponent = getBoardTypeIcon(board.type);
+                        return (
+                          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-sm">
+                            <IconComponent className="h-5 w-5" />
+                          </div>
+                        );
+                      })()}
                       <h3 className="text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
                         {board.name}
                       </h3>
@@ -369,7 +384,11 @@ export default function JiraBoardsPage() {
         )
       ) : (
         <div className="rounded-xl border border-gray-200 bg-white p-12 text-center dark:border-gray-800 dark:bg-gray-900">
-          <div className="mb-4 text-6xl">📌</div>
+          <div className="mb-4 flex justify-center">
+            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg">
+              <Pin className="h-10 w-10" />
+            </div>
+          </div>
           <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
             {searchQuery || typeFilter !== "all"
               ? "Board bulunamadı"

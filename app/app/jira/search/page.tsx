@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { Search } from "lucide-react";
 import type { JiraTask } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
 import { useToastContext } from "@/contexts/ToastContext";
@@ -402,7 +403,11 @@ export default function JiraSearchPage() {
         </div>
       ) : !loading && jql ? (
         <div className="rounded-xl border border-gray-200 bg-white p-12 text-center dark:border-gray-800 dark:bg-gray-900">
-          <div className="mb-4 text-6xl">🔍</div>
+          <div className="mb-4 flex justify-center">
+            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg">
+              <Search className="h-10 w-10" />
+            </div>
+          </div>
           <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
             Sonuç bulunamadı
           </h3>

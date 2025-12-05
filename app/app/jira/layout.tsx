@@ -3,6 +3,15 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import {
+  LayoutDashboard,
+  Folder,
+  ClipboardList,
+  Pin,
+  Search,
+  Settings,
+  Link2,
+} from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getDefaultNavigationItems } from "@/lib/utils";
@@ -17,16 +26,16 @@ interface JiraNavItem {
   id: string;
   label: string;
   href: string;
-  icon: string;
+  icon: React.ComponentType<{ className?: string }>;
 }
 
 const jiraNavItems: JiraNavItem[] = [
-  { id: "dashboard", label: "Dashboard", href: "/app/jira", icon: "📊" },
-  { id: "projects", label: "Projeler", href: "/app/jira/projects", icon: "📁" },
-  { id: "issues", label: "Issue'larım", href: "/app/jira/issues", icon: "📋" },
-  { id: "boards", label: "Board'lar", href: "/app/jira/boards", icon: "📌" },
-  { id: "search", label: "Arama", href: "/app/jira/search", icon: "🔍" },
-  { id: "settings", label: "Ayarlar", href: "/app/jira/settings", icon: "⚙️" },
+  { id: "dashboard", label: "Dashboard", href: "/app/jira", icon: LayoutDashboard },
+  { id: "projects", label: "Projeler", href: "/app/jira/projects", icon: Folder },
+  { id: "issues", label: "Issue'larım", href: "/app/jira/issues", icon: ClipboardList },
+  { id: "boards", label: "Board'lar", href: "/app/jira/boards", icon: Pin },
+  { id: "search", label: "Arama", href: "/app/jira/search", icon: Search },
+  { id: "settings", label: "Ayarlar", href: "/app/jira/settings", icon: Settings },
 ];
 
 export default function JiraLayout({ children }: JiraLayoutProps) {
@@ -131,7 +140,11 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
             <div className="mx-auto max-w-2xl">
               <div className="rounded-2xl border border-blue-200/70 bg-white p-8 shadow-lg dark:border-blue-800/70 dark:bg-gray-900">
                 <div className="mb-6 text-center">
-                  <div className="mb-4 text-6xl">🔗</div>
+                  <div className="mb-4 flex justify-center">
+                    <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-xl">
+                      <Link2 className="h-12 w-12" />
+                    </div>
+                  </div>
                   <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
                     Jira Bağlantısı Gerekli
                   </h2>
@@ -195,6 +208,7 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
                   <nav className="space-y-1">
                     {jiraNavItems.map((item) => {
                       const active = isActive(item.href);
+                      const IconComponent = item.icon;
                       return (
                         <Link
                           key={item.id}
@@ -205,7 +219,7 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
                               : "text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
                           }`}
                         >
-                          <span className="text-lg">{item.icon}</span>
+                          <IconComponent className="h-5 w-5 shrink-0" />
                           <span>{item.label}</span>
                         </Link>
                       );
@@ -221,6 +235,7 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
                 <div className="flex gap-2">
                   {jiraNavItems.map((item) => {
                     const active = isActive(item.href);
+                    const IconComponent = item.icon;
                     return (
                       <Link
                         key={item.id}
@@ -231,7 +246,7 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
                             : "bg-white text-gray-700 dark:bg-gray-900 dark:text-gray-300"
                         }`}
                       >
-                        <span className="text-base">{item.icon}</span>
+                        <IconComponent className="h-4 w-4 shrink-0" />
                         <span>{item.label}</span>
                       </Link>
                     );

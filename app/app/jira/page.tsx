@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import { Folder, ClipboardList, Pin, Search, ChevronRight } from "lucide-react";
 import type { JiraBoard, JiraTask } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
 
@@ -121,20 +122,10 @@ export default function JiraDashboardPage() {
           className="group rounded-xl border-2 border-blue-400/20 bg-white p-6 shadow-sm transition-all hover:border-blue-400/40 hover:shadow-md dark:border-blue-500/20 dark:bg-gray-900 dark:hover:border-blue-500/40"
         >
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-2xl">📁</span>
-            <svg
-              className="h-5 w-5 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-sm">
+              <Folder className="h-6 w-6" />
+            </div>
+            <ChevronRight className="h-5 w-5 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100" />
           </div>
           <div className="text-3xl font-bold text-gray-900 dark:text-white">
             {loading ? (
@@ -151,20 +142,10 @@ export default function JiraDashboardPage() {
           className="group rounded-xl border-2 border-blue-400/20 bg-white p-6 shadow-sm transition-all hover:border-blue-400/40 hover:shadow-md dark:border-blue-500/20 dark:bg-gray-900 dark:hover:border-blue-500/40"
         >
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-2xl">📋</span>
-            <svg
-              className="h-5 w-5 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-green-500 to-green-600 text-white shadow-sm">
+              <ClipboardList className="h-6 w-6" />
+            </div>
+            <ChevronRight className="h-5 w-5 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100" />
           </div>
           <div className="text-3xl font-bold text-gray-900 dark:text-white">
             {loading ? (
@@ -181,20 +162,10 @@ export default function JiraDashboardPage() {
           className="group rounded-xl border-2 border-blue-400/20 bg-white p-6 shadow-sm transition-all hover:border-blue-400/40 hover:shadow-md dark:border-blue-500/20 dark:bg-gray-900 dark:hover:border-blue-500/40"
         >
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-2xl">📌</span>
-            <svg
-              className="h-5 w-5 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-sm">
+              <Pin className="h-6 w-6" />
+            </div>
+            <ChevronRight className="h-5 w-5 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100" />
           </div>
           <div className="text-3xl font-bold text-gray-900 dark:text-white">
             {loading ? (
@@ -211,35 +182,13 @@ export default function JiraDashboardPage() {
           className="group rounded-xl border-2 border-blue-400/20 bg-white p-6 shadow-sm transition-all hover:border-blue-400/40 hover:shadow-md dark:border-blue-500/20 dark:bg-gray-900 dark:hover:border-blue-500/40"
         >
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-2xl">🔍</span>
-            <svg
-              className="h-5 w-5 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-sm">
+              <Search className="h-6 w-6" />
+            </div>
+            <ChevronRight className="h-5 w-5 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100" />
           </div>
           <div className="text-3xl font-bold text-gray-900 dark:text-white">
-            <svg
-              className="mx-auto h-8 w-8 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
+            <Search className="mx-auto h-8 w-8 text-gray-400" />
           </div>
           <div className="text-sm text-gray-600 dark:text-gray-400">Arama</div>
         </Link>

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import { Folder } from "lucide-react";
 import type { JiraBoard } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
 
@@ -206,7 +207,9 @@ export default function JiraProjectsPage() {
                 className="group block rounded-xl border-2 border-gray-200 bg-white p-6 shadow-sm transition-all hover:border-blue-400 hover:shadow-md dark:border-gray-800 dark:bg-gray-900 dark:hover:border-blue-600"
               >
                 <div className="mb-4 flex items-start justify-between">
-                  <div className="text-4xl">📁</div>
+                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md">
+                    <Folder className="h-8 w-8" />
+                  </div>
                   <svg
                     className="h-5 w-5 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100"
                     fill="none"
@@ -249,7 +252,9 @@ export default function JiraProjectsPage() {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="text-3xl">📁</div>
+                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-sm">
+                      <Folder className="h-6 w-6" />
+                    </div>
                     <div>
                       <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
                         {project.name}
@@ -288,7 +293,11 @@ export default function JiraProjectsPage() {
         )
       ) : (
         <div className="rounded-xl border border-gray-200 bg-white p-12 text-center dark:border-gray-800 dark:bg-gray-900">
-          <div className="mb-4 text-6xl">📁</div>
+          <div className="mb-4 flex justify-center">
+            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg">
+              <Folder className="h-10 w-10" />
+            </div>
+          </div>
           <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
             {searchQuery ? "Proje bulunamadı" : "Henüz proje yok"}
           </h3>
