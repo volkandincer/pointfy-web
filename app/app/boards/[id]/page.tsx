@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { Edit, Plus, ClipboardList, FileText } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import PersonalTaskList from "@/components/tasks/PersonalTaskList";
@@ -377,7 +378,6 @@ export default function BoardDetailPage() {
   }
 
   const boardColor = board.color || "#3B82F6";
-  const boardIcon = board.icon || "📋";
 
   return (
     <>
@@ -408,8 +408,8 @@ export default function BoardDetailPage() {
                 <div className="mb-4 flex items-start justify-between">
                   <div className="flex-1">
                     <div className="mb-3 flex items-center gap-3">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/20 text-4xl backdrop-blur-sm">
-                        {boardIcon}
+                      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm">
+                        <ClipboardList className="h-8 w-8 text-white" />
                       </div>
                       <div>
                         <h1 className="mb-1 text-3xl font-bold tracking-tight">
@@ -423,21 +423,9 @@ export default function BoardDetailPage() {
                   </div>
                   <button
                     onClick={() => setShowEditBoardModal(true)}
-                    className="rounded-xl bg-white/20 px-5 py-2.5 text-sm font-semibold backdrop-blur-sm transition-all hover:bg-white/30 hover:scale-105"
+                    className="inline-flex items-center gap-2 rounded-xl bg-white/20 px-5 py-2.5 text-sm font-semibold backdrop-blur-sm transition-all hover:bg-white/30 hover:scale-105"
                   >
-                    <svg
-                      className="mr-2 inline h-4 w-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                      />
-                    </svg>
+                    <Edit className="h-4 w-4" />
                     Düzenle
                   </button>
                 </div>
@@ -462,19 +450,7 @@ export default function BoardDetailPage() {
                   }}
                   className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-xl"
                 >
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
+                  <Plus className="h-5 w-5" />
                   Yeni Task
                 </button>
               </div>
@@ -510,19 +486,7 @@ export default function BoardDetailPage() {
                   }}
                   className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-purple-700 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-all hover:from-purple-700 hover:to-purple-800 hover:shadow-xl"
                 >
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
+                  <Plus className="h-5 w-5" />
                   Yeni Not
                 </button>
               </div>

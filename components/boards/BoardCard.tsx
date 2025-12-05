@@ -2,6 +2,7 @@
 
 import { memo, useCallback } from "react";
 import Link from "next/link";
+import { Edit, Archive, ArchiveRestore, Trash2, ClipboardList } from "lucide-react";
 import type { Board } from "@/interfaces/Board.interface";
 
 interface BoardCardProps {
@@ -47,7 +48,6 @@ const BoardCard = memo(function BoardCard({
   );
 
   const boardColor = board.color || "#3B82F6";
-  const boardIcon = board.icon || "📋";
 
   // Renk için opacity değerleri
   const getColorWithOpacity = (color: string, opacity: number) => {
@@ -84,12 +84,15 @@ const BoardCard = memo(function BoardCard({
           <div className="flex items-start gap-3 pr-20">
             {/* Icon Box */}
             <div
-              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-2xl shadow-md transition-all group-hover:scale-110 group-hover:shadow-lg"
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl shadow-md transition-all group-hover:scale-110 group-hover:shadow-lg"
               style={{
                 backgroundColor: getColorWithOpacity(boardColor, 0.15),
               }}
             >
-              {boardIcon}
+              <ClipboardList 
+                className="h-6 w-6"
+                style={{ color: boardColor }}
+              />
             </div>
 
             {/* Title and Description */}
@@ -113,19 +116,7 @@ const BoardCard = memo(function BoardCard({
                 className="rounded-lg bg-blue-50 p-2 text-blue-600 transition-all hover:bg-blue-100 hover:scale-110 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/30"
                 title="Düzenle"
               >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                  />
-                </svg>
+                <Edit className="h-4 w-4" />
               </button>
             )}
             {onArchive && (
@@ -134,23 +125,11 @@ const BoardCard = memo(function BoardCard({
                 className="rounded-lg bg-gray-100 p-2 text-gray-600 transition-all hover:bg-gray-200 hover:scale-110 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
                 title={board.is_archived ? "Arşivden Çıkar" : "Arşivle"}
               >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d={
-                      board.is_archived
-                        ? "M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
-                        : "M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"
-                    }
-                  />
-                </svg>
+                {board.is_archived ? (
+                  <ArchiveRestore className="h-4 w-4" />
+                ) : (
+                  <Archive className="h-4 w-4" />
+                )}
               </button>
             )}
             {onDelete && (
@@ -159,19 +138,7 @@ const BoardCard = memo(function BoardCard({
                 className="rounded-lg bg-red-50 p-2 text-red-600 transition-all hover:bg-red-100 hover:scale-110 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30"
                 title="Sil"
               >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                  />
-                </svg>
+                <Trash2 className="h-4 w-4" />
               </button>
             )}
           </div>
