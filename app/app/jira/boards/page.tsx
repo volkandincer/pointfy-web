@@ -2,9 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { Pin, BarChart3, LayoutGrid, X } from "lucide-react";
+import { Pin, BarChart3, LayoutGrid, X, Search } from "lucide-react";
 import FilterDropdown from "@/components/jira/FilterDropdown";
 import FilterChip from "@/components/jira/FilterChip";
+import EmptyState from "@/components/jira/EmptyState";
 import type { JiraBoard } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
 
@@ -433,23 +434,29 @@ export default function JiraBoardsPage() {
           </div>
         )
       ) : (
-        <div className="rounded-xl border border-gray-200 bg-white p-12 text-center dark:border-gray-800 dark:bg-gray-900">
-          <div className="mb-4 flex justify-center">
-            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg">
-              <Pin className="h-10 w-10" />
-            </div>
-          </div>
-          <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
-            {searchQuery || typeFilter !== "all"
+        <EmptyState
+          icon={searchQuery || typeFilter !== "all" ? Search : Pin}
+          title={
+            searchQuery || typeFilter !== "all"
               ? "Board bulunamadı"
-              : "Henüz board yok"}
-          </h3>
-          <p className="text-gray-600 dark:text-gray-400">
-            {searchQuery || typeFilter !== "all"
-              ? "Arama kriterlerinize uygun board bulunamadı."
-              : "Jira board'ları bulunmuyor."}
-          </p>
-        </div>
+              : "Henüz board yok"
+          }
+          description={
+            searchQuery || typeFilter !== "all"
+              ? "Arama kriterlerinize uygun board bulunamadı. Filtreleri temizleyip tekrar deneyin."
+              : "Jira hesabınızda henüz board bulunmuyor. Board'lar oluşturulduğunda burada görünecektir."
+          }
+          actionLabel={
+            searchQuery || typeFilter !== "all"
+              ? "Filtreleri Temizle"
+              : undefined
+          }
+          onAction={
+            searchQuery || typeFilter !== "all"
+              ? clearAllFilters
+              : undefined
+          }
+        />
       )}
 
       {/* Results Count */}

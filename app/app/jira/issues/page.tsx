@@ -2,9 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { ClipboardList, X } from "lucide-react";
+import { ClipboardList, X, Search } from "lucide-react";
 import FilterDropdown from "@/components/jira/FilterDropdown";
 import FilterChip from "@/components/jira/FilterChip";
+import EmptyState from "@/components/jira/EmptyState";
 import type { JiraTask } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
 
@@ -550,23 +551,29 @@ export default function JiraIssuesPage() {
           </div>
         )
       ) : (
-        <div className="rounded-xl border border-gray-200 bg-white p-12 text-center dark:border-gray-800 dark:bg-gray-900">
-          <div className="mb-4 flex justify-center">
-            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-green-500 to-green-600 text-white shadow-lg">
-              <ClipboardList className="h-10 w-10" />
-            </div>
-          </div>
-          <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
-            {searchQuery || statusFilter !== "all" || priorityFilter !== "all" || projectFilter !== "all" || typeFilter !== "all"
+        <EmptyState
+          icon={searchQuery || statusFilter !== "all" || priorityFilter !== "all" || projectFilter !== "all" || typeFilter !== "all" ? Search : ClipboardList}
+          title={
+            searchQuery || statusFilter !== "all" || priorityFilter !== "all" || projectFilter !== "all" || typeFilter !== "all"
               ? "Issue bulunamadı"
-              : "Henüz issue yok"}
-          </h3>
-          <p className="text-gray-600 dark:text-gray-400">
-            {searchQuery || statusFilter !== "all" || priorityFilter !== "all" || projectFilter !== "all" || typeFilter !== "all"
-              ? "Arama kriterlerinize uygun issue bulunamadı."
-              : "Size atanmış Jira issue'ları bulunmuyor."}
-          </p>
-        </div>
+              : "Henüz issue yok"
+          }
+          description={
+            searchQuery || statusFilter !== "all" || priorityFilter !== "all" || projectFilter !== "all" || typeFilter !== "all"
+              ? "Arama kriterlerinize uygun issue bulunamadı. Filtreleri temizleyip tekrar deneyin."
+              : "Size atanmış Jira issue'ları bulunmuyor. Jira hesabınızda size atanmış issue'lar olduğunda burada görünecektir."
+          }
+          actionLabel={
+            searchQuery || statusFilter !== "all" || priorityFilter !== "all" || projectFilter !== "all" || typeFilter !== "all"
+              ? "Filtreleri Temizle"
+              : undefined
+          }
+          onAction={
+            searchQuery || statusFilter !== "all" || priorityFilter !== "all" || projectFilter !== "all" || typeFilter !== "all"
+              ? clearAllFilters
+              : undefined
+          }
+        />
       )}
 
       {/* Results Count */}

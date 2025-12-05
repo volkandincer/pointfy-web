@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Search } from "lucide-react";
+import EmptyState from "@/components/jira/EmptyState";
 import type { JiraTask } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
 import { useToastContext } from "@/contexts/ToastContext";
@@ -402,19 +403,11 @@ export default function JiraSearchPage() {
           </div>
         </div>
       ) : !loading && jql ? (
-        <div className="rounded-xl border border-gray-200 bg-white p-12 text-center dark:border-gray-800 dark:bg-gray-900">
-          <div className="mb-4 flex justify-center">
-            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg">
-              <Search className="h-10 w-10" />
-            </div>
-          </div>
-          <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
-            Sonuç bulunamadı
-          </h3>
-          <p className="text-gray-600 dark:text-gray-400">
-            Arama kriterlerinize uygun issue bulunamadı.
-          </p>
-        </div>
+        <EmptyState
+          icon={Search}
+          title="Sonuç bulunamadı"
+          description="Arama kriterlerinize uygun issue bulunamadı. JQL sorgunuzu kontrol edip tekrar deneyin."
+        />
       ) : null}
     </div>
   );
