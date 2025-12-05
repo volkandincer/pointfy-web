@@ -3,8 +3,8 @@
  * Implements INoteRepository using Supabase directly
  */
 
-import type { INoteRepository } from "@/domain/repositories/INoteRepository";
-import type { Note } from "@/domain/entities/Note";
+import type { INoteRepository } from "../../domain/repositories/INoteRepository";
+import { Note } from "../../domain/entities/Note";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { getSupabase } from "@/lib/supabase";
 

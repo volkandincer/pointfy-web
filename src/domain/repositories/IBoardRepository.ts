@@ -11,7 +11,7 @@ export interface IBoardRepository {
   create(board: Omit<Board, "id" | "createdAt" | "updatedAt">): Promise<Board>;
   update(board: Board): Promise<Board>;
   delete(id: string): Promise<void>;
-  
+
   // Realtime subscription
   subscribe(
     userId: string,
@@ -20,4 +20,3 @@ export interface IBoardRepository {
     onDelete: (id: string) => void
   ): () => void;
 }
-
