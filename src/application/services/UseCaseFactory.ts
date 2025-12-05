@@ -38,6 +38,7 @@ import {
   DeleteRoomCustomFlagUseCase,
   GetVotesUseCase,
   CreateContactMessageUseCase,
+  UpdateUserJiraBaseUrlUseCase,
 } from "../use-cases";
 
 export class UseCaseFactory {
@@ -187,6 +188,11 @@ export class UseCaseFactory {
   // Contact
   static createContactMessage(): CreateContactMessageUseCase {
     return new CreateContactMessageUseCase(container.getContactMessageRepository());
+  }
+
+  // Users
+  static updateUserJiraBaseUrl(): UpdateUserJiraBaseUrlUseCase {
+    return new UpdateUserJiraBaseUrlUseCase(container.getUserRepository());
   }
 }
 

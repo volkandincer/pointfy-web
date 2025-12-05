@@ -12,6 +12,7 @@ import type { IRetroActionItemRepository } from "../../domain/repositories/IRetr
 import type { IVoteRepository } from "../../domain/repositories/IVoteRepository";
 import type { IRoomCustomFlagRepository } from "../../domain/repositories/IRoomCustomFlagRepository";
 import type { IContactMessageRepository } from "../../domain/repositories/IContactMessageRepository";
+import type { IUserRepository } from "../../domain/repositories/IUserRepository";
 
 import { SupabaseNoteRepository } from "../repositories/SupabaseNoteRepository";
 import { SupabaseRoomRepository } from "../repositories/SupabaseRoomRepository";
@@ -22,6 +23,7 @@ import { SupabaseRetroActionItemRepository } from "../repositories/SupabaseRetro
 import { SupabaseVoteRepository } from "../repositories/SupabaseVoteRepository";
 import { SupabaseRoomCustomFlagRepository } from "../repositories/SupabaseRoomCustomFlagRepository";
 import { SupabaseContactMessageRepository } from "../repositories/SupabaseContactMessageRepository";
+import { SupabaseUserRepository } from "../repositories/SupabaseUserRepository";
 
 class Container {
   private noteRepository: INoteRepository | null = null;
@@ -33,6 +35,7 @@ class Container {
   private voteRepository: IVoteRepository | null = null;
   private roomCustomFlagRepository: IRoomCustomFlagRepository | null = null;
   private contactMessageRepository: IContactMessageRepository | null = null;
+  private userRepository: IUserRepository | null = null;
 
   // Repositories
   getNoteRepository(): INoteRepository {
@@ -98,6 +101,13 @@ class Container {
     return this.contactMessageRepository;
   }
 
+  getUserRepository(): IUserRepository {
+    if (!this.userRepository) {
+      this.userRepository = new SupabaseUserRepository();
+    }
+    return this.userRepository;
+  }
+
   // Reset all instances (useful for testing)
   reset(): void {
     this.noteRepository = null;
@@ -109,6 +119,7 @@ class Container {
     this.voteRepository = null;
     this.roomCustomFlagRepository = null;
     this.contactMessageRepository = null;
+    this.userRepository = null;
   }
 }
 

@@ -65,3 +65,7 @@ export type { GetVotesDTO } from "./votes/GetVotesUseCase";
 export { CreateContactMessageUseCase } from "./contact/CreateContactMessageUseCase";
 export type { CreateContactMessageDTO } from "./contact/CreateContactMessageUseCase";
 
+// Users
+export { UpdateUserJiraBaseUrlUseCase } from "./users/UpdateUserJiraBaseUrlUseCase";
+export type { UpdateUserJiraBaseUrlDTO } from "./users/UpdateUserJiraBaseUrlUseCase";
+

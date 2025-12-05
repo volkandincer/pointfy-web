@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { getSupabase, getSupabaseServer } from "@/lib/supabase";
-import { resolveEnvValue } from "@/lib/appEnvironment";
+import { UseCaseFactory } from "@/src/application/services/UseCaseFactory";
+import { getUserIdFromRequest } from "@/src/infrastructure/utils/getUserIdFromRequest";
 
 /**
  * Jira URL'ini veritabanına kaydet
@@ -9,55 +8,7 @@ import { resolveEnvValue } from "@/lib/appEnvironment";
 export async function POST(request: Request) {
   try {
     // 1. Kullanıcıyı doğrula
-    const { searchParams } = new URL(request.url);
-    let userId: string | undefined = searchParams.get("userId") || undefined;
-    
-    // Eğer query'den alınamadıysa, cookie'den deneyelim
-    if (!userId) {
-      try {
-        const cookieStore = await cookies();
-        const accessToken = cookieStore.get("sb-access-token")?.value;
-        
-        if (accessToken) {
-          try {
-            const tokenParts = accessToken.split(".");
-            if (tokenParts.length === 3) {
-              const payload = JSON.parse(Buffer.from(tokenParts[1], "base64").toString());
-              userId = payload.sub;
-            }
-          } catch (error) {
-            // JWT decode başarısız
-          }
-        }
-        
-        if (!userId && accessToken) {
-          try {
-            const supabaseUrl = resolveEnvValue("NEXT_PUBLIC_SUPABASE_URL");
-            const supabaseAnonKey = resolveEnvValue(
-              "NEXT_PUBLIC_SUPABASE_ANON_KEY"
-            );
-            if (!supabaseUrl || !supabaseAnonKey) {
-              throw new Error("Supabase REST env vars missing");
-            }
-            const userResponse = await fetch(`${supabaseUrl}/auth/v1/user`, {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-                apikey: supabaseAnonKey,
-              },
-            });
-            
-            if (userResponse.ok) {
-              const userData = await userResponse.json();
-              userId = userData.id;
-            }
-          } catch (apiError) {
-            // Supabase API error
-          }
-        }
-      } catch (authError) {
-        // Auth error
-      }
-    }
+    const userId = await getUserIdFromRequest(request);
 
     if (!userId) {
       return NextResponse.json(
@@ -77,35 +28,12 @@ export async function POST(request: Request) {
       );
     }
 
-    // URL'i normalize et
-    let normalizedUrl = jiraBaseUrl;
-    if (normalizedUrl.startsWith("http://") || normalizedUrl.startsWith("https://")) {
-      normalizedUrl = normalizedUrl.replace(/^https?:\/\//, "");
-    }
-    if (normalizedUrl.endsWith("/")) {
-      normalizedUrl = normalizedUrl.slice(0, -1);
-    }
-
-    // 3. URL'i veritabanına kaydet
-    let supabase;
-    try {
-      supabase = getSupabaseServer();
-    } catch {
-      supabase = getSupabase();
-    }
-
-    const { error: updateError } = await supabase
-      .from("users")
-      .update({ jira_base_url: normalizedUrl })
-      .eq("id", userId);
-
-    if (updateError) {
-      // Jira URL save error
-      return NextResponse.json(
-        { error: `Failed to save Jira URL: ${updateError.message}` },
-        { status: 500 }
-      );
-    }
+    // 3. Use case ile URL'i kaydet
+    const updateUserJiraBaseUrlUseCase = UseCaseFactory.updateUserJiraBaseUrl();
+    const normalizedUrl = await updateUserJiraBaseUrlUseCase.execute({
+      userId,
+      jiraBaseUrl,
+    });
 
     return NextResponse.json({
       success: true,
@@ -113,9 +41,25 @@ export async function POST(request: Request) {
       message: "Jira URL saved successfully",
     });
   } catch (error) {
-    // Save Jira URL API error
+    const errorMessage = error instanceof Error ? error.message : "Internal server error";
+    
+    // Map domain errors to user-friendly messages
+    if (errorMessage.includes("User not found")) {
+      return NextResponse.json(
+        { error: "User not found" },
+        { status: 404 }
+      );
+    }
+
+    if (errorMessage.includes("Failed to update")) {
+      return NextResponse.json(
+        { error: `Failed to save Jira URL: ${errorMessage}` },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Internal server error" },
+      { error: errorMessage },
       { status: 500 }
     );
   }
