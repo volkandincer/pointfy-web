@@ -6,9 +6,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { UseCaseFactory } from "@/src/application/services/UseCaseFactory";
-import { container } from "@/src/infrastructure/di/Container";
-import type { Task } from "@/src/domain/entities/Task";
+import { UseCaseFactory } from "../../application/services/UseCaseFactory";
+import { container } from "../../infrastructure/di/Container";
+import type { Task } from "../../domain/entities/Task";
 import type { VotingSessionState } from "@/interfaces/Voting.interface";
 
 const VOTING_DURATION_SECONDS = 60; // 60 saniye
