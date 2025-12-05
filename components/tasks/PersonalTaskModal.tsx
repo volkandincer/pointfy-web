@@ -89,7 +89,7 @@ const PersonalTaskModal = memo(function PersonalTaskModal({
             placeholder="Task başlığı"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            className="w-full border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
         </div>
         <div>
@@ -97,7 +97,7 @@ const PersonalTaskModal = memo(function PersonalTaskModal({
             placeholder="Açıklama (isteğe bağlı)"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            className="w-full border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
         </div>
         <div>
@@ -110,10 +110,10 @@ const PersonalTaskModal = memo(function PersonalTaskModal({
                 key={c}
                 type="button"
                 onClick={() => setCategory(c)}
-                className={`rounded-full px-3 py-1 text-xs ${
+                className={`border-2 px-3 py-1 text-xs transition-colors ${
                   category === c
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                    ? "border-blue-600 bg-blue-600 text-white"
+                    : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
                 }`}
               >
                 {c}
@@ -131,10 +131,10 @@ const PersonalTaskModal = memo(function PersonalTaskModal({
                 key={p.key}
                 type="button"
                 onClick={() => setPriority(p.key)}
-                className={`rounded-full px-3 py-1 text-xs ${
+                className={`border-2 px-3 py-1 text-xs transition-colors ${
                   priority === p.key
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                    ? "border-blue-600 bg-blue-600 text-white"
+                    : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
                 }`}
               >
                 {p.label}
@@ -146,7 +146,7 @@ const PersonalTaskModal = memo(function PersonalTaskModal({
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+            className="inline-flex h-10 items-center justify-center border-2 border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
           >
             İptal
           </button>
@@ -154,7 +154,7 @@ const PersonalTaskModal = memo(function PersonalTaskModal({
             type="button"
             disabled={loading || !title.trim()}
             onClick={submit}
-            className="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-5 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:opacity-60"
+            className="inline-flex h-10 items-center justify-center border-2 border-indigo-600 bg-indigo-600 px-5 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 hover:border-indigo-700 disabled:opacity-60"
           >
             {initialTask ? "Kaydet" : "Ekle"}
           </button>

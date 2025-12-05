@@ -160,7 +160,7 @@ function HomePageContent() {
         <Header navigationItems={navigationItems} />
         <main>
           <div className="container mx-auto px-4 py-12">
-            <div className="h-64 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800" />
+            <div className="h-64 animate-pulse border border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
           </div>
         </main>
         <Footer navigationItems={navigationItems} />

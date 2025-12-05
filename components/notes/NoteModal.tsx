@@ -115,9 +115,9 @@ const NoteModal = memo(function NoteModal({
             maxLength={500}
             disabled={loading}
             autoFocus
-            className={`w-full rounded-2xl border-2 px-4 py-4 text-base transition ${
+            className={`w-full border-2 px-4 py-4 text-base transition ${
               inputFocused
-                ? "border-blue-500 bg-blue-50 dark:border-blue-500 dark:bg-gray-800"
+                ? "border-blue-600 bg-blue-50 dark:border-blue-600 dark:bg-gray-800"
                 : "border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-800"
             } text-gray-900 outline-none dark:text-white`}
           />
@@ -139,10 +139,10 @@ const NoteModal = memo(function NoteModal({
                   }
                 }}
                 disabled={loading}
-                className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+                className={`border-2 px-4 py-2 text-sm font-medium transition-colors ${
                   category === cat.value
-                    ? "bg-blue-600 text-white shadow-md"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                    ? "border-blue-600 bg-blue-600 text-white"
+                    : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
                 }`}
               >
                 {cat.label}
@@ -159,7 +159,7 @@ const NoteModal = memo(function NoteModal({
                 maxLength={20}
                 disabled={loading}
                 autoFocus
-                className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                className="w-full border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
               />
               <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                 Özel kategori adınızı yazın (max 20 karakter)
@@ -173,7 +173,7 @@ const NoteModal = memo(function NoteModal({
             type="button"
             onClick={onClose}
             disabled={loading}
-            className="inline-flex h-11 items-center justify-center rounded-xl border border-gray-300 bg-white px-6 text-base font-semibold text-gray-900 transition hover:bg-gray-50 disabled:opacity-60 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+            className="inline-flex h-11 items-center justify-center border-2 border-gray-300 bg-white px-6 text-base font-semibold text-gray-900 transition-colors hover:bg-gray-50 hover:border-gray-400 disabled:opacity-60 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
           >
             İptal
           </button>
@@ -181,7 +181,7 @@ const NoteModal = memo(function NoteModal({
             type="button"
             disabled={loading || !content.trim() || !getSelectedCategory()}
             onClick={submit}
-            className="inline-flex h-11 items-center justify-center rounded-xl bg-blue-600 px-6 text-base font-semibold text-white transition hover:bg-blue-700 disabled:opacity-60"
+            className="inline-flex h-11 items-center justify-center border-2 border-blue-600 bg-blue-600 px-6 text-base font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700 disabled:opacity-60"
           >
             {loading ? "Kaydediliyor..." : initialNote ? "Kaydet" : "Kaydet"}
           </button>

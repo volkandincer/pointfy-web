@@ -58,7 +58,7 @@ export default function NotesPage() {
   return (
     <>
       <Header navigationItems={navigationItems} />
-        <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+        <main className="min-h-screen bg-white dark:bg-gray-900">
           <div className="container mx-auto px-4 py-12">
             <div className="mx-auto max-w-7xl">
               {/* Header Section */}
@@ -73,16 +73,16 @@ export default function NotesPage() {
                 </div>
 
                 {/* Chip Filter Bar */}
-                <div className="mb-6 rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+                <div className="mb-6 border border-gray-300 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
                   <div className="flex flex-wrap gap-2">
                     {categories.map((cat) => (
                       <button
                         key={cat}
                         onClick={() => setSelectedCategory(cat)}
-                        className={`rounded-full px-5 py-2.5 text-sm font-semibold transition-all ${
+                        className={`border-2 px-5 py-2.5 text-sm font-semibold transition-colors ${
                           selectedCategory === cat
-                            ? "bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-md"
-                            : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                            ? "border-purple-600 bg-purple-600 text-white"
+                            : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
                         }`}
                       >
                         {getCategoryLabel(cat)}
@@ -98,7 +98,7 @@ export default function NotesPage() {
                       setEditingNote(null);
                       setShowModal(true);
                     }}
-                    className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-purple-700 px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:from-purple-700 hover:to-purple-800 hover:shadow-xl"
+                    className="group inline-flex items-center gap-2 border-2 border-purple-600 bg-purple-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-purple-700 hover:border-purple-700"
                   >
                     <svg
                       className="h-5 w-5 transition-transform group-hover:rotate-90"
@@ -125,7 +125,7 @@ export default function NotesPage() {
                     {[1, 2, 3, 4, 5, 6].map((i) => (
                       <div
                         key={i}
-                        className="h-64 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800"
+                        className="h-64 animate-pulse border border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800"
                       />
                     ))}
                   </div>

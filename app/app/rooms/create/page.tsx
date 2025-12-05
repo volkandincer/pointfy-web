@@ -132,7 +132,7 @@ function CreateRoomPageContent() {
   return (
     <>
       <Header navigationItems={navigationItems} />
-      <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+      <main className="min-h-screen bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4 py-12">
           <div className="mx-auto max-w-3xl">
             <div className="mb-8">
@@ -143,7 +143,7 @@ function CreateRoomPageContent() {
                 Takımınızla birlikte çalışmak için bir oda oluşturun
               </p>
             </div>
-            <div className="rounded-2xl border-2 border-gray-200/70 bg-white p-8 shadow-lg dark:border-gray-800/70 dark:bg-gray-900">
+            <div className="border border-gray-300 bg-white p-8 shadow-sm dark:border-gray-700 dark:bg-gray-900">
               <CreateRoomForm
                 onSubmit={handleCreate}
                 loading={loading}
@@ -164,7 +164,7 @@ export default function CreateRoomPage() {
       <>
         <Header navigationItems={getDefaultNavigationItems()} />
         <main className="container mx-auto px-4 py-16">
-          <div className="h-40 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800" />
+          <div className="h-40 animate-pulse border border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
         </main>
         <Footer navigationItems={getDefaultNavigationItems()} />
       </>
