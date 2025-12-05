@@ -1,10 +1,6 @@
 import { NextResponse } from "next/server";
-import { getSupabase } from "@/lib/supabase";
 import type { ContactFormData } from "@/interfaces/Contact.interface";
-
-function isValidEmail(email: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
+import { UseCaseFactory } from "@/src/application/services/UseCaseFactory";
 
 export async function POST(request: Request) {
   try {
@@ -17,50 +13,39 @@ export async function POST(request: Request) {
       );
     }
 
-    const name = (body.name || "").trim();
-    const email = (body.email || "").trim();
-    const message = (body.message || "").trim();
-    const website = (body.website || "").trim();
-
-    if (website.length > 0) {
-      // Honeypot triggered
+    // Honeypot check - if triggered, return success silently
+    if (body.website && body.website.trim().length > 0) {
       return NextResponse.json({ success: true }, { status: 200 });
     }
 
-    if (name.length < 2 || name.length > 100) {
-      return NextResponse.json(
-        { success: false, error: "Ad geçersiz" },
-        { status: 400 }
-      );
-    }
-    if (!isValidEmail(email)) {
-      return NextResponse.json(
-        { success: false, error: "E-posta geçersiz" },
-        { status: 400 }
-      );
-    }
-    if (message.length < 10 || message.length > 2000) {
-      return NextResponse.json(
-        { success: false, error: "Mesaj uzunluğu geçersiz" },
-        { status: 400 }
-      );
-    }
-
-    const supabase = getSupabase();
-    const { error } = await supabase
-      .from("contact_messages")
-      .insert({ name, email, message });
-    if (error) {
-      return NextResponse.json(
-        { success: false, error: "Kayıt başarısız" },
-        { status: 500 }
-      );
-    }
+    // Create contact message using use case
+    const createContactMessageUseCase = UseCaseFactory.createContactMessage();
+    await createContactMessageUseCase.execute({
+      name: body.name || "",
+      email: body.email || "",
+      message: body.message || "",
+      website: body.website || "",
+    });
 
     return NextResponse.json({ success: true }, { status: 200 });
-  } catch {
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "Beklenmeyen hata";
+    
+    // Map domain errors to user-friendly messages
+    let userMessage = "Beklenmeyen hata";
+    if (errorMessage.includes("Name must be between")) {
+      userMessage = "Ad geçersiz";
+    } else if (errorMessage.includes("Valid email")) {
+      userMessage = "E-posta geçersiz";
+    } else if (errorMessage.includes("Message must be between")) {
+      userMessage = "Mesaj uzunluğu geçersiz";
+    } else if (errorMessage.includes("Spam detected")) {
+      // Silently return success for spam
+      return NextResponse.json({ success: true }, { status: 200 });
+    }
+
     return NextResponse.json(
-      { success: false, error: "Beklenmeyen hata" },
+      { success: false, error: userMessage },
       { status: 500 }
     );
   }

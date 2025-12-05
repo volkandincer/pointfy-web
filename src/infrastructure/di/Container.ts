@@ -11,6 +11,7 @@ import type { IRetroCardRepository } from "../../domain/repositories/IRetroCardR
 import type { IRetroActionItemRepository } from "../../domain/repositories/IRetroActionItemRepository";
 import type { IVoteRepository } from "../../domain/repositories/IVoteRepository";
 import type { IRoomCustomFlagRepository } from "../../domain/repositories/IRoomCustomFlagRepository";
+import type { IContactMessageRepository } from "../../domain/repositories/IContactMessageRepository";
 
 import { SupabaseNoteRepository } from "../repositories/SupabaseNoteRepository";
 import { SupabaseRoomRepository } from "../repositories/SupabaseRoomRepository";
@@ -20,6 +21,7 @@ import { SupabaseRetroCardRepository } from "../repositories/SupabaseRetroCardRe
 import { SupabaseRetroActionItemRepository } from "../repositories/SupabaseRetroActionItemRepository";
 import { SupabaseVoteRepository } from "../repositories/SupabaseVoteRepository";
 import { SupabaseRoomCustomFlagRepository } from "../repositories/SupabaseRoomCustomFlagRepository";
+import { SupabaseContactMessageRepository } from "../repositories/SupabaseContactMessageRepository";
 
 class Container {
   private noteRepository: INoteRepository | null = null;
@@ -30,6 +32,7 @@ class Container {
   private retroActionItemRepository: IRetroActionItemRepository | null = null;
   private voteRepository: IVoteRepository | null = null;
   private roomCustomFlagRepository: IRoomCustomFlagRepository | null = null;
+  private contactMessageRepository: IContactMessageRepository | null = null;
 
   // Repositories
   getNoteRepository(): INoteRepository {
@@ -88,6 +91,13 @@ class Container {
     return this.roomCustomFlagRepository;
   }
 
+  getContactMessageRepository(): IContactMessageRepository {
+    if (!this.contactMessageRepository) {
+      this.contactMessageRepository = new SupabaseContactMessageRepository();
+    }
+    return this.contactMessageRepository;
+  }
+
   // Reset all instances (useful for testing)
   reset(): void {
     this.noteRepository = null;
@@ -98,6 +108,7 @@ class Container {
     this.retroActionItemRepository = null;
     this.voteRepository = null;
     this.roomCustomFlagRepository = null;
+    this.contactMessageRepository = null;
   }
 }
 

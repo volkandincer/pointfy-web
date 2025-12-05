@@ -37,6 +37,7 @@ import {
   CreateRoomCustomFlagUseCase,
   DeleteRoomCustomFlagUseCase,
   GetVotesUseCase,
+  CreateContactMessageUseCase,
 } from "../use-cases";
 
 export class UseCaseFactory {
@@ -181,6 +182,11 @@ export class UseCaseFactory {
       container.getTaskRepository(),
       container.getRoomRepository()
     );
+  }
+
+  // Contact
+  static createContactMessage(): CreateContactMessageUseCase {
+    return new CreateContactMessageUseCase(container.getContactMessageRepository());
   }
 }
 

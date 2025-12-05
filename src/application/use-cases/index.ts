@@ -61,3 +61,7 @@ export type { UpdateRetroActionItemDTO } from "./retro/UpdateRetroActionItemUseC
 export { GetVotesUseCase } from "./votes/GetVotesUseCase";
 export type { GetVotesDTO } from "./votes/GetVotesUseCase";
 
+// Contact
+export { CreateContactMessageUseCase } from "./contact/CreateContactMessageUseCase";
+export type { CreateContactMessageDTO } from "./contact/CreateContactMessageUseCase";
+
