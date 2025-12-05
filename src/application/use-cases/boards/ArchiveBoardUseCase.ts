@@ -33,4 +33,3 @@ export class ArchiveBoardUseCase {
     return this.boardRepository.update(board);
   }
 }
-

@@ -22,6 +22,7 @@ export { GetTasksUseCase } from "./tasks/GetTasksUseCase";
 export { UpdateTaskUseCase } from "./tasks/UpdateTaskUseCase";
 export type { UpdateTaskDTO } from "./tasks/UpdateTaskUseCase";
 export { DeleteTaskUseCase } from "./tasks/DeleteTaskUseCase";
+export { GetActiveTaskUseCase } from "./tasks/GetActiveTaskUseCase";
 
 // Boards
 export { GetBoardsUseCase } from "./boards/GetBoardsUseCase";

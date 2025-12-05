@@ -15,6 +15,7 @@ import {
   GetTasksUseCase,
   UpdateTaskUseCase,
   DeleteTaskUseCase,
+  GetActiveTaskUseCase,
   GetBoardsUseCase,
   CreateBoardUseCase,
   UpdateBoardUseCase,
@@ -71,6 +72,10 @@ export class UseCaseFactory {
 
   static deleteTask(): DeleteTaskUseCase {
     return new DeleteTaskUseCase(container.getTaskRepository());
+  }
+
+  static getActiveTask(): GetActiveTaskUseCase {
+    return new GetActiveTaskUseCase(container.getTaskRepository());
   }
 
   // Boards
