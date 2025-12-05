@@ -26,6 +26,10 @@ export interface IRoomRepository {
   generateUniqueCode(): Promise<string>;
   verifyPassword(roomId: string, password: string): Promise<boolean>;
   
+  // Retro Timer operations
+  startRetroTimer(roomId: string, durationSeconds: number): Promise<void>;
+  stopRetroTimer(roomId: string): Promise<void>;
+  
   // Realtime subscription
   subscribe(
     roomId: string,

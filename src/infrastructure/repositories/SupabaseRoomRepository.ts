@@ -18,7 +18,7 @@ export class SupabaseRoomRepository implements IRoomRepository {
   async findById(id: string): Promise<Room | null> {
     const { data, error } = await this.getClient()
       .from("rooms")
-      .select("id, code, name, created_by_key, created_by_username, created_at, is_active, is_private, room_password, room_type")
+      .select("id, code, name, created_by_key, created_by_username, created_at, is_active, is_private, room_password, room_type, retro_timer_duration, retro_timer_started_at, retro_timer_ended_at")
       .eq("id", id)
       .single();
 
@@ -37,13 +37,16 @@ export class SupabaseRoomRepository implements IRoomRepository {
       is_private: data.is_private,
       room_password: data.room_password,
       room_type: data.room_type || "poker",
+      retro_timer_duration: data.retro_timer_duration ?? null,
+      retro_timer_started_at: data.retro_timer_started_at ?? null,
+      retro_timer_ended_at: data.retro_timer_ended_at ?? null,
     });
   }
 
   async findByCode(code: string): Promise<Room | null> {
     const { data, error } = await this.getClient()
       .from("rooms")
-      .select("id, code, name, created_by_key, created_by_username, created_at, is_active, is_private, room_password, room_type")
+      .select("id, code, name, created_by_key, created_by_username, created_at, is_active, is_private, room_password, room_type, retro_timer_duration, retro_timer_started_at, retro_timer_ended_at")
       .eq("code", code)
       .single();
 
@@ -62,6 +65,9 @@ export class SupabaseRoomRepository implements IRoomRepository {
       is_private: data.is_private,
       room_password: data.room_password,
       room_type: data.room_type || "poker",
+      retro_timer_duration: data.retro_timer_duration ?? null,
+      retro_timer_started_at: data.retro_timer_started_at ?? null,
+      retro_timer_ended_at: data.retro_timer_ended_at ?? null,
     });
   }
 
@@ -70,7 +76,7 @@ export class SupabaseRoomRepository implements IRoomRepository {
       .from("room_participants")
       .select(`
         rooms (
-          id, code, name, created_by_key, created_by_username, created_at, is_active, is_private, room_password, room_type
+          id, code, name, created_by_key, created_by_username, created_at, is_active, is_private, room_password, room_type, retro_timer_duration, retro_timer_started_at, retro_timer_ended_at
         )
       `)
       .eq("user_key", userId);
@@ -92,6 +98,9 @@ export class SupabaseRoomRepository implements IRoomRepository {
           is_private: boolean;
           room_password: string | null;
           room_type: string;
+          retro_timer_duration?: number | null;
+          retro_timer_started_at?: string | null;
+          retro_timer_ended_at?: string | null;
         };
         return Room.fromRow({
           id: roomData.id,
@@ -104,6 +113,9 @@ export class SupabaseRoomRepository implements IRoomRepository {
           is_private: roomData.is_private,
           room_password: roomData.room_password,
           room_type: roomData.room_type as "poker" | "retro",
+          retro_timer_duration: roomData.retro_timer_duration ?? null,
+          retro_timer_started_at: roomData.retro_timer_started_at ?? null,
+          retro_timer_ended_at: roomData.retro_timer_ended_at ?? null,
         });
       })
       .filter((room): room is Room => room !== null);
@@ -171,7 +183,46 @@ export class SupabaseRoomRepository implements IRoomRepository {
       is_private: data.is_private,
       room_password: data.room_password,
       room_type: data.room_type,
+      retro_timer_duration: data.retro_timer_duration ?? null,
+      retro_timer_started_at: data.retro_timer_started_at ?? null,
+      retro_timer_ended_at: data.retro_timer_ended_at ?? null,
     });
+  }
+
+  async startRetroTimer(roomId: string, durationSeconds: number): Promise<void> {
+    if (durationSeconds <= 0) {
+      throw new Error("Timer duration must be greater than 0");
+    }
+
+    const startedAt = new Date().toISOString();
+    const { error } = await this.getClient()
+      .from("rooms")
+      .update({
+        retro_timer_duration: durationSeconds,
+        retro_timer_started_at: startedAt,
+        retro_timer_ended_at: null,
+      })
+      .eq("id", roomId);
+
+    if (error) {
+      throw new Error(`Failed to start timer: ${error.message}`);
+    }
+  }
+
+  async stopRetroTimer(roomId: string): Promise<void> {
+    const endedAt = new Date().toISOString();
+    const { error } = await this.getClient()
+      .from("rooms")
+      .update({
+        retro_timer_ended_at: endedAt,
+        retro_timer_duration: null,
+        retro_timer_started_at: null,
+      })
+      .eq("id", roomId);
+
+    if (error) {
+      throw new Error(`Failed to stop timer: ${error.message}`);
+    }
   }
 
   async delete(id: string): Promise<void> {

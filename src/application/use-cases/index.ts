@@ -15,6 +15,8 @@ export { CreateRoomUseCase } from "./rooms/CreateRoomUseCase";
 export type { CreateRoomDTO } from "./rooms/CreateRoomUseCase";
 export { GetRoomUseCase } from "./rooms/GetRoomUseCase";
 export { GetRoomParticipantsUseCase } from "./rooms/GetRoomParticipantsUseCase";
+export { StartRetroTimerUseCase } from "./rooms/StartRetroTimerUseCase";
+export { StopRetroTimerUseCase } from "./rooms/StopRetroTimerUseCase";
 export type { RoomParticipant } from "./rooms/GetRoomParticipantsUseCase";
 
 // Tasks

@@ -15,7 +15,10 @@ export class Room {
     public isActive: boolean,
     public isPrivate: boolean,
     public roomPassword: string | null,
-    public roomType: RoomType
+    public roomType: RoomType,
+    public retroTimerDuration: number | null = null,
+    public retroTimerStartedAt: Date | null = null,
+    public retroTimerEndedAt: Date | null = null
   ) {
     this.validate();
   }
@@ -66,6 +69,47 @@ export class Room {
     this.isActive = true;
   }
 
+  // Retro Timer methods
+  startRetroTimer(durationSeconds: number): void {
+    if (this.roomType !== "retro") {
+      throw new Error("Timer can only be started for retro rooms");
+    }
+    if (durationSeconds <= 0) {
+      throw new Error("Timer duration must be greater than 0");
+    }
+    this.retroTimerDuration = durationSeconds;
+    this.retroTimerStartedAt = new Date();
+    this.retroTimerEndedAt = null;
+  }
+
+  stopRetroTimer(): void {
+    if (this.roomType !== "retro") {
+      throw new Error("Timer can only be stopped for retro rooms");
+    }
+    this.retroTimerEndedAt = new Date();
+    this.retroTimerDuration = null;
+    this.retroTimerStartedAt = null;
+  }
+
+  getRemainingSeconds(): number {
+    if (
+      !this.retroTimerStartedAt ||
+      !this.retroTimerDuration ||
+      this.retroTimerEndedAt
+    ) {
+      return 0;
+    }
+
+    const startTime = this.retroTimerStartedAt.getTime();
+    const now = Date.now();
+    const elapsedSeconds = Math.floor((now - startTime) / 1000);
+    return Math.max(0, this.retroTimerDuration - elapsedSeconds);
+  }
+
+  isTimerActive(): boolean {
+    return this.getRemainingSeconds() > 0;
+  }
+
   // Factory method to create from database row
   static fromRow(row: {
     id: string;
@@ -78,6 +122,9 @@ export class Room {
     is_private: boolean;
     room_password: string | null;
     room_type: RoomType;
+    retro_timer_duration?: number | null;
+    retro_timer_started_at?: string | null;
+    retro_timer_ended_at?: string | null;
   }): Room {
     return new Room(
       row.id,
@@ -88,7 +135,10 @@ export class Room {
       row.is_active,
       row.is_private,
       row.room_password,
-      row.room_type
+      row.room_type,
+      row.retro_timer_duration ?? null,
+      row.retro_timer_started_at ? new Date(row.retro_timer_started_at) : null,
+      row.retro_timer_ended_at ? new Date(row.retro_timer_ended_at) : null
     );
   }
 

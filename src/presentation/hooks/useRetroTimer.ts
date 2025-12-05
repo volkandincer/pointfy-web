@@ -6,9 +6,9 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { UseCaseFactory } from "@/src/application/services/UseCaseFactory";
-import { container } from "@/src/infrastructure/di/Container";
-import type { Room } from "@/src/domain/entities/Room";
+import { UseCaseFactory } from "../../application/services/UseCaseFactory";
+import { container } from "../../infrastructure/di/Container";
+import type { Room } from "../../domain/entities/Room";
 
 interface UseRetroTimerResult {
   remainingSeconds: number;
