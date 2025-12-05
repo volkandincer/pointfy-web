@@ -229,34 +229,44 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
               </div>
             </aside>
 
-            {/* Mobile Navigation */}
-            <div className="w-full lg:hidden">
-              <div className="overflow-x-auto pb-2">
-                <div className="flex gap-2">
-                  {jiraNavItems.map((item) => {
+            {/* Mobile Bottom Navigation - Hidden on desktop */}
+            <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 bg-white/95 backdrop-blur-sm dark:border-gray-800 dark:bg-gray-900/95 lg:hidden">
+              <div className="container mx-auto">
+                <nav className="flex items-center justify-around">
+                  {jiraNavItems.slice(0, 5).map((item) => {
                     const active = isActive(item.href);
                     const IconComponent = item.icon;
                     return (
                       <Link
                         key={item.id}
                         href={item.href}
-                        className={`flex shrink-0 items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-all shadow-sm ${
+                        className={`relative flex flex-col items-center gap-1 px-2 py-3 transition-all ${
                           active
-                            ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
-                            : "bg-white text-gray-700 dark:bg-gray-900 dark:text-gray-300"
+                            ? "text-blue-600 dark:text-blue-400"
+                            : "text-gray-600 dark:text-gray-400"
                         }`}
                       >
-                        <IconComponent className="h-4 w-4 shrink-0" />
-                        <span>{item.label}</span>
+                        <div className="relative">
+                          <IconComponent className={`h-5 w-5 transition-transform ${active ? "scale-110" : ""}`} />
+                          {active && (
+                            <div className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-blue-600 dark:bg-blue-400" />
+                          )}
+                        </div>
+                        <span className={`text-[10px] font-medium ${active ? "font-semibold" : ""}`}>
+                          {item.label.length > 8 ? item.label.substring(0, 7) + "..." : item.label}
+                        </span>
+                        {active && (
+                          <div className="absolute bottom-0 left-1/2 h-0.5 w-8 -translate-x-1/2 rounded-full bg-blue-600 dark:bg-blue-400" />
+                        )}
                       </Link>
                     );
                   })}
-                </div>
+                </nav>
               </div>
             </div>
 
             {/* Main Content */}
-            <main className="w-full flex-1 lg:w-auto">{children}</main>
+            <main className="w-full flex-1 lg:w-auto pb-20 lg:pb-0">{children}</main>
           </div>
         </div>
       </div>

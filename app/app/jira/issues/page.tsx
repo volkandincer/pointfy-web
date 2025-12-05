@@ -473,7 +473,7 @@ export default function JiraIssuesPage() {
                       </span>
                       {issue.priority && (
                         <span
-                          className={`rounded-md px-2 py-1 text-xs font-semibold ${getPriorityColor(
+                          className={`rounded-md px-2 py-1 text-xs font-semibold ${getPriorityColorClasses(
                             issue.priority
                           )}`}
                         >
