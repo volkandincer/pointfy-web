@@ -299,6 +299,71 @@ export default function JiraProjectDetailPage() {
     return Array.from(new Set(allIssues.map((issue) => issue.status))).sort();
   }, [allIssues]);
 
+  // Filter options with counts
+  const statusOptions = useMemo(() => {
+    const statusMap = new Map<string, number>();
+    allIssues.forEach((issue) => {
+      statusMap.set(issue.status, (statusMap.get(issue.status) || 0) + 1);
+    });
+    return Array.from(statusMap.entries())
+      .map(([value, count]) => ({ value, label: value, count }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, [allIssues]);
+
+  const priorityOptions = useMemo(() => {
+    const priorityMap = new Map<string, number>();
+    allIssues.forEach((issue) => {
+      if (issue.priority) {
+        priorityMap.set(issue.priority, (priorityMap.get(issue.priority) || 0) + 1);
+      }
+    });
+    return Array.from(priorityMap.entries())
+      .map(([value, count]) => ({ value, label: value, count }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, [allIssues]);
+
+  const typeOptions = useMemo(() => {
+    const typeMap = new Map<string, number>();
+    allIssues.forEach((issue) => {
+      typeMap.set(issue.type, (typeMap.get(issue.type) || 0) + 1);
+    });
+    return Array.from(typeMap.entries())
+      .map(([value, count]) => ({ value, label: value, count }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, [allIssues]);
+
+  const assigneeOptions = useMemo(() => {
+    const assigneeMap = new Map<string, number>();
+    allIssues.forEach((issue) => {
+      if (issue.assignee?.name) {
+        assigneeMap.set(issue.assignee.name, (assigneeMap.get(issue.assignee.name) || 0) + 1);
+      }
+    });
+    return Array.from(assigneeMap.entries())
+      .map(([value, count]) => ({ value, label: value, count }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, [allIssues]);
+
+  // Active filters count
+  const activeFiltersCount = useMemo(() => {
+    let count = 0;
+    if (statusFilter !== "all") count++;
+    if (priorityFilter !== "all") count++;
+    if (typeFilter !== "all") count++;
+    if (assigneeFilter !== "all") count++;
+    if (searchQuery.trim()) count++;
+    return count;
+  }, [statusFilter, priorityFilter, typeFilter, assigneeFilter, searchQuery]);
+
+  // Clear all filters
+  const clearAllFilters = useCallback(() => {
+    setSearchQuery("");
+    setStatusFilter("all");
+    setPriorityFilter("all");
+    setTypeFilter("all");
+    setAssigneeFilter("all");
+  }, []);
+
   // Filtered issues'ı set et
   useEffect(() => {
     setIssues(filteredIssues);
