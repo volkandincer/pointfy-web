@@ -7,7 +7,6 @@
 
 import { useEffect, useState } from "react";
 import { UseCaseFactory } from "../../application/services/UseCaseFactory";
-import type { TaskInfo } from "@/interfaces/Voting.interface";
 import { container } from "../../infrastructure/di/Container";
 import { TaskAdapter } from "../adapters/TaskAdapter";
 
@@ -33,13 +32,15 @@ interface UseCompletedTasksResult {
 
 export function useCompletedTasks(roomId: string): UseCompletedTasksResult {
   const [completedTasks, setCompletedTasks] = useState<CompletedTask[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(!!roomId);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!roomId) {
+      // Reset state when roomId becomes invalid
       setCompletedTasks([]);
       setLoading(false);
+      setError(null);
       return;
     }
 
@@ -49,7 +50,9 @@ export function useCompletedTasks(roomId: string): UseCompletedTasksResult {
     (async () => {
       try {
         const getCompletedTasksUseCase = UseCaseFactory.getCompletedTasks();
-        const fetchedTasksWithStats = await getCompletedTasksUseCase.execute(roomId);
+        const fetchedTasksWithStats = await getCompletedTasksUseCase.execute(
+          roomId
+        );
 
         if (!mounted) return;
 
@@ -84,7 +87,13 @@ export function useCompletedTasks(roomId: string): UseCompletedTasksResult {
                   if (!mounted) return;
                   const updatedPresentationTasks: CompletedTask[] =
                     updatedTasksWithStats.map(
-                      ({ task, averagePoint, totalVotes, highestPoint, lowestPoint }) => {
+                      ({
+                        task,
+                        averagePoint,
+                        totalVotes,
+                        highestPoint,
+                        lowestPoint,
+                      }) => {
                         const taskInfo = TaskAdapter.toPresentation(task);
                         return {
                           ...taskInfo,
@@ -109,7 +118,13 @@ export function useCompletedTasks(roomId: string): UseCompletedTasksResult {
                   if (!mounted) return;
                   const updatedPresentationTasks: CompletedTask[] =
                     updatedTasksWithStats.map(
-                      ({ task, averagePoint, totalVotes, highestPoint, lowestPoint }) => {
+                      ({
+                        task,
+                        averagePoint,
+                        totalVotes,
+                        highestPoint,
+                        lowestPoint,
+                      }) => {
                         const taskInfo = TaskAdapter.toPresentation(task);
                         return {
                           ...taskInfo,

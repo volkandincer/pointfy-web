@@ -30,6 +30,9 @@ import {
   CreateRetroActionItemUseCase,
   GetRetroActionItemsUseCase,
   UpdateRetroActionItemUseCase,
+  GetRoomCustomFlagsUseCase,
+  CreateRoomCustomFlagUseCase,
+  DeleteRoomCustomFlagUseCase,
   GetVotesUseCase,
 } from "../use-cases";
 
@@ -141,6 +144,19 @@ export class UseCaseFactory {
 
   static updateRetroActionItem(): UpdateRetroActionItemUseCase {
     return new UpdateRetroActionItemUseCase(container.getRetroActionItemRepository());
+  }
+
+  // Room Custom Flags
+  static getRoomCustomFlags(): GetRoomCustomFlagsUseCase {
+    return new GetRoomCustomFlagsUseCase(container.getRoomCustomFlagRepository());
+  }
+
+  static createRoomCustomFlag(): CreateRoomCustomFlagUseCase {
+    return new CreateRoomCustomFlagUseCase(container.getRoomCustomFlagRepository());
+  }
+
+  static deleteRoomCustomFlag(): DeleteRoomCustomFlagUseCase {
+    return new DeleteRoomCustomFlagUseCase(container.getRoomCustomFlagRepository());
   }
 
   // Votes

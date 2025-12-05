@@ -6,10 +6,10 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { UseCaseFactory } from "@/src/application/services/UseCaseFactory";
+import { UseCaseFactory } from "../../application/services/UseCaseFactory";
 import type { RoomCustomFlag } from "@/interfaces/RetroActionItem.interface";
-import { container } from "@/src/infrastructure/di/Container";
-import { RoomCustomFlagAdapter } from "@/src/presentation/adapters/RoomCustomFlagAdapter";
+import { container } from "../../infrastructure/di/Container";
+import { RoomCustomFlagAdapter } from "../adapters/RoomCustomFlagAdapter";
 import { getSupabase } from "@/lib/supabase";
 
 interface UseRoomCustomFlagsResult {

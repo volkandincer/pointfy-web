@@ -48,6 +48,9 @@ export { CreateRetroActionItemUseCase } from "./retro/CreateRetroActionItemUseCa
 export type { CreateRetroActionItemDTO } from "./retro/CreateRetroActionItemUseCase";
 export { GetRetroActionItemsUseCase } from "./retro/GetRetroActionItemsUseCase";
 export { UpdateRetroActionItemUseCase } from "./retro/UpdateRetroActionItemUseCase";
+export { GetRoomCustomFlagsUseCase } from "./retro/GetRoomCustomFlagsUseCase";
+export { CreateRoomCustomFlagUseCase } from "./retro/CreateRoomCustomFlagUseCase";
+export { DeleteRoomCustomFlagUseCase } from "./retro/DeleteRoomCustomFlagUseCase";
 export type { UpdateRetroActionItemDTO } from "./retro/UpdateRetroActionItemUseCase";
 
 // Votes

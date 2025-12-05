@@ -10,6 +10,7 @@ import type { IBoardRepository } from "../../domain/repositories/IBoardRepositor
 import type { IRetroCardRepository } from "../../domain/repositories/IRetroCardRepository";
 import type { IRetroActionItemRepository } from "../../domain/repositories/IRetroActionItemRepository";
 import type { IVoteRepository } from "../../domain/repositories/IVoteRepository";
+import type { IRoomCustomFlagRepository } from "../../domain/repositories/IRoomCustomFlagRepository";
 
 import { SupabaseNoteRepository } from "../repositories/SupabaseNoteRepository";
 import { SupabaseRoomRepository } from "../repositories/SupabaseRoomRepository";
@@ -18,6 +19,7 @@ import { SupabaseBoardRepository } from "../repositories/SupabaseBoardRepository
 import { SupabaseRetroCardRepository } from "../repositories/SupabaseRetroCardRepository";
 import { SupabaseRetroActionItemRepository } from "../repositories/SupabaseRetroActionItemRepository";
 import { SupabaseVoteRepository } from "../repositories/SupabaseVoteRepository";
+import { SupabaseRoomCustomFlagRepository } from "../repositories/SupabaseRoomCustomFlagRepository";
 
 class Container {
   private noteRepository: INoteRepository | null = null;
@@ -27,6 +29,7 @@ class Container {
   private retroCardRepository: IRetroCardRepository | null = null;
   private retroActionItemRepository: IRetroActionItemRepository | null = null;
   private voteRepository: IVoteRepository | null = null;
+  private roomCustomFlagRepository: IRoomCustomFlagRepository | null = null;
 
   // Repositories
   getNoteRepository(): INoteRepository {
@@ -78,6 +81,13 @@ class Container {
     return this.voteRepository;
   }
 
+  getRoomCustomFlagRepository(): IRoomCustomFlagRepository {
+    if (!this.roomCustomFlagRepository) {
+      this.roomCustomFlagRepository = new SupabaseRoomCustomFlagRepository();
+    }
+    return this.roomCustomFlagRepository;
+  }
+
   // Reset all instances (useful for testing)
   reset(): void {
     this.noteRepository = null;
@@ -87,6 +97,7 @@ class Container {
     this.retroCardRepository = null;
     this.retroActionItemRepository = null;
     this.voteRepository = null;
+    this.roomCustomFlagRepository = null;
   }
 }
 
