@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import EmptyState from "@/components/jira/EmptyState";
+import { getStatusColorClasses } from "@/lib/jira/colors";
 import type { JiraTask } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
 import { useToastContext } from "@/contexts/ToastContext";
@@ -160,18 +161,6 @@ export default function JiraSearchPage() {
     }
   }, [jql, maxResults, jiraBaseUrl, showToast, saveToHistory]);
 
-  const getStatusColor = (statusColor: string) => {
-    switch (statusColor) {
-      case "green":
-        return "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400";
-      case "yellow":
-        return "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400";
-      case "blue":
-        return "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400";
-      default:
-        return "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300";
-    }
-  };
 
   return (
     <div className="space-y-6">
@@ -352,7 +341,7 @@ export default function JiraSearchPage() {
                         {issue.key}
                       </span>
                       <span
-                        className={`rounded-full px-2 py-0.5 text-xs font-semibold ${getStatusColor(
+                        className={`rounded-full px-2 py-0.5 text-xs font-semibold ${getStatusColorClasses(
                           issue.statusColor
                         )}`}
                       >

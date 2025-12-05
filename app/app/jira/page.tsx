@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Folder, ClipboardList, Pin, Search, ChevronRight } from "lucide-react";
+import { getStatusColorClasses } from "@/lib/jira/colors";
 import type { JiraBoard, JiraTask } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
 
@@ -318,13 +319,9 @@ export default function JiraDashboardPage() {
                       {issue.key}
                     </span>
                     <span
-                      className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
-                        issue.statusColor === "green"
-                          ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                          : issue.statusColor === "yellow"
-                          ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
-                          : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300"
-                      }`}
+                      className={`rounded-full px-2 py-0.5 text-xs font-semibold ${getStatusColorClasses(
+                        issue.statusColor
+                      )}`}
                     >
                       {issue.status}
                     </span>

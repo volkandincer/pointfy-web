@@ -6,6 +6,7 @@ import { ClipboardList, X, Search } from "lucide-react";
 import FilterDropdown from "@/components/jira/FilterDropdown";
 import FilterChip from "@/components/jira/FilterChip";
 import EmptyState from "@/components/jira/EmptyState";
+import { getStatusColorClasses, getPriorityColorClasses } from "@/lib/jira/colors";
 import type { JiraTask } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
 
@@ -201,37 +202,6 @@ export default function JiraIssuesPage() {
     setFilteredIssues(filtered);
   }, [searchQuery, statusFilter, priorityFilter, projectFilter, typeFilter, issues]);
 
-  const getStatusColor = (statusColor: string) => {
-    switch (statusColor) {
-      case "green":
-        return "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400";
-      case "yellow":
-        return "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400";
-      case "blue":
-        return "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400";
-      default:
-        return "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300";
-    }
-  };
-
-  const getPriorityColor = (priority?: string) => {
-    if (!priority) return "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300";
-    
-    const lowerPriority = priority.toLowerCase();
-    if (lowerPriority.includes("highest") || lowerPriority.includes("critical")) {
-      return "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400";
-    }
-    if (lowerPriority.includes("high")) {
-      return "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400";
-    }
-    if (lowerPriority.includes("medium")) {
-      return "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400";
-    }
-    if (lowerPriority.includes("low")) {
-      return "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400";
-    }
-    return "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300";
-  };
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -437,7 +407,7 @@ export default function JiraIssuesPage() {
                       {issue.key}
                     </span>
                     <span
-                      className={`rounded-full px-2.5 py-1 text-xs font-semibold shadow-sm ${getStatusColor(
+                      className={`rounded-full px-2.5 py-1 text-xs font-semibold shadow-sm ${getStatusColorClasses(
                         issue.statusColor
                       )}`}
                     >
@@ -466,7 +436,7 @@ export default function JiraIssuesPage() {
                     {issue.project.key}
                   </span>
                   {issue.priority && (
-                    <span className={`rounded-md px-2 py-1 text-xs font-semibold ${getPriorityColor(issue.priority)}`}>
+                    <span className={`rounded-md px-2 py-1 text-xs font-semibold ${getPriorityColorClasses(issue.priority)}`}>
                       {issue.priority}
                     </span>
                   )}
@@ -495,7 +465,7 @@ export default function JiraIssuesPage() {
                         {issue.key}
                       </span>
                       <span
-                        className={`rounded-full px-2.5 py-1 text-xs font-semibold shadow-sm ${getStatusColor(
+                        className={`rounded-full px-2.5 py-1 text-xs font-semibold shadow-sm ${getStatusColorClasses(
                           issue.statusColor
                         )}`}
                       >
