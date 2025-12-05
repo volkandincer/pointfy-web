@@ -11,6 +11,7 @@ export default function JiraDashboardPage() {
 
   // Stats state
   const [projectsCount, setProjectsCount] = useState<number>(0);
+  const [boardsCount, setBoardsCount] = useState<number>(0);
   const [issuesCount, setIssuesCount] = useState<number>(0);
   const [recentProjects, setRecentProjects] = useState<JiraBoard[]>([]);
   const [recentIssues, setRecentIssues] = useState<JiraTask[]>([]);
@@ -61,7 +62,7 @@ export default function JiraDashboardPage() {
       urlParams.set("jiraBaseUrl", jiraBaseUrl);
       urlParams.set("userId", userData.user.id);
 
-      // Projects ve Issues'i paralel olarak yükle
+      // Projects, Boards ve Issues'i paralel olarak yükle
       const [projectsResponse, issuesResponse] = await Promise.all([
         fetch(`/api/jira/boards?${urlParams.toString()}`, {
           credentials: "include",
@@ -75,13 +76,18 @@ export default function JiraDashboardPage() {
       const issuesData = await issuesResponse.json();
 
       if (projectsResponse.ok && projectsData.boards) {
-        setProjectsCount(projectsData.boards.length);
-        setRecentProjects(projectsData.boards.slice(0, 3));
+        const boards = projectsData.boards || [];
+        const uniqueProjects = new Set(
+          boards.map((b: JiraBoard) => b.location?.projectKey).filter(Boolean)
+        );
+        setProjectsCount(uniqueProjects.size);
+        setBoardsCount(boards.length);
+        setRecentProjects(boards.slice(0, 5));
       }
 
       if (issuesResponse.ok && issuesData.issues) {
         setIssuesCount(issuesData.issues.length);
-        setRecentIssues(issuesData.issues.slice(0, 5));
+        setRecentIssues(issuesData.issues.slice(0, 10));
       }
     } catch (err) {
       // Dashboard fetch error
@@ -194,7 +200,7 @@ export default function JiraDashboardPage() {
             {loading ? (
               <span className="inline-block h-8 w-12 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
             ) : (
-              projectsCount
+              boardsCount
             )}
           </div>
           <div className="text-sm text-gray-600 dark:text-gray-400">Board</div>
@@ -220,7 +226,21 @@ export default function JiraDashboardPage() {
               />
             </svg>
           </div>
-          <div className="text-3xl font-bold text-gray-900 dark:text-white">—</div>
+          <div className="text-3xl font-bold text-gray-900 dark:text-white">
+            <svg
+              className="mx-auto h-8 w-8 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </div>
           <div className="text-sm text-gray-600 dark:text-gray-400">Arama</div>
         </Link>
       </div>
@@ -243,7 +263,7 @@ export default function JiraDashboardPage() {
 
           {loading ? (
             <div className="space-y-3">
-              {[1, 2, 3].map((i) => (
+              {[1, 2, 3, 4, 5].map((i) => (
                 <div
                   key={i}
                   className="h-16 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800"
@@ -290,7 +310,7 @@ export default function JiraDashboardPage() {
 
           {loading ? (
             <div className="space-y-3">
-              {[1, 2, 3, 4, 5].map((i) => (
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
                 <div
                   key={i}
                   className="h-20 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800"

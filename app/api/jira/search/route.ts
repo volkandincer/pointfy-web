@@ -1,12 +1,20 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
+import { jiraConfig } from "@/lib/jiraConfig";
 import type {
   JiraAccessibleResource,
+  JiraAdfDocument,
+  JiraAdfNode,
   JiraApiErrorResponse,
+  JiraIssue,
   JiraSearchResponse,
+  JiraTask,
 } from "@/interfaces/Jira.interface";
 import { resolveEnvValue } from "@/lib/appEnvironment";
+
+const { clientId: jiraClientId, clientSecret: jiraClientSecret } = jiraConfig;
+const fallbackJiraBaseUrl = resolveEnvValue("JIRA_BASE_URL");
 
 /**
  * Jira JQL ile arama yap
@@ -79,6 +87,77 @@ export async function POST(request: Request) {
       );
     }
 
+    // Token'ın geçerliliğini kontrol et ve refresh et (gerekirse)
+    let jiraToken = userRow.jira_access_token;
+    const tokenExpiresAt = userRow.jira_token_expires_at
+      ? new Date(userRow.jira_token_expires_at)
+      : null;
+
+    const shouldRefresh =
+      tokenExpiresAt && tokenExpiresAt <= new Date();
+
+    if (shouldRefresh) {
+      if (!userRow.jira_refresh_token) {
+        return NextResponse.json(
+          {
+            error:
+              "Jira token expired and no refresh token available. Please reconnect Jira.",
+          },
+          { status: 401 }
+        );
+      }
+
+      try {
+        const { refreshJiraToken } = await import("@/lib/jira");
+
+        if (!jiraClientId || !jiraClientSecret) {
+          return NextResponse.json(
+            { error: "Jira OAuth configuration missing" },
+            { status: 500 }
+          );
+        }
+
+        const refreshed = await refreshJiraToken(
+          userRow.jira_refresh_token,
+          jiraClientId,
+          jiraClientSecret
+        );
+
+        jiraToken = refreshed.access_token;
+
+        const expiresAt = new Date();
+        expiresAt.setSeconds(expiresAt.getSeconds() + refreshed.expires_in);
+
+        await supabase
+          .from("users")
+          .update({
+            jira_access_token: refreshed.access_token,
+            jira_refresh_token:
+              refreshed.refresh_token || userRow.jira_refresh_token,
+            jira_token_expires_at: expiresAt.toISOString(),
+          })
+          .eq("id", userId);
+
+        userRow.jira_access_token = refreshed.access_token;
+        userRow.jira_refresh_token =
+          refreshed.refresh_token || userRow.jira_refresh_token;
+        userRow.jira_token_expires_at = expiresAt.toISOString();
+      } catch (refreshError) {
+        const errorMessage =
+          refreshError instanceof Error
+            ? refreshError.message
+            : "Failed to refresh token";
+        return NextResponse.json(
+          {
+            error:
+              "Jira token expired and refresh failed. Please reconnect Jira.",
+            details: errorMessage,
+          },
+          { status: 401 }
+        );
+      }
+    }
+
     // CloudId al
     let cloudId: string | undefined;
     try {
@@ -86,7 +165,7 @@ export async function POST(request: Request) {
         "https://api.atlassian.com/oauth/token/accessible-resources",
         {
           headers: {
-            Authorization: `Bearer ${userRow.jira_access_token}`,
+            Authorization: `Bearer ${jiraToken}`,
             Accept: "application/json",
           },
         }
@@ -111,16 +190,24 @@ export async function POST(request: Request) {
       // CloudId alınamadı
     }
 
-    // API URL oluştur
+    // Jira base URL ve API URL oluştur
+    const jiraBaseUrl =
+      searchParams.get("jiraBaseUrl") ||
+      userRow.jira_base_url ||
+      fallbackJiraBaseUrl;
+
     let apiUrl: string;
     if (cloudId) {
       apiUrl = `https://api.atlassian.com/ex/jira/${cloudId}`;
     } else {
-      const jiraBaseUrl =
-        userRow.jira_base_url || resolveEnvValue("JIRA_BASE_URL");
       if (!jiraBaseUrl) {
         return NextResponse.json(
-          { error: "Jira base URL could not be determined" },
+          {
+            error:
+              "Jira base URL could not be determined. Please provide it manually.",
+            suggestion:
+              "Jira URL'inizi manuel olarak girin (örn: pointf.atlassian.net)",
+          },
           { status: 400 }
         );
       }
@@ -135,18 +222,18 @@ export async function POST(request: Request) {
     }
 
     // JQL search endpoint'ine istek yap
-    // /rest/api/3/search/jql endpoint'i fields parametresi ile hangi field'ların döndürüleceğini belirler
+    // /rest/api/3/search/jql endpoint'i POST ile kullanılır ve body'de JQL gönderilir
     const searchEndpoint = `${apiUrl}/rest/api/3/search/jql`;
     const response = await fetch(searchEndpoint, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${userRow.jira_access_token}`,
+        Authorization: `Bearer ${jiraToken}`,
         Accept: "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         jql: jql,
-        maxResults: Math.min(maxResults, 100), // Max 100
+        maxResults: Math.min(maxResults, 100),
         fields: [
           "summary",
           "description",
@@ -163,6 +250,159 @@ export async function POST(request: Request) {
     });
 
     if (!response.ok) {
+      // Token refresh mekanizması - 401 hatası alırsak token'ı refresh etmeyi dene
+      if (response.status === 401 && userRow.jira_refresh_token) {
+        try {
+          const { refreshJiraToken } = await import("@/lib/jira");
+
+          if (jiraClientId && jiraClientSecret) {
+            const refreshed = await refreshJiraToken(
+              userRow.jira_refresh_token,
+              jiraClientId,
+              jiraClientSecret
+            );
+
+            const expiresAt = new Date();
+            expiresAt.setSeconds(expiresAt.getSeconds() + refreshed.expires_in);
+
+            await supabase
+              .from("users")
+              .update({
+                jira_access_token: refreshed.access_token,
+                jira_refresh_token:
+                  refreshed.refresh_token || userRow.jira_refresh_token,
+                jira_token_expires_at: expiresAt.toISOString(),
+              })
+              .eq("id", userId);
+
+            jiraToken = refreshed.access_token;
+
+            // Yeni token ile tekrar dene
+            const retryResponse = await fetch(`${apiUrl}/rest/api/3/search/jql`, {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${jiraToken}`,
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                jql: jql,
+                maxResults: Math.min(maxResults, 100),
+                fields: [
+                  "summary",
+                  "description",
+                  "status",
+                  "assignee",
+                  "priority",
+                  "issuetype",
+                  "project",
+                  "created",
+                  "updated",
+                  "resolutiondate",
+                ],
+              }),
+            });
+
+            if (retryResponse.ok) {
+              const retryData = (await retryResponse.json()) as JiraSearchResponse;
+              if (!retryData.issues || !Array.isArray(retryData.issues)) {
+                return NextResponse.json(
+                  { error: "Invalid response format from Jira API" },
+                  { status: 500 }
+                );
+              }
+
+              // Response mapping (retry için)
+              const jiraBaseUrlForUrl =
+                userRow.jira_base_url || resolveEnvValue("JIRA_BASE_URL");
+              let baseUrlForUrl = "";
+              if (cloudId) {
+                baseUrlForUrl = `https://api.atlassian.com/ex/jira/${cloudId}`;
+              } else if (jiraBaseUrlForUrl) {
+                let url = jiraBaseUrlForUrl;
+                if (!url.startsWith("http")) {
+                  url = `https://${url}`;
+                }
+                if (url.endsWith("/")) {
+                  url = url.slice(0, -1);
+                }
+                baseUrlForUrl = url;
+              } else {
+                baseUrlForUrl = apiUrl;
+              }
+
+              const extractDescription = (
+                desc: JiraAdfDocument | string | undefined
+              ): string | undefined => {
+                if (!desc) return undefined;
+                if (typeof desc === "string") return desc;
+
+                const extractText = (node: JiraAdfNode): string => {
+                  const currentText = node.text ?? "";
+                  if (node.content && Array.isArray(node.content)) {
+                    return currentText + node.content.map(extractText).join("");
+                  }
+                  return currentText;
+                };
+
+                if (Array.isArray(desc.content)) {
+                  const combined = desc.content.map(extractText).join("").trim();
+                  return combined || undefined;
+                }
+
+                return undefined;
+              };
+
+              const tasks: JiraTask[] = retryData.issues
+                .filter((issue) => issue.fields !== undefined)
+                .map((issue) => {
+                  if (!issue.fields) {
+                    throw new Error("Issue missing fields after filter");
+                  }
+                  return {
+                    id: issue.id,
+                    key: issue.key,
+                    summary: issue.fields.summary,
+                    description: extractDescription(issue.fields.description),
+                    status: issue.fields.status.name,
+                    statusColor: issue.fields.status.statusCategory.colorName,
+                    assignee: issue.fields.assignee
+                      ? {
+                          name: issue.fields.assignee.displayName,
+                          avatar: issue.fields.assignee.avatarUrls["48x48"],
+                        }
+                      : undefined,
+                    priority: issue.fields.priority?.name,
+                    type: issue.fields.issuetype.name,
+                    project: {
+                      key: issue.fields.project.key,
+                      name: issue.fields.project.name,
+                    },
+                    created: issue.fields.created,
+                    updated: issue.fields.updated,
+                    resolved: issue.fields.resolutiondate,
+                    url: jiraBaseUrlForUrl
+                      ? `https://${jiraBaseUrlForUrl.replace(/^https?:\/\//, "")}/browse/${issue.key}`
+                      : cloudId
+                      ? `https://api.atlassian.com/ex/jira/${cloudId}/browse/${issue.key}`
+                      : `${baseUrlForUrl}/browse/${issue.key}`,
+                  };
+                });
+
+              return NextResponse.json({
+                issues: tasks,
+                total: retryData.total,
+                startAt: retryData.startAt,
+                maxResults: retryData.maxResults,
+              });
+            }
+          }
+        } catch (refreshError) {
+          // Token refresh başarısız
+        }
+      }
+
+      // Error handling (token refresh başarısız olduysa veya 401 değilse)
       const errorText = await response.text();
       let errorJson: JiraApiErrorResponse | null = null;
       try {
@@ -181,9 +421,98 @@ export async function POST(request: Request) {
     }
 
     const data = (await response.json()) as JiraSearchResponse;
-    
 
-    return NextResponse.json(data);
+    if (!data.issues || !Array.isArray(data.issues)) {
+      return NextResponse.json(
+        { error: "Invalid response format from Jira API" },
+        { status: 500 }
+      );
+    }
+
+    // Helper function: ADF format description'ı string'e çevir
+    const extractDescription = (
+      desc: JiraAdfDocument | string | undefined
+    ): string | undefined => {
+      if (!desc) return undefined;
+      if (typeof desc === "string") return desc;
+
+      const extractText = (node: JiraAdfNode): string => {
+        const currentText = node.text ?? "";
+        if (node.content && Array.isArray(node.content)) {
+          return currentText + node.content.map(extractText).join("");
+        }
+        return currentText;
+      };
+
+      if (Array.isArray(desc.content)) {
+        const combined = desc.content.map(extractText).join("").trim();
+        return combined || undefined;
+      }
+
+      return undefined;
+    };
+
+    // JiraIssue[] formatını JiraTask[] formatına dönüştür
+    const jiraBaseUrlForUrl =
+      userRow.jira_base_url || resolveEnvValue("JIRA_BASE_URL");
+    let baseUrlForUrl = "";
+    if (cloudId) {
+      baseUrlForUrl = `https://api.atlassian.com/ex/jira/${cloudId}`;
+    } else if (jiraBaseUrlForUrl) {
+      let url = jiraBaseUrlForUrl;
+      if (!url.startsWith("http")) {
+        url = `https://${url}`;
+      }
+      if (url.endsWith("/")) {
+        url = url.slice(0, -1);
+      }
+      baseUrlForUrl = url;
+    } else {
+      baseUrlForUrl = apiUrl;
+    }
+
+    const tasks: JiraTask[] = data.issues
+      .filter((issue) => issue.fields !== undefined)
+      .map((issue) => {
+        if (!issue.fields) {
+          throw new Error("Issue missing fields after filter");
+        }
+        return {
+          id: issue.id,
+          key: issue.key,
+          summary: issue.fields.summary,
+          description: extractDescription(issue.fields.description),
+          status: issue.fields.status.name,
+          statusColor: issue.fields.status.statusCategory.colorName,
+          assignee: issue.fields.assignee
+            ? {
+                name: issue.fields.assignee.displayName,
+                avatar: issue.fields.assignee.avatarUrls["48x48"],
+              }
+            : undefined,
+          priority: issue.fields.priority?.name,
+          type: issue.fields.issuetype.name,
+          project: {
+            key: issue.fields.project.key,
+            name: issue.fields.project.name,
+          },
+          created: issue.fields.created,
+          updated: issue.fields.updated,
+          resolved: issue.fields.resolutiondate,
+          url: jiraBaseUrlForUrl
+            ? `https://${jiraBaseUrlForUrl.replace(/^https?:\/\//, "")}/browse/${issue.key}`
+            : cloudId
+            ? `https://api.atlassian.com/ex/jira/${cloudId}/browse/${issue.key}`
+            : `${baseUrlForUrl}/browse/${issue.key}`,
+        };
+      });
+
+    return NextResponse.json({
+      issues: tasks,
+      total: data.total,
+      startAt: data.startAt,
+      maxResults: data.maxResults,
+    });
   } catch (error) {
     // Jira search API error
     return NextResponse.json(
