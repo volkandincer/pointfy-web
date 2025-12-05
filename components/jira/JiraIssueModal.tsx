@@ -59,7 +59,7 @@ const JiraIssueModal = memo(function JiraIssueModal({
       }}
     >
       <div
-        className="relative w-full max-w-3xl my-8 rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-900"
+        className="relative w-full max-w-3xl my-8 border border-gray-300 bg-white shadow-md dark:border-gray-700 dark:bg-gray-900"
         onClick={(e) => e.stopPropagation()}
         onTouchStart={(e) => e.stopPropagation()}
         onTouchMove={(e) => e.stopPropagation()}
@@ -94,7 +94,7 @@ const JiraIssueModal = memo(function JiraIssueModal({
             </div>
             <button
               onClick={onClose}
-              className="ml-4 rounded-lg p-2 text-gray-400 transition hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+              className="ml-4 border-2 border-gray-300 bg-white p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:border-gray-400 hover:text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-gray-200"
             >
               <X className="h-6 w-6" />
             </button>
@@ -117,7 +117,7 @@ const JiraIssueModal = memo(function JiraIssueModal({
               <h3 className="mb-2 text-sm font-semibold text-gray-900 dark:text-white">
                 Açıklama
               </h3>
-              <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm leading-relaxed text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+              <div className="border border-gray-300 bg-gray-50 p-4 text-sm leading-relaxed text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
                 {issue.description}
               </div>
             </div>
@@ -227,14 +227,14 @@ const JiraIssueModal = memo(function JiraIssueModal({
               href={issue.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
+              className="flex items-center gap-2 border-2 border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700"
             >
               <span>Jira&apos;da Aç</span>
               <ExternalLink className="h-4 w-4" />
             </a>
             <button
               onClick={onClose}
-              className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+              className="border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
             >
               Kapat
             </button>

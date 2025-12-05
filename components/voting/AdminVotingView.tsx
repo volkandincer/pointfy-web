@@ -80,7 +80,7 @@ const AdminVotingView = memo(function AdminVotingView({
 
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl border border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
+      <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">
             {activeTask.title}
@@ -111,7 +111,7 @@ const AdminVotingView = memo(function AdminVotingView({
       </div>
 
       {isVotingActive && (
-        <div className="rounded-2xl border border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
+        <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
           <div className="mb-4 text-center">
             <p className="text-sm text-gray-600 dark:text-gray-400">
               Kalan Süre
@@ -123,7 +123,7 @@ const AdminVotingView = memo(function AdminVotingView({
         </div>
       )}
 
-      <div className="rounded-2xl border border-amber-200/70 bg-amber-50 p-6 dark:border-amber-800/70 dark:bg-amber-900/20">
+      <div className="border border-amber-300 bg-amber-50 p-6 dark:border-amber-700 dark:bg-amber-900/20">
         <div className="flex items-center gap-3">
           <span className="text-2xl">👑</span>
           <div>
@@ -138,7 +138,7 @@ const AdminVotingView = memo(function AdminVotingView({
       </div>
 
       {activeTask.status === "completed" && validVotes.length > 0 && (
-        <div className="rounded-2xl border border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
+        <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
           <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
             📊 Final Sonuçları
           </h3>
@@ -178,17 +178,17 @@ const AdminVotingView = memo(function AdminVotingView({
       )}
 
       {isVotingActive && (
-        <div className="rounded-2xl border border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
+        <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
           <button
             onClick={handleCompleteTask}
-            className="w-full rounded-md bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
+            className="w-full border-2 border-gray-900 bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-800 hover:border-gray-800 dark:border-white dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
           >
             Taskı Bitir
           </button>
         </div>
       )}
 
-      <div className="rounded-2xl border border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
+      <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
           Katılımcı Puanları
         </h3>
@@ -208,7 +208,7 @@ const AdminVotingView = memo(function AdminVotingView({
             {votes.map((vote) => (
               <div
                 key={vote.user_key || vote.user_name}
-                className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800"
+                className="flex items-center justify-between border border-gray-300 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800"
               >
                 <span className="font-medium text-gray-900 dark:text-white">
                   {vote.user_name}

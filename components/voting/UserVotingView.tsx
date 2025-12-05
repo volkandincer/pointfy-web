@@ -78,7 +78,7 @@ const UserVotingView = memo(function UserVotingView({
 
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl border border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
+      <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">
             {activeTask.title}
@@ -113,7 +113,7 @@ const UserVotingView = memo(function UserVotingView({
       </div>
 
       {isVotingActive && (
-        <div className="rounded-2xl border border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
+        <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
           <div className="mb-4 text-center">
             <p className="text-sm text-gray-600 dark:text-gray-400">
               Kalan Süre
@@ -126,7 +126,7 @@ const UserVotingView = memo(function UserVotingView({
       )}
 
       {isVotingActive && (
-        <div className="rounded-2xl border border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
+        <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
           <VotingCardGrid
             selectedPoint={selectedPoint}
             hasVoted={hasVoted}
@@ -136,7 +136,7 @@ const UserVotingView = memo(function UserVotingView({
         </div>
       )}
 
-      <div className="rounded-2xl border border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
+      <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
           Katılımcı Puanları
         </h3>
@@ -159,7 +159,7 @@ const UserVotingView = memo(function UserVotingView({
             {votes.map((vote) => (
               <div
                 key={vote.user_key || vote.user_name}
-                className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800"
+                className="flex items-center justify-between border border-gray-300 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800"
               >
                 <div className="flex items-center gap-2">
                   <span className="font-medium text-gray-900 dark:text-white">

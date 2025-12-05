@@ -45,17 +45,14 @@ const VotingCardGrid = memo(function VotingCardGrid({
               key={point}
               onClick={() => handleClick(point)}
               disabled={isDisabled}
-              className={`relative rounded-2xl border-2 px-4 py-6 text-xl font-bold transition-all ${
+              className={`relative border-2 px-4 py-6 text-xl font-bold transition-all ${
                 isSelected
-                  ? "border-blue-600 bg-blue-600 text-white shadow-lg scale-105"
+                  ? "border-blue-600 bg-blue-600 text-white scale-105"
                   : isDisabled
-                  ? "border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed dark:border-gray-700 dark:bg-gray-800 dark:text-gray-600"
-                  : "border-gray-300 bg-white text-gray-900 hover:border-blue-400 hover:bg-blue-50 hover:scale-105 dark:border-gray-600 dark:bg-gray-900 dark:text-white dark:hover:border-blue-500 dark:hover:bg-gray-800"
+                  ? "border-gray-300 bg-gray-50 text-gray-400 cursor-not-allowed dark:border-gray-700 dark:bg-gray-800 dark:text-gray-600"
+                  : "border-gray-300 bg-white text-gray-900 hover:border-blue-600 hover:bg-blue-50 hover:scale-105 dark:border-gray-600 dark:bg-gray-900 dark:text-white dark:hover:border-blue-500 dark:hover:bg-gray-800"
               }`}
             >
-              {isSelected && (
-                <div className="absolute inset-0 rounded-2xl bg-blue-600 animate-pulse opacity-20" />
-              )}
               {loadingPoint === point ? (
                 <span className="text-sm">...</span>
               ) : (

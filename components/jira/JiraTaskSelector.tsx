@@ -271,7 +271,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
     <div className="space-y-4">
       {/* Error Message */}
       {error && (
-        <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+        <div className="border border-red-300 bg-red-50 p-3 text-sm text-red-700 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400">
           {error}
         </div>
       )}
@@ -379,7 +379,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
                   key={issue.id}
                   type="button"
                   onClick={() => handleTaskSelect(issue)}
-                  className="w-full rounded-lg border-2 border-gray-200 bg-white p-3 text-left transition-all hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-500"
+                  className="w-full border-2 border-gray-300 bg-white p-3 text-left transition-all hover:border-blue-600 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-500"
                 >
                   <div className="mb-1 flex items-center gap-2">
                     <span className="font-mono text-xs font-semibold text-blue-600 dark:text-blue-400">

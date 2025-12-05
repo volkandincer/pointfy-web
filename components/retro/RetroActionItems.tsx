@@ -194,7 +194,7 @@ const RetroActionItems = memo(function RetroActionItems({
   // Kartlar açılmadıysa aksiyon maddelerini gösterme
   if (!cardsRevealed) {
     return (
-      <div className="rounded-lg border border-gray-200 bg-white p-8 text-center dark:border-gray-800 dark:bg-gray-900">
+      <div className="border border-gray-300 bg-white p-8 text-center dark:border-gray-700 dark:bg-gray-900">
         <p className="mb-2 text-4xl">📋</p>
         <p className="font-medium text-gray-900 dark:text-white">
           Aksiyon Maddeleri
@@ -225,7 +225,7 @@ const RetroActionItems = memo(function RetroActionItems({
       {/* Header */}
       <div className="flex flex-col gap-4 no-print sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-xl shadow-md">
+          <div className="flex h-10 w-10 items-center justify-center border-2 border-indigo-600 bg-indigo-50 text-xl dark:bg-indigo-900/20">
             📋
           </div>
           <div>
@@ -241,7 +241,7 @@ const RetroActionItems = memo(function RetroActionItems({
           <div className="flex flex-col gap-3 sm:flex-row">
             <button
               onClick={() => window.print()}
-              className="flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+              className="flex items-center justify-center gap-2 border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
               title="Yazdır/PDF"
             >
               <svg
@@ -261,7 +261,7 @@ const RetroActionItems = memo(function RetroActionItems({
             </button>
             <button
               onClick={() => setShowAddModal(true)}
-              className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-3 text-base font-bold text-white shadow-lg shadow-indigo-500/50 transition-all hover:from-indigo-700 hover:to-purple-700 hover:shadow-xl hover:shadow-indigo-500/60 hover:scale-105 active:scale-95"
+              className="flex items-center justify-center gap-2 border-2 border-indigo-600 bg-indigo-600 px-6 py-3 text-base font-bold text-white transition-colors hover:bg-indigo-700 hover:border-indigo-700"
             >
               <svg
                 className="h-5 w-5"
@@ -315,7 +315,10 @@ const RetroActionItems = memo(function RetroActionItems({
             return (
               <div
                 key={item.id}
-                className="group relative overflow-hidden rounded-xl border-2 border-l-4 border-l-orange-500 border-gray-200 bg-gradient-to-br from-white to-gray-50/50 p-5 shadow-sm transition-all hover:border-l-orange-600 hover:shadow-md hover:-translate-y-0.5 dark:border-gray-800 dark:from-gray-900 dark:to-gray-800/50"
+                className="group relative border-l-4 border-t border-r border-b border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                style={{
+                  borderLeftColor: '#f97316',
+                }}
               >
                 {/* Flag Badge */}
                 {flagInfo && (
@@ -393,7 +396,7 @@ const RetroActionItems = memo(function RetroActionItems({
                     <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
                       <button
                         onClick={() => handleToggleComplete(item)}
-                        className="flex items-center gap-1.5 rounded-lg bg-green-600 px-4 py-2 text-xs font-bold text-white transition hover:bg-green-700 active:scale-95"
+                        className="flex items-center gap-1.5 border-2 border-green-600 bg-green-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-green-700 hover:border-green-700"
                         title="Tamamla"
                       >
                         <svg
@@ -413,7 +416,7 @@ const RetroActionItems = memo(function RetroActionItems({
                       </button>
                       <button
                         onClick={() => handleOpenEdit(item)}
-                        className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-xs font-bold text-white transition hover:bg-blue-700 active:scale-95"
+                        className="flex items-center gap-1.5 border-2 border-blue-600 bg-blue-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-blue-700 hover:border-blue-700"
                         title="Düzenle"
                       >
                         <svg
@@ -433,7 +436,7 @@ const RetroActionItems = memo(function RetroActionItems({
                       </button>
                       <button
                         onClick={() => handleDeleteItem(item)}
-                        className="flex items-center gap-1.5 rounded-lg bg-red-600 px-4 py-2 text-xs font-bold text-white transition hover:bg-red-700 active:scale-95"
+                        className="flex items-center gap-1.5 border-2 border-red-600 bg-red-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-red-700 hover:border-red-700"
                         title="Sil"
                       >
                         <svg
@@ -493,11 +496,14 @@ const RetroActionItems = memo(function RetroActionItems({
             return (
               <div
                 key={item.id}
-                className="group relative overflow-hidden rounded-xl border-2 border-l-4 border-l-green-500 border-green-200 bg-gradient-to-br from-green-50 via-emerald-50/50 to-white p-5 shadow-sm transition-all hover:border-l-green-600 hover:shadow-md hover:-translate-y-0.5 dark:border-green-800 dark:from-green-950/30 dark:via-emerald-950/20 dark:to-gray-900"
+                className="group relative border-l-4 border-t border-r border-b border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                style={{
+                  borderLeftColor: '#16a34a',
+                }}
               >
                 {/* Completed Badge */}
                 <div className="absolute right-4 top-4">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-500 text-white shadow-md">
+                  <div className="flex h-8 w-8 items-center justify-center border-2 border-green-600 bg-green-600 text-white">
                     <svg
                       className="h-5 w-5"
                       fill="none"
@@ -591,7 +597,7 @@ const RetroActionItems = memo(function RetroActionItems({
                     <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
                       <button
                         onClick={() => handleToggleComplete(item)}
-                        className="flex items-center gap-1.5 rounded-lg bg-gray-600 px-4 py-2 text-xs font-bold text-white transition hover:bg-gray-700 active:scale-95"
+                        className="flex items-center gap-1.5 border-2 border-gray-600 bg-gray-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-gray-700 hover:border-gray-700"
                         title="Geri Al"
                       >
                         <svg
@@ -611,7 +617,7 @@ const RetroActionItems = memo(function RetroActionItems({
                       </button>
                       <button
                         onClick={() => handleOpenEdit(item)}
-                        className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-xs font-bold text-white transition hover:bg-blue-700 active:scale-95"
+                        className="flex items-center gap-1.5 border-2 border-blue-600 bg-blue-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-blue-700 hover:border-blue-700"
                         title="Düzenle"
                       >
                         <svg
@@ -631,7 +637,7 @@ const RetroActionItems = memo(function RetroActionItems({
                       </button>
                       <button
                         onClick={() => handleDeleteItem(item)}
-                        className="flex items-center gap-1.5 rounded-lg bg-red-600 px-4 py-2 text-xs font-bold text-white transition hover:bg-red-700 active:scale-95"
+                        className="flex items-center gap-1.5 border-2 border-red-600 bg-red-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-red-700 hover:border-red-700"
                         title="Sil"
                       >
                         <svg
@@ -660,9 +666,9 @@ const RetroActionItems = memo(function RetroActionItems({
 
       {/* Empty State */}
       {actionItems.length === 0 && (
-        <div className="rounded-xl border-2 border-dashed border-gray-300 bg-gradient-to-br from-gray-50 to-white p-12 text-center dark:border-gray-700 dark:from-gray-900 dark:to-gray-800">
+        <div className="border-2 border-dashed border-gray-300 bg-white p-12 text-center dark:border-gray-700 dark:bg-gray-900">
           <div className="mb-4 flex justify-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-purple-100 text-3xl dark:from-indigo-900/30 dark:to-purple-900/30">
+            <div className="flex h-16 w-16 items-center justify-center border-2 border-indigo-600 bg-indigo-50 text-3xl dark:bg-indigo-900/30">
               📋
             </div>
           </div>
@@ -677,7 +683,7 @@ const RetroActionItems = memo(function RetroActionItems({
           {isAdmin && (
             <button
               onClick={() => setShowAddModal(true)}
-              className="mx-auto flex items-center gap-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-8 py-4 text-base font-bold text-white shadow-xl shadow-indigo-500/50 transition-all hover:from-indigo-700 hover:to-purple-700 hover:shadow-2xl hover:shadow-indigo-500/60 hover:scale-105 active:scale-95"
+              className="mx-auto flex items-center gap-3 border-2 border-indigo-600 bg-indigo-600 px-8 py-4 text-base font-bold text-white transition-colors hover:bg-indigo-700 hover:border-indigo-700"
             >
               <svg
                 className="h-6 w-6"

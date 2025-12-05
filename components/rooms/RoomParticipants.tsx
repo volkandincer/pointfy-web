@@ -19,9 +19,9 @@ const RoomParticipants = memo(function RoomParticipants({
 
   if (loading) {
     return (
-      <div className="rounded-xl border border-gray-200/70 bg-white p-4 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
+      <div className="border border-gray-300 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="flex items-center gap-2">
-          <div className="h-8 w-8 animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800" />
+          <div className="h-8 w-8 animate-pulse border border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
           <div className="h-4 w-24 animate-pulse rounded bg-gray-100 dark:bg-gray-800" />
         </div>
       </div>
@@ -30,7 +30,7 @@ const RoomParticipants = memo(function RoomParticipants({
 
   if (error) {
     return (
-      <div className="rounded-xl border border-red-200/70 bg-red-50/50 p-4 shadow-sm dark:border-red-800/70 dark:bg-red-900/10">
+      <div className="border border-red-300 bg-red-50 p-4 shadow-sm dark:border-red-700 dark:bg-red-900/10">
         <p className="text-xs text-red-600 dark:text-red-400">
           Katılımcılar yüklenirken hata oluştu: {error}
         </p>
@@ -39,7 +39,7 @@ const RoomParticipants = memo(function RoomParticipants({
   }
 
   return (
-    <div className="rounded-xl border border-gray-200/70 bg-white shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
+    <div className="border border-gray-300 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
       {/* Accordion Header - Tıklanabilir */}
       <button
         onClick={() => participants.length > 0 && setShowAll(!showAll)}
@@ -48,7 +48,7 @@ const RoomParticipants = memo(function RoomParticipants({
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 text-sm font-bold text-white shadow-sm dark:from-blue-500 dark:to-blue-600">
+            <div className="flex h-8 w-8 items-center justify-center border-2 border-blue-600 bg-blue-600 text-sm font-bold text-white dark:bg-blue-500">
               👥
             </div>
             <div>
@@ -81,7 +81,7 @@ const RoomParticipants = memo(function RoomParticipants({
               </div>
               {/* Accordion Toggle Icon */}
               <div
-                className={`flex h-8 w-8 items-center justify-center rounded-lg border border-gray-300 bg-gray-50 text-gray-600 transition-all duration-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 ${
+                className={`flex h-8 w-8 items-center justify-center border-2 border-gray-300 bg-gray-50 text-gray-600 transition-all duration-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 ${
                   showAll
                     ? "rotate-180 bg-blue-50 border-blue-300 dark:bg-blue-900/20 dark:border-blue-500"
                     : "hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -169,7 +169,7 @@ const CompactParticipantCard = memo(function CompactParticipantCard({
 
   return (
     <div
-      className={`group flex items-center gap-2 rounded-lg border p-2 transition-all hover:shadow-sm ${
+      className={`group flex items-center gap-2 border-2 border-gray-300 p-2 transition-all hover:shadow-sm hover:border-gray-400 ${
         isCurrentUser
           ? "border-blue-300/60 bg-blue-50/50 dark:border-blue-500/60 dark:bg-blue-900/20"
           : "border-gray-200/70 bg-gray-50/50 hover:border-blue-300/50 hover:bg-blue-50/30 dark:border-gray-700/70 dark:bg-gray-800/30 dark:hover:border-blue-500/30 dark:hover:bg-blue-900/10"
@@ -180,8 +180,8 @@ const CompactParticipantCard = memo(function CompactParticipantCard({
         <div
           className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold text-white shadow-sm ${
             isCurrentUser
-              ? "bg-gradient-to-br from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600"
-              : "bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500"
+              ? "border-blue-600 bg-blue-600 dark:bg-blue-500"
+              : "border-purple-600 bg-purple-600"
           }`}
         >
           {participant.username.charAt(0).toUpperCase()}
