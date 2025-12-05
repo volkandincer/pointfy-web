@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { Pin, BarChart3, LayoutGrid, X, Search } from "lucide-react";
+import { Pin, BarChart3, LayoutGrid, X, Search, ChevronRight } from "lucide-react";
 import FilterDropdown from "@/components/jira/FilterDropdown";
 import FilterChip from "@/components/jira/FilterChip";
 import EmptyState from "@/components/jira/EmptyState";
@@ -314,40 +314,33 @@ export default function JiraBoardsPage() {
               <Link
                 key={board.id}
                 href={`/app/jira/${board.location?.projectKey || board.id}`}
-                className="group relative overflow-hidden rounded-2xl border border-gray-200/70 bg-gradient-to-br from-white to-gray-50/50 p-6 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-purple-300/70 hover:shadow-xl dark:border-gray-800/70 dark:from-gray-900 dark:to-gray-800/50 dark:hover:border-purple-600/70"
+                className="group relative border-l-4 border-t border-r border-b border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                style={{
+                  borderLeftColor: board.type === 'scrum' ? '#9333ea' : '#2563eb',
+                }}
               >
-                <div className="absolute right-0 top-0 h-24 w-24 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-purple-400/10 to-purple-600/10 blur-2xl transition-all group-hover:scale-150" />
-                <div className="relative mb-4 flex items-start justify-between">
+                <div className="mb-4 flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     {(() => {
                       const IconComponent = getBoardTypeIcon(board.type);
                       return (
-                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg shadow-purple-500/30 transition-transform group-hover:scale-110">
-                          <IconComponent className="h-6 w-6" />
+                        <div className="flex h-12 w-12 items-center justify-center border-2 bg-purple-50 dark:bg-purple-900/20" style={{ borderColor: board.type === 'scrum' ? '#9333ea' : '#2563eb' }}>
+                          <IconComponent className="h-6 w-6" style={{ color: board.type === 'scrum' ? '#9333ea' : '#2563eb' }} />
                         </div>
                       );
                     })()}
                     <span
-                      className={`rounded-full px-2.5 py-1 text-xs font-semibold shadow-sm ${getBoardTypeColor(
+                      className={`border-2 px-2.5 py-1 text-xs font-semibold ${getBoardTypeColor(
                         board.type
                       )}`}
+                      style={{
+                        borderColor: board.type === 'scrum' ? '#9333ea' : '#2563eb',
+                      }}
                     >
                       {board.type}
                     </span>
                   </div>
-                  <svg
-                    className="h-5 w-5 shrink-0 text-purple-400 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
+                  <ChevronRight className="h-5 w-5 shrink-0 text-gray-400 opacity-0 transition-all group-hover:opacity-100" />
                 </div>
                 <h3 className="relative mb-3 text-lg font-bold text-gray-900 dark:text-white">
                   {board.name}
@@ -375,17 +368,19 @@ export default function JiraBoardsPage() {
               <Link
                 key={board.id}
                 href={`/app/jira/${board.location?.projectKey || board.id}`}
-                className="group relative block overflow-hidden rounded-2xl border-l-4 border-l-purple-500 border-gray-200/70 bg-gradient-to-r from-white to-gray-50/50 p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:border-l-purple-600 hover:shadow-xl dark:border-gray-800/70 dark:from-gray-900 dark:to-gray-800/50 dark:hover:border-l-purple-500"
+                className="group relative block border-l-4 border-t border-r border-b border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                style={{
+                  borderLeftColor: board.type === 'scrum' ? '#9333ea' : '#2563eb',
+                }}
               >
-                <div className="absolute right-0 top-0 h-32 w-32 translate-x-16 -translate-y-16 rounded-full bg-gradient-to-br from-purple-400/10 to-purple-600/10 blur-3xl transition-all group-hover:scale-150" />
-                <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex-1 space-y-3">
                     <div className="flex flex-wrap items-center gap-3">
                       {(() => {
                         const IconComponent = getBoardTypeIcon(board.type);
                         return (
-                          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg shadow-purple-500/30 transition-transform group-hover:scale-110">
-                            <IconComponent className="h-6 w-6" />
+                          <div className="flex h-12 w-12 items-center justify-center border-2 bg-purple-50 dark:bg-purple-900/20" style={{ borderColor: board.type === 'scrum' ? '#9333ea' : '#2563eb' }}>
+                            <IconComponent className="h-6 w-6" style={{ color: board.type === 'scrum' ? '#9333ea' : '#2563eb' }} />
                           </div>
                         );
                       })()}
@@ -393,9 +388,12 @@ export default function JiraBoardsPage() {
                         {board.name}
                       </h3>
                       <span
-                        className={`rounded-full px-2.5 py-1 text-xs font-semibold shadow-sm ${getBoardTypeColor(
+                        className={`border-2 px-2.5 py-1 text-xs font-semibold ${getBoardTypeColor(
                           board.type
                         )}`}
+                        style={{
+                          borderColor: board.type === 'scrum' ? '#9333ea' : '#2563eb',
+                        }}
                       >
                         {board.type}
                       </span>

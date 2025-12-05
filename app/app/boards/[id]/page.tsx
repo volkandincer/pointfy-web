@@ -423,7 +423,7 @@ export default function BoardDetailPage() {
                   </div>
                   <button
                     onClick={() => setShowEditBoardModal(true)}
-                    className="inline-flex items-center gap-2 rounded-xl bg-white/20 px-5 py-2.5 text-sm font-semibold backdrop-blur-sm transition-all hover:bg-white/30 hover:scale-105"
+                    className="inline-flex items-center gap-2 border-2 border-white/30 bg-white/20 px-5 py-2.5 text-sm font-semibold backdrop-blur-sm transition-colors hover:bg-white/30"
                   >
                     <Edit className="h-4 w-4" />
                     Düzenle
@@ -448,7 +448,7 @@ export default function BoardDetailPage() {
                     setEditingTask(null);
                     setShowTaskModal(true);
                   }}
-                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-xl"
+                  className="inline-flex items-center gap-2 border-2 border-blue-600 bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700"
                 >
                   <Plus className="h-5 w-5" />
                   Yeni Task
@@ -484,7 +484,7 @@ export default function BoardDetailPage() {
                     setEditingNote(null);
                     setShowNoteModal(true);
                   }}
-                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-purple-700 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-all hover:from-purple-700 hover:to-purple-800 hover:shadow-xl"
+                  className="inline-flex items-center gap-2 border-2 border-purple-600 bg-purple-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-purple-700 hover:border-purple-700"
                 >
                   <Plus className="h-5 w-5" />
                   Yeni Not

@@ -120,89 +120,79 @@ export default function JiraDashboardPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Link
           href="/app/jira/projects"
-          className="group relative overflow-hidden rounded-2xl border border-blue-200/50 bg-gradient-to-br from-blue-50 via-white to-white p-6 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-blue-300/70 hover:shadow-xl dark:border-blue-800/50 dark:from-blue-950/30 dark:via-gray-900 dark:to-gray-900 dark:hover:border-blue-700/70"
+          className="border border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
         >
-          <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-blue-400/20 to-blue-600/20 blur-2xl transition-all group-hover:scale-150" />
-          <div className="relative mb-4 flex items-center justify-between">
-            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/30 transition-transform group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-blue-500/40">
-              <Folder className="h-7 w-7" />
+          <div className="mb-4 flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
+              <Folder className="h-6 w-6 text-blue-600 dark:text-blue-400" />
             </div>
-            <ChevronRight className="h-5 w-5 text-blue-400 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
-          </div>
-          <div className="relative">
-            <div className="mb-1 text-4xl font-bold text-gray-900 dark:text-white">
-              {loading ? (
-                <span className="inline-block h-10 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
-              ) : (
-                projectsCount
-              )}
+            <div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                {loading ? (
+                  <span className="inline-block h-8 w-12 animate-pulse bg-gray-200 dark:bg-gray-800" />
+                ) : (
+                  projectsCount
+                )}
+              </div>
+              <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Proje</div>
             </div>
-            <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Proje</div>
           </div>
         </Link>
 
         <Link
           href="/app/jira/issues"
-          className="group relative overflow-hidden rounded-2xl border border-green-200/50 bg-gradient-to-br from-green-50 via-white to-white p-6 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-green-300/70 hover:shadow-xl dark:border-green-800/50 dark:from-green-950/30 dark:via-gray-900 dark:to-gray-900 dark:hover:border-green-700/70"
+          className="border border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
         >
-          <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-green-400/20 to-green-600/20 blur-2xl transition-all group-hover:scale-150" />
-          <div className="relative mb-4 flex items-center justify-between">
-            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-green-500 to-green-600 text-white shadow-lg shadow-green-500/30 transition-transform group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-green-500/40">
-              <ClipboardList className="h-7 w-7" />
+          <div className="mb-4 flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20">
+              <ClipboardList className="h-6 w-6 text-green-600 dark:text-green-400" />
             </div>
-            <ChevronRight className="h-5 w-5 text-green-400 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
-          </div>
-          <div className="relative">
-            <div className="mb-1 text-4xl font-bold text-gray-900 dark:text-white">
-              {loading ? (
-                <span className="inline-block h-10 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
-              ) : (
-                issuesCount
-              )}
+            <div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                {loading ? (
+                  <span className="inline-block h-8 w-12 animate-pulse bg-gray-200 dark:bg-gray-800" />
+                ) : (
+                  issuesCount
+                )}
+              </div>
+              <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Issue</div>
             </div>
-            <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Issue</div>
           </div>
         </Link>
 
         <Link
           href="/app/jira/boards"
-          className="group relative overflow-hidden rounded-2xl border border-purple-200/50 bg-gradient-to-br from-purple-50 via-white to-white p-6 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-purple-300/70 hover:shadow-xl dark:border-purple-800/50 dark:from-purple-950/30 dark:via-gray-900 dark:to-gray-900 dark:hover:border-purple-700/70"
+          className="border border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
         >
-          <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-purple-400/20 to-purple-600/20 blur-2xl transition-all group-hover:scale-150" />
-          <div className="relative mb-4 flex items-center justify-between">
-            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg shadow-purple-500/30 transition-transform group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-purple-500/40">
-              <Pin className="h-7 w-7" />
+          <div className="mb-4 flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20">
+              <Pin className="h-6 w-6 text-purple-600 dark:text-purple-400" />
             </div>
-            <ChevronRight className="h-5 w-5 text-purple-400 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
-          </div>
-          <div className="relative">
-            <div className="mb-1 text-4xl font-bold text-gray-900 dark:text-white">
-              {loading ? (
-                <span className="inline-block h-10 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
-              ) : (
-                boardsCount
-              )}
+            <div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                {loading ? (
+                  <span className="inline-block h-8 w-12 animate-pulse bg-gray-200 dark:bg-gray-800" />
+                ) : (
+                  boardsCount
+                )}
+              </div>
+              <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Board</div>
             </div>
-            <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Board</div>
           </div>
         </Link>
 
         <Link
           href="/app/jira/search"
-          className="group relative overflow-hidden rounded-2xl border border-orange-200/50 bg-gradient-to-br from-orange-50 via-white to-white p-6 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-orange-300/70 hover:shadow-xl dark:border-orange-800/50 dark:from-orange-950/30 dark:via-gray-900 dark:to-gray-900 dark:hover:border-orange-700/70"
+          className="border border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
         >
-          <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-orange-400/20 to-orange-600/20 blur-2xl transition-all group-hover:scale-150" />
-          <div className="relative mb-4 flex items-center justify-between">
-            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30 transition-transform group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-orange-500/40">
-              <Search className="h-7 w-7" />
+          <div className="mb-4 flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center border-2 border-orange-600 bg-orange-50 dark:bg-orange-900/20">
+              <Search className="h-6 w-6 text-orange-600 dark:text-orange-400" />
             </div>
-            <ChevronRight className="h-5 w-5 text-orange-400 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
-          </div>
-          <div className="relative">
-            <div className="mb-1 flex items-center justify-center text-4xl font-bold text-gray-900 dark:text-white">
-              <Search className="h-10 w-10 text-orange-400" />
+            <div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">—</div>
+              <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Arama</div>
             </div>
-            <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Arama</div>
           </div>
         </Link>
       </div>
@@ -210,7 +200,7 @@ export default function JiraDashboardPage() {
       {/* Recent Projects & Issues */}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Recent Projects */}
-        <div className="rounded-2xl border border-gray-200/70 bg-white p-6 shadow-lg dark:border-gray-800/70 dark:bg-gray-900">
+        <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md">
@@ -265,8 +255,8 @@ export default function JiraDashboardPage() {
           ) : (
             <div className="py-12 text-center">
               <div className="mb-3 flex justify-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/10 to-blue-600/10">
-                  <Folder className="h-8 w-8 text-blue-400" />
+                <div className="flex h-16 w-16 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
+                  <Folder className="h-8 w-8 text-blue-600 dark:text-blue-400" />
                 </div>
               </div>
               <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
@@ -277,11 +267,11 @@ export default function JiraDashboardPage() {
         </div>
 
         {/* Recent Issues */}
-        <div className="rounded-2xl border border-gray-200/70 bg-white p-6 shadow-lg dark:border-gray-800/70 dark:bg-gray-900">
+        <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-green-500 to-green-600 text-white shadow-md">
-                <ClipboardList className="h-5 w-5" />
+              <div className="flex h-10 w-10 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20">
+                <ClipboardList className="h-5 w-5 text-green-600 dark:text-green-400" />
               </div>
               <h2 className="text-lg font-bold text-gray-900 dark:text-white">
                 Son Issue&apos;lar

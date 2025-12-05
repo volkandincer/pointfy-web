@@ -398,9 +398,11 @@ export default function JiraIssuesPage() {
                 href={issue.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative overflow-hidden rounded-2xl border border-gray-200/70 bg-gradient-to-br from-white to-gray-50/50 p-6 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-blue-300/70 hover:shadow-xl dark:border-gray-800/70 dark:from-gray-900 dark:to-gray-800/50 dark:hover:border-blue-600/70"
+                className="group relative border-l-4 border-t border-r border-b border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                style={{
+                  borderLeftColor: issue.statusColor === 'green' ? '#16a34a' : issue.statusColor === 'yellow' ? '#eab308' : issue.statusColor === 'blue' ? '#2563eb' : '#6b7280',
+                }}
               >
-                <div className="absolute right-0 top-0 h-24 w-24 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-blue-400/10 to-blue-600/10 blur-2xl transition-all group-hover:scale-150" />
                 <div className="relative mb-4 flex items-start justify-between">
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="rounded-lg bg-blue-100 px-2.5 py-1 font-mono text-xs font-bold text-blue-700 shadow-sm dark:bg-blue-900/30 dark:text-blue-400">
@@ -455,9 +457,11 @@ export default function JiraIssuesPage() {
                 href={issue.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative block overflow-hidden rounded-2xl border-l-4 border-l-blue-500 border-gray-200/70 bg-gradient-to-r from-white to-gray-50/50 p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:border-l-blue-600 hover:shadow-xl dark:border-gray-800/70 dark:from-gray-900 dark:to-gray-800/50 dark:hover:border-l-blue-500"
+                className="group relative block border-l-4 border-t border-r border-b border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                style={{
+                  borderLeftColor: issue.statusColor === 'green' ? '#16a34a' : issue.statusColor === 'yellow' ? '#eab308' : issue.statusColor === 'blue' ? '#2563eb' : '#6b7280',
+                }}
               >
-                <div className="absolute right-0 top-0 h-32 w-32 translate-x-16 -translate-y-16 rounded-full bg-gradient-to-br from-blue-400/10 to-blue-600/10 blur-3xl transition-all group-hover:scale-150" />
                 <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex-1 space-y-3">
                     <div className="flex flex-wrap items-center gap-2">

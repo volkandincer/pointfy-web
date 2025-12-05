@@ -205,11 +205,14 @@ export default function JiraProjectsPage() {
               <Link
                 key={project.id}
                 href={`/app/jira/${project.location?.projectKey || project.id}`}
-                className="group block rounded-xl border-2 border-gray-200 bg-white p-6 shadow-sm transition-all hover:border-blue-400 hover:shadow-md dark:border-gray-800 dark:bg-gray-900 dark:hover:border-blue-600"
+                className="group block border-l-4 border-t border-r border-b border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                style={{
+                  borderLeftColor: '#2563eb',
+                }}
               >
                 <div className="mb-4 flex items-start justify-between">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md">
-                    <Folder className="h-8 w-8" />
+                  <div className="flex h-14 w-14 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
+                    <Folder className="h-8 w-8 text-blue-600 dark:text-blue-400" />
                   </div>
                   <svg
                     className="h-5 w-5 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100"
@@ -249,12 +252,15 @@ export default function JiraProjectsPage() {
               <Link
                 key={project.id}
                 href={`/app/jira/${project.location?.projectKey || project.id}`}
-                className="group block rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-all hover:border-blue-400 hover:shadow-md dark:border-gray-800 dark:bg-gray-900 dark:hover:border-blue-600 sm:p-5"
+                className="group block border-l-4 border-t border-r border-b border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 sm:p-5"
+                style={{
+                  borderLeftColor: '#2563eb',
+                }}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-sm">
-                      <Folder className="h-6 w-6" />
+                    <div className="flex h-12 w-12 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
+                      <Folder className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                     </div>
                     <div>
                       <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
