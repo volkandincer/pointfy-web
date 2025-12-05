@@ -229,12 +229,12 @@ export default function VotedTasksPage() {
                 {Array.from({ length: 3 }).map((_, idx) => (
                   <div
                     key={idx}
-                    className="h-32 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800"
+                    className="h-32 animate-pulse border border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800"
                   />
                 ))}
               </div>
             ) : votedTasks.length === 0 ? (
-              <div className="rounded-2xl border border-gray-200/70 bg-white p-12 text-center dark:border-gray-800/70 dark:bg-gray-900">
+              <div className="border border-gray-300 bg-white p-12 text-center dark:border-gray-700 dark:bg-gray-900">
                 <p className="mb-2 text-4xl">📊</p>
                 <p className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
                   Henüz puanladığınız task yok
@@ -248,7 +248,10 @@ export default function VotedTasksPage() {
                 {votedTasks.map((task) => (
                   <div
                     key={task.id}
-                    className="group relative overflow-hidden rounded-2xl border-2 border-l-4 border-l-blue-600 border-blue-400/15 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md dark:border-blue-500/10 dark:bg-gray-900"
+                    className="group relative border-l-4 border-t border-r border-b border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                    style={{
+                      borderLeftColor: '#2563eb',
+                    }}
                   >
                     <div className="mb-3 flex items-start justify-between">
                       <div className="flex-1">

@@ -345,7 +345,7 @@ export default function RoomDetailPage() {
       <>
         <Header navigationItems={navigationItems} />
         <main className="container mx-auto px-4 py-16">
-          <div className="h-40 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800" />
+          <div className="h-40 animate-pulse border border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
         </main>
         <Footer navigationItems={navigationItems} />
       </>
@@ -376,7 +376,7 @@ export default function RoomDetailPage() {
                 )}
                 <button
                   onClick={() => router.back()}
-                  className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                  className="border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
                 >
                   ← Geri
                 </button>
@@ -422,7 +422,7 @@ export default function RoomDetailPage() {
               </>
             ) : (
               <div className="space-y-6">
-                <div className="rounded-2xl border border-gray-200/70 bg-white p-8 text-center shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
+                <div className="border border-gray-300 bg-white p-8 text-center shadow-sm dark:border-gray-700 dark:bg-gray-900">
                   <p className="mb-2 text-4xl">⏳</p>
                   <p className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
                     Aktif Task Yok
@@ -451,7 +451,7 @@ export default function RoomDetailPage() {
                       );
                       if (pendingTasks.length === 0) return null;
                       return (
-                        <div className="mb-6 rounded-2xl border border-amber-200/70 bg-amber-50/50 p-6 shadow-sm dark:border-amber-800/70 dark:bg-amber-900/10">
+                        <div className="mb-6 border border-amber-300 bg-amber-50 p-6 shadow-sm dark:border-amber-700 dark:bg-amber-900/10">
                           <div className="mb-4 flex items-center justify-between">
                             <div>
                               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -463,7 +463,7 @@ export default function RoomDetailPage() {
                             </div>
                             <button
                               onClick={() => setShowTaskModal(true)}
-                              className="rounded-md bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-700"
+                              className="border-2 border-blue-600 bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700"
                             >
                               + Task Ekle
                             </button>
@@ -484,7 +484,7 @@ export default function RoomDetailPage() {
                     })()}
 
                     {/* Diğer Task'lar (Active ve Completed) */}
-                    <div className="rounded-2xl border border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
+                    <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
                       <div className="mb-4 flex items-center justify-between">
                         <div>
                           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -496,7 +496,7 @@ export default function RoomDetailPage() {
                         </div>
                         <button
                           onClick={() => setShowTaskModal(true)}
-                          className="rounded-md bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-700"
+                          className="border-2 border-blue-600 bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700"
                         >
                           + Task Ekle
                         </button>

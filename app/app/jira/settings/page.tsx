@@ -258,7 +258,7 @@ export default function JiraSettingsPage() {
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="h-32 animate-pulse rounded-xl bg-gray-200 dark:bg-gray-800"
+              className="h-32 animate-pulse border border-gray-300 bg-gray-200 dark:border-gray-700 dark:bg-gray-800"
             />
           ))}
         </div>
@@ -279,7 +279,7 @@ export default function JiraSettingsPage() {
       </div>
 
       {/* Connection Status Card */}
-      <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
             Bağlantı Durumu
@@ -356,13 +356,13 @@ export default function JiraSettingsPage() {
               <button
                 onClick={testConnection}
                 disabled={testing || !baseUrl}
-                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
+                className="border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
               >
                 {testing ? "Test Ediliyor..." : "Bağlantıyı Test Et"}
               </button>
               <button
                 onClick={disconnectJira}
-                className="rounded-lg border border-red-300 bg-white px-4 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50 dark:border-red-700 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-900/20"
+                className="border-2 border-red-600 bg-white px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50 hover:border-red-700 dark:bg-gray-800 dark:text-red-500 dark:hover:bg-red-900/20"
               >
                 Bağlantıyı Kes
               </button>
@@ -375,7 +375,7 @@ export default function JiraSettingsPage() {
             </p>
             <button
               onClick={connectJira}
-              className="rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-base font-semibold text-white shadow-md transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-lg"
+              className="border-2 border-blue-600 bg-blue-600 px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700"
             >
               Jira&apos;yı Bağla
             </button>
@@ -384,7 +384,7 @@ export default function JiraSettingsPage() {
       </div>
 
       {/* Base URL Configuration */}
-      <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
           Jira Base URL Yapılandırması
         </h2>
@@ -402,7 +402,7 @@ export default function JiraSettingsPage() {
               value={baseUrlInput}
               onChange={(e) => setBaseUrlInput(e.target.value)}
               placeholder="örn: pointf.atlassian.net"
-              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 sm:text-base"
+              className="w-full border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 sm:text-base"
             />
             <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
               Jira instance&apos;ınızın base URL&apos;i (örn: pointf.atlassian.net)
@@ -411,7 +411,7 @@ export default function JiraSettingsPage() {
           <button
             onClick={saveBaseUrl}
             disabled={saving || baseUrlInput === baseUrl}
-            className="rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-lg disabled:opacity-50"
+            className="border-2 border-blue-600 bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700 disabled:opacity-50"
           >
             {saving ? "Kaydediliyor..." : "Kaydet"}
           </button>
@@ -419,7 +419,7 @@ export default function JiraSettingsPage() {
       </div>
 
       {/* Help Card */}
-      <div className="rounded-xl border border-blue-200 bg-blue-50 p-6 dark:border-blue-800 dark:bg-blue-900/20">
+      <div className="border border-blue-300 bg-blue-50 p-6 dark:border-blue-700 dark:bg-blue-900/20">
         <h3 className="mb-2 text-base font-semibold text-blue-900 dark:text-blue-100">
           Yardım
         </h3>

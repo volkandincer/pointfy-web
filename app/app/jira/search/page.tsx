@@ -176,7 +176,7 @@ export default function JiraSearchPage() {
       </div>
 
       {/* Search Form */}
-      <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="space-y-4">
           {/* JQL Input */}
           <div>
@@ -211,20 +211,20 @@ export default function JiraSearchPage() {
                 max="100"
                 value={maxResults}
                 onChange={(e) => setMaxResults(Math.min(100, Math.max(1, parseInt(e.target.value) || 50)))}
-                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white sm:w-32"
+                className="w-full border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white sm:w-32"
               />
             </div>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowHistory(!showHistory)}
-                className="rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                className="border-2 border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
               >
                 {showHistory ? "Geçmişi Gizle" : "Geçmişi Göster"}
               </button>
               <button
                 onClick={performSearch}
                 disabled={loading || !jql.trim()}
-                className="rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-lg disabled:opacity-50"
+                className="border-2 border-blue-600 bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700 disabled:opacity-50"
               >
                 {loading ? "Aranıyor..." : "Ara"}
               </button>
@@ -234,7 +234,7 @@ export default function JiraSearchPage() {
       </div>
 
       {/* Quick Search Templates */}
-      <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
           Hızlı Arama Şablonları
         </h2>
@@ -246,7 +246,7 @@ export default function JiraSearchPage() {
                 setJql(template.jql);
                 performSearch(template.jql);
               }}
-              className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:border-blue-400 hover:bg-blue-50 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-blue-600 dark:hover:bg-blue-900/20 dark:hover:text-blue-400"
+              className="border-2 border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:border-blue-600 hover:bg-blue-50 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-blue-500 dark:hover:bg-blue-900/20 dark:hover:text-blue-400"
             >
               {template.label}
             </button>
@@ -256,7 +256,7 @@ export default function JiraSearchPage() {
 
       {/* Search History */}
       {showHistory && searchHistory.length > 0 && (
-        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
           <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
             Arama Geçmişi
           </h2>
@@ -268,7 +268,7 @@ export default function JiraSearchPage() {
                   setJql(item.jql);
                   performSearch(item.jql);
                 }}
-                className="w-full rounded-lg border border-gray-200 bg-gray-50 p-3 text-left transition hover:border-blue-400 hover:bg-blue-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-600 dark:hover:bg-blue-900/20"
+                className="w-full border border-gray-300 bg-gray-50 p-3 text-left transition-colors hover:border-blue-600 hover:bg-blue-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-500 dark:hover:bg-blue-900/20"
               >
                 <div className="mb-1 flex items-center justify-between">
                   <code className="text-xs font-mono text-gray-700 dark:text-gray-300">
@@ -289,7 +289,7 @@ export default function JiraSearchPage() {
 
       {/* Error Message */}
       {error && (
-        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-600 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+        <div className="border border-red-300 bg-red-50 p-4 text-sm text-red-600 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400">
           {error}
         </div>
       )}
@@ -300,7 +300,7 @@ export default function JiraSearchPage() {
           {[1, 2, 3, 4, 5].map((i) => (
             <div
               key={i}
-              className="h-20 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800"
+              className="h-20 animate-pulse border border-gray-300 bg-gray-200 dark:border-gray-700 dark:bg-gray-800"
             />
           ))}
         </div>
@@ -321,7 +321,7 @@ export default function JiraSearchPage() {
                 href={issue.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-all hover:border-blue-400 hover:shadow-md dark:border-gray-800 dark:bg-gray-900 dark:hover:border-blue-600 sm:p-5"
+                className="group block border-l-4 border-t border-r border-b border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 sm:p-5"
               >
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex-1">
