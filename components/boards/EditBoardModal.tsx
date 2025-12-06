@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, startTransition, useCallback, useEffect, useState } from "react";
+import { ClipboardList, FileText, CheckSquare, Target, Lightbulb, Rocket, Star, Flame, Pin, Folder, Check, Loader2 } from "lucide-react";
 import Modal from "@/components/ui/Modal";
 import type { Board, BoardInput } from "@/interfaces/Board.interface";
 
@@ -24,16 +25,16 @@ const BOARD_COLORS = [
 ];
 
 const BOARD_ICONS = [
-  "📋",
-  "📝",
-  "✅",
-  "🎯",
-  "💡",
-  "🚀",
-  "⭐",
-  "🔥",
-  "📌",
-  "🗂️",
+  { icon: ClipboardList, label: "Clipboard" },
+  { icon: FileText, label: "File" },
+  { icon: CheckSquare, label: "Check" },
+  { icon: Target, label: "Target" },
+  { icon: Lightbulb, label: "Lightbulb" },
+  { icon: Rocket, label: "Rocket" },
+  { icon: Star, label: "Star" },
+  { icon: Flame, label: "Flame" },
+  { icon: Pin, label: "Pin" },
+  { icon: Folder, label: "Folder" },
 ];
 
 const EditBoardModal = memo(function EditBoardModal({
@@ -46,7 +47,7 @@ const EditBoardModal = memo(function EditBoardModal({
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [color, setColor] = useState<string>(BOARD_COLORS[0].value);
-  const [icon, setIcon] = useState<string>(BOARD_ICONS[0]);
+  const [icon, setIcon] = useState<typeof BOARD_ICONS[0]>(BOARD_ICONS[0]);
 
   useEffect(() => {
     if (!board) {
@@ -57,7 +58,8 @@ const EditBoardModal = memo(function EditBoardModal({
       setName(board.name);
       setDescription(board.description || "");
       setColor(board.color || BOARD_COLORS[0].value);
-      setIcon(board.icon || BOARD_ICONS[0]);
+      const iconMatch = BOARD_ICONS.find(ic => ic.label.toLowerCase() === board.icon?.toLowerCase()) || BOARD_ICONS[0];
+      setIcon(iconMatch);
     });
   }, [board]);
 
@@ -70,7 +72,7 @@ const EditBoardModal = memo(function EditBoardModal({
         name: name.trim(),
         description: description.trim() || undefined,
         color,
-        icon,
+        icon: icon.label.toLowerCase(),
       });
     },
     [name, description, color, icon, board, onSubmit]
@@ -144,8 +146,8 @@ const EditBoardModal = memo(function EditBoardModal({
                 disabled={loading}
                 className={`group relative h-12 w-full border-2 transition-all ${
                   color === c.value
-                    ? "border-gray-900 scale-105"
-                    : "border-gray-300 hover:border-gray-400"
+                    ? "border-gray-900 shadow-md"
+                    : "border-gray-300 hover:border-gray-400 hover:shadow-sm"
                 }`}
                 style={{
                   backgroundColor: c.value,
@@ -157,19 +159,7 @@ const EditBoardModal = memo(function EditBoardModal({
               >
                 {color === c.value && (
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <svg
-                      className="h-6 w-6 text-white drop-shadow-lg"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={3}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
+                    <Check className="h-6 w-6 text-white" strokeWidth={3} />
                   </div>
                 )}
               </button>
@@ -182,21 +172,24 @@ const EditBoardModal = memo(function EditBoardModal({
             Icon Seçin
           </label>
           <div className="grid grid-cols-5 gap-2">
-            {BOARD_ICONS.map((ic) => (
-              <button
-                key={ic}
-                type="button"
-                onClick={() => setIcon(ic)}
-                disabled={loading}
-                className={`flex h-12 w-full items-center justify-center border-2 text-2xl transition-all ${
-                  icon === ic
-                    ? "border-blue-600 bg-blue-50 scale-105 dark:bg-blue-900/20"
-                    : "border-gray-300 bg-white hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
-                }`}
-              >
-                {ic}
-              </button>
-            ))}
+            {BOARD_ICONS.map((ic) => {
+              const IconComponent = ic.icon;
+              return (
+                <button
+                  key={ic.label}
+                  type="button"
+                  onClick={() => setIcon(ic)}
+                  disabled={loading}
+                  className={`flex h-12 w-full items-center justify-center border-2 transition-all ${
+                    icon === ic
+                      ? "border-blue-600 bg-blue-50 shadow-sm dark:bg-blue-900/20"
+                      : "border-gray-300 bg-white hover:bg-gray-50 hover:border-gray-400 hover:shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+                  }`}
+                >
+                  <IconComponent className="h-6 w-6 text-gray-700 dark:text-gray-300" />
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -216,25 +209,7 @@ const EditBoardModal = memo(function EditBoardModal({
           >
             {loading ? (
               <span className="inline-flex items-center gap-2">
-                <svg
-                  className="h-4 w-4 animate-spin"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  />
-                </svg>
+                <Loader2 className="h-4 w-4 animate-spin" />
                 Kaydediliyor...
               </span>
             ) : (

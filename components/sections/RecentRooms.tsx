@@ -142,15 +142,17 @@ const RecentRooms = memo(function RecentRooms() {
   return (
     <section className="container mx-auto px-4 py-8">
       <div className="mx-auto max-w-6xl">
-        <h2 className="mb-5 text-2xl font-bold tracking-tight text-gray-900 dark:text-white md:text-3xl">
-          Son Aktif Odalar
-        </h2>
+        <div className="mb-5">
+          <h2 className="mb-0.5 text-lg font-bold tracking-tight text-gray-900 dark:text-white sm:text-xl md:text-2xl">
+            Son Aktif Odalar
+          </h2>
+        </div>
         {loading ? (
           <div className="space-y-3.5">
             {Array.from({ length: 3 }).map((_, idx) => (
               <div
                 key={idx}
-                className="h-24 animate-pulse border border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800"
+                className="h-24 animate-pulse border-2 border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800"
               />
             ))}
           </div>
@@ -161,7 +163,7 @@ const RecentRooms = memo(function RecentRooms() {
                 <button
                   key={r.id}
                   onClick={() => handleRoomClick(r.id)}
-                  className="group relative w-full flex items-center gap-4 border-l-4 border-t border-r border-b border-gray-300 bg-white p-5 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                  className="group relative w-full flex items-center gap-4 border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-5 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
                   style={{
                     borderLeftColor: '#2563eb',
                   }}
@@ -177,7 +179,7 @@ const RecentRooms = memo(function RecentRooms() {
                       {r.name || "Oda"}
                     </h3>
                     <div className="flex items-center gap-3">
-                      <span className="rounded-lg bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                      <span className="rounded-lg border-2 border-gray-300 bg-white px-2.5 py-1 text-xs font-semibold text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
                         {r.code}
                       </span>
                       {r.created_by_username && (
@@ -206,7 +208,7 @@ const RecentRooms = memo(function RecentRooms() {
                 <span className="text-sm font-semibold text-gray-900 dark:text-white">
                   Tüm odaları gör
                 </span>
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-50 text-xs font-bold text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                <div className="flex h-6 w-6 items-center justify-center border-2 border-blue-600 bg-blue-600 text-xs font-bold text-white dark:border-blue-500 dark:bg-blue-500">
                   {(rooms?.length || 0) - 3}
                 </div>
               </button>

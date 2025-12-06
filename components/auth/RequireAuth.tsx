@@ -124,7 +124,7 @@ export default function RequireAuth({
   // Loading state - show loading UI instead of white screen
   if (!checked || isRedirecting) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-white to-white dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-950">
         <div className="text-center">
           <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-blue-600 border-t-transparent dark:border-blue-400" />
           <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
@@ -138,7 +138,7 @@ export default function RequireAuth({
   // Not authenticated - show loading while redirecting
   if (!isAuthed) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-white to-white dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-950">
         <div className="text-center">
           <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-blue-600 border-t-transparent dark:border-blue-400" />
           <p className="text-sm font-medium text-gray-600 dark:text-gray-400">

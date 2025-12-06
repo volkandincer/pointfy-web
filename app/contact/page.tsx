@@ -83,7 +83,7 @@ export default function ContactPage() {
                 onChange={(e) =>
                   setForm((f) => ({ ...f, name: e.target.value }))
                 }
-                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                className="w-full rounded-lg border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:border-blue-500"
               />
             </div>
             <div>
@@ -101,7 +101,7 @@ export default function ContactPage() {
                 onChange={(e) =>
                   setForm((f) => ({ ...f, email: e.target.value }))
                 }
-                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                className="w-full rounded-lg border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:border-blue-500"
               />
             </div>
             <div>
@@ -119,14 +119,14 @@ export default function ContactPage() {
                 onChange={(e) =>
                   setForm((f) => ({ ...f, message: e.target.value }))
                 }
-                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                className="w-full rounded-lg border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:border-blue-500"
               />
             </div>
             <div className="flex items-center gap-3">
               <button
                 type="submit"
                 disabled={loading}
-                className="inline-flex h-10 items-center justify-center rounded-md bg-gray-900 px-5 text-sm font-semibold text-white transition hover:bg-gray-800 disabled:opacity-60 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
+                className="inline-flex h-10 items-center justify-center rounded-lg border-2 border-gray-900 bg-gray-900 px-5 text-sm font-semibold text-white transition hover:bg-gray-800 hover:border-gray-800 disabled:opacity-60 dark:border-white dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100 dark:hover:border-gray-100"
               >
                 {loading ? "Gönderiliyor..." : "Gönder"}
               </button>

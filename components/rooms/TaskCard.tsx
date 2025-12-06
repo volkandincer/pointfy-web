@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useEffect, useState, useMemo } from "react";
+import { Link2, CheckCircle2, RefreshCw, Clock, BarChart3 } from "lucide-react";
 import { getSupabase } from "@/lib/supabase";
 import Modal from "@/components/ui/Modal";
 import { useToastContext } from "@/contexts/ToastContext";
@@ -401,19 +402,19 @@ const TaskCard = memo(function TaskCard({
 
   return (
     <div
-      className={`group relative overflow-hidden rounded-xl border-2 p-6 shadow-sm transition-all duration-200 ${
+      className={`group relative overflow-hidden rounded-lg border-2 p-6 shadow-sm transition-all duration-200 ${
         task.status === "completed"
-          ? "border-green-200/60 bg-gradient-to-br from-green-50/80 to-white dark:border-green-800/40 dark:from-green-900/20 dark:to-gray-900"
+          ? "border-green-300 bg-green-50 dark:border-green-700 dark:bg-green-900/20"
           : task.status === "active"
-          ? "border-blue-200/60 bg-gradient-to-br from-blue-50/80 to-white dark:border-blue-800/40 dark:from-blue-900/20 dark:to-gray-900"
-          : "border-gray-200/60 bg-white dark:border-gray-800/40 dark:bg-gray-900"
+          ? "border-blue-300 bg-blue-50 dark:border-blue-700 dark:bg-blue-900/20"
+          : "border-gray-300 bg-white dark:border-gray-700 dark:bg-gray-900"
       } ${
         (task.status === "pending" && isAdmin) ||
         (task.status === "completed" &&
           isAdmin &&
           task.jira_key &&
           task.jira_id)
-          ? "cursor-pointer hover:border-blue-300 hover:shadow-lg hover:scale-[1.01] dark:hover:border-blue-600"
+          ? "cursor-pointer hover:border-blue-400 hover:shadow-md dark:hover:border-blue-500"
           : ""
       }`}
       onClick={handleCardClick}
@@ -452,32 +453,32 @@ const TaskCard = memo(function TaskCard({
                 href={task.jira_url || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 rounded-lg bg-blue-100 px-2.5 py-1 text-xs font-mono font-semibold text-blue-700 transition-all hover:bg-blue-200 hover:scale-105 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
+                className="inline-flex items-center gap-1 rounded-lg border-2 border-blue-300 bg-blue-100 px-2.5 py-1 text-xs font-mono font-semibold text-blue-700 transition-all hover:bg-blue-200 hover:shadow-sm dark:border-blue-700 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
                 onClick={(e) => {
                   if (!task.jira_url) {
                     e.preventDefault();
                   }
                 }}
               >
-                <span>🔗</span>
+                <Link2 className="h-3 w-3" />
                 <span>{task.jira_key}</span>
               </a>
             )}
             {task.status === "completed" && (
               <span className="inline-flex items-center gap-1 rounded-lg bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-700 dark:bg-green-900/40 dark:text-green-300">
-                <span>✅</span>
+                <CheckCircle2 className="h-3.5 w-3.5" />
                 <span>Tamamlandı</span>
               </span>
             )}
             {task.status === "active" && (
               <span className="inline-flex items-center gap-1 rounded-lg bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
-                <span>🔄</span>
+                <RefreshCw className="h-3.5 w-3.5" />
                 <span>Aktif</span>
               </span>
             )}
             {task.status === "pending" && (
               <span className="inline-flex items-center gap-1 rounded-lg bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-700 dark:bg-gray-800 dark:text-gray-300">
-                <span>⏳</span>
+                <Clock className="h-3.5 w-3.5" />
                 <span>Beklemede</span>
               </span>
             )}
@@ -493,7 +494,7 @@ const TaskCard = memo(function TaskCard({
       {/* Details Grid */}
       <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {/* Oluşturan */}
-        <div className="rounded-lg border border-gray-200/50 bg-white/60 p-3 shadow-sm dark:border-gray-700/50 dark:bg-gray-800/60">
+        <div className="rounded-lg border-2 border-gray-200/50 bg-white/60 p-3 shadow-sm dark:border-gray-700/50 dark:bg-gray-800/60">
           <p className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
             Oluşturan
           </p>
@@ -503,7 +504,7 @@ const TaskCard = memo(function TaskCard({
         </div>
 
         {/* Tarih */}
-        <div className="rounded-lg border border-gray-200/50 bg-white/60 p-3 shadow-sm dark:border-gray-700/50 dark:bg-gray-800/60">
+        <div className="rounded-lg border-2 border-gray-200/50 bg-white/60 p-3 shadow-sm dark:border-gray-700/50 dark:bg-gray-800/60">
           <p className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
             Oluşturulma
           </p>
@@ -513,7 +514,7 @@ const TaskCard = memo(function TaskCard({
         </div>
 
         {/* Katılımcı Sayısı */}
-        <div className="rounded-lg border border-gray-200/50 bg-white/60 p-3 shadow-sm dark:border-gray-700/50 dark:bg-gray-800/60">
+        <div className="rounded-lg border-2 border-gray-200/50 bg-white/60 p-3 shadow-sm dark:border-gray-700/50 dark:bg-gray-800/60">
           <p className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
             Katılımcı
           </p>
@@ -528,7 +529,7 @@ const TaskCard = memo(function TaskCard({
 
         {/* Ortalama Puan (sadece completed veya active task'larda) */}
         {(task.status === "completed" || task.status === "active") && (
-          <div className="rounded-lg border border-gray-200/50 bg-white/60 p-3 shadow-sm dark:border-gray-700/50 dark:bg-gray-800/60">
+          <div className="rounded-lg border-2 border-gray-200/50 bg-white/60 p-3 shadow-sm dark:border-gray-700/50 dark:bg-gray-800/60">
             <p className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
               Ortalama
             </p>
@@ -567,7 +568,7 @@ const TaskCard = memo(function TaskCard({
                       setInputFocused(false);
                     }}
                     onClick={(e) => e.stopPropagation()}
-                    className="w-20 rounded-md border-2 border-blue-300 bg-white px-2 py-1 text-sm font-bold text-gray-900 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:border-blue-600 dark:bg-gray-800 dark:text-white dark:focus:ring-blue-800"
+                    className="w-20 rounded-lg border-2 border-blue-300 bg-white px-2 py-1 text-sm font-bold text-gray-900 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:border-blue-600 dark:bg-gray-800 dark:text-white dark:focus:ring-blue-800"
                     placeholder="0"
                   />
                   <span className="text-xs text-gray-500 dark:text-gray-400">
@@ -582,7 +583,7 @@ const TaskCard = memo(function TaskCard({
                         e.stopPropagation();
                         handleSourceSelect("jira");
                       }}
-                      className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all ${
+                      className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
                         selectedSource === "jira"
                           ? "bg-blue-100 text-blue-700 ring-2 ring-blue-300 dark:bg-blue-900/40 dark:text-blue-300 dark:ring-blue-600"
                           : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
@@ -598,7 +599,7 @@ const TaskCard = memo(function TaskCard({
                         e.stopPropagation();
                         handleSourceSelect("average");
                       }}
-                      className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all ${
+                      className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
                         selectedSource === "average"
                           ? "bg-blue-100 text-blue-700 ring-2 ring-blue-300 dark:bg-blue-900/40 dark:text-blue-300 dark:ring-blue-600"
                           : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
@@ -628,7 +629,7 @@ const TaskCard = memo(function TaskCard({
       {isAdmin &&
         (task.status === "completed" || task.status === "active") &&
         votes.length > 0 && (
-          <div className="mb-5 rounded-lg border border-gray-200/60 bg-white/80 p-4 shadow-sm dark:border-gray-700/60 dark:bg-gray-800/80">
+          <div className="mb-5 rounded-lg border-2 border-gray-200/60 bg-white/80 p-4 shadow-sm dark:border-gray-700/60 dark:bg-gray-800/80">
             <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
               Katılımcı Puanları
             </p>
@@ -636,12 +637,12 @@ const TaskCard = memo(function TaskCard({
               {votes.map((vote) => (
                 <div
                   key={vote.user_key || vote.user_name}
-                  className="flex items-center justify-between rounded-md bg-gray-50 px-3 py-2 dark:bg-gray-900/50"
+                  className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2 dark:bg-gray-900/50"
                 >
                   <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                     {vote.user_name}
                   </span>
-                  <span className="rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-bold text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
+                  <span className="rounded-lg border-2 border-blue-300 bg-blue-100 px-2.5 py-0.5 text-xs font-bold text-blue-700 shadow-sm dark:border-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
                     {vote.point ?? "Girilmedi"}
                   </span>
                 </div>
@@ -651,7 +652,7 @@ const TaskCard = memo(function TaskCard({
         )}
 
       {/* Action Button */}
-      <div className="flex items-center justify-between gap-3 border-t border-gray-200/50 pt-4 dark:border-gray-700/50">
+      <div className="flex items-center justify-between gap-3 border-t-2 border-gray-200/50 pt-4 dark:border-gray-700/50">
         {task.status === "completed" ? (
           <>
             <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
@@ -669,7 +670,7 @@ const TaskCard = memo(function TaskCard({
                     storyPointsInput < 0 ||
                     !hasInputChanged
                   }
-                  className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-2 text-sm font-semibold text-white shadow-md transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-lg hover:scale-105 disabled:scale-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-md"
+                  className="inline-flex min-h-[44px] items-center gap-2 rounded-lg border-2 border-blue-600 bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all active:border-blue-700 active:bg-blue-700 active:shadow-md hover:border-blue-700 hover:bg-blue-700 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-sm"
                   title={
                     jiraStoryPoints !== null && jiraStoryPoints > 0
                       ? "Jira'daki Story Point'i Güncelle"
@@ -683,7 +684,7 @@ const TaskCard = memo(function TaskCard({
                     </>
                   ) : (
                     <>
-                      <span>📊</span>
+                      <BarChart3 className="h-4 w-4" />
                       <span>
                         {jiraStoryPoints !== null && jiraStoryPoints > 0
                           ? "Güncelle"
@@ -697,7 +698,7 @@ const TaskCard = memo(function TaskCard({
           </>
         ) : task.status === "active" ? (
           <span className="inline-flex items-center gap-2 rounded-lg bg-blue-100 px-3 py-1.5 text-xs font-semibold text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
-            <span>🔄</span>
+            <RefreshCw className="h-4 w-4" />
             <span>Şu anda puanlama yapılıyor</span>
           </span>
         ) : (
@@ -706,7 +707,7 @@ const TaskCard = memo(function TaskCard({
               e.stopPropagation(); // Card click event'ini durdur
               setShowConfirmModal(true);
             }}
-            className="ml-auto rounded-lg bg-gradient-to-r from-gray-900 to-gray-800 px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:from-gray-800 hover:to-gray-700 hover:shadow-lg hover:scale-105 dark:from-white dark:to-gray-100 dark:text-gray-900 dark:hover:from-gray-100 dark:hover:to-white"
+            className="ml-auto rounded-lg border-2 border-gray-900 bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:border-gray-800 hover:bg-gray-800 hover:shadow-md dark:border-white dark:bg-white dark:text-gray-900 dark:hover:border-gray-100 dark:hover:bg-gray-100"
           >
             Puanlamaya Gönder
           </button>
@@ -741,14 +742,14 @@ const TaskCard = memo(function TaskCard({
               <button
                 type="button"
                 onClick={() => setShowConfirmModal(false)}
-                className="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                className="inline-flex h-10 items-center justify-center rounded-lg border-2 border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
               >
                 İptal
               </button>
               <button
                 type="button"
                 onClick={handleConfirmSetActive}
-                className="inline-flex h-10 items-center justify-center rounded-md bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700"
+                className="inline-flex h-10 items-center justify-center rounded-lg bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700"
               >
                 Puanlamaya Gönder
               </button>

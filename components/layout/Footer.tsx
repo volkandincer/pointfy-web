@@ -12,7 +12,7 @@ const Footer = memo(function Footer({ navigationItems }: FooterProps) {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
+    <footer className="border-t-2 border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div className="col-span-1 md:col-span-2">
@@ -83,7 +83,7 @@ const Footer = memo(function Footer({ navigationItems }: FooterProps) {
             </ul>
           </div>
         </div>
-        <div className="mt-8 border-t border-gray-200 pt-8 text-center text-sm text-gray-600 dark:border-gray-800 dark:text-gray-400">
+        <div className="mt-8 border-t-2 border-gray-200 pt-8 text-center text-sm text-gray-600 dark:border-gray-800 dark:text-gray-400">
           <p>© {currentYear} Pointfy. Tüm hakları saklıdır.</p>
         </div>
       </div>

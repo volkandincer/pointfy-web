@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { Folder, Search } from "lucide-react";
+import { Folder, Search, ChevronRight } from "lucide-react";
 import EmptyState from "@/components/jira/EmptyState";
 import type { JiraBoard } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
@@ -125,7 +125,7 @@ export default function JiraProjectsPage() {
         <button
           onClick={fetchProjects}
           disabled={loading}
-          className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
+          className="rounded-lg border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
         >
           {loading ? "Yükleniyor..." : "Yenile"}
         </button>
@@ -139,26 +139,14 @@ export default function JiraProjectsPage() {
             placeholder="Proje ara..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 pl-10 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 sm:text-base"
+            className="w-full rounded-lg border-2 border-gray-300 bg-white px-4 py-2.5 pl-10 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 sm:text-base"
           />
-          <svg
-            className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
+          <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
         </div>
-        <div className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white p-1 dark:border-gray-700 dark:bg-gray-800">
+        <div className="flex items-center gap-2 rounded-lg border-2 border-gray-300 bg-white p-1 dark:border-gray-700 dark:bg-gray-800">
           <button
             onClick={() => setViewMode("grid")}
-            className={`rounded-md px-3 py-1.5 text-sm transition ${
+            className={`rounded-lg px-3 py-1.5 text-sm transition ${
               viewMode === "grid"
                 ? "bg-blue-600 text-white"
                 : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
@@ -168,7 +156,7 @@ export default function JiraProjectsPage() {
           </button>
           <button
             onClick={() => setViewMode("list")}
-            className={`rounded-md px-3 py-1.5 text-sm transition ${
+            className={`rounded-lg px-3 py-1.5 text-sm transition ${
               viewMode === "list"
                 ? "bg-blue-600 text-white"
                 : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
@@ -181,7 +169,7 @@ export default function JiraProjectsPage() {
 
       {/* Error Message */}
       {error && (
-        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-600 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+        <div className="rounded-lg border-2 border-red-200 bg-red-50 p-4 text-sm text-red-600 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
           {error}
         </div>
       )}
@@ -205,7 +193,7 @@ export default function JiraProjectsPage() {
               <Link
                 key={project.id}
                 href={`/app/jira/${project.location?.projectKey || project.id}`}
-                className="group block border-l-4 border-t border-r border-b border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                className="group block border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
                 style={{
                   borderLeftColor: '#2563eb',
                 }}
@@ -214,19 +202,7 @@ export default function JiraProjectsPage() {
                   <div className="flex h-14 w-14 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
                     <Folder className="h-8 w-8 text-blue-600 dark:text-blue-400" />
                   </div>
-                  <svg
-                    className="h-5 w-5 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
+                  <ChevronRight className="h-5 w-5 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100" />
                 </div>
                 <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
                   {project.name}
@@ -252,7 +228,7 @@ export default function JiraProjectsPage() {
               <Link
                 key={project.id}
                 href={`/app/jira/${project.location?.projectKey || project.id}`}
-                className="group block border-l-4 border-t border-r border-b border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 sm:p-5"
+                className="group block border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 sm:p-5"
                 style={{
                   borderLeftColor: '#2563eb',
                 }}
@@ -280,19 +256,7 @@ export default function JiraProjectsPage() {
                       </div>
                     </div>
                   </div>
-                  <svg
-                    className="h-5 w-5 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
+                  <ChevronRight className="h-5 w-5 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100" />
                 </div>
               </Link>
             ))}

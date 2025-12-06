@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useState, useEffect, useCallback } from "react";
+import { Angry, Frown, Smile } from "lucide-react";
 import Modal from "@/components/ui/Modal";
 import { useToastContext } from "@/contexts/ToastContext";
 import type { RetroCategory } from "@/interfaces/Retro.interface";
@@ -17,11 +18,11 @@ interface RetroCardModalProps {
 const getCategoryInfo = (category: RetroCategory) => {
   switch (category) {
     case "mad":
-      return { title: "Mad 😠", color: "red", emoji: "😠" };
+      return { title: "Mad", color: "red", icon: Angry };
     case "sad":
-      return { title: "Sad 😢", color: "blue", emoji: "😢" };
+      return { title: "Sad", color: "blue", icon: Frown };
     case "glad":
-      return { title: "Glad 😊", color: "green", emoji: "😊" };
+      return { title: "Glad", color: "green", icon: Smile };
   }
 };
 
@@ -58,7 +59,7 @@ const RetroCardModal = memo(function RetroCardModal({
         setContent("");
         onClose();
         showToast(
-          isEdit ? "✅ Kart başarıyla güncellendi!" : "✅ Kart başarıyla eklendi!",
+          isEdit ? "Kart başarıyla güncellendi!" : "Kart başarıyla eklendi!",
           "success"
         );
       } catch (err) {
@@ -93,14 +94,14 @@ const RetroCardModal = memo(function RetroCardModal({
                 key={cat}
                 type="button"
                 onClick={() => setCategory(cat)}
-                className={`flex-1 border-2 px-3 py-2 font-semibold transition-colors ${
+                className={`flex items-center justify-center gap-2 flex-1 border-2 px-3 py-2 font-semibold transition-colors ${
                   isSelected
                     ? `${bgColorClass} border-transparent text-white`
                     : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
                 }`}
               >
-                <span className="mr-1">{info.emoji}</span>
-                {info.title.split(" ")[0]}
+                <info.icon className="h-5 w-5" />
+                {info.title}
               </button>
             );
           })}
@@ -121,7 +122,7 @@ const RetroCardModal = memo(function RetroCardModal({
             onChange={(e) => setContent(e.target.value)}
             placeholder="Kartınızı yazın..."
             required
-            className="w-full border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            className="w-full border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
         </div>
 

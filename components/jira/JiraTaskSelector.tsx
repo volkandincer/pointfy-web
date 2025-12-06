@@ -271,7 +271,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
     <div className="space-y-4">
       {/* Error Message */}
       {error && (
-        <div className="border border-red-300 bg-red-50 p-3 text-sm text-red-700 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400">
+        <div className="border-2 border-red-300 bg-red-50 p-3 text-sm text-red-700 shadow-sm dark:border-red-700 dark:bg-red-900/20 dark:text-red-400">
           {error}
         </div>
       )}
@@ -296,6 +296,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
           />
         ) : (
           <FilterDropdown
+            label="Board"
             value={selectedBoardId?.toString() || ""}
             options={[
               { value: "", label: "Board seçin..." },
@@ -354,7 +355,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Issue ara..."
-                className="w-full rounded-md border border-gray-300 bg-white pl-10 pr-3 py-2 text-sm text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                className="w-full rounded-lg border-2 border-gray-300 bg-white pl-10 pr-3 py-2 text-sm text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
               />
             </div>
           )}
@@ -386,7 +387,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
                       {issue.key}
                     </span>
                     <span
-                      className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${getStatusColorClasses(issue.statusColor || "gray")}`}
+                      className={`rounded-lg border-2 px-2 py-0.5 text-[10px] font-semibold shadow-sm ${getStatusColorClasses(issue.statusColor || "gray")}`}
                     >
                       {issue.status}
                     </span>
@@ -401,12 +402,12 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
                   )}
                   <div className="mt-2 flex items-center gap-2">
                     {issue.priority && (
-                      <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${getPriorityColorClasses(issue.priority)}`}>
+                      <span className={`rounded-lg border-2 px-2 py-0.5 text-[10px] font-medium shadow-sm ${getPriorityColorClasses(issue.priority)}`}>
                         {issue.priority}
                       </span>
                     )}
                     {issue.type && (
-                      <span className="rounded-full bg-purple-100 px-2 py-0.5 text-[10px] font-medium text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
+                      <span className="rounded-lg border-2 border-purple-300 bg-purple-100 px-2 py-0.5 text-[10px] font-medium text-purple-700 shadow-sm dark:border-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
                         {issue.type}
                       </span>
                     )}
@@ -419,11 +420,11 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
       )}
 
       {/* Actions */}
-      <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+      <div className="flex items-center justify-end gap-3 pt-4 border-t-2 border-gray-200 dark:border-gray-700">
         <button
           type="button"
           onClick={onCancel}
-          className="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+          className="inline-flex h-10 items-center justify-center rounded-lg border-2 border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
         >
           İptal
         </button>

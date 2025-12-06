@@ -1,6 +1,7 @@
 "use client";
 
 import { memo } from "react";
+import { CheckCircle2, ClipboardList } from "lucide-react";
 import { useCompletedTasks } from "@/hooks/useCompletedTasks";
 
 interface CompletedTasksViewProps {
@@ -14,7 +15,7 @@ const CompletedTasksView = memo(function CompletedTasksView({
 
   if (loading) {
     return (
-      <div className="rounded-2xl border border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
+      <div className="rounded-lg border-2 border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
         <p className="text-sm text-gray-500 dark:text-gray-400">
           Yükleniyor...
         </p>
@@ -24,16 +25,19 @@ const CompletedTasksView = memo(function CompletedTasksView({
 
   if (completedTasks.length === 0) {
     return (
-      <div className="rounded-2xl border border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
-        <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-          🃏 Tamamlanan Task Kartları
-        </h3>
+      <div className="rounded-lg border-2 border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
+        <div className="mb-4 flex items-center gap-3">
+          <CheckCircle2 className="h-6 w-6 text-green-600 dark:text-green-400" />
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            Tamamlanan Task Kartları
+          </h3>
+        </div>
         <div className="py-8 text-center">
-          <p className="mb-2 text-4xl">📋</p>
+          <ClipboardList className="mx-auto mb-3 h-12 w-12 text-gray-400 dark:text-gray-500" />
           <p className="text-sm font-medium text-gray-900 dark:text-white">
             Henüz tamamlanan task yok
           </p>
-          <p className="text-xs text-gray-500 dark:text-gray-400">
+          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
             Task&apos;lar tamamlandığında burada görünecek
           </p>
         </div>
@@ -42,22 +46,26 @@ const CompletedTasksView = memo(function CompletedTasksView({
   }
 
   return (
-    <div className="rounded-2xl border border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
-      <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-        🃏 Tamamlanan Task Kartları
-      </h3>
+    <div className="rounded-lg border-2 border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
+      <div className="mb-4 flex items-center gap-3">
+        <CheckCircle2 className="h-6 w-6 text-green-600 dark:text-green-400" />
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+          Tamamlanan Task Kartları
+        </h3>
+      </div>
       <div className="space-y-4">
         {completedTasks.map((task) => (
           <div
             key={task.id}
-            className="rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800"
+            className="rounded-lg border-2 border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800"
           >
             <div className="mb-2 flex items-center justify-between">
               <h4 className="font-medium text-gray-900 dark:text-white">
                 {task.title}
               </h4>
-              <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-700 dark:bg-green-900 dark:text-green-300">
-                ✅ Tamamlandı
+              <span className="inline-flex items-center gap-1 rounded-lg border-2 border-green-300 bg-green-50 px-2 py-0.5 text-xs font-semibold text-green-700 shadow-sm dark:border-green-700 dark:bg-green-900/20 dark:text-green-300">
+                <CheckCircle2 className="h-3 w-3" />
+                Tamamlandı
               </span>
             </div>
             {task.description && (

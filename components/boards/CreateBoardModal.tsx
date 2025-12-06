@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useCallback, useState } from "react";
+import { ClipboardList, FileText, CheckSquare, Target, Lightbulb, Rocket, Star, Flame, Pin, Folder, Check, Loader2 } from "lucide-react";
 import Modal from "@/components/ui/Modal";
 import type { BoardInput } from "@/interfaces/Board.interface";
 
@@ -23,16 +24,16 @@ const BOARD_COLORS = [
 ];
 
 const BOARD_ICONS = [
-  "📋",
-  "📝",
-  "✅",
-  "🎯",
-  "💡",
-  "🚀",
-  "⭐",
-  "🔥",
-  "📌",
-  "🗂️",
+  { icon: ClipboardList, label: "Clipboard" },
+  { icon: FileText, label: "File" },
+  { icon: CheckSquare, label: "Check" },
+  { icon: Target, label: "Target" },
+  { icon: Lightbulb, label: "Lightbulb" },
+  { icon: Rocket, label: "Rocket" },
+  { icon: Star, label: "Star" },
+  { icon: Flame, label: "Flame" },
+  { icon: Pin, label: "Pin" },
+  { icon: Folder, label: "Folder" },
 ];
 
 const CreateBoardModal = memo(function CreateBoardModal({
@@ -44,7 +45,7 @@ const CreateBoardModal = memo(function CreateBoardModal({
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [color, setColor] = useState<string>(BOARD_COLORS[0].value);
-  const [icon, setIcon] = useState<string>(BOARD_ICONS[0]);
+  const [icon, setIcon] = useState<typeof BOARD_ICONS[0]>(BOARD_ICONS[0]);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -55,7 +56,7 @@ const CreateBoardModal = memo(function CreateBoardModal({
         name: name.trim(),
         description: description.trim() || undefined,
         color,
-        icon,
+        icon: icon.label.toLowerCase(),
       });
 
       // Form'u temizle
@@ -97,7 +98,7 @@ const CreateBoardModal = memo(function CreateBoardModal({
             maxLength={50}
             required
             disabled={loading}
-            className="w-full border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+            className="w-full border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
           />
           <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
             {name.length}/50
@@ -119,7 +120,7 @@ const CreateBoardModal = memo(function CreateBoardModal({
             rows={2}
             maxLength={200}
             disabled={loading}
-            className="w-full border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+            className="w-full border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
           />
           <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
             {description.length}/200
@@ -139,8 +140,8 @@ const CreateBoardModal = memo(function CreateBoardModal({
                 disabled={loading}
                 className={`group relative h-12 w-full border-2 transition-all ${
                   color === c.value
-                    ? "border-gray-900 scale-105"
-                    : "border-gray-300 hover:border-gray-400"
+                    ? "border-gray-900 shadow-md"
+                    : "border-gray-300 hover:border-gray-400 hover:shadow-sm"
                 }`}
                 style={{
                   backgroundColor: c.value,
@@ -152,19 +153,7 @@ const CreateBoardModal = memo(function CreateBoardModal({
               >
                 {color === c.value && (
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <svg
-                      className="h-6 w-6 text-white drop-shadow-lg"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={3}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
+                    <Check className="h-6 w-6 text-white" strokeWidth={3} />
                   </div>
                 )}
               </button>
@@ -177,21 +166,24 @@ const CreateBoardModal = memo(function CreateBoardModal({
             Icon Seçin
           </label>
           <div className="grid grid-cols-5 gap-2">
-            {BOARD_ICONS.map((ic) => (
-              <button
-                key={ic}
-                type="button"
-                onClick={() => setIcon(ic)}
-                disabled={loading}
-                className={`flex h-12 w-full items-center justify-center border-2 text-2xl transition-all ${
-                  icon === ic
-                    ? "border-blue-600 bg-blue-50 scale-105 dark:bg-blue-900/20"
-                    : "border-gray-300 bg-white hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
-                }`}
-              >
-                {ic}
-              </button>
-            ))}
+            {BOARD_ICONS.map((ic) => {
+              const IconComponent = ic.icon;
+              return (
+                <button
+                  key={ic.label}
+                  type="button"
+                  onClick={() => setIcon(ic)}
+                  disabled={loading}
+                  className={`flex h-12 w-full items-center justify-center border-2 transition-all ${
+                    icon === ic
+                      ? "border-blue-600 bg-blue-50 shadow-sm dark:bg-blue-900/20"
+                      : "border-gray-300 bg-white hover:bg-gray-50 hover:border-gray-400 hover:shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+                  }`}
+                >
+                  <IconComponent className="h-6 w-6 text-gray-700 dark:text-gray-300" />
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -211,25 +203,7 @@ const CreateBoardModal = memo(function CreateBoardModal({
           >
             {loading ? (
               <span className="inline-flex items-center gap-2">
-                <svg
-                  className="h-4 w-4 animate-spin"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  />
-                </svg>
+                <Loader2 className="h-4 w-4 animate-spin" />
                 Oluşturuluyor...
               </span>
             ) : (

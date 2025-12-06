@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { memo, useMemo, useState } from "react";
+import { Link2, BarChart3, Folder, ClipboardList, Search, Settings, ChevronDown } from "lucide-react";
 import Modal from "@/components/ui/Modal";
 import type { JiraAction } from "@/interfaces/JiraAction.interface";
 
@@ -10,6 +11,16 @@ interface JiraSectionProps {
   userId: string | null;
   jiraBaseUrl?: string;
 }
+
+// Icon mapping for Jira actions
+const jiraIconMap: Record<string, typeof BarChart3> = {
+  "link": Link2,
+  "bar-chart-3": BarChart3,
+  "folder": Folder,
+  "clipboard-list": ClipboardList,
+  "search": Search,
+  "settings": Settings,
+};
 
 const JiraSection = memo(function JiraSection({
   jiraConnected,
@@ -28,7 +39,7 @@ const JiraSection = memo(function JiraSection({
         id: "connect-jira",
         title: "Jira'yı Bağla",
         description: "Jira hesabınızı bağlayın ve projelerinizi yönetin",
-        icon: "🔗",
+        icon: "link",
         requiresConnection: false,
         onClick: () => {
           setShowPermissionModal(true);
@@ -42,7 +53,7 @@ const JiraSection = memo(function JiraSection({
           title: "Jira Ana Sayfa",
           description: "Projelerinizi ve issue'larınızı görüntüleyin",
           href: "/app/jira",
-          icon: "📊",
+          icon: "bar-chart-3",
           requiresConnection: true,
         },
         {
@@ -50,7 +61,7 @@ const JiraSection = memo(function JiraSection({
           title: "Projelerim",
           description: "Tüm Jira projelerinizi görüntüleyin",
           href: "/app/jira?tab=projects",
-          icon: "📁",
+          icon: "folder",
           requiresConnection: true,
         },
         {
@@ -58,7 +69,7 @@ const JiraSection = memo(function JiraSection({
           title: "Issue'larım",
           description: "Size atanan issue'ları görüntüleyin",
           href: "/app/jira?tab=issues",
-          icon: "📋",
+          icon: "clipboard-list",
           requiresConnection: true,
         },
         {
@@ -66,7 +77,7 @@ const JiraSection = memo(function JiraSection({
           title: "Jira'da Ara",
           description: "JQL ile gelişmiş arama yapın",
           href: "/app/jira-test?tab=search",
-          icon: "🔍",
+          icon: "search",
           requiresConnection: true,
         },
         {
@@ -74,7 +85,7 @@ const JiraSection = memo(function JiraSection({
           title: "Jira Ayarları",
           description: "Jira bağlantı ayarlarını yönetin",
           href: "/app/account",
-          icon: "⚙️",
+          icon: "settings",
           requiresConnection: true,
         }
       );
@@ -92,7 +103,9 @@ const JiraSection = memo(function JiraSection({
           className="group mb-4 flex w-full items-center justify-between border-2 border-blue-600 bg-white p-5 text-left transition-all hover:border-blue-700 hover:shadow-md dark:bg-gray-900"
         >
           <div className="flex items-center gap-4">
-            <div className="text-3xl">🔗</div>
+            <div className="flex h-12 w-12 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
+              <Link2 className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+            </div>
             <div>
               <h2 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white md:text-2xl">
                 Jira
@@ -105,21 +118,11 @@ const JiraSection = memo(function JiraSection({
             </div>
           </div>
           <div className="flex-shrink-0">
-            <svg
+            <ChevronDown
               className={`h-6 w-6 text-gray-500 transition-transform duration-200 dark:text-gray-400 ${
                 isExpanded ? "rotate-180" : ""
               }`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
+            />
           </div>
         </button>
 
@@ -132,18 +135,25 @@ const JiraSection = memo(function JiraSection({
                   <button
                     key={action.id}
                     onClick={action.onClick}
-                    className="group relative block w-full border-l-4 border-t border-r border-b border-gray-300 bg-white p-4 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
+                    className="group relative block w-full border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
                     style={{
                       borderLeftColor: '#2563eb',
                     }}
                   >
                     <div className="mb-2 flex items-center gap-3">
-                      <span className="text-2xl">{action.icon}</span>
-                      <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+                      {(() => {
+                        const IconComponent = jiraIconMap[action.icon] || Link2;
+                        return (
+                          <div className="flex h-8 w-8 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
+                            <IconComponent className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                          </div>
+                        );
+                      })()}
+                      <h3 className="text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
                         {action.title}
                       </h3>
                     </div>
-                    <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400">
+                    <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
                       {action.description}
                     </p>
                   </button>
@@ -151,18 +161,25 @@ const JiraSection = memo(function JiraSection({
                   <Link
                     key={action.id}
                     href={action.href}
-                    className="group relative block w-full border-l-4 border-t border-r border-b border-gray-300 bg-white p-4 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
+                    className="group relative block w-full border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
                     style={{
                       borderLeftColor: '#2563eb',
                     }}
                   >
                     <div className="mb-2 flex items-center gap-3">
-                      <span className="text-2xl">{action.icon}</span>
-                      <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+                      {(() => {
+                        const IconComponent = jiraIconMap[action.icon] || Link2;
+                        return (
+                          <div className="flex h-8 w-8 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
+                            <IconComponent className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                          </div>
+                        );
+                      })()}
+                      <h3 className="text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
                         {action.title}
                       </h3>
                     </div>
-                    <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400">
+                    <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
                       {action.description}
                     </p>
                   </Link>
@@ -180,7 +197,7 @@ const JiraSection = memo(function JiraSection({
         title="Jira Bağlantısı İçin Gerekli İzinler"
       >
         <div className="space-y-4">
-          <div className="border border-blue-300 bg-blue-50 p-3 dark:border-blue-700 dark:bg-blue-900/20">
+          <div className="border-2 border-blue-300 bg-blue-50 p-3 dark:border-blue-700 dark:bg-blue-900/20">
             <p className="text-sm text-blue-800 dark:text-blue-200">
               <strong>Neden bu izinler gerekli?</strong> Jira hesabınızı bağlamak için bu izinlere
               ihtiyacımız var. Bu sayede projelerinizi, issue&apos;larınızı ve board&apos;larınızı
@@ -188,9 +205,9 @@ const JiraSection = memo(function JiraSection({
             </p>
           </div>
 
-          <div className="space-y-3 border border-gray-300 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
+          <div className="space-y-3 border-2 border-gray-300 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
             <div className="flex items-start gap-3">
-              <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+              <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center border-2 border-blue-600 bg-blue-50 text-blue-600 dark:border-blue-500 dark:bg-blue-900/30 dark:text-blue-400">
                 <span className="text-xs font-semibold">1</span>
               </div>
               <div className="flex-1">
@@ -209,7 +226,7 @@ const JiraSection = memo(function JiraSection({
             </div>
 
             <div className="flex items-start gap-3">
-              <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+              <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center border-2 border-blue-600 bg-blue-50 text-blue-600 dark:border-blue-500 dark:bg-blue-900/30 dark:text-blue-400">
                 <span className="text-xs font-semibold">2</span>
               </div>
               <div className="flex-1">
@@ -228,7 +245,7 @@ const JiraSection = memo(function JiraSection({
             </div>
 
             <div className="flex items-start gap-3">
-              <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+              <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center border-2 border-blue-600 bg-blue-50 text-blue-600 dark:border-blue-500 dark:bg-blue-900/30 dark:text-blue-400">
                 <span className="text-xs font-semibold">3</span>
               </div>
               <div className="flex-1">
@@ -247,7 +264,7 @@ const JiraSection = memo(function JiraSection({
             </div>
 
             <div className="flex items-start gap-3">
-              <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400">
+              <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center border-2 border-green-600 bg-green-50 text-green-600 dark:border-green-500 dark:bg-green-900/30 dark:text-green-400">
                 <span className="text-xs font-semibold">✓</span>
               </div>
               <div className="flex-1">
@@ -265,9 +282,9 @@ const JiraSection = memo(function JiraSection({
             </div>
           </div>
 
-          <div className="border border-green-300 bg-green-50 p-3 dark:border-green-700 dark:bg-green-900/20">
+          <div className="border-2 border-green-300 bg-green-50 p-3 dark:border-green-700 dark:bg-green-900/20">
             <p className="text-xs text-green-800 dark:text-green-200">
-              <strong>🔒 Güvenlik:</strong> Bu izinler sadece Jira verilerinize erişim sağlar. Hesap
+              <strong>Güvenlik:</strong> Bu izinler sadece Jira verilerinize erişim sağlar. Hesap
               şifreniz, kişisel bilgileriniz veya diğer hassas verileriniz saklanmaz. İstediğiniz
               zaman hesap ayarlarından bağlantıyı kaldırabilirsiniz.
             </p>

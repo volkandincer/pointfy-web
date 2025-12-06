@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { Clock } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -289,7 +290,7 @@ export default function RoomDetailPage() {
           })
           .eq("id", taskId);
         if (error) throw error;
-        showToast("✅ Task başarıyla aktif yapıldı!", "success");
+        showToast("Task başarıyla aktif yapıldı!", "success");
       } catch (err) {
         showToast("Task aktif yapılamadı.", "error");
       }
@@ -329,7 +330,7 @@ export default function RoomDetailPage() {
           jira_id: jiraId || null,
         });
         if (error) throw error;
-        showToast("✅ Task başarıyla oluşturuldu!", "success");
+        showToast("Task başarıyla oluşturuldu!", "success");
       } catch (err) {
         showToast("Task oluşturulamadı.", "error");
         throw err;
@@ -345,7 +346,7 @@ export default function RoomDetailPage() {
       <>
         <Header navigationItems={navigationItems} />
         <main className="container mx-auto px-4 py-16">
-          <div className="h-40 animate-pulse border border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
+          <div className="h-40 animate-pulse border-2 border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
         </main>
         <Footer navigationItems={navigationItems} />
       </>
@@ -422,8 +423,12 @@ export default function RoomDetailPage() {
               </>
             ) : (
               <div className="space-y-6">
-                <div className="border border-gray-300 bg-white p-8 text-center shadow-sm dark:border-gray-700 dark:bg-gray-900">
-                  <p className="mb-2 text-4xl">⏳</p>
+                <div className="border-2 border-gray-300 bg-white p-8 text-center shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                  <div className="mb-4 flex justify-center">
+                    <div className="flex h-16 w-16 items-center justify-center border-2 border-amber-600 bg-amber-50 dark:bg-amber-900/20">
+                      <Clock className="h-8 w-8 text-amber-600 dark:text-amber-400" />
+                    </div>
+                  </div>
                   <p className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
                     Aktif Task Yok
                   </p>
@@ -451,12 +456,15 @@ export default function RoomDetailPage() {
                       );
                       if (pendingTasks.length === 0) return null;
                       return (
-                        <div className="mb-6 border border-amber-300 bg-amber-50 p-6 shadow-sm dark:border-amber-700 dark:bg-amber-900/10">
+                        <div className="mb-6 border-2 border-amber-300 bg-amber-50 p-6 shadow-sm dark:border-amber-700 dark:bg-amber-900/10">
                           <div className="mb-4 flex items-center justify-between">
                             <div>
-                              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                                ⏳ Puanlanmayı Bekleyen Task&apos;lar
-                              </h2>
+                              <div className="flex items-center gap-2">
+                                <Clock className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+                                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                                  Puanlanmayı Bekleyen Task&apos;lar
+                                </h2>
+                              </div>
                               <p className="text-xs text-gray-600 dark:text-gray-400">
                                 {pendingTasks.length} task puanlamaya hazır
                               </p>
@@ -484,7 +492,7 @@ export default function RoomDetailPage() {
                     })()}
 
                     {/* Diğer Task'lar (Active ve Completed) */}
-                    <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                    <div className="border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
                       <div className="mb-4 flex items-center justify-between">
                         <div>
                           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">

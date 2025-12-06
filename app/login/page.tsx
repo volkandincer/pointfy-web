@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
+import { Layers } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -221,54 +222,22 @@ function LoginPageContent() {
     <>
       <Header navigationItems={navigationItems} />
       <main className="relative min-h-[calc(100vh-4rem)] overflow-hidden">
-        {/* Background gradient */}
-        <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-blue-50 via-white to-white dark:from-gray-950/40 dark:via-gray-950 dark:to-gray-950" />
-        <div className="pointer-events-none absolute -left-40 -top-40 h-80 w-80 rounded-full bg-blue-200/40 blur-3xl dark:bg-blue-500/20" />
-        <div className="pointer-events-none absolute -right-40 -bottom-40 h-80 w-80 rounded-full bg-purple-200/40 blur-3xl dark:bg-purple-500/20" />
+        {/* Background */}
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-gray-50 dark:bg-gray-950" />
 
         <div className="container mx-auto flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-16">
           <div className="w-full max-w-md">
             {/* Card */}
-            <div className="border border-gray-300 bg-white p-8 shadow-md dark:border-gray-700 dark:bg-gray-900">
+            <div className="border-2 border-gray-300 bg-white p-8 shadow-md dark:border-gray-700 dark:bg-gray-900">
               {/* Logo */}
               <div className="mb-8 flex justify-center">
-                <div className="relative flex h-16 w-16 items-center justify-center border-2 border-blue-600 bg-blue-50 p-2 dark:bg-blue-900/20">
-                  <svg
-                    className="relative h-full w-full text-white"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M12 2L2 7L12 12L22 7L12 2Z"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      fill="none"
-                    />
-                    <path
-                      d="M2 17L12 22L22 17"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      fill="none"
-                    />
-                    <path
-                      d="M2 12L12 17L22 12"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      fill="none"
-                    />
-                  </svg>
+                <div className="flex h-16 w-16 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
+                  <Layers className="h-8 w-8 text-blue-600 dark:text-blue-400" />
                 </div>
               </div>
 
               {/* Tab buttons */}
-              <div className="mb-8 flex gap-2 border border-gray-300 bg-gray-100 p-1 dark:border-gray-700 dark:bg-gray-800">
+              <div className="mb-8 flex gap-2 border-2 border-gray-300 bg-gray-100 p-1 dark:border-gray-700 dark:bg-gray-800">
                 <button
                   className={`flex-1 border-2 px-4 py-2.5 text-sm font-semibold transition-colors ${
                     isLogin
@@ -320,7 +289,7 @@ function LoginPageContent() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full border border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
+                    className="w-full border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
                     placeholder="ornek@email.com"
                   />
                 </div>
@@ -337,7 +306,7 @@ function LoginPageContent() {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full border border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
+                    className="w-full border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
                     placeholder="••••••••"
                   />
                 </div>
@@ -355,7 +324,7 @@ function LoginPageContent() {
                       required
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
-                      className="w-full border border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
+                      className="w-full border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
                       placeholder="kullaniciadi"
                     />
                   </div>
@@ -374,7 +343,7 @@ function LoginPageContent() {
                     : "Kayıt Ol"}
                 </button>
                 {message && (
-                  <div className="border border-red-300 bg-red-50 p-3 text-sm text-red-600 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400">
+                  <div className="border-2 border-red-300 bg-red-50 p-3 text-sm text-red-600 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400">
                     {message}
                   </div>
                 )}

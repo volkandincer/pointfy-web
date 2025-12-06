@@ -258,7 +258,7 @@ export default function JiraSettingsPage() {
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="h-32 animate-pulse border border-gray-300 bg-gray-200 dark:border-gray-700 dark:bg-gray-800"
+              className="h-32 animate-pulse border-2 border-gray-300 bg-gray-200 dark:border-gray-700 dark:bg-gray-800"
             />
           ))}
         </div>
@@ -279,16 +279,16 @@ export default function JiraSettingsPage() {
       </div>
 
       {/* Connection Status Card */}
-      <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+      <div className="border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
             Bağlantı Durumu
           </h2>
           <div
-            className={`flex items-center gap-2 rounded-full px-3 py-1 text-sm font-semibold ${
+            className={`flex items-center gap-2 rounded-lg border-2 px-3 py-1 text-sm font-semibold shadow-sm ${
               connectionStatus.connected
-                ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                ? "border-green-300 bg-green-100 text-green-700 dark:border-green-700 dark:bg-green-900/30 dark:text-green-400"
+                : "border-red-300 bg-red-100 text-red-700 dark:border-red-700 dark:bg-red-900/30 dark:text-red-400"
             }`}
           >
             <div
@@ -384,7 +384,7 @@ export default function JiraSettingsPage() {
       </div>
 
       {/* Base URL Configuration */}
-      <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+      <div className="border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
           Jira Base URL Yapılandırması
         </h2>
@@ -402,7 +402,7 @@ export default function JiraSettingsPage() {
               value={baseUrlInput}
               onChange={(e) => setBaseUrlInput(e.target.value)}
               placeholder="örn: pointf.atlassian.net"
-              className="w-full border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 sm:text-base"
+              className="w-full border-2 border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 sm:text-base"
             />
             <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
               Jira instance&apos;ınızın base URL&apos;i (örn: pointf.atlassian.net)
@@ -419,7 +419,7 @@ export default function JiraSettingsPage() {
       </div>
 
       {/* Help Card */}
-      <div className="border border-blue-300 bg-blue-50 p-6 dark:border-blue-700 dark:bg-blue-900/20">
+      <div className="border-2 border-blue-300 bg-blue-50 p-6 dark:border-blue-700 dark:bg-blue-900/20">
         <h3 className="mb-2 text-base font-semibold text-blue-900 dark:text-blue-100">
           Yardım
         </h3>

@@ -2,79 +2,99 @@
 
 import Link from "next/link";
 import { memo } from "react";
+import { 
+  Zap, 
+  Link2, 
+  ClipboardList, 
+  CheckSquare, 
+  FileText, 
+  BarChart3, 
+  RotateCcw,
+  type LucideIcon 
+} from "lucide-react";
 import type { QuickAction } from "@/interfaces/QuickAction.interface";
 
 interface QuickActionsProps {
   actions: QuickAction[];
 }
 
+// Icon mapping
+const iconMap: Record<string, LucideIcon> = {
+  "create-room": Zap,
+  "jira": Link2,
+  "boards": ClipboardList,
+  "personal-tasks": CheckSquare,
+  "notes": FileText,
+  "voted-tasks": BarChart3,
+  "retro": RotateCcw,
+};
+
+// Color mapping for left border
+const colorMap: Record<string, string> = {
+  "create-room": "border-l-blue-600 dark:border-l-blue-500",
+  "jira": "border-l-purple-600 dark:border-l-purple-500",
+  "boards": "border-l-green-600 dark:border-l-green-500",
+  "personal-tasks": "border-l-orange-600 dark:border-l-orange-500",
+  "notes": "border-l-yellow-600 dark:border-l-yellow-500",
+  "voted-tasks": "border-l-indigo-600 dark:border-l-indigo-500",
+  "retro": "border-l-pink-600 dark:border-l-pink-500",
+};
+
+// Icon color mapping
+const iconColorMap: Record<string, string> = {
+  "create-room": "text-blue-600 dark:text-blue-400",
+  "jira": "text-purple-600 dark:text-purple-400",
+  "boards": "text-green-600 dark:text-green-400",
+  "personal-tasks": "text-orange-600 dark:text-orange-400",
+  "notes": "text-yellow-600 dark:text-yellow-400",
+  "voted-tasks": "text-indigo-600 dark:text-indigo-400",
+  "retro": "text-pink-600 dark:text-pink-400",
+};
+
 const QuickActions = memo(function QuickActions({ actions }: QuickActionsProps) {
-  // İlk action'ı (Oda Oluştur) featured card olarak ayır
-  const featuredAction = actions[0];
-  const otherActions = actions.slice(1);
+  const getIcon = (actionId: string) => {
+    const IconComponent = iconMap[actionId];
+    const iconColor = iconColorMap[actionId] || "text-gray-700 dark:text-gray-300";
+    return IconComponent ? <IconComponent className={`h-6 w-6 sm:h-7 sm:w-7 ${iconColor}`} /> : null;
+  };
+
+  const getBorderColor = (actionId: string) => {
+    return colorMap[actionId] || "border-l-blue-600 dark:border-l-blue-500";
+  };
 
   return (
-    <section className="container mx-auto px-4 py-8">
+    <section className="container mx-auto px-4 py-4 sm:py-6">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-6">
-          <h2 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white md:text-3xl">
+        <div className="mb-3 sm:mb-4">
+          <h2 className="mb-0.5 text-lg font-bold tracking-tight text-gray-900 dark:text-white sm:text-xl md:text-2xl">
             Hızlı İşlemler
           </h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400 md:text-base">
+          <p className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
             Takım çalışmanızı başlatın
           </p>
         </div>
 
-        {/* Featured Card - Oda Oluştur */}
-        {featuredAction && (
-          <>
-            {featuredAction.onClick ? (
-              <button
-                onClick={featuredAction.onClick}
-                className="group relative mb-5 block w-full overflow-hidden rounded-3xl border-2 border-blue-400/40 bg-white p-6 text-left shadow-[0_12px_24px_rgba(59,130,246,0.3)] transition-all hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(59,130,246,0.4)] dark:border-blue-500/30 dark:bg-gray-900"
-              >
-                <div className="mb-4 text-4xl">{featuredAction.icon}</div>
-                <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-white">
-                  {featuredAction.title}
-                </h3>
-                <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
-                  {featuredAction.description}
-                </p>
-              </button>
-            ) : (
-              <Link
-                href={featuredAction.href}
-                className="group relative mb-5 block overflow-hidden rounded-3xl border-2 border-blue-400/40 bg-white p-6 shadow-[0_12px_24px_rgba(59,130,246,0.3)] transition-all hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(59,130,246,0.4)] dark:border-blue-500/30 dark:bg-gray-900"
-              >
-                <div className="mb-4 text-4xl">{featuredAction.icon}</div>
-                <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-white">
-                  {featuredAction.title}
-                </h3>
-                <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
-                  {featuredAction.description}
-                </p>
-              </Link>
-            )}
-          </>
-        )}
-
-        {/* Diğer Action'lar */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {otherActions.map((action) =>
-            action.onClick ? (
+        {/* Tüm Action'lar - Kompakt Grid */}
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4">
+          {actions.map((action) => {
+            const IconComponent = getIcon(action.id);
+            const borderColor = getBorderColor(action.id);
+            
+            const baseClasses = `group relative flex min-h-[100px] flex-col items-center justify-center border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 text-center shadow-sm transition-all active:border-gray-400 active:shadow-md sm:min-h-[120px] sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900`;
+            
+            return action.onClick ? (
               <button
                 key={action.id}
                 onClick={action.onClick}
-                className="group relative block w-full border-l-4 border-t border-r border-b border-gray-300 bg-white p-5 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
-                style={{
-                  borderLeftColor: '#2563eb',
-                }}
+                className={baseClasses}
               >
-                <div className="mb-3 text-4xl">{action.icon}</div>
-                <h3 className="mb-1.5 text-base font-semibold text-gray-900 dark:text-white">
+                <div className="mb-2 sm:mb-2.5">
+                  {IconComponent}
+                </div>
+                <h3 className="mb-1 text-xs font-semibold text-gray-900 dark:text-white sm:text-sm">
                   {action.title}
                 </h3>
-                <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400">
+                <p className="hidden text-[10px] leading-tight text-gray-600 dark:text-gray-400 sm:block sm:text-xs">
                   {action.description}
                 </p>
               </button>
@@ -82,18 +102,20 @@ const QuickActions = memo(function QuickActions({ actions }: QuickActionsProps) 
               <Link
                 key={action.id}
                 href={action.href}
-                className="group relative block overflow-hidden rounded-2xl border-2 border-blue-400/15 bg-white p-5 shadow-[0_8px_20px_rgba(59,130,246,0.15)] transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(59,130,246,0.2)] dark:border-blue-500/10 dark:bg-gray-900"
+                className={baseClasses}
               >
-                <div className="mb-3 text-4xl">{action.icon}</div>
-                <h3 className="mb-1.5 text-base font-semibold text-gray-900 dark:text-white">
+                <div className="mb-2 sm:mb-2.5">
+                  {IconComponent}
+                </div>
+                <h3 className="mb-1 text-xs font-semibold text-gray-900 dark:text-white sm:text-sm">
                   {action.title}
                 </h3>
-                <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400">
+                <p className="hidden text-[10px] leading-tight text-gray-600 dark:text-gray-400 sm:block sm:text-xs">
                   {action.description}
                 </p>
               </Link>
-            )
-          )}
+            );
+          })}
         </div>
       </div>
     </section>

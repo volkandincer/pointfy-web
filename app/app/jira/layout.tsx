@@ -88,13 +88,13 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
     return (
       <>
         <Header navigationItems={navigationItems} />
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
           <div className="container mx-auto px-4 py-6">
             <div className="flex gap-6">
               {/* Sidebar Skeleton */}
               <aside className="hidden w-64 shrink-0 lg:block">
                 <div className="sticky top-6">
-                  <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+                  <div className="rounded-lg border-2 border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                     <div className="mb-4 h-6 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
                     <div className="space-y-2">
                       {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -135,13 +135,13 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
     return (
       <>
         <Header navigationItems={navigationItems} />
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
           <div className="container mx-auto px-4 py-16">
             <div className="mx-auto max-w-2xl">
-              <div className="rounded-2xl border border-blue-200/70 bg-white p-8 shadow-lg dark:border-blue-800/70 dark:bg-gray-900">
+              <div className="rounded-lg border-2 border-blue-600 bg-white p-8 shadow-sm dark:border-blue-500 dark:bg-gray-900">
                 <div className="mb-6 text-center">
                   <div className="mb-4 flex justify-center">
-                    <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-xl">
+                    <div className="flex h-24 w-24 items-center justify-center rounded-lg border-2 border-blue-600 bg-blue-600 text-white shadow-sm">
                       <Link2 className="h-12 w-12" />
                     </div>
                   </div>
@@ -166,7 +166,7 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
                       // Jira OAuth error
                     }
                   }}
-                  className="w-full rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-base font-semibold text-white shadow-md transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-lg"
+                  className="w-full rounded-lg border-2 border-blue-600 bg-blue-600 px-6 py-3 text-base font-semibold text-white shadow-sm transition-all hover:border-blue-700 hover:bg-blue-700 hover:shadow-md"
                 >
                   Jira&apos;yı Bağla
                 </button>
@@ -190,13 +190,13 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
   return (
     <>
       <Header navigationItems={navigationItems} />
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col gap-6 lg:flex-row">
             {/* Sidebar Navigation */}
             <aside className="hidden w-64 shrink-0 lg:block">
               <div className="sticky top-6">
-                <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+                <div className="rounded-lg border-2 border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                   <div className="mb-4">
                     <h2 className="text-lg font-bold text-gray-900 dark:text-white">
                       Jira Modülü
@@ -230,7 +230,7 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
             </aside>
 
             {/* Mobile Bottom Navigation - Hidden on desktop */}
-            <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 bg-white/95 backdrop-blur-sm dark:border-gray-800 dark:bg-gray-900/95 lg:hidden">
+            <div className="fixed bottom-0 left-0 right-0 z-50 border-t-2 border-gray-200 bg-white/95 backdrop-blur-sm dark:border-gray-800 dark:bg-gray-900/95 lg:hidden">
               <div className="container mx-auto">
                 <nav className="flex items-center justify-around">
                   {jiraNavItems.slice(0, 5).map((item) => {

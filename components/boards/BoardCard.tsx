@@ -61,7 +61,7 @@ const BoardCard = memo(function BoardCard({
   return (
     <Link
       href={`/app/boards/${board.id}`}
-      className="group relative block border-l-4 border-t border-r border-b border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+      className="group relative block border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-6 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
       style={{
         borderLeftColor: boardColor,
       }}
@@ -74,24 +74,24 @@ const BoardCard = memo(function BoardCard({
           <div className="flex items-start gap-3 pr-20">
             {/* Icon Box */}
             <div
-              className="flex h-12 w-12 shrink-0 items-center justify-center border-2 bg-gray-50 transition-colors dark:bg-gray-800"
+              className="flex h-10 w-10 shrink-0 items-center justify-center border-2 bg-gray-50 transition-colors sm:h-12 sm:w-12 dark:bg-gray-800"
               style={{
                 borderColor: boardColor,
               }}
             >
               <ClipboardList 
-                className="h-6 w-6"
+                className="h-5 w-5 sm:h-6 sm:w-6"
                 style={{ color: boardColor }}
               />
             </div>
 
             {/* Title and Description */}
             <div className="min-w-0 flex-1">
-              <h3 className="mb-1.5 text-xl font-bold text-gray-900 dark:text-white line-clamp-2">
+              <h3 className="mb-1 text-lg font-bold text-gray-900 dark:text-white line-clamp-2 sm:mb-1.5 sm:text-xl">
                 {board.name}
               </h3>
               {board.description && (
-                <p className="line-clamp-3 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                <p className="line-clamp-2 text-xs leading-relaxed text-gray-600 dark:text-gray-400 sm:line-clamp-3 sm:text-sm">
                   {board.description}
                 </p>
               )}
@@ -99,11 +99,11 @@ const BoardCard = memo(function BoardCard({
           </div>
 
           {/* Action Buttons - Absolute positioned */}
-          <div className="absolute right-0 top-0 flex shrink-0 gap-1.5 opacity-0 transition-opacity group-hover:opacity-100">
+          <div className="absolute right-0 top-0 flex shrink-0 gap-1 opacity-0 transition-opacity group-hover:opacity-100 sm:gap-1.5">
             {onEdit && (
               <button
                 onClick={handleEdit}
-                className="border border-blue-600 bg-white p-2 text-blue-600 transition-colors hover:bg-blue-50 dark:bg-gray-900 dark:border-blue-500 dark:text-blue-400 dark:hover:bg-blue-900/20"
+                className="flex h-9 w-9 items-center justify-center border-2 border-blue-600 bg-white text-blue-600 transition-colors active:bg-blue-50 sm:h-10 sm:w-10 dark:bg-gray-900 dark:border-blue-500 dark:text-blue-400 dark:active:bg-blue-900/20"
                 title="Düzenle"
               >
                 <Edit className="h-4 w-4" />
@@ -112,7 +112,7 @@ const BoardCard = memo(function BoardCard({
             {onArchive && (
               <button
                 onClick={handleArchive}
-                className="border border-gray-300 bg-white p-2 text-gray-600 transition-colors hover:bg-gray-50 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
+                className="flex h-9 w-9 items-center justify-center border-2 border-gray-300 bg-white text-gray-600 transition-colors active:bg-gray-50 sm:h-10 sm:w-10 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:active:bg-gray-800"
                 title={board.is_archived ? "Arşivden Çıkar" : "Arşivle"}
               >
                 {board.is_archived ? (
@@ -125,7 +125,7 @@ const BoardCard = memo(function BoardCard({
             {onDelete && (
               <button
                 onClick={handleDelete}
-                className="border border-red-600 bg-white p-2 text-red-600 transition-colors hover:bg-red-50 dark:bg-gray-900 dark:border-red-500 dark:text-red-400 dark:hover:bg-red-900/20"
+                className="flex h-9 w-9 items-center justify-center border-2 border-red-600 bg-white text-red-600 transition-colors active:bg-red-50 sm:h-10 sm:w-10 dark:bg-gray-900 dark:border-red-500 dark:text-red-400 dark:active:bg-red-900/20"
                 title="Sil"
               >
                 <Trash2 className="h-4 w-4" />

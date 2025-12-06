@@ -105,49 +105,42 @@ function HomePageContent() {
         title: "Oda Oluştur",
         description: "Yeni bir oda oluşturun",
         href: "/app/rooms/create",
-        icon: "⚡",
       },
       {
         id: "jira",
         title: "Jira",
         description: "Jira projelerinizi ve issue'larınızı yönetin",
         href: "/app/jira",
-        icon: "🔗",
       },
       {
         id: "boards",
         title: "Board'larım",
         description: "Task ve notlarınızı organize edin",
         href: "/app/boards",
-        icon: "📋",
       },
       {
         id: "personal-tasks",
         title: "Tasklarım",
         description: "Kişisel tasklarınızı yönetin",
         href: "/app/tasks",
-        icon: "📝",
       },
       {
         id: "notes",
         title: "Notlarım",
         description: "Kişisel notlarınızı görüntüleyin",
         href: "/app/notes",
-        icon: "✏️",
       },
       {
         id: "voted-tasks",
         title: "Puanladığım Task'lar",
         description: "Oy verdiğiniz task'ları görüntüleyin",
         href: "/app/voted-tasks",
-        icon: "📊",
       },
       {
         id: "retro",
         title: "Retro",
         description: "Takım retrosu başlat",
         href: "/app/rooms/create?type=retro",
-        icon: "🔁",
       },
     ],
     []
@@ -160,7 +153,7 @@ function HomePageContent() {
         <Header navigationItems={navigationItems} />
         <main>
           <div className="container mx-auto px-4 py-12">
-            <div className="h-64 animate-pulse border border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
+            <div className="h-64 animate-pulse border-2 border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
           </div>
         </main>
         <Footer navigationItems={navigationItems} />

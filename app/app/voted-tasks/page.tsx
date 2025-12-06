@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { CheckCircle2, RefreshCw, Clock, BarChart3 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getDefaultNavigationItems } from "@/lib/utils";
@@ -188,21 +189,24 @@ export default function VotedTasksPage() {
     switch (status) {
       case "completed":
         return (
-          <span className="rounded-md bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-700 dark:bg-green-900/20 dark:text-green-400">
-            ✅ Tamamlandı
+          <span className="inline-flex items-center gap-1 rounded-lg border-2 border-green-300 bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-700 shadow-sm dark:border-green-700 dark:bg-green-900/20 dark:text-green-400">
+            <CheckCircle2 className="h-3 w-3" />
+            Tamamlandı
           </span>
         );
       case "active":
         return (
-          <span className="rounded-md bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-900/20 dark:text-blue-400">
-            🔄 Aktif
+          <span className="inline-flex items-center gap-1 rounded-lg border-2 border-blue-300 bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700 shadow-sm dark:border-blue-700 dark:bg-blue-900/20 dark:text-blue-400">
+            <RefreshCw className="h-3 w-3" />
+            Aktif
           </span>
         );
       case "pending":
       default:
         return (
-          <span className="rounded-md bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-700 dark:bg-gray-800 dark:text-gray-300">
-            ⏳ Beklemede
+          <span className="inline-flex items-center gap-1 rounded-lg border-2 border-gray-300 bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+            <Clock className="h-3 w-3" />
+            Beklemede
           </span>
         );
     }
@@ -215,7 +219,7 @@ export default function VotedTasksPage() {
           <div className="mx-auto max-w-5xl">
             <div className="mb-6 flex items-center justify-between">
               <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
                   Puanladığım Task&apos;lar
                 </h1>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -229,17 +233,17 @@ export default function VotedTasksPage() {
                 {Array.from({ length: 3 }).map((_, idx) => (
                   <div
                     key={idx}
-                    className="h-32 animate-pulse border border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800"
+                    className="h-32 animate-pulse border-2 border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800"
                   />
                 ))}
               </div>
             ) : votedTasks.length === 0 ? (
-              <div className="border border-gray-300 bg-white p-12 text-center dark:border-gray-700 dark:bg-gray-900">
-                <p className="mb-2 text-4xl">📊</p>
+              <div className="border-2 border-gray-300 bg-white p-12 text-center shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                <BarChart3 className="mx-auto mb-3 h-12 w-12 text-gray-400 dark:text-gray-500" />
                 <p className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
                   Henüz puanladığınız task yok
                 </p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
                   Odalarda task&apos;lara oy vererek buraya ekleyebilirsiniz
                 </p>
               </div>
@@ -248,7 +252,7 @@ export default function VotedTasksPage() {
                 {votedTasks.map((task) => (
                   <div
                     key={task.id}
-                    className="group relative border-l-4 border-t border-r border-b border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                    className="group relative border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
                     style={{
                       borderLeftColor: '#2563eb',
                     }}
@@ -316,7 +320,7 @@ export default function VotedTasksPage() {
                       <div className="mt-4 text-right">
                         <Link
                           href={`/app/rooms/${task.room_id}`}
-                          className="inline-flex h-9 items-center justify-center rounded-md bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-700"
+                          className="inline-flex h-9 items-center justify-center rounded-lg border-2 border-blue-600 bg-blue-600 px-4 text-sm font-semibold text-white transition hover:border-blue-700 hover:bg-blue-700"
                         >
                           Odaya Git →
                         </Link>

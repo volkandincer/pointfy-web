@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useState } from "react";
+import { CheckCircle2 } from "lucide-react";
 import { FIBONACCI_POINTS } from "@/interfaces/Voting.interface";
 
 interface VotingCardGridProps {
@@ -47,10 +48,10 @@ const VotingCardGrid = memo(function VotingCardGrid({
               disabled={isDisabled}
               className={`relative border-2 px-4 py-6 text-xl font-bold transition-all ${
                 isSelected
-                  ? "border-blue-600 bg-blue-600 text-white scale-105"
+                  ? "border-blue-600 bg-blue-600 text-white shadow-md"
                   : isDisabled
                   ? "border-gray-300 bg-gray-50 text-gray-400 cursor-not-allowed dark:border-gray-700 dark:bg-gray-800 dark:text-gray-600"
-                  : "border-gray-300 bg-white text-gray-900 hover:border-blue-600 hover:bg-blue-50 hover:scale-105 dark:border-gray-600 dark:bg-gray-900 dark:text-white dark:hover:border-blue-500 dark:hover:bg-gray-800"
+                  : "border-gray-300 bg-white text-gray-900 hover:border-blue-600 hover:bg-blue-50 hover:shadow-md dark:border-gray-600 dark:bg-gray-900 dark:text-white dark:hover:border-blue-500 dark:hover:bg-gray-800"
               }`}
             >
               {loadingPoint === point ? (
@@ -63,8 +64,9 @@ const VotingCardGrid = memo(function VotingCardGrid({
         })}
       </div>
       {hasVoted && (
-        <p className="text-sm text-green-600 dark:text-green-400">
-          ✅ Puanını verdin! Diğer katılımcıları bekle
+        <p className="flex items-center gap-2 text-sm font-medium text-green-600 dark:text-green-400">
+          <CheckCircle2 className="h-4 w-4" />
+          Puanını verdin! Diğer katılımcıları bekle
         </p>
       )}
     </div>

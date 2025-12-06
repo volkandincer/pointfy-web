@@ -22,28 +22,27 @@ const EmptyState = memo(function EmptyState({
 }: EmptyStateProps) {
   return (
     <div
-      className={`flex flex-col items-center justify-center rounded-2xl border border-gray-200 bg-white p-12 text-center dark:border-gray-800 dark:bg-gray-900 ${className}`}
+      className={`flex flex-col items-center justify-center rounded-lg border-2 border-gray-300 bg-white p-6 text-center shadow-sm sm:p-8 md:p-12 dark:border-gray-700 dark:bg-gray-900 ${className}`}
     >
-      <div className="mb-6 flex justify-center">
+      <div className="mb-4 flex justify-center sm:mb-6">
         <div className="relative">
-          <div className="absolute inset-0 animate-pulse rounded-full bg-gradient-to-br from-blue-400/20 to-purple-400/20 blur-2xl" />
-          <div className="relative flex h-24 w-24 items-center justify-center rounded-3xl bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10">
-            <Icon className="h-12 w-12 text-gray-400 dark:text-gray-500" />
+          <div className="relative flex h-16 w-16 items-center justify-center rounded-lg border-2 border-gray-300 bg-gray-50 sm:h-20 sm:w-20 md:h-24 md:w-24 dark:border-gray-700 dark:bg-gray-800">
+            <Icon className="h-8 w-8 text-gray-400 sm:h-10 sm:w-10 md:h-12 md:w-12 dark:text-gray-500" />
           </div>
         </div>
       </div>
-      <h3 className="mb-2 text-xl font-bold text-gray-900 dark:text-white">
+      <h3 className="mb-2 text-lg font-bold text-gray-900 dark:text-white sm:text-xl">
         {title}
       </h3>
       {description && (
-        <p className="mb-6 max-w-md text-sm text-gray-600 dark:text-gray-400">
+        <p className="mb-4 max-w-md text-xs text-gray-600 dark:text-gray-400 sm:mb-6 sm:text-sm">
           {description}
         </p>
       )}
       {actionLabel && onAction && (
         <button
           onClick={onAction}
-          className="rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl hover:from-blue-700 hover:to-blue-800"
+          className="min-h-[44px] rounded-lg border-2 border-blue-600 bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all active:border-blue-700 active:bg-blue-700 active:shadow-md sm:px-6 sm:py-3 hover:border-blue-700 hover:bg-blue-700 hover:shadow-md"
         >
           {actionLabel}
         </button>

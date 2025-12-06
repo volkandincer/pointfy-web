@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useCallback, useEffect, useState } from "react";
+import { RefreshCw, CheckCircle2, Pause, Crown, BarChart3 } from "lucide-react";
 import { getSupabase } from "@/lib/supabase";
 import { useVotes } from "@/hooks/useVotes";
 import { useVotingSession } from "@/hooks/useVotingSession";
@@ -44,7 +45,7 @@ const AdminVotingView = memo(function AdminVotingView({
 
       // Task başarıyla tamamlandı
       setTaskCompleted(true);
-      showToast("✅ Task başarıyla tamamlandı!", "success");
+      showToast("Task başarıyla tamamlandı!", "success");
 
       // Web'de zaten room detail sayfasındayız, yönlendirme yapmaya gerek yok
       // Realtime subscription sayesinde activeTask null olacak ve "Aktif Task Yok" ekranı gösterilecek
@@ -80,17 +81,28 @@ const AdminVotingView = memo(function AdminVotingView({
 
   return (
     <div className="space-y-6">
-      <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+      <div className="border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">
             {activeTask.title}
           </h2>
-          <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-900 dark:text-blue-300">
-            {isVotingActive
-              ? "🔄 Aktif"
-              : activeTask.status === "completed"
-              ? "✅ Tamamlandı"
-              : "⏸️ Beklemede"}
+          <span className="flex items-center gap-1.5 rounded-lg border-2 border-blue-300 bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700 shadow-sm dark:border-blue-700 dark:bg-blue-900 dark:text-blue-300">
+            {isVotingActive ? (
+              <>
+                <RefreshCw className="h-3.5 w-3.5" />
+                Aktif
+              </>
+            ) : activeTask.status === "completed" ? (
+              <>
+                <CheckCircle2 className="h-3.5 w-3.5" />
+                Tamamlandı
+              </>
+            ) : (
+              <>
+                <Pause className="h-3.5 w-3.5" />
+                Beklemede
+              </>
+            )}
           </span>
         </div>
         {activeTask.description && (
@@ -111,7 +123,7 @@ const AdminVotingView = memo(function AdminVotingView({
       </div>
 
       {isVotingActive && (
-        <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+        <div className="border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
           <div className="mb-4 text-center">
             <p className="text-sm text-gray-600 dark:text-gray-400">
               Kalan Süre
@@ -123,9 +135,9 @@ const AdminVotingView = memo(function AdminVotingView({
         </div>
       )}
 
-      <div className="border border-amber-300 bg-amber-50 p-6 dark:border-amber-700 dark:bg-amber-900/20">
+      <div className="border-2 border-amber-300 bg-amber-50 p-6 dark:border-amber-700 dark:bg-amber-900/20">
         <div className="flex items-center gap-3">
-          <span className="text-2xl">👑</span>
+          <Crown className="h-6 w-6 text-amber-600 dark:text-amber-400" />
           <div>
             <p className="font-semibold text-gray-900 dark:text-white">
               Admin Modu
@@ -138,9 +150,10 @@ const AdminVotingView = memo(function AdminVotingView({
       </div>
 
       {activeTask.status === "completed" && validVotes.length > 0 && (
-        <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
-          <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-            📊 Final Sonuçları
+        <div className="border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+          <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">
+            <BarChart3 className="h-5 w-5" />
+            Final Sonuçları
           </h3>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
@@ -178,7 +191,7 @@ const AdminVotingView = memo(function AdminVotingView({
       )}
 
       {isVotingActive && (
-        <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+        <div className="border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
           <button
             onClick={handleCompleteTask}
             className="w-full border-2 border-gray-900 bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-800 hover:border-gray-800 dark:border-white dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
@@ -188,7 +201,7 @@ const AdminVotingView = memo(function AdminVotingView({
         </div>
       )}
 
-      <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+      <div className="border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
           Katılımcı Puanları
         </h3>
@@ -198,7 +211,7 @@ const AdminVotingView = memo(function AdminVotingView({
           </p>
         ) : votes.length === 0 ? (
           <div className="py-8 text-center">
-            <p className="mb-2 text-4xl">📊</p>
+            <BarChart3 className="mx-auto mb-2 h-12 w-12 text-gray-400 dark:text-gray-500" />
             <p className="text-sm font-medium text-gray-900 dark:text-white">
               Henüz puan yok
             </p>
@@ -208,7 +221,7 @@ const AdminVotingView = memo(function AdminVotingView({
             {votes.map((vote) => (
               <div
                 key={vote.user_key || vote.user_name}
-                className="flex items-center justify-between border border-gray-300 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800"
+                className="flex items-center justify-between border-2 border-gray-300 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800"
               >
                 <span className="font-medium text-gray-900 dark:text-white">
                   {vote.user_name}

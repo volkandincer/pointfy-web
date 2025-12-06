@@ -56,7 +56,7 @@ const FilterDropdown = memo(function FilterDropdown({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex w-full items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition-all hover:border-blue-400 hover:bg-gray-50 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-blue-600 dark:hover:bg-gray-700"
+        className="flex min-h-[44px] w-full items-center justify-between gap-2 rounded-lg border-2 border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition-all active:border-blue-500 active:bg-gray-50 hover:border-blue-400 hover:bg-gray-50 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:active:border-blue-500 dark:active:bg-gray-700 dark:hover:border-blue-500 dark:hover:bg-gray-700"
       >
         <div className="flex items-center gap-2">
           <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">
@@ -79,7 +79,7 @@ const FilterDropdown = memo(function FilterDropdown({
             className="fixed inset-0 z-10"
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute z-20 mt-1 w-full rounded-lg border border-gray-200 bg-white shadow-xl dark:border-gray-700 dark:bg-gray-800">
+          <div className="absolute z-20 mt-1 w-full rounded-lg border-2 border-gray-300 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800">
             <div className="max-h-64 overflow-y-auto">
               {options.map((option) => (
                 <button
@@ -89,7 +89,7 @@ const FilterDropdown = memo(function FilterDropdown({
                     onChange(option.value);
                     setIsOpen(false);
                   }}
-                  className={`flex w-full items-center justify-between px-4 py-2.5 text-left text-sm transition-colors ${
+                  className={`flex min-h-[44px] w-full items-center justify-between px-4 py-3 text-left text-sm transition-colors active:bg-gray-100 dark:active:bg-gray-600 ${
                     value === option.value
                       ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
                       : "text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"

@@ -1,6 +1,7 @@
 "use client";
 
 import { memo } from "react";
+import { CheckCircle2, ClipboardList } from "lucide-react";
 import { useCompletedTasks } from "@/hooks/useCompletedTasks";
 import { useVotes } from "@/hooks/useVotes";
 
@@ -23,7 +24,7 @@ const UserCompletedTasksView = memo(function UserCompletedTasksView({
         {Array.from({ length: 2 }).map((_, idx) => (
           <div
             key={idx}
-            className="h-40 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800"
+            className="h-40 animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800"
           />
         ))}
       </div>
@@ -32,8 +33,8 @@ const UserCompletedTasksView = memo(function UserCompletedTasksView({
 
   if (completedTasks.length === 0) {
     return (
-      <div className="rounded-2xl border border-gray-200/70 bg-white p-8 text-center shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
-        <p className="mb-2 text-4xl">📋</p>
+      <div className="rounded-lg border-2 border-gray-300 bg-white p-8 text-center shadow-sm dark:border-gray-700 dark:bg-gray-900">
+        <ClipboardList className="mx-auto mb-3 h-12 w-12 text-gray-400 dark:text-gray-500" />
         <p className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
           Henüz tamamlanan task yok
         </p>
@@ -46,9 +47,12 @@ const UserCompletedTasksView = memo(function UserCompletedTasksView({
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-        🃏 Tamamlanan Task Kartları
-      </h2>
+      <div className="mb-4 flex items-center gap-3">
+        <CheckCircle2 className="h-6 w-6 text-green-600 dark:text-green-400" />
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+          Tamamlanan Task Kartları
+        </h2>
+      </div>
       {completedTasks.map((task) => (
         <CompletedTaskCard
           key={task.id}
@@ -99,7 +103,7 @@ const CompletedTaskCard = memo(function CompletedTaskCard({
   };
 
   return (
-    <div className="rounded-2xl border-2 border-green-400/15 bg-green-50/50 p-6 shadow-sm dark:border-green-500/10 dark:bg-green-900/10">
+    <div className="rounded-lg border-2 border-green-400/15 bg-green-50/50 p-6 shadow-sm dark:border-green-500/10 dark:bg-green-900/10">
       {/* Header */}
       <div className="mb-4 flex items-start justify-between">
         <div className="flex-1">
@@ -112,8 +116,9 @@ const CompletedTaskCard = memo(function CompletedTaskCard({
             </p>
           )}
         </div>
-        <span className="ml-4 shrink-0 rounded-md bg-green-100 px-3 py-1.5 text-xs font-semibold text-green-700 dark:bg-green-900/20 dark:text-green-400">
-          ✅ Tamamlandı
+        <span className="ml-4 shrink-0 inline-flex items-center gap-1 rounded-lg border-2 border-green-300 bg-green-50 px-3 py-1.5 text-xs font-semibold text-green-700 shadow-sm dark:border-green-700 dark:bg-green-900/20 dark:text-green-400">
+          <CheckCircle2 className="h-3 w-3" />
+          Tamamlandı
         </span>
       </div>
 
@@ -155,7 +160,7 @@ const CompletedTaskCard = memo(function CompletedTaskCard({
 
       {/* Votes List - Kim ne verdi */}
       {votes.length > 0 && (
-        <div className="mb-4 rounded-xl border border-gray-200/70 bg-white p-4 dark:border-gray-800/70 dark:bg-gray-900">
+        <div className="mb-4 rounded-lg border-2 border-gray-200/70 bg-white p-4 dark:border-gray-800/70 dark:bg-gray-900">
           <h4 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">
             Puanlar
           </h4>
@@ -166,7 +171,7 @@ const CompletedTaskCard = memo(function CompletedTaskCard({
               return (
                 <div
                   key={vote.user_key || vote.user_name}
-                  className={`flex items-center justify-between rounded-lg border p-3 ${
+                  className={`flex items-center justify-between rounded-lg border-2 p-3 ${
                     isCurrentUser
                       ? "border-blue-300 bg-blue-50 dark:border-blue-700 dark:bg-blue-900/20"
                       : "border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800"
@@ -177,7 +182,7 @@ const CompletedTaskCard = memo(function CompletedTaskCard({
                       {vote.user_name}
                     </span>
                     {isCurrentUser && (
-                      <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-700 dark:bg-blue-900 dark:text-blue-300">
+                      <span className="inline-flex items-center gap-1 rounded-lg border-2 border-blue-300 bg-blue-50 px-2 py-0.5 text-xs font-semibold text-blue-700 shadow-sm dark:border-blue-700 dark:bg-blue-900/20 dark:text-blue-300">
                         Sen
                       </span>
                     )}

@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useState } from "react";
+import { FileText } from "lucide-react";
 import NoteModal from "./NoteModal";
 import { useNotes } from "@/hooks/useNotes";
 import { useToastContext } from "@/contexts/ToastContext";
@@ -14,23 +15,10 @@ const GlobalNoteFab = memo(function GlobalNoteFab() {
     <>
       <button
         onClick={() => setShowModal(true)}
-        className="group fixed bottom-6 right-6 z-40 flex items-center gap-3 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 px-5 py-3 text-white shadow-xl shadow-purple-500/50 backdrop-blur-sm transition-all hover:from-purple-700 hover:to-indigo-700 hover:shadow-2xl hover:shadow-purple-500/60 hover:scale-105 active:scale-95"
+        className="group fixed bottom-4 right-4 z-40 flex min-h-[56px] items-center gap-2 rounded-lg border-2 border-purple-600 bg-purple-600 px-4 py-3 text-white shadow-md transition-all sm:bottom-6 sm:right-6 sm:gap-3 sm:px-5 hover:border-purple-700 hover:bg-purple-700 hover:shadow-md"
         aria-label="Not ekle"
       >
-        <svg
-          className="h-5 w-5 transition-transform group-hover:rotate-90"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M12 5V19M5 12H19"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        <FileText className="h-5 w-5 sm:h-6 sm:w-6" />
         <span className="hidden font-semibold sm:inline-block">Not Ekle</span>
         <span className="sm:hidden font-semibold">Not</span>
       </button>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useCallback, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { ClipboardList, Archive } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -27,7 +27,7 @@ export default function BoardsPage() {
   return (
     <>
       <Header navigationItems={navigationItems} />
-        <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+        <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
           <div className="container mx-auto px-4 py-12">
             <div className="mx-auto max-w-7xl">
               {/* Header Section */}
@@ -36,14 +36,14 @@ export default function BoardsPage() {
                   <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
                     Board&apos;larım
                   </h1>
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
                     Task&apos;larınızı ve notlarınızı organize edin, projelerinizi yönetin
                   </p>
                 </div>
 
                 {/* Stats Cards */}
                 <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  <div className="border border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
+                  <div className="border-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
                     <div className="mb-4 flex items-center gap-3">
                       <div className="flex h-12 w-12 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
                         <ClipboardList className="h-6 w-6 text-blue-600 dark:text-blue-400" />
@@ -55,7 +55,7 @@ export default function BoardsPage() {
                     </div>
                   </div>
 
-                  <div className="border border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
+                  <div className="border-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
                     <div className="mb-4 flex items-center gap-3">
                       <div className="flex h-12 w-12 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20">
                         <ClipboardList className="h-6 w-6 text-green-600 dark:text-green-400" />
@@ -67,7 +67,7 @@ export default function BoardsPage() {
                     </div>
                   </div>
 
-                  <div className="border border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
+                  <div className="border-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
                     <div className="mb-4 flex items-center gap-3">
                       <div className="flex h-12 w-12 items-center justify-center border-2 border-gray-600 bg-gray-50 dark:bg-gray-800">
                         <Archive className="h-6 w-6 text-gray-600 dark:text-gray-400" />
@@ -81,7 +81,7 @@ export default function BoardsPage() {
                 </div>
 
                 {/* Tab Buttons */}
-                <div className="inline-flex border border-gray-300 bg-white p-1 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                <div className="inline-flex border-2 border-gray-300 bg-white p-1 shadow-sm dark:border-gray-700 dark:bg-gray-900">
                   <button
                     onClick={() => setShowArchived(false)}
                     className={`px-6 py-2.5 text-sm font-semibold transition-colors ${

@@ -26,12 +26,12 @@ const FilterChip = memo(function FilterChip({
 
   return (
     <div
-      className={`group flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-all hover:shadow-sm ${colorClasses[color]}`}
+      className={`group flex items-center gap-1.5 rounded-lg border-2 px-3 py-1.5 text-xs font-semibold transition-all hover:shadow-sm ${colorClasses[color]}`}
     >
       <span>{label}</span>
       <button
         onClick={onRemove}
-        className="ml-0.5 rounded-full p-0.5 transition-colors hover:bg-black/10 dark:hover:bg-white/10"
+        className="ml-0.5 rounded-lg p-0.5 transition-colors hover:bg-black/10 dark:hover:bg-white/10"
         aria-label={`Remove ${label} filter`}
       >
         <X className="h-3 w-3" />

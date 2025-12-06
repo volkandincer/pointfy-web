@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useState } from "react";
+import { Crown } from "lucide-react";
 import { useRoomParticipants } from "@/hooks/useRoomParticipants";
 import type { RoomParticipant } from "@/hooks/useRoomParticipants";
 
@@ -19,9 +20,9 @@ const RoomParticipants = memo(function RoomParticipants({
 
   if (loading) {
     return (
-      <div className="border border-gray-300 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+      <div className="border-2 border-gray-300 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="flex items-center gap-2">
-          <div className="h-8 w-8 animate-pulse border border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
+          <div className="h-8 w-8 animate-pulse border-2 border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
           <div className="h-4 w-24 animate-pulse rounded bg-gray-100 dark:bg-gray-800" />
         </div>
       </div>
@@ -30,7 +31,7 @@ const RoomParticipants = memo(function RoomParticipants({
 
   if (error) {
     return (
-      <div className="border border-red-300 bg-red-50 p-4 shadow-sm dark:border-red-700 dark:bg-red-900/10">
+      <div className="border-2 border-red-300 bg-red-50 p-4 shadow-sm dark:border-red-700 dark:bg-red-900/10">
         <p className="text-xs text-red-600 dark:text-red-400">
           Katılımcılar yüklenirken hata oluştu: {error}
         </p>
@@ -39,7 +40,7 @@ const RoomParticipants = memo(function RoomParticipants({
   }
 
   return (
-    <div className="border border-gray-300 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+    <div className="border-2 border-gray-300 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
       {/* Accordion Header - Tıklanabilir */}
       <button
         onClick={() => participants.length > 0 && setShowAll(!showAll)}
@@ -48,8 +49,8 @@ const RoomParticipants = memo(function RoomParticipants({
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center border-2 border-blue-600 bg-blue-600 text-sm font-bold text-white dark:bg-blue-500">
-              👥
+            <div className="flex h-8 w-8 items-center justify-center border-2 border-blue-600 bg-blue-600 text-white dark:bg-blue-500">
+              <Users className="h-4 w-4" />
             </div>
             <div>
               <h3 className="text-sm font-bold text-gray-900 dark:text-white">
@@ -69,8 +70,8 @@ const RoomParticipants = memo(function RoomParticipants({
                     key={participant.user_key}
                     className={`flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-xs font-bold text-white shadow-sm dark:border-gray-900 ${
                       participant.user_key === currentUserKey
-                        ? "bg-gradient-to-br from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600"
-                        : "bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500"
+                        ? "border-blue-600 bg-blue-600 dark:border-blue-500 dark:bg-blue-500"
+                        : "border-purple-600 bg-purple-600 dark:border-purple-500 dark:bg-purple-500"
                     }`}
                     style={{ zIndex: 3 - idx }}
                     title={participant.username}
@@ -87,19 +88,7 @@ const RoomParticipants = memo(function RoomParticipants({
                     : "hover:bg-gray-100 dark:hover:bg-gray-700"
                 }`}
               >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
+                <ChevronDown className="h-4 w-4" />
               </div>
             </div>
           )}
@@ -114,7 +103,7 @@ const RoomParticipants = memo(function RoomParticipants({
             : "max-h-0 opacity-0"
         }`}
       >
-        <div className="border-t border-gray-200/70 px-4 pb-4 pt-3 dark:border-gray-800/70">
+        <div className="border-t-2 border-gray-200/70 px-4 pb-4 pt-3 dark:border-gray-800/70">
           <div className="space-y-1.5 overflow-y-auto pr-2 max-h-80">
             {participants.map((participant) => (
               <CompactParticipantCard
@@ -178,16 +167,16 @@ const CompactParticipantCard = memo(function CompactParticipantCard({
       {/* Kompakt Avatar */}
       <div className="relative shrink-0">
         <div
-          className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold text-white shadow-sm ${
+          className={`flex h-8 w-8 items-center justify-center border-2 text-xs font-bold text-white shadow-sm ${
             isCurrentUser
-              ? "border-blue-600 bg-blue-600 dark:bg-blue-500"
-              : "border-purple-600 bg-purple-600"
+              ? "border-blue-600 bg-blue-600 dark:border-blue-500 dark:bg-blue-500"
+              : "border-purple-600 bg-purple-600 dark:border-purple-500 dark:bg-purple-500"
           }`}
         >
           {participant.username.charAt(0).toUpperCase()}
         </div>
         {isCurrentUser && (
-          <div className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full border border-white bg-green-500 text-[8px] font-bold text-white dark:border-gray-900">
+          <div className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center border-2 border-white bg-green-600 text-[8px] font-bold text-white dark:border-gray-900">
             ✓
           </div>
         )}
@@ -206,15 +195,15 @@ const CompactParticipantCard = memo(function CompactParticipantCard({
             {participant.username}
           </p>
           {participant.is_admin && (
-            <span className="shrink-0 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-1.5 py-0.5 text-[9px] font-bold text-white">
-              👑
+            <span className="shrink-0 inline-flex items-center gap-0.5 rounded-lg border-2 border-amber-300 bg-amber-500 px-1.5 py-0.5 text-[9px] font-bold text-white shadow-sm dark:border-amber-600 dark:bg-amber-600">
+              <Crown className="h-2.5 w-2.5" />
             </span>
           )}
         </div>
         <div className="flex items-center gap-1.5">
           {isActive ? (
-            <span className="flex items-center gap-1 rounded-full bg-green-100 px-1.5 py-0.5 text-[10px] font-semibold text-green-700 dark:bg-green-900/30 dark:text-green-400">
-              <span className="h-1 w-1 animate-pulse rounded-full bg-green-500"></span>
+            <span className="flex items-center gap-1 rounded-lg border-2 border-green-300 bg-green-50 px-1.5 py-0.5 text-[10px] font-semibold text-green-700 shadow-sm dark:border-green-700 dark:bg-green-900/30 dark:text-green-400">
+              <span className="h-1.5 w-1.5 border-2 border-green-600 bg-green-500 dark:border-green-400 dark:bg-green-400"></span>
               {status}
             </span>
           ) : (

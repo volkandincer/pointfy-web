@@ -1,8 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import Link from "next/link";
-import { ClipboardList, X, Search } from "lucide-react";
+import { ClipboardList, X, Search, ExternalLink, ChevronRight } from "lucide-react";
 import FilterDropdown from "@/components/jira/FilterDropdown";
 import FilterChip from "@/components/jira/FilterChip";
 import EmptyState from "@/components/jira/EmptyState";
@@ -218,7 +217,7 @@ export default function JiraIssuesPage() {
         <button
           onClick={fetchIssues}
           disabled={loading}
-          className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
+          className="min-h-[44px] rounded-lg border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
         >
           {loading ? "Yükleniyor..." : "Yenile"}
         </button>
@@ -233,21 +232,9 @@ export default function JiraIssuesPage() {
             placeholder="Issue ara (key, summary, project)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 pl-10 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 sm:text-base"
+            className="w-full rounded-lg border-2 border-gray-300 bg-white px-4 py-2.5 pl-10 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 sm:text-base"
           />
-          <svg
-            className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
+          <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
         </div>
 
         {/* Filters */}
@@ -296,10 +283,10 @@ export default function JiraIssuesPage() {
             />
 
             {/* View Mode Toggle */}
-            <div className="ml-auto flex items-center gap-2 rounded-lg border border-gray-300 bg-white p-1 dark:border-gray-700 dark:bg-gray-800">
+            <div className="ml-auto flex items-center gap-2 rounded-lg border-2 border-gray-300 bg-white p-1 dark:border-gray-700 dark:bg-gray-800">
               <button
                 onClick={() => setViewMode("list")}
-                className={`rounded-md px-3 py-1.5 text-sm transition ${
+                className={`min-h-[44px] rounded-lg px-3 py-1.5 text-sm transition ${
                   viewMode === "list"
                     ? "bg-blue-600 text-white"
                     : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
@@ -309,7 +296,7 @@ export default function JiraIssuesPage() {
               </button>
               <button
                 onClick={() => setViewMode("grid")}
-                className={`rounded-md px-3 py-1.5 text-sm transition ${
+                className={`min-h-[44px] rounded-lg px-3 py-1.5 text-sm transition ${
                   viewMode === "grid"
                     ? "bg-blue-600 text-white"
                     : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
@@ -322,7 +309,7 @@ export default function JiraIssuesPage() {
 
           {/* Active Filter Chips */}
           {activeFiltersCount > 0 && (
-            <div className="flex flex-wrap items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800/50">
+            <div className="flex flex-wrap items-center gap-2 rounded-lg border-2 border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800/50">
               <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">
                 Aktif Filtreler:
               </span>
@@ -360,7 +347,7 @@ export default function JiraIssuesPage() {
               )}
               <button
                 onClick={clearAllFilters}
-                className="ml-auto flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200"
+                className="ml-auto flex min-h-[44px] items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200"
               >
                 <X className="h-3 w-3" />
                 Tümünü Temizle
@@ -372,7 +359,7 @@ export default function JiraIssuesPage() {
 
       {/* Error Message */}
       {error && (
-        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-600 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+        <div className="rounded-lg border-2 border-red-200 bg-red-50 p-4 text-sm text-red-600 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
           {error}
         </div>
       )}
@@ -398,51 +385,39 @@ export default function JiraIssuesPage() {
                 href={issue.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative border-l-4 border-t border-r border-b border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                className="group relative border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
                 style={{
                   borderLeftColor: issue.statusColor === 'green' ? '#16a34a' : issue.statusColor === 'yellow' ? '#eab308' : issue.statusColor === 'blue' ? '#2563eb' : '#6b7280',
                 }}
               >
                 <div className="relative mb-4 flex items-start justify-between">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="rounded-lg bg-blue-100 px-2.5 py-1 font-mono text-xs font-bold text-blue-700 shadow-sm dark:bg-blue-900/30 dark:text-blue-400">
+                    <span className="rounded-lg border-2 border-blue-300 bg-blue-100 px-2.5 py-1 font-mono text-xs font-bold text-blue-700 shadow-sm dark:border-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
                       {issue.key}
                     </span>
                     <span
-                      className={`rounded-full px-2.5 py-1 text-xs font-semibold shadow-sm ${getStatusColorClasses(
+                      className={`rounded-lg border-2 px-2.5 py-1 text-xs font-semibold shadow-sm ${getStatusColorClasses(
                         issue.statusColor
                       )}`}
                     >
                       {issue.status}
                     </span>
                   </div>
-                  <svg
-                    className="h-5 w-5 shrink-0 text-blue-400 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                    />
-                  </svg>
+                  <ExternalLink className="h-5 w-5 shrink-0 text-blue-400 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
                 </div>
                 <h3 className="relative mb-4 line-clamp-2 text-base font-bold text-gray-900 dark:text-white">
                   {issue.summary}
                 </h3>
                 <div className="relative flex flex-wrap items-center gap-2">
-                  <span className="rounded-md bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                  <span className="rounded-lg border-2 border-blue-300 bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700 shadow-sm dark:border-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
                     {issue.project.key}
                   </span>
                   {issue.priority && (
-                    <span className={`rounded-md px-2 py-1 text-xs font-semibold ${getPriorityColorClasses(issue.priority)}`}>
+                    <span className={`rounded-lg border-2 px-2 py-1 text-xs font-semibold shadow-sm ${getPriorityColorClasses(issue.priority)}`}>
                       {issue.priority}
                     </span>
                   )}
-                  <span className="rounded-md bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                  <span className="rounded-lg bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300">
                     {issue.type}
                   </span>
                 </div>
@@ -457,7 +432,7 @@ export default function JiraIssuesPage() {
                 href={issue.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative block border-l-4 border-t border-r border-b border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                className="group relative block border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
                 style={{
                   borderLeftColor: issue.statusColor === 'green' ? '#16a34a' : issue.statusColor === 'yellow' ? '#eab308' : issue.statusColor === 'blue' ? '#2563eb' : '#6b7280',
                 }}
@@ -469,7 +444,7 @@ export default function JiraIssuesPage() {
                         {issue.key}
                       </span>
                       <span
-                        className={`rounded-full px-2.5 py-1 text-xs font-semibold shadow-sm ${getStatusColorClasses(
+                        className={`rounded-lg border-2 px-2.5 py-1 text-xs font-semibold shadow-sm ${getStatusColorClasses(
                           issue.statusColor
                         )}`}
                       >
@@ -477,14 +452,14 @@ export default function JiraIssuesPage() {
                       </span>
                       {issue.priority && (
                         <span
-                          className={`rounded-md px-2 py-1 text-xs font-semibold ${getPriorityColorClasses(
+                          className={`rounded-lg border-2 px-2 py-1 text-xs font-semibold shadow-sm ${getPriorityColorClasses(
                             issue.priority
                           )}`}
                         >
                           {issue.priority}
                         </span>
                       )}
-                      <span className="rounded-md bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                      <span className="rounded-lg border-2 border-purple-300 bg-purple-100 px-2 py-1 text-xs font-semibold text-purple-700 shadow-sm dark:border-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
                         {issue.type}
                       </span>
                     </div>
@@ -506,19 +481,7 @@ export default function JiraIssuesPage() {
                       )}
                     </div>
                   </div>
-                  <svg
-                    className="h-6 w-6 shrink-0 text-blue-400 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
+                  <ChevronRight className="h-6 w-6 shrink-0 text-blue-400 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
                 </div>
               </a>
             ))}

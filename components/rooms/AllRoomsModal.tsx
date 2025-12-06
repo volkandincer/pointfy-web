@@ -176,7 +176,7 @@ const AllRoomsModal = memo(function AllRoomsModal({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Oda adı, kod veya oluşturan ile ara..."
-            className="w-full border border-gray-300 bg-white px-4 py-3 pl-10 text-sm outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
+            className="w-full border-2 border-gray-300 bg-white px-4 py-3 pl-10 text-sm outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
           />
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
           {searchQuery && (
@@ -201,7 +201,7 @@ const AllRoomsModal = memo(function AllRoomsModal({
             {Array.from({ length: 3 }).map((_, idx) => (
               <div
                 key={idx}
-                className="h-20 animate-pulse border border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800"
+                className="h-20 animate-pulse border-2 border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800"
               />
             ))}
           </div>
@@ -227,7 +227,7 @@ const AllRoomsModal = memo(function AllRoomsModal({
               <button
                 key={room.id}
                 onClick={() => handleRoomClick(room.id)}
-                className="group w-full border-l-4 border-t border-r border-b border-gray-300 bg-white p-4 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                className="group w-full border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
                 style={{
                   borderLeftColor: '#2563eb',
                 }}
@@ -244,7 +244,7 @@ const AllRoomsModal = memo(function AllRoomsModal({
                       {room.name || "Oda"}
                     </h3>
                     <div className="flex items-center gap-2">
-                      <span className="rounded-md bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                      <span className="rounded-lg border-2 border-gray-300 bg-white px-2 py-0.5 text-xs font-semibold text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
                         {room.code}
                       </span>
                       {room.created_by_username && (

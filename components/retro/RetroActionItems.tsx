@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useState, useCallback, useMemo } from "react";
+import { ClipboardList, User, Clock, CheckCircle2, Edit, Trash2, RotateCcw, Printer, Plus, Circle, AlertCircle, Lightbulb, Search, HelpCircle } from "lucide-react";
 import { getSupabase } from "@/lib/supabase";
 import { useRetroActionItems } from "@/hooks/useRetroActionItems";
 import { useRoomCustomFlags } from "@/hooks/useRoomCustomFlags";
@@ -32,13 +33,13 @@ const RetroActionItems = memo(function RetroActionItems({
   const [showAddModal, setShowAddModal] = useState<boolean>(false);
   const [editingItem, setEditingItem] = useState<RetroActionItem | null>(null);
 
-  const PREDEFINED_FLAGS: Record<string, { emoji: string; label: string; color: string }> = {
-    "high-priority": { emoji: "🔴", label: "Yüksek Öncelik", color: "#EF4444" },
-    "medium-priority": { emoji: "🟡", label: "Orta Öncelik", color: "#F59E0B" },
-    "low-priority": { emoji: "🟢", label: "Düşük Öncelik", color: "#10B981" },
-    improvement: { emoji: "🔵", label: "İyileştirme", color: "#3B82F6" },
-    research: { emoji: "🟣", label: "Araştırma", color: "#8B5CF6" },
-    general: { emoji: "⚪", label: "Genel", color: "#6B7280" },
+  const PREDEFINED_FLAGS: Record<string, { icon: typeof Circle; label: string; color: string }> = {
+    "high-priority": { icon: Circle, label: "Yüksek Öncelik", color: "#EF4444" },
+    "medium-priority": { icon: AlertCircle, label: "Orta Öncelik", color: "#F59E0B" },
+    "low-priority": { icon: CheckCircle2, label: "Düşük Öncelik", color: "#10B981" },
+    improvement: { icon: Lightbulb, label: "İyileştirme", color: "#3B82F6" },
+    research: { icon: Search, label: "Araştırma", color: "#8B5CF6" },
+    general: { icon: HelpCircle, label: "Genel", color: "#6B7280" },
   };
 
   const completedItems = useMemo(
@@ -58,7 +59,7 @@ const RetroActionItems = memo(function RetroActionItems({
         return;
       }
       if (!cardsRevealed) {
-        showToast("❌ Önce kartları açmanız gerekiyor!", "error");
+        showToast("Önce kartları açmanız gerekiyor!", "error");
         return;
       }
 
@@ -77,7 +78,7 @@ const RetroActionItems = memo(function RetroActionItems({
 
         if (error) throw error;
         setShowAddModal(false);
-        showToast("✅ Aksiyon maddesi başarıyla eklendi!", "success");
+        showToast("Aksiyon maddesi başarıyla eklendi!", "success");
       } catch (err) {
         showToast("Aksiyon maddesi eklenirken bir hata oluştu.", "error");
       }
@@ -106,7 +107,7 @@ const RetroActionItems = memo(function RetroActionItems({
 
         if (error) throw error;
         setEditingItem(null);
-        showToast("✅ Aksiyon maddesi başarıyla güncellendi!", "success");
+        showToast("Aksiyon maddesi başarıyla güncellendi!", "success");
       } catch (err) {
         showToast("Aksiyon maddesi güncellenirken bir hata oluştu.", "error");
       }
@@ -132,7 +133,7 @@ const RetroActionItems = memo(function RetroActionItems({
           .eq("id", item.id);
 
         if (error) throw error;
-        showToast("✅ Aksiyon maddesi başarıyla silindi!", "success");
+        showToast("Aksiyon maddesi başarıyla silindi!", "success");
       } catch (err) {
         showToast("Aksiyon maddesi silinirken bir hata oluştu.", "error");
       }
@@ -161,8 +162,8 @@ const RetroActionItems = memo(function RetroActionItems({
         if (error) throw error;
         showToast(
           item.is_completed
-            ? "✅ Aksiyon maddesi beklemeye alındı!"
-            : "✅ Aksiyon maddesi tamamlandı!",
+            ? "Aksiyon maddesi beklemeye alındı!"
+            : "Aksiyon maddesi tamamlandı!",
           "success"
         );
       } catch (err) {
@@ -194,12 +195,12 @@ const RetroActionItems = memo(function RetroActionItems({
   // Kartlar açılmadıysa aksiyon maddelerini gösterme
   if (!cardsRevealed) {
     return (
-      <div className="border border-gray-300 bg-white p-8 text-center dark:border-gray-700 dark:bg-gray-900">
-        <p className="mb-2 text-4xl">📋</p>
+      <div className="border-2 border-gray-300 bg-white p-8 text-center shadow-sm dark:border-gray-700 dark:bg-gray-900">
+        <ClipboardList className="mx-auto mb-3 h-12 w-12 text-gray-400 dark:text-gray-500" />
         <p className="font-medium text-gray-900 dark:text-white">
           Aksiyon Maddeleri
         </p>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
           Kartlar açıldıktan sonra aksiyon maddeleri eklenebilir.
         </p>
       </div>
@@ -225,8 +226,8 @@ const RetroActionItems = memo(function RetroActionItems({
       {/* Header */}
       <div className="flex flex-col gap-4 no-print sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center border-2 border-indigo-600 bg-indigo-50 text-xl dark:bg-indigo-900/20">
-            📋
+          <div className="flex h-10 w-10 items-center justify-center border-2 border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20">
+            <ClipboardList className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
           </div>
           <div>
             <h3 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -244,38 +245,14 @@ const RetroActionItems = memo(function RetroActionItems({
               className="flex items-center justify-center gap-2 border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
               title="Yazdır/PDF"
             >
-              <svg
-                className="h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
-                />
-              </svg>
+              <Printer className="h-4 w-4" />
               Yazdır
             </button>
             <button
               onClick={() => setShowAddModal(true)}
               className="flex items-center justify-center gap-2 border-2 border-indigo-600 bg-indigo-600 px-6 py-3 text-base font-bold text-white transition-colors hover:bg-indigo-700 hover:border-indigo-700"
             >
-              <svg
-                className="h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2.5}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
+              <Plus className="h-5 w-5" />
               Yeni Aksiyon Maddesi Ekle
             </button>
           </div>
@@ -286,7 +263,7 @@ const RetroActionItems = memo(function RetroActionItems({
       {pendingItems.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <div className="h-1 w-1 rounded-full bg-orange-500"></div>
+            <div className="h-1.5 w-1.5 border-2 border-orange-600 bg-orange-500"></div>
             <h4 className="text-sm font-bold uppercase tracking-wide text-gray-700 dark:text-gray-300">
               Bekleyen Aksiyonlar ({pendingItems.length})
             </h4>
@@ -310,12 +287,12 @@ const RetroActionItems = memo(function RetroActionItems({
                 : flagInfo && "flag_name" in flagInfo
                 ? flagInfo.flag_name
                 : "";
-            const flagEmoji = flagInfo && "emoji" in flagInfo ? flagInfo.emoji : "";
+            const FlagIcon = flagInfo && "icon" in flagInfo ? flagInfo.icon : null;
 
             return (
               <div
                 key={item.id}
-                className="group relative border-l-4 border-t border-r border-b border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                className="group relative border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
                 style={{
                   borderLeftColor: '#f97316',
                 }}
@@ -324,14 +301,14 @@ const RetroActionItems = memo(function RetroActionItems({
                 {flagInfo && (
                   <div className="mb-3">
                     <span
-                      className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold shadow-sm"
+                      className="inline-flex items-center gap-1.5 rounded-lg border-2 px-3 py-1 text-xs font-bold shadow-sm"
                       style={{
                         backgroundColor: `${flagColor}15`,
                         color: flagColor,
-                        border: `1px solid ${flagColor}40`,
+                        borderColor: flagColor,
                       }}
                     >
-                      <span className="text-sm">{flagEmoji}</span>
+                      {FlagIcon && <FlagIcon className="h-3.5 w-3.5" />}
                       {flagLabel}
                     </span>
                   </div>
@@ -345,41 +322,17 @@ const RetroActionItems = memo(function RetroActionItems({
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-between border-t border-gray-200 pt-4 dark:border-gray-700">
+                <div className="flex items-center justify-between border-t-2 border-gray-200 pt-4 dark:border-gray-700">
                   <div className="flex items-center gap-4 text-xs font-medium text-gray-600 dark:text-gray-400">
                     <div className="flex items-center gap-2">
-                      <svg
-                        className="h-4 w-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                        />
-                      </svg>
+                      <User className="h-4 w-4" />
                       <span className="font-semibold text-gray-700 dark:text-gray-300">
                         {item.created_by_username}
                       </span>
                     </div>
                     <span className="text-gray-400">•</span>
                     <div className="flex items-center gap-2">
-                      <svg
-                        className="h-4 w-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
+                      <Clock className="h-4 w-4" />
                       <span className="text-gray-600 dark:text-gray-400">
                         {new Date(item.created_at).toLocaleDateString("tr-TR", {
                           day: "numeric",
@@ -399,19 +352,7 @@ const RetroActionItems = memo(function RetroActionItems({
                         className="flex items-center gap-1.5 border-2 border-green-600 bg-green-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-green-700 hover:border-green-700"
                         title="Tamamla"
                       >
-                        <svg
-                          className="h-4 w-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
+                        <CheckCircle2 className="h-4 w-4" />
                         Tamamla
                       </button>
                       <button
@@ -419,19 +360,7 @@ const RetroActionItems = memo(function RetroActionItems({
                         className="flex items-center gap-1.5 border-2 border-blue-600 bg-blue-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-blue-700 hover:border-blue-700"
                         title="Düzenle"
                       >
-                        <svg
-                          className="h-4 w-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                          />
-                        </svg>
+                        <Edit className="h-4 w-4" />
                         Düzenle
                       </button>
                       <button
@@ -439,19 +368,7 @@ const RetroActionItems = memo(function RetroActionItems({
                         className="flex items-center gap-1.5 border-2 border-red-600 bg-red-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-red-700 hover:border-red-700"
                         title="Sil"
                       >
-                        <svg
-                          className="h-4 w-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          />
-                        </svg>
+                        <Trash2 className="h-4 w-4" />
                         Sil
                       </button>
                     </div>
@@ -467,7 +384,7 @@ const RetroActionItems = memo(function RetroActionItems({
       {completedItems.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <div className="h-1 w-1 rounded-full bg-green-500"></div>
+            <div className="h-1.5 w-1.5 border-2 border-green-600 bg-green-500"></div>
             <h4 className="text-sm font-bold uppercase tracking-wide text-gray-700 dark:text-gray-300">
               Tamamlanan Aksiyonlar ({completedItems.length})
             </h4>
@@ -491,12 +408,12 @@ const RetroActionItems = memo(function RetroActionItems({
                 : flagInfo && "flag_name" in flagInfo
                 ? flagInfo.flag_name
                 : "";
-            const flagEmoji = flagInfo && "emoji" in flagInfo ? flagInfo.emoji : "";
+            const FlagIcon = flagInfo && "icon" in flagInfo ? flagInfo.icon : null;
 
             return (
               <div
                 key={item.id}
-                className="group relative border-l-4 border-t border-r border-b border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                className="group relative border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
                 style={{
                   borderLeftColor: '#16a34a',
                 }}
@@ -504,19 +421,7 @@ const RetroActionItems = memo(function RetroActionItems({
                 {/* Completed Badge */}
                 <div className="absolute right-4 top-4">
                   <div className="flex h-8 w-8 items-center justify-center border-2 border-green-600 bg-green-600 text-white">
-                    <svg
-                      className="h-5 w-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
+                    <CheckCircle2 className="h-5 w-5" />
                   </div>
                 </div>
 
@@ -524,14 +429,14 @@ const RetroActionItems = memo(function RetroActionItems({
                 {flagInfo && (
                   <div className="mb-3">
                     <span
-                      className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold shadow-sm opacity-75"
+                      className="inline-flex items-center gap-1.5 rounded-lg border-2 px-3 py-1 text-xs font-bold shadow-sm opacity-75"
                       style={{
                         backgroundColor: `${flagColor}15`,
                         color: flagColor,
-                        border: `1px solid ${flagColor}40`,
+                        borderColor: flagColor,
                       }}
                     >
-                      <span className="text-sm">{flagEmoji}</span>
+                      {FlagIcon && <FlagIcon className="h-3.5 w-3.5" />}
                       {flagLabel}
                     </span>
                   </div>
@@ -545,41 +450,17 @@ const RetroActionItems = memo(function RetroActionItems({
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-between border-t border-green-200 pt-4 dark:border-green-800/50">
+                <div className="flex items-center justify-between border-t-2 border-green-200 pt-4 dark:border-green-800/50">
                   <div className="flex items-center gap-4 text-xs font-medium text-gray-600 dark:text-gray-400">
                     <div className="flex items-center gap-2">
-                      <svg
-                        className="h-4 w-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                        />
-                      </svg>
+                      <User className="h-4 w-4" />
                       <span className="font-semibold text-gray-700 dark:text-gray-300">
                         {item.created_by_username}
                       </span>
                     </div>
                     <span className="text-gray-400">•</span>
                     <div className="flex items-center gap-2">
-                      <svg
-                        className="h-4 w-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
+                      <CheckCircle2 className="h-4 w-4" />
                       <span className="text-gray-600 dark:text-gray-400">
                         {item.completed_at &&
                           new Date(item.completed_at).toLocaleDateString("tr-TR", {
@@ -600,19 +481,7 @@ const RetroActionItems = memo(function RetroActionItems({
                         className="flex items-center gap-1.5 border-2 border-gray-600 bg-gray-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-gray-700 hover:border-gray-700"
                         title="Geri Al"
                       >
-                        <svg
-                          className="h-4 w-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                          />
-                        </svg>
+                        <RotateCcw className="h-4 w-4" />
                         Geri Al
                       </button>
                       <button
@@ -620,19 +489,7 @@ const RetroActionItems = memo(function RetroActionItems({
                         className="flex items-center gap-1.5 border-2 border-blue-600 bg-blue-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-blue-700 hover:border-blue-700"
                         title="Düzenle"
                       >
-                        <svg
-                          className="h-4 w-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                          />
-                        </svg>
+                        <Edit className="h-4 w-4" />
                         Düzenle
                       </button>
                       <button
@@ -640,19 +497,7 @@ const RetroActionItems = memo(function RetroActionItems({
                         className="flex items-center gap-1.5 border-2 border-red-600 bg-red-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-red-700 hover:border-red-700"
                         title="Sil"
                       >
-                        <svg
-                          className="h-4 w-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          />
-                        </svg>
+                        <Trash2 className="h-4 w-4" />
                         Sil
                       </button>
                     </div>
@@ -668,8 +513,8 @@ const RetroActionItems = memo(function RetroActionItems({
       {actionItems.length === 0 && (
         <div className="border-2 border-dashed border-gray-300 bg-white p-12 text-center dark:border-gray-700 dark:bg-gray-900">
           <div className="mb-4 flex justify-center">
-            <div className="flex h-16 w-16 items-center justify-center border-2 border-indigo-600 bg-indigo-50 text-3xl dark:bg-indigo-900/30">
-              📋
+            <div className="flex h-16 w-16 items-center justify-center border-2 border-indigo-600 bg-indigo-50 dark:bg-indigo-900/30">
+              <ClipboardList className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
             </div>
           </div>
           <h3 className="mb-2 text-lg font-bold text-gray-900 dark:text-white">
@@ -685,19 +530,7 @@ const RetroActionItems = memo(function RetroActionItems({
               onClick={() => setShowAddModal(true)}
               className="mx-auto flex items-center gap-3 border-2 border-indigo-600 bg-indigo-600 px-8 py-4 text-base font-bold text-white transition-colors hover:bg-indigo-700 hover:border-indigo-700"
             >
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2.5}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
+              <Plus className="h-6 w-6" />
               İlk Aksiyon Maddesini Ekle
             </button>
           )}

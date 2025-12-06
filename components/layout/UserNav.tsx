@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useEffect, useState } from "react";
+import { User, LogOut } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getSupabase } from "@/lib/supabase";
@@ -45,7 +46,7 @@ const UserNav = memo(function UserNav() {
     return (
       <Link
         href="/login"
-        className="rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-md"
+        className="min-h-[44px] rounded-lg border-2 border-blue-600 bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all active:border-blue-700 active:bg-blue-700 active:shadow-md hover:border-blue-700 hover:bg-blue-700 hover:shadow-md"
       >
         Giriş Yap
       </Link>
@@ -56,30 +57,10 @@ const UserNav = memo(function UserNav() {
     <div className="flex items-center gap-2">
       <Link
         href="/app/account"
-        className="group flex items-center gap-2 rounded-lg border border-gray-200/80 bg-white px-3 py-2 text-sm font-semibold text-gray-700 shadow-sm transition-all hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-blue-500 dark:hover:bg-blue-900/20 dark:hover:text-blue-400"
+        className="group flex min-h-[44px] items-center gap-2 rounded-lg border-2 border-gray-200/80 bg-white px-3 py-2 text-sm font-semibold text-gray-700 shadow-sm transition-all active:border-blue-300 active:bg-blue-50 active:text-blue-700 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:active:border-blue-500 dark:active:bg-blue-900/20 dark:active:text-blue-400 dark:hover:border-blue-500 dark:hover:bg-blue-900/20 dark:hover:text-blue-400"
       >
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-sm">
-          <svg
-            className="h-4 w-4"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12Z"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M19 20C19 17.2386 15.866 15 12 15C8.13401 15 5 17.2386 5 20"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+        <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-blue-600 bg-blue-600 text-white">
+          <User className="h-4 w-4" />
         </div>
         <span className="hidden sm:inline">Hesabım</span>
       </Link>
@@ -95,37 +76,10 @@ const UserNav = memo(function UserNav() {
             router.replace("/login");
           }
         }}
-        className="group relative flex items-center gap-2 rounded-lg border border-red-200/70 bg-white px-3 py-2 text-sm font-semibold text-gray-600 shadow-sm transition-all hover:border-red-300 hover:bg-red-50 hover:text-red-700 dark:border-red-500/40 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-red-500 dark:hover:bg-red-900/20 dark:hover:text-red-400"
+        className="group relative flex min-h-[44px] items-center gap-2 rounded-lg border-2 border-red-200/70 bg-white px-3 py-2 text-sm font-semibold text-gray-600 shadow-sm transition-all active:border-red-300 active:bg-red-50 active:text-red-700 hover:border-red-300 hover:bg-red-50 hover:text-red-700 dark:border-red-500/40 dark:bg-gray-800 dark:text-gray-300 dark:active:border-red-500 dark:active:bg-red-900/20 dark:active:text-red-400 dark:hover:border-red-500 dark:hover:bg-red-900/20 dark:hover:text-red-400"
       >
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-red-500 via-red-500 to-pink-500 text-white shadow-sm transition-all group-hover:shadow-md">
-          <svg
-            className="h-4 w-4"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M13 6L13 4C13 3.44772 12.5523 3 12 3L5 3C4.44772 3 4 3.44772 4 4L4 20C4 20.5523 4.44772 21 5 21L12 21C12.5523 21 13 20.5523 13 20L13 18"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M17 16L20 12L17 8"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M9 12L20 12"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+        <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-red-600 bg-red-600 text-white">
+          <LogOut className="h-4 w-4" />
         </div>
         <span className="hidden sm:inline">Çıkış Yap</span>
       </button>

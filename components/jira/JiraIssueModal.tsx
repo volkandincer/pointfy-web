@@ -59,13 +59,13 @@ const JiraIssueModal = memo(function JiraIssueModal({
       }}
     >
       <div
-        className="relative w-full max-w-3xl my-8 border border-gray-300 bg-white shadow-md dark:border-gray-700 dark:bg-gray-900"
+        className="relative w-full max-w-3xl my-8 border-2 border-gray-300 bg-white shadow-md dark:border-gray-700 dark:bg-gray-900"
         onClick={(e) => e.stopPropagation()}
         onTouchStart={(e) => e.stopPropagation()}
         onTouchMove={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="border-b border-gray-200 p-6 dark:border-gray-800">
+        <div className="border-b-2 border-gray-200 p-6 dark:border-gray-800">
           <div className="mb-4 flex items-start justify-between">
             <div className="flex-1">
               <div className="mb-3 flex flex-wrap items-center gap-2">
@@ -73,17 +73,17 @@ const JiraIssueModal = memo(function JiraIssueModal({
                   {issue.key}
                 </span>
                 <span
-                  className={`rounded-full px-3 py-1 text-xs font-semibold ${getStatusColorClasses(issue.statusColor || "gray")}`}
+                  className={`rounded-lg border-2 px-3 py-1 text-xs font-semibold shadow-sm ${getStatusColorClasses(issue.statusColor || "gray")}`}
                 >
                   {issue.status}
                 </span>
                 {issue.priority && (
-                  <span className={`rounded-full px-3 py-1 text-xs font-medium ${getPriorityColorClasses(issue.priority)}`}>
+                  <span className={`rounded-lg border-2 px-3 py-1 text-xs font-medium shadow-sm ${getPriorityColorClasses(issue.priority)}`}>
                     {issue.priority}
                   </span>
                 )}
                 {issue.type && (
-                  <span className="rounded-full bg-purple-100 px-3 py-1 text-xs font-medium text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
+                  <span className="rounded-lg border-2 border-purple-300 bg-purple-100 px-3 py-1 text-xs font-medium text-purple-700 shadow-sm dark:border-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
                     {issue.type}
                   </span>
                 )}
@@ -117,7 +117,7 @@ const JiraIssueModal = memo(function JiraIssueModal({
               <h3 className="mb-2 text-sm font-semibold text-gray-900 dark:text-white">
                 Açıklama
               </h3>
-              <div className="border border-gray-300 bg-gray-50 p-4 text-sm leading-relaxed text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+              <div className="border-2 border-gray-300 bg-gray-50 p-4 text-sm leading-relaxed text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
                 {issue.description}
               </div>
             </div>
@@ -221,7 +221,7 @@ const JiraIssueModal = memo(function JiraIssueModal({
         </div>
 
         {/* Footer */}
-        <div className="border-t border-gray-200 p-4 dark:border-gray-800">
+        <div className="border-t-2 border-gray-200 p-4 dark:border-gray-800">
           <div className="flex items-center justify-between">
             <a
               href={issue.url}

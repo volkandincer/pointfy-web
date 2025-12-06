@@ -97,7 +97,7 @@ const NoteList = memo(function NoteList({
         return (
           <div
             key={note.id}
-            className="group relative border-l-4 border-t border-r border-b border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+            className="group relative border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
             style={{
               borderLeftColor: categoryStyle.borderColor,
             }}
@@ -123,7 +123,7 @@ const NoteList = memo(function NoteList({
                         onDelete(note.id);
                       }
                     }}
-                    className="border border-red-600 bg-white p-1.5 text-red-600 transition-colors hover:bg-red-50 dark:bg-gray-900 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-900/20"
+                    className="border-2 border-red-600 bg-white p-1.5 text-red-600 transition-colors hover:bg-red-50 dark:bg-gray-900 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-900/20"
                     title="Sil"
                   >
                     <Trash2 className="h-4 w-4" />
@@ -138,7 +138,7 @@ const NoteList = memo(function NoteList({
               </div>
 
               {/* Info Section */}
-              <div className="mb-4 space-y-2 border-t border-gray-300 pt-4 dark:border-gray-700">
+              <div className="mb-4 space-y-2 border-t-2 border-gray-300 pt-4 dark:border-gray-700">
                 {/* Created Date */}
                 {dateValue && (
                   <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">

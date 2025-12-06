@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useState, useRef, useEffect } from "react";
+import { ChevronDown, Check } from "lucide-react";
 
 interface MobileSelectProps {
   value: string;
@@ -49,25 +50,15 @@ const MobileSelect = memo(function MobileSelect({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full rounded-lg border border-gray-300 bg-gray-50/50 px-3 py-3 text-base text-gray-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800/50 dark:text-white dark:focus:bg-gray-800 sm:py-2.5 sm:text-sm"
+        className="w-full rounded-lg border-2 border-gray-300 bg-white px-3 py-3 text-base text-gray-900 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white sm:py-2.5 sm:text-sm"
       >
         <div className="flex items-center justify-between">
           <span>{selectedOption.label}</span>
-          <svg
+          <ChevronDown
             className={`h-5 w-5 text-gray-400 transition-transform ${
               isOpen ? "rotate-180" : ""
             }`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
+          />
         </div>
       </button>
 
@@ -83,7 +74,7 @@ const MobileSelect = memo(function MobileSelect({
             }}
           />
           {/* Dropdown Menu */}
-          <div className="absolute z-[9999] mt-1 w-full rounded-lg border border-gray-200 bg-white shadow-xl dark:border-gray-700 dark:bg-gray-800">
+          <div className="absolute z-[9999] mt-1 w-full rounded-lg border-2 border-gray-300 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800">
             <div 
               className="max-h-[60vh] overflow-y-auto overscroll-contain"
               style={{ 
@@ -121,19 +112,7 @@ const MobileSelect = memo(function MobileSelect({
                   <div className="flex items-center justify-between">
                     <span>{option.label}</span>
                     {value === option.value && (
-                      <svg
-                        className="h-5 w-5 text-blue-600 dark:text-blue-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
+                      <Check className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                     )}
                   </div>
                 </button>

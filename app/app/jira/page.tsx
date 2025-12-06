@@ -108,10 +108,10 @@ export default function JiraDashboardPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
+        <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
           Dashboard
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-sm text-gray-600 dark:text-gray-400">
           Jira projelerinizin ve issue&apos;larınızın özeti
         </p>
       </div>
@@ -120,7 +120,7 @@ export default function JiraDashboardPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Link
           href="/app/jira/projects"
-          className="border border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+          className="border-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
         >
           <div className="mb-4 flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
@@ -141,7 +141,7 @@ export default function JiraDashboardPage() {
 
         <Link
           href="/app/jira/issues"
-          className="border border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+          className="border-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
         >
           <div className="mb-4 flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20">
@@ -162,7 +162,7 @@ export default function JiraDashboardPage() {
 
         <Link
           href="/app/jira/boards"
-          className="border border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+          className="border-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
         >
           <div className="mb-4 flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20">
@@ -183,7 +183,7 @@ export default function JiraDashboardPage() {
 
         <Link
           href="/app/jira/search"
-          className="border border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+          className="border-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
         >
           <div className="mb-4 flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center border-2 border-orange-600 bg-orange-50 dark:bg-orange-900/20">
@@ -200,10 +200,10 @@ export default function JiraDashboardPage() {
       {/* Recent Projects & Issues */}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Recent Projects */}
-        <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+        <div className="border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg border-2 border-blue-600 bg-blue-600 text-white shadow-sm">
                 <Folder className="h-5 w-5" />
               </div>
               <h2 className="text-lg font-bold text-gray-900 dark:text-white">
@@ -233,10 +233,10 @@ export default function JiraDashboardPage() {
                 <Link
                   key={project.id}
                   href={`/app/jira/${project.location?.projectKey || project.id}`}
-                  className="group block rounded-xl border border-gray-200 bg-gradient-to-r from-gray-50 to-white p-4 transition-all hover:border-blue-300 hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-50/50 hover:shadow-md dark:border-gray-700 dark:from-gray-800 dark:to-gray-900 dark:hover:border-blue-600 dark:hover:from-blue-900/20 dark:hover:to-blue-900/10"
+                  className="group block rounded-lg border-2 border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-blue-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:hover:border-blue-500"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-sm transition-transform group-hover:scale-110">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border-2 border-blue-600 bg-blue-600 text-white shadow-sm">
                       <Folder className="h-5 w-5" />
                     </div>
                     <div className="min-w-0 flex-1">
@@ -267,7 +267,7 @@ export default function JiraDashboardPage() {
         </div>
 
         {/* Recent Issues */}
-        <div className="border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+        <div className="border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20">
@@ -302,14 +302,14 @@ export default function JiraDashboardPage() {
                   href={issue.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group block rounded-xl border border-gray-200 bg-gradient-to-r from-gray-50 to-white p-4 transition-all hover:border-green-300 hover:bg-gradient-to-r hover:from-green-50 hover:to-green-50/50 hover:shadow-md dark:border-gray-700 dark:from-gray-800 dark:to-gray-900 dark:hover:border-green-600 dark:hover:from-green-900/20 dark:hover:to-green-900/10"
+                  className="group block rounded-lg border-2 border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-green-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:hover:border-green-500"
                 >
                   <div className="mb-2 flex flex-wrap items-center gap-2">
-                    <span className="rounded-md bg-blue-100 px-2 py-0.5 font-mono text-xs font-bold text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                    <span className="rounded-lg border-2 border-blue-300 bg-blue-100 px-2 py-0.5 font-mono text-xs font-bold text-blue-700 shadow-sm dark:border-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
                       {issue.key}
                     </span>
                     <span
-                      className={`rounded-full px-2 py-0.5 text-xs font-semibold ${getStatusColorClasses(
+                      className={`rounded-lg border-2 px-2 py-0.5 text-xs font-semibold ${getStatusColorClasses(
                         issue.statusColor
                       )}`}
                     >
@@ -325,7 +325,7 @@ export default function JiraDashboardPage() {
           ) : (
             <div className="py-12 text-center">
               <div className="mb-3 flex justify-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-green-500/10 to-green-600/10">
+                <div className="flex h-16 w-16 items-center justify-center rounded-lg border-2 border-green-600 bg-green-50 dark:bg-green-900/20">
                   <ClipboardList className="h-8 w-8 text-green-400" />
                 </div>
               </div>

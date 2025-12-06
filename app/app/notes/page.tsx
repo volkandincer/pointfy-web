@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Plus } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getDefaultNavigationItems } from "@/lib/utils";
@@ -64,16 +65,16 @@ export default function NotesPage() {
               {/* Header Section */}
               <div className="mb-8">
                 <div className="mb-6">
-                  <h1 className="mb-3 text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+                  <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
                     Notlarım
                   </h1>
-                  <p className="text-lg text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
                     Kişisel notlarını kategorilere ayır, toplantı öncesi hazırlık yap!
                   </p>
                 </div>
 
                 {/* Chip Filter Bar */}
-                <div className="mb-6 border border-gray-300 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                <div className="mb-6 border-2 border-gray-300 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
                   <div className="flex flex-wrap gap-2">
                     {categories.map((cat) => (
                       <button
@@ -100,19 +101,7 @@ export default function NotesPage() {
                     }}
                     className="group inline-flex items-center gap-2 border-2 border-purple-600 bg-purple-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-purple-700 hover:border-purple-700"
                   >
-                    <svg
-                      className="h-5 w-5 transition-transform group-hover:rotate-90"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 4v16m8-8H4"
-                      />
-                    </svg>
+                    <Plus className="h-5 w-5 transition-transform group-hover:rotate-90" />
                     Yeni Not Ekle
                   </button>
                 </div>
@@ -125,7 +114,7 @@ export default function NotesPage() {
                     {[1, 2, 3, 4, 5, 6].map((i) => (
                       <div
                         key={i}
-                        className="h-64 animate-pulse border border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800"
+                        className="h-64 animate-pulse border-2 border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800"
                       />
                     ))}
                   </div>

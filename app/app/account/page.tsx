@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { X, CheckCircle2, Link2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -214,7 +215,7 @@ export default function AccountPage() {
 
       setUsername(newUsername.trim());
       setEditingUsername(false);
-      showToast("✅ Kullanıcı adı başarıyla güncellendi!", "success");
+      showToast("Kullanıcı adı başarıyla güncellendi!", "success");
     } catch (err) {
       showToast("Kullanıcı adı güncellenemedi.", "error");
     } finally {
@@ -290,7 +291,7 @@ export default function AccountPage() {
       if (error) throw error;
 
       setJiraConnected(false);
-      showToast("✅ Jira hesabı bağlantıdan koparıldı.", "success");
+      showToast("Jira hesabı bağlantıdan koparıldı.", "success");
     } catch (err) {
       showToast("Jira bağlantısı koparılamadı.", "error");
     }
@@ -301,7 +302,7 @@ export default function AccountPage() {
       <>
         <Header navigationItems={navigationItems} />
         <main className="container mx-auto px-4 py-16">
-          <div className="h-40 animate-pulse border border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
+          <div className="h-40 animate-pulse border-2 border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
         </main>
         <Footer navigationItems={navigationItems} />
       </>
@@ -329,14 +330,15 @@ export default function AccountPage() {
                 <button
                   onClick={() => setErrorMessage(null)}
                   className="ml-2 text-red-800 hover:text-red-900 dark:text-red-300 dark:hover:text-red-200"
+                  aria-label="Kapat"
                 >
-                  ✕
+                  <X className="h-4 w-4" />
                 </button>
               </div>
             )}
 
             {/* Profil Bilgileri */}
-            <div className="mb-6 border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+            <div className="mb-6 border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
               <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
                 Profil Bilgileri
               </h2>
@@ -350,7 +352,7 @@ export default function AccountPage() {
                     type="email"
                     value={email}
                     disabled
-                    className="w-full border border-gray-300 bg-gray-50 px-3 py-2 text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
+                    className="w-full border-2 border-gray-300 bg-gray-50 px-3 py-2 text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
                   />
                   <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                     E-posta adresi değiştirilemez
@@ -370,7 +372,7 @@ export default function AccountPage() {
                         onChange={(e) => setNewUsername(e.target.value)}
                         placeholder="Kullanıcı adı"
                         maxLength={50}
-                        className="flex-1 border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                        className="flex-1 border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                         disabled={saving}
                       />
                       <button
@@ -397,7 +399,7 @@ export default function AccountPage() {
                         type="text"
                         value={username}
                         disabled
-                        className="flex-1 border border-gray-300 bg-gray-50 px-3 py-2 text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
+                        className="flex-1 border-2 border-gray-300 bg-gray-50 px-3 py-2 text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
                       />
                       <button
                         onClick={() => setEditingUsername(true)}
@@ -412,7 +414,7 @@ export default function AccountPage() {
             </div>
 
             {/* Jira Bağlantısı */}
-            <div className="mb-6 border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+            <div className="mb-6 border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
               <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
                 Jira Bağlantısı
               </h2>
@@ -425,17 +427,7 @@ export default function AccountPage() {
                     disabled
                     className="flex w-full items-center justify-center gap-3 border-2 border-green-600 bg-green-50 px-4 py-2.5 text-sm font-semibold text-green-700 dark:bg-green-900/20 dark:text-green-400"
                   >
-                    <svg
-                      className="h-5 w-5 text-green-600 dark:text-green-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
                     Jira Bağlı
                   </button>
                   <button
@@ -450,20 +442,14 @@ export default function AccountPage() {
                   onClick={handleConnectJira}
                   className="flex w-full items-center justify-center gap-3 border-2 border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
                 >
-                  <svg
-                    className="h-5 w-5"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z" />
-                  </svg>
+                  <Link2 className="h-5 w-5" />
                   Jira Bağla
                 </button>
               )}
             </div>
 
             {/* Çıkış Yap */}
-            <div className="border border-red-300 bg-red-50 p-6 shadow-sm dark:border-red-700 dark:bg-red-900/10">
+            <div className="border-2 border-red-300 bg-red-50 p-6 shadow-sm dark:border-red-700 dark:bg-red-900/10">
               <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
                 Hesap İşlemleri
               </h2>
@@ -486,7 +472,7 @@ export default function AccountPage() {
           title="Jira Bağlantısı İçin Gerekli İzinler"
         >
           <div className="space-y-4">
-            <div className="border border-blue-300 bg-blue-50 p-3 dark:border-blue-700 dark:bg-blue-900/20">
+            <div className="border-2 border-blue-300 bg-blue-50 p-3 dark:border-blue-700 dark:bg-blue-900/20">
               <p className="text-sm text-blue-800 dark:text-blue-200">
                 <strong>Neden bu izinler gerekli?</strong> Jira hesabınızı bağlamak için bu izinlere
                 ihtiyacımız var. Bu sayede projelerinizi, issue&apos;larınızı ve board&apos;larınızı
@@ -494,9 +480,9 @@ export default function AccountPage() {
               </p>
             </div>
 
-            <div className="space-y-3 border border-gray-300 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
+            <div className="space-y-3 border-2 border-gray-300 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
               <div className="flex items-start gap-3">
-                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border-2 border-blue-600 bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:border-blue-500 dark:text-blue-400">
                   <span className="text-xs font-semibold">1</span>
                 </div>
                 <div className="flex-1">
@@ -515,7 +501,7 @@ export default function AccountPage() {
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border-2 border-blue-600 bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:border-blue-500 dark:text-blue-400">
                   <span className="text-xs font-semibold">2</span>
                 </div>
                 <div className="flex-1">
@@ -534,7 +520,7 @@ export default function AccountPage() {
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border-2 border-blue-600 bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:border-blue-500 dark:text-blue-400">
                   <span className="text-xs font-semibold">3</span>
                 </div>
                 <div className="flex-1">
@@ -553,7 +539,7 @@ export default function AccountPage() {
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400">
+                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border-2 border-green-600 bg-green-100 text-green-600 dark:bg-green-900/30 dark:border-green-500 dark:text-green-400">
                   <span className="text-xs font-semibold">✓</span>
                 </div>
                 <div className="flex-1">
@@ -571,9 +557,9 @@ export default function AccountPage() {
               </div>
             </div>
 
-            <div className="border border-green-300 bg-green-50 p-3 dark:border-green-700 dark:bg-green-900/20">
+            <div className="border-2 border-green-300 bg-green-50 p-3 dark:border-green-700 dark:bg-green-900/20">
               <p className="text-xs text-green-800 dark:text-green-200">
-                <strong>🔒 Güvenlik:</strong> Bu izinler sadece Jira verilerinize erişim sağlar. Hesap
+                <strong>Güvenlik:</strong> Bu izinler sadece Jira verilerinize erişim sağlar. Hesap
                 şifreniz, kişisel bilgileriniz veya diğer hassas verileriniz saklanmaz. İstediğiniz
                 zaman hesap ayarlarından bağlantıyı kaldırabilirsiniz.
               </p>

@@ -2,6 +2,7 @@
 
 import { memo, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { Search, X, Home, ChevronRight } from "lucide-react";
 import RoomPinModal from "@/components/rooms/RoomPinModal";
 import { useToastContext } from "@/contexts/ToastContext";
 import type { RoomInfo } from "@/interfaces/Room.interface";
@@ -198,18 +199,16 @@ const HomeWelcome = memo(function HomeWelcome() {
                 placeholder="Oda ara (ad, kod veya oluşturan)..."
                 className="w-full border-2 border-gray-300 bg-white px-5 py-4 pl-12 pr-12 text-base outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
               />
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl text-gray-400">
-                🔍
-              </span>
+              <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
               {searchQuery && (
                 <button
                   onClick={() => {
                     setSearchQuery("");
                     setShowResults(false);
                   }}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300"
                 >
-                  ✕
+                  <X className="h-5 w-5" />
                 </button>
               )}
             </div>
@@ -225,7 +224,7 @@ const HomeWelcome = memo(function HomeWelcome() {
                   </div>
                 ) : rooms.length === 0 ? (
                   <div className="p-6 text-center">
-                    <p className="mb-2 text-2xl">🔍</p>
+                    <Search className="mx-auto mb-2 h-8 w-8 text-gray-400 dark:text-gray-500" />
                     <p className="text-sm font-medium text-gray-900 dark:text-white">
                       Sonuç bulunamadı
                     </p>
@@ -239,21 +238,18 @@ const HomeWelcome = memo(function HomeWelcome() {
                       <button
                         key={room.id}
                         onClick={() => handleRoomClick(room.id)}
-                        className="group w-full border-l-4 border-t border-r border-b border-gray-300 bg-white p-4 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
-                        style={{
-                          borderLeftColor: '#2563eb',
-                        }}
+                        className="group w-full border-l-4 border-l-blue-600 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-l-blue-500 dark:border-gray-700 dark:bg-gray-900"
                       >
                         <div className="flex items-center gap-4">
-                          <div className="flex h-12 w-12 shrink-0 items-center justify-center border-2 border-blue-600 bg-blue-50 text-xl dark:bg-blue-900/20">
-                            🏠
+                          <div className="flex h-12 w-12 shrink-0 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
+                            <Home className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                           </div>
                           <div className="min-w-0 flex-1">
                             <h3 className="mb-1 truncate text-base font-semibold text-gray-900 dark:text-white">
                               {room.name || "Oda"}
                             </h3>
                             <div className="flex items-center gap-2">
-                              <span className="rounded-md bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                              <span className="rounded-lg border-2 border-gray-300 bg-white px-2 py-0.5 text-xs font-semibold text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
                                 {room.code}
                               </span>
                               {room.created_by_username && (
@@ -263,8 +259,8 @@ const HomeWelcome = memo(function HomeWelcome() {
                               )}
                             </div>
                           </div>
-                          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white shadow-sm transition group-hover:scale-110">
-                            <span className="text-sm font-bold">→</span>
+                          <div className="flex h-7 w-7 shrink-0 items-center justify-center border-2 border-blue-600 bg-blue-600 text-white shadow-sm transition group-hover:border-blue-700 group-hover:bg-blue-700">
+                            <ChevronRight className="h-4 w-4" />
                           </div>
                         </div>
                       </button>

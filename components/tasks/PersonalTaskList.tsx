@@ -55,7 +55,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
         return (
           <div
             key={t.id}
-            className="group relative border-l-4 border-t border-r border-b border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+            className="group relative border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
             style={{
               borderLeftColor: t.priority === 3 ? '#dc2626' : t.priority === 2 ? '#2563eb' : '#6b7280',
             }}
@@ -88,7 +88,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
               {/* Info Grid */}
               <div className="mb-4 grid grid-cols-2 gap-3">
                 {/* Category */}
-                <div className="border border-gray-200 bg-gray-50 p-2.5 dark:border-gray-700 dark:bg-gray-800">
+                <div className="border-2 border-gray-300 bg-gray-50 p-2.5 shadow-sm dark:border-gray-700 dark:bg-gray-800">
                   <p className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
                     Kategori
                   </p>
@@ -98,7 +98,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
                 </div>
 
                 {/* Priority */}
-                <div className="border border-gray-200 bg-gray-50 p-2.5 dark:border-gray-700 dark:bg-gray-800">
+                <div className="border-2 border-gray-300 bg-gray-50 p-2.5 shadow-sm dark:border-gray-700 dark:bg-gray-800">
                   <p className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
                     Öncelik
                   </p>
@@ -117,7 +117,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
               )}
 
               {/* Actions */}
-              <div className="flex items-center gap-2 border-t border-gray-300 pt-4 dark:border-gray-700">
+              <div className="flex items-center gap-2 border-t-2 border-gray-300 pt-4 dark:border-gray-700">
                 <button
                   onClick={() => onEdit(t)}
                   className="flex-1 inline-flex items-center justify-center gap-2 border-2 border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700"

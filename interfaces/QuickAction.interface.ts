@@ -3,7 +3,7 @@ export interface QuickAction {
   title: string;
   description: string;
   href: string;
-  icon: string; // emoji or icon name
+  icon?: string; // Optional - icon is mapped by QuickActions component
   onClick?: () => void | Promise<void>; // Optional click handler
 }
 
