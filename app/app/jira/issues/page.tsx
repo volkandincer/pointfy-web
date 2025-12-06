@@ -385,7 +385,7 @@ export default function JiraIssuesPage() {
                 href={issue.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative rounded-md border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                className="group relative border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
                 style={{
                   borderLeftColor: issue.statusColor === 'green' ? '#16a34a' : issue.statusColor === 'yellow' ? '#eab308' : issue.statusColor === 'blue' ? '#2563eb' : '#6b7280',
                 }}
@@ -432,7 +432,7 @@ export default function JiraIssuesPage() {
                 href={issue.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative block rounded-md border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                className="group relative block border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
                 style={{
                   borderLeftColor: issue.statusColor === 'green' ? '#16a34a' : issue.statusColor === 'yellow' ? '#eab308' : issue.statusColor === 'blue' ? '#2563eb' : '#6b7280',
                 }}

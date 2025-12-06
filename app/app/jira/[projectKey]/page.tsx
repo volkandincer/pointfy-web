@@ -408,7 +408,7 @@ export default function JiraProjectDetailPage() {
                 {[1, 2, 3, 4].map((i) => (
                   <div
                     key={i}
-                    className="group relative rounded-md border-2 border-gray-300 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900"
+                    className="group relative border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900"
                   >
                     <div className="mb-2 h-10 w-10 animate-pulse border-2 border-gray-300 bg-gray-200 dark:border-gray-700 dark:bg-gray-800" />
                     <div className="mb-2 h-4 w-20 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
@@ -418,7 +418,7 @@ export default function JiraProjectDetailPage() {
               </div>
             ) : (
               <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
-                <div className="rounded-md border-2 border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
+                <div className="border-2 border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-gray-400 hover:shadow-md sm:p-5 dark:border-gray-700 dark:bg-gray-900">
                   <div className="mb-2 flex items-center justify-between">
                     <div className="border-2 border-blue-600 bg-blue-50 p-2 dark:bg-blue-900/20">
                       <ClipboardList className="h-5 w-5 text-blue-600 dark:text-blue-400" />
@@ -431,7 +431,7 @@ export default function JiraProjectDetailPage() {
                     {allIssues.length}
                   </div>
                 </div>
-                <div className="rounded-md border-2 border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
+                <div className="border-2 border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-gray-400 hover:shadow-md sm:p-5 dark:border-gray-700 dark:bg-gray-900">
                 <div className="mb-2 flex items-center justify-between">
                   <div className="border-2 border-orange-600 bg-orange-50 p-2 dark:bg-orange-900/20">
                     <Clock className="h-5 w-5 text-orange-600 dark:text-orange-400" />
@@ -442,7 +442,7 @@ export default function JiraProjectDetailPage() {
                   {allIssues.filter((i) => i.statusColor !== "green" && !i.resolved).length}
                 </div>
               </div>
-              <div className="rounded-md border-2 border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
+              <div className="border-2 border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-gray-400 hover:shadow-md sm:p-5 dark:border-gray-700 dark:bg-gray-900">
                 <div className="mb-2 flex items-center justify-between">
                   <div className="border-2 border-green-600 bg-green-50 p-2 dark:bg-green-900/20">
                     <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
@@ -455,7 +455,7 @@ export default function JiraProjectDetailPage() {
                   {allIssues.filter((i) => i.statusColor === "green" || i.resolved).length}
                 </div>
               </div>
-              <div className="rounded-md border-2 border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
+              <div className="border-2 border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-gray-400 hover:shadow-md sm:p-5 dark:border-gray-700 dark:bg-gray-900">
                 <div className="mb-2 flex items-center justify-between">
                   <div className="border-2 border-purple-600 bg-purple-50 p-2 dark:bg-purple-900/20">
                       <Filter className="h-5 w-5 text-purple-600 dark:text-purple-400" />
@@ -473,7 +473,7 @@ export default function JiraProjectDetailPage() {
 
             {/* Status Distribution Chart */}
             {issuesLoading && allIssues.length === 0 ? (
-              <div className="mb-6 rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
+              <div className="mb-6 border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
                 <div className="mb-5 flex items-center gap-2">
                   <div className="h-9 w-9 animate-pulse border-2 border-gray-300 bg-gray-200 dark:border-gray-700 dark:bg-gray-800" />
                   <div className="h-5 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
@@ -489,7 +489,7 @@ export default function JiraProjectDetailPage() {
                 </div>
               </div>
             ) : (
-              <div className="mb-6 rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
+              <div className="mb-6 border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
               <div className="mb-5 flex items-center gap-2">
                 <div className="border-2 border-indigo-600 bg-indigo-50 p-2 dark:bg-indigo-900/20">
                   <BarChart3 className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
@@ -540,7 +540,7 @@ export default function JiraProjectDetailPage() {
             )}
 
             {/* Filters and Search */}
-            <div className="relative mb-6 rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
+            <div className="relative mb-6 border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
               <div className="mb-5">
                 <div className="relative flex items-center gap-3">
                   <div className="absolute left-3 z-10">
@@ -721,7 +721,7 @@ export default function JiraProjectDetailPage() {
                     {[1, 2, 3, 4, 5].map((i) => (
                       <div
                         key={i}
-                        className="group relative block rounded-md border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                        className="group relative block border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
                       >
                         <div className="flex items-start gap-4">
                           <div className="flex-1">
@@ -839,7 +839,7 @@ export default function JiraProjectDetailPage() {
                         {issues.map((issue) => (
                       <div
                         key={issue.id}
-                        className="group relative block rounded-md border-l-4 border-l-purple-600 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-l-purple-500 dark:border-gray-700 dark:bg-gray-900 cursor-pointer"
+                        className="group relative block border-l-4 border-l-purple-600 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-l-purple-500 dark:border-gray-700 dark:bg-gray-900 cursor-pointer"
                         onClick={() => {
                           setSelectedIssue(issue);
                           setIsModalOpen(true);

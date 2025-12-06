@@ -201,11 +201,11 @@ export default function JiraDashboardPage() {
       {/* Recent Projects & Issues */}
       <div className="grid gap-4 lg:grid-cols-2 sm:gap-4">
         {/* Recent Projects */}
-        <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
+        <div className="border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-md border-2 border-purple-600 bg-purple-600 text-white shadow-sm">
-                <Folder className="h-5 w-5" />
+              <div className="flex h-10 w-10 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20">
+                <Folder className="h-5 w-5 text-purple-600 dark:text-purple-400" />
               </div>
               <h2 className="text-lg font-bold text-gray-900 dark:text-white">
                 Son Projeler
@@ -272,7 +272,7 @@ export default function JiraDashboardPage() {
         </div>
 
         {/* Recent Issues */}
-        <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
+        <div className="border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20">

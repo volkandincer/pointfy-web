@@ -112,12 +112,15 @@ const NoteList = memo(function NoteList({
         return (
           <div
             key={note.id}
-            className="group relative flex flex-col rounded-md border-2 border-gray-200 bg-white p-4 shadow-sm transition-all active:border-gray-300 active:shadow-md sm:p-5 hover:border-gray-300 hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
+            className="group relative flex flex-col border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+            style={{
+              borderLeftColor: categoryStyle.border.includes('yellow') ? '#eab308' : categoryStyle.border.includes('purple') ? '#a855f7' : categoryStyle.border.includes('blue') ? '#2563eb' : categoryStyle.border.includes('green') ? '#16a34a' : categoryStyle.border.includes('red') ? '#dc2626' : categoryStyle.border.includes('orange') ? '#f97316' : categoryStyle.border.includes('pink') ? '#ec4899' : '#6b7280',
+            }}
           >
             {/* Header - Category Badge & Actions */}
             <div className="mb-3 flex items-start justify-between gap-2">
               <span
-                className={`rounded-md border-2 px-2.5 py-1 text-xs font-semibold ${categoryStyle.bg} ${categoryStyle.text} ${categoryStyle.border}`}
+                className={`border-2 px-2.5 py-1 text-xs font-semibold ${categoryStyle.bg} ${categoryStyle.text} ${categoryStyle.border}`}
               >
                 {getCategoryLabel(note.category)}
               </span>

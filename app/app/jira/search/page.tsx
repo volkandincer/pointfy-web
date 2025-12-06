@@ -177,7 +177,7 @@ export default function JiraSearchPage() {
       </div>
 
       {/* Search Form */}
-      <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
+      <div className="border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
         <div className="space-y-4">
           {/* JQL Input */}
           <div>
@@ -240,7 +240,7 @@ export default function JiraSearchPage() {
       </div>
 
       {/* Quick Search Templates */}
-      <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
+      <div className="border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
         <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
           Hızlı Arama Şablonları
         </h2>
@@ -262,7 +262,7 @@ export default function JiraSearchPage() {
 
       {/* Search History */}
       {showHistory && searchHistory.length > 0 && (
-        <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
+        <div className="border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
           <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
             Arama Geçmişi
           </h2>
@@ -327,7 +327,7 @@ export default function JiraSearchPage() {
                 href={issue.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block rounded-md border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                className="group block border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
               >
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex-1">

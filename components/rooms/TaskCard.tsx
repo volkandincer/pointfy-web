@@ -402,21 +402,24 @@ const TaskCard = memo(function TaskCard({
 
   return (
     <div
-      className={`group relative overflow-hidden rounded-md border-2 p-6 shadow-sm transition-all duration-200 ${
+      className={`group relative overflow-hidden border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all duration-200 sm:p-5 ${
         task.status === "completed"
-          ? "border-green-300 bg-green-50 dark:border-green-700 dark:bg-green-900/20"
+          ? "bg-green-50 dark:bg-green-900/20"
           : task.status === "active"
-          ? "border-blue-300 bg-blue-50 dark:border-blue-700 dark:bg-blue-900/20"
-          : "border-gray-300 bg-white dark:border-gray-700 dark:bg-gray-900"
+          ? "bg-blue-50 dark:bg-blue-900/20"
+          : "bg-white dark:bg-gray-900"
       } ${
         (task.status === "pending" && isAdmin) ||
         (task.status === "completed" &&
           isAdmin &&
           task.jira_key &&
           task.jira_id)
-          ? "cursor-pointer hover:border-blue-400 hover:shadow-md dark:hover:border-blue-500"
+          ? "cursor-pointer hover:border-gray-400 hover:shadow-md active:border-gray-400 active:shadow-md"
           : ""
-      }`}
+      } dark:border-gray-700`}
+      style={{
+        borderLeftColor: task.status === "completed" ? '#16a34a' : task.status === "active" ? '#2563eb' : '#6b7280',
+      }}
       onClick={handleCardClick}
       role={
         task.status === "completed" && isAdmin && task.jira_key && task.jira_id

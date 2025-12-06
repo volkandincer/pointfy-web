@@ -256,7 +256,7 @@ const HomeWelcome = memo(function HomeWelcome() {
                       <button
                         key={room.id}
                         onClick={() => handleRoomClick(room.id)}
-                        className={`group w-full rounded-md border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 text-left shadow-sm transition-all active:border-gray-400 active:shadow-md hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900`}
+                        className={`group w-full border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 text-left shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900`}
                       >
                         <div className="flex items-center gap-4">
                           <div className={`flex h-12 w-12 shrink-0 items-center justify-center border-2 ${iconBorderColor} ${iconBgColor}`}>
