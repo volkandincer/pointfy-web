@@ -73,11 +73,13 @@ const Button = memo(
 
       // If href is provided, render as Link
       if (href || asLink) {
+        // Extract href from props to avoid duplicate
+        const { href: propsHref, ...linkProps } = props as React.ComponentProps<typeof Link>;
         return (
           <Link
-            href={href || "#"}
+            href={href || propsHref || "#"}
             className={combinedClasses}
-            {...(props as React.ComponentProps<typeof Link>)}
+            {...linkProps}
           >
             {showIcon && iconPosition === "left" && Icon && (
               <Icon className="h-4 w-4" aria-hidden="true" />
