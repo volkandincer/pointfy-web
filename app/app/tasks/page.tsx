@@ -198,7 +198,7 @@ export default function PersonalTasksPage() {
             </div>
             <div>
               {loading ? (
-                <div className="h-40 animate-pulse rounded-md bg-gray-100 dark:bg-gray-800" />
+                <div className="h-40 animate-pulse border-l-4 border-l-orange-400 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm sm:p-4 dark:border-l-orange-500 dark:border-gray-700 dark:bg-gray-900" />
               ) : (
                 <PersonalTaskList
                   tasks={tasks}

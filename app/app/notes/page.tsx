@@ -122,7 +122,7 @@ export default function NotesPage() {
                   {[1, 2, 3, 4, 5, 6].map((i) => (
                     <div
                       key={i}
-                      className="h-48 animate-pulse rounded-md border-2 border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-800"
+                      className="h-48 animate-pulse border-l-4 border-l-yellow-400 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm sm:p-4 dark:border-l-yellow-500 dark:border-gray-700 dark:bg-gray-900"
                     />
                   ))}
                 </div>

@@ -149,7 +149,7 @@ const RecentRooms = memo(function RecentRooms() {
             {Array.from({ length: 4 }).map((_, idx) => (
               <div
                 key={idx}
-                className="h-24 animate-pulse rounded-md border-2 border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-800 sm:h-28"
+                className="h-24 animate-pulse border-l-4 border-l-blue-400 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm sm:h-28 sm:p-4 dark:border-l-blue-500 dark:border-gray-700 dark:bg-gray-900"
               />
             ))}
           </div>

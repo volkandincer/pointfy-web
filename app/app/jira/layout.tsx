@@ -115,7 +115,7 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
                     {[1, 2, 3, 4].map((i) => (
                       <div
                         key={i}
-                        className="h-24 animate-pulse rounded-md bg-gray-200 dark:bg-gray-800"
+                        className="h-24 animate-pulse border-2 border-gray-300 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900"
                       />
                     ))}
                   </div>

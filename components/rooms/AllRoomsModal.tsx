@@ -201,7 +201,7 @@ const AllRoomsModal = memo(function AllRoomsModal({
             {Array.from({ length: 3 }).map((_, idx) => (
               <div
                 key={idx}
-                className="h-20 animate-pulse border-2 border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800"
+                className="h-20 animate-pulse border-l-4 border-l-blue-400 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm sm:p-4 dark:border-l-blue-500 dark:border-gray-700 dark:bg-gray-900"
               />
             ))}
           </div>
