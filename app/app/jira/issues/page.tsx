@@ -288,7 +288,7 @@ export default function JiraIssuesPage() {
                 onClick={() => setViewMode("list")}
                 className={`min-h-[44px] rounded-md px-3 py-1.5 text-sm transition ${
                   viewMode === "list"
-                    ? "bg-green-600 text-white"
+                    ? "bg-purple-600 text-white"
                     : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
                 }`}
               >
@@ -298,7 +298,7 @@ export default function JiraIssuesPage() {
                 onClick={() => setViewMode("grid")}
                 className={`min-h-[44px] rounded-md px-3 py-1.5 text-sm transition ${
                   viewMode === "grid"
-                    ? "bg-green-600 text-white"
+                    ? "bg-purple-600 text-white"
                     : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
                 }`}
               >
