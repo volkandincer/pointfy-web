@@ -150,6 +150,12 @@ function HomePageContent() {
         description: "Takım retrosu başlat",
         href: "/app/rooms/create?type=retro",
       },
+      {
+        id: "account",
+        title: "Hesabım",
+        description: "Profil ve ayarlarınızı yönetin",
+        href: "/app/account",
+      },
     ],
     []
   );

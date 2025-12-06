@@ -10,6 +10,7 @@ import {
   FileText, 
   BarChart3, 
   RotateCcw,
+  Settings,
   type LucideIcon 
 } from "lucide-react";
 import type { QuickAction } from "@/interfaces/QuickAction.interface";
@@ -27,6 +28,7 @@ const iconMap: Record<string, LucideIcon> = {
   "notes": FileText,
   "voted-tasks": BarChart3,
   "retro": RotateCcw,
+  "account": Settings,
 };
 
 // Color mapping for left border
@@ -38,6 +40,7 @@ const colorMap: Record<string, string> = {
   "notes": "border-l-yellow-600 dark:border-l-yellow-500",
   "voted-tasks": "border-l-indigo-600 dark:border-l-indigo-500",
   "retro": "border-l-pink-600 dark:border-l-pink-500",
+  "account": "border-l-cyan-600 dark:border-l-cyan-500",
 };
 
 // Icon color mapping
@@ -49,6 +52,7 @@ const iconColorMap: Record<string, string> = {
   "notes": "text-yellow-600 dark:text-yellow-400",
   "voted-tasks": "text-indigo-600 dark:text-indigo-400",
   "retro": "text-pink-600 dark:text-pink-400",
+  "account": "text-cyan-600 dark:text-cyan-400",
 };
 
 const QuickActions = memo(function QuickActions({ actions }: QuickActionsProps) {
