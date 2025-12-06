@@ -336,7 +336,7 @@ export default function JiraBoardsPage() {
                 <div className="relative space-y-2 text-sm text-gray-600 dark:text-gray-400">
                   <div>
                     <span className="font-semibold">Proje:</span>{" "}
-                    <span className="font-mono font-semibold text-green-600 dark:text-green-400"
+                    <span className="font-mono font-semibold text-purple-600 dark:text-purple-400">
                       {board.location?.projectKey}
                     </span>
                   </div>
