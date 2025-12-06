@@ -7,11 +7,7 @@ import RoomPinModal from "@/components/rooms/RoomPinModal";
 import { useToastContext } from "@/contexts/ToastContext";
 import type { RoomInfo } from "@/interfaces/Room.interface";
 import { getSupabase } from "@/lib/supabase";
-import {
-  checkRoomEntry,
-  verifyRoomPin,
-  addUserToRoom,
-} from "@/lib/roomUtils";
+import { checkRoomEntry, verifyRoomPin, addUserToRoom } from "@/lib/roomUtils";
 
 const HomeWelcome = memo(function HomeWelcome() {
   const router = useRouter();
@@ -84,13 +80,17 @@ const HomeWelcome = memo(function HomeWelcome() {
 
         const supabase = getSupabase();
         const query = searchQuery.toLowerCase().trim();
-        
+
         const { data, error } = await supabase
           .from("rooms")
-          .select("id, name, code, created_by_username, is_active, created_at, room_type")
+          .select(
+            "id, name, code, created_by_username, is_active, created_at, room_type"
+          )
           .eq("is_active", true)
           .eq("status", "active")
-          .or(`name.ilike.%${query}%,code.ilike.%${query}%,created_by_username.ilike.%${query}%`)
+          .or(
+            `name.ilike.%${query}%,code.ilike.%${query}%,created_by_username.ilike.%${query}%`
+          )
           .order("created_at", { ascending: false })
           .limit(10);
 
@@ -122,7 +122,7 @@ const HomeWelcome = memo(function HomeWelcome() {
   const handleRoomClick = async (roomId: string) => {
     try {
       const result = await checkRoomEntry(roomId);
-      
+
       if (result.error) {
         showToast(result.error, "error");
         return;
@@ -236,8 +236,8 @@ const HomeWelcome = memo(function HomeWelcome() {
                   <div className="max-h-[400px] overflow-y-auto p-2">
                     {rooms.map((room) => {
                       const isRetro = room.room_type === "retro";
-                      const borderColor = isRetro 
-                        ? "border-l-purple-600 dark:border-l-purple-500" 
+                      const borderColor = isRetro
+                        ? "border-l-purple-600 dark:border-l-purple-500"
                         : "border-l-blue-600 dark:border-l-blue-500";
                       const iconBorderColor = isRetro
                         ? "border-purple-600 dark:border-purple-500"
@@ -251,37 +251,41 @@ const HomeWelcome = memo(function HomeWelcome() {
                       const arrowBorderColor = isRetro
                         ? "border-purple-600 bg-purple-600 group-hover:bg-purple-700 group-hover:border-purple-700"
                         : "border-blue-600 bg-blue-600 group-hover:bg-blue-700 group-hover:border-blue-700";
-                      
+
                       return (
-                      <button
-                        key={room.id}
-                        onClick={() => handleRoomClick(room.id)}
-                        className={`group w-full border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 text-left shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900`}
-                      >
-                        <div className="flex items-center gap-4">
-                          <div className={`flex h-12 w-12 shrink-0 items-center justify-center border-2 ${iconBorderColor} ${iconBgColor}`}>
-                            <Home className={`h-6 w-6 ${iconTextColor}`} />
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <h3 className="mb-1 truncate text-base font-semibold text-gray-900 dark:text-white">
-                              {room.name || "Oda"}
-                            </h3>
-                            <div className="flex items-center gap-2">
-                              <span className="rounded-md border-2 border-gray-300 bg-white px-2 py-0.5 text-xs font-semibold text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
-                                {room.code}
-                              </span>
-                              {room.created_by_username && (
-                                <span className="text-xs font-semibold text-green-600 dark:text-green-400">
-                                  {room.created_by_username}
+                        <button
+                          key={room.id}
+                          onClick={() => handleRoomClick(room.id)}
+                          className={`group w-full border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 text-left shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900`}
+                        >
+                          <div className="flex items-center gap-4">
+                            <div
+                              className={`flex h-12 w-12 shrink-0 items-center justify-center border-2 ${iconBorderColor} ${iconBgColor}`}
+                            >
+                              <Home className={`h-6 w-6 ${iconTextColor}`} />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <h3 className="mb-1 truncate text-base font-semibold text-gray-900 dark:text-white">
+                                {room.name || "Oda"}
+                              </h3>
+                              <div className="flex items-center gap-2">
+                                <span className="rounded-md border-2 border-gray-300 bg-white px-2 py-0.5 text-xs font-semibold text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                                  {room.code}
                                 </span>
-                              )}
+                                {room.created_by_username && (
+                                  <span className="text-xs font-semibold text-green-600 dark:text-green-400">
+                                    {room.created_by_username}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                            <div
+                              className={`flex h-7 w-7 shrink-0 items-center justify-center border-2 ${arrowBorderColor} text-white shadow-sm transition`}
+                            >
+                              <ChevronRight className="h-4 w-4" />
                             </div>
                           </div>
-                          <div className={`flex h-7 w-7 shrink-0 items-center justify-center border-2 ${arrowBorderColor} text-white shadow-sm transition`}>
-                            <ChevronRight className="h-4 w-4" />
-                          </div>
-                        </div>
-                      </button>
+                        </button>
                       );
                     })}
                   </div>

@@ -53,6 +53,7 @@ export default function NotesPage() {
   const filteredNotes = useMemo(() => {
     if (selectedCategory === "Tümü") return notes;
     return notes.filter((n) => n.category === selectedCategory);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notes, selectedCategory]);
 
   return (
