@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { memo, useEffect } from "react";
 import { X, ExternalLink } from "lucide-react";
+import Button from "@/components/ui/Button";
 import type { JiraTask } from "@/interfaces/Jira.interface";
 import { getStatusColorClasses, getPriorityColorClasses } from "@/lib/jira/colors";
 
@@ -53,16 +54,36 @@ const JiraIssueModal = memo(function JiraIssueModal({
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 overflow-y-auto"
       onClick={onClose}
+      onTouchStart={(e) => {
+        // Backdrop'a dokunulduğunda scroll'u engelle
+        const target = e.target as HTMLElement;
+        if (target.classList.contains("fixed") || target.classList.contains("bg-black")) {
+          e.preventDefault();
+        }
+      }}
       onTouchMove={(e) => {
-        // Modal içindeki scroll'u sayfa scroll'undan ayır
-        e.stopPropagation();
+        // Modal backdrop'unda scroll'u engelle
+        const target = e.target as HTMLElement;
+        if (target.classList.contains("fixed") || target.classList.contains("bg-black")) {
+          e.preventDefault();
+        }
       }}
     >
       <div
-        className="relative w-full max-w-3xl my-8 border-2 border-gray-300 bg-white shadow-md dark:border-gray-700 dark:bg-gray-900"
+        className="relative w-full max-w-3xl my-8 rounded-md border-2 border-gray-300 bg-white shadow-md dark:border-gray-700 dark:bg-gray-900"
         onClick={(e) => e.stopPropagation()}
-        onTouchStart={(e) => e.stopPropagation()}
-        onTouchMove={(e) => e.stopPropagation()}
+        onTouchStart={(e) => {
+          // Modal içindeki touch event'lerini sayfa scroll'undan ayır
+          e.stopPropagation();
+        }}
+        onTouchMove={(e) => {
+          // Modal içindeki scroll'u sayfa scroll'undan ayır
+          e.stopPropagation();
+        }}
+        style={{
+          WebkitOverflowScrolling: 'touch',
+          touchAction: 'pan-y',
+        }}
       >
         {/* Header */}
         <div className="border-b-2 border-gray-200 p-6 dark:border-gray-800">
@@ -73,17 +94,17 @@ const JiraIssueModal = memo(function JiraIssueModal({
                   {issue.key}
                 </span>
                 <span
-                  className={`rounded-lg border-2 px-3 py-1 text-xs font-semibold shadow-sm ${getStatusColorClasses(issue.statusColor || "gray")}`}
+                  className={`rounded-md border-2 px-3 py-1 text-xs font-semibold shadow-sm ${getStatusColorClasses(issue.statusColor || "gray")}`}
                 >
                   {issue.status}
                 </span>
                 {issue.priority && (
-                  <span className={`rounded-lg border-2 px-3 py-1 text-xs font-medium shadow-sm ${getPriorityColorClasses(issue.priority)}`}>
+                  <span className={`rounded-md border-2 px-3 py-1 text-xs font-medium shadow-sm ${getPriorityColorClasses(issue.priority)}`}>
                     {issue.priority}
                   </span>
                 )}
                 {issue.type && (
-                  <span className="rounded-lg border-2 border-purple-300 bg-purple-100 px-3 py-1 text-xs font-medium text-purple-700 shadow-sm dark:border-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
+                  <span className="rounded-md border-2 border-purple-300 bg-purple-100 px-3 py-1 text-xs font-medium text-purple-700 shadow-sm dark:border-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
                     {issue.type}
                   </span>
                 )}
@@ -94,7 +115,7 @@ const JiraIssueModal = memo(function JiraIssueModal({
             </div>
             <button
               onClick={onClose}
-              className="ml-4 border-2 border-gray-300 bg-white p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:border-gray-400 hover:text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-gray-200"
+              className="ml-4 rounded-md border-2 border-gray-300 bg-white p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:border-gray-400 hover:text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-gray-200"
             >
               <X className="h-6 w-6" />
             </button>
@@ -223,21 +244,24 @@ const JiraIssueModal = memo(function JiraIssueModal({
         {/* Footer */}
         <div className="border-t-2 border-gray-200 p-4 dark:border-gray-800">
           <div className="flex items-center justify-between">
-            <a
+            <Button
+              variant="primary"
+              size="md"
               href={issue.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 border-2 border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700"
+              asLink
+              icon={ExternalLink}
+              iconPosition="right"
+              className="!border-0"
             >
-              <span>Jira&apos;da Aç</span>
-              <ExternalLink className="h-4 w-4" />
-            </a>
-            <button
+              Jira&apos;da Aç
+            </Button>
+            <Button
+              variant="secondary"
+              size="md"
               onClick={onClose}
-              className="border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
             >
               Kapat
-            </button>
+            </Button>
           </div>
         </div>
       </div>

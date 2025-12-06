@@ -189,14 +189,14 @@ export default function VotedTasksPage() {
     switch (status) {
       case "completed":
         return (
-          <span className="inline-flex items-center gap-1 rounded-lg border-2 border-green-300 bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-700 shadow-sm dark:border-green-700 dark:bg-green-900/20 dark:text-green-400">
+          <span className="inline-flex items-center gap-1 rounded-md border-2 border-green-300 bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-700 shadow-sm dark:border-green-700 dark:bg-green-900/20 dark:text-green-400">
             <CheckCircle2 className="h-3 w-3" />
             Tamamlandı
           </span>
         );
       case "active":
         return (
-          <span className="inline-flex items-center gap-1 rounded-lg border-2 border-blue-300 bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700 shadow-sm dark:border-blue-700 dark:bg-blue-900/20 dark:text-blue-400">
+          <span className="inline-flex items-center gap-1 rounded-md border-2 border-indigo-300 bg-indigo-100 px-2.5 py-1 text-xs font-semibold text-indigo-700 shadow-sm dark:border-indigo-700 dark:bg-indigo-900/20 dark:text-indigo-400">
             <RefreshCw className="h-3 w-3" />
             Aktif
           </span>
@@ -204,7 +204,7 @@ export default function VotedTasksPage() {
       case "pending":
       default:
         return (
-          <span className="inline-flex items-center gap-1 rounded-lg border-2 border-gray-300 bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+          <span className="inline-flex items-center gap-1 rounded-md border-2 border-gray-300 bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
             <Clock className="h-3 w-3" />
             Beklemede
           </span>
@@ -238,7 +238,7 @@ export default function VotedTasksPage() {
                 ))}
               </div>
             ) : votedTasks.length === 0 ? (
-              <div className="border-2 border-gray-300 bg-white p-12 text-center shadow-sm dark:border-gray-700 dark:bg-gray-900">
+              <div className="rounded-md border-2 border-gray-300 bg-white p-8 text-center shadow-sm sm:p-12 dark:border-gray-700 dark:bg-gray-900">
                 <BarChart3 className="mx-auto mb-3 h-12 w-12 text-gray-400 dark:text-gray-500" />
                 <p className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
                   Henüz puanladığınız task yok
@@ -254,7 +254,7 @@ export default function VotedTasksPage() {
                     key={task.id}
                     className="group relative border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
                     style={{
-                      borderLeftColor: '#2563eb',
+                      borderLeftColor: '#4f46e5',
                     }}
                   >
                     <div className="mb-3 flex items-start justify-between">
@@ -270,7 +270,7 @@ export default function VotedTasksPage() {
                         <div className="flex items-center gap-2">
                           <Link
                             href={`/app/rooms/${task.room_id}`}
-                            className="text-xs font-semibold text-blue-600 hover:underline dark:text-blue-400"
+                            className="text-xs font-semibold text-indigo-600 hover:underline dark:text-indigo-400"
                           >
                             {task.room_name} ({task.room_code})
                           </Link>
@@ -320,7 +320,7 @@ export default function VotedTasksPage() {
                       <div className="mt-4 text-right">
                         <Link
                           href={`/app/rooms/${task.room_id}`}
-                          className="inline-flex h-9 items-center justify-center rounded-lg border-2 border-blue-600 bg-blue-600 px-4 text-sm font-semibold text-white transition hover:border-blue-700 hover:bg-blue-700"
+                          className="inline-flex h-9 items-center justify-center rounded-md border-2 border-indigo-600 bg-indigo-600 px-4 text-sm font-semibold text-white transition hover:border-indigo-700 hover:bg-indigo-700"
                         >
                           Odaya Git →
                         </Link>

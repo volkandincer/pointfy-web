@@ -43,10 +43,10 @@ export default function BoardsPage() {
 
                 {/* Stats Cards */}
                 <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  <div className="border-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
+                  <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
                     <div className="mb-4 flex items-center gap-3">
-                      <div className="flex h-12 w-12 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
-                        <ClipboardList className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                      <div className="flex h-12 w-12 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20">
+                        <ClipboardList className="h-6 w-6 text-green-600 dark:text-green-400" />
                       </div>
                       <div>
                         <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalBoards}</div>
@@ -55,7 +55,7 @@ export default function BoardsPage() {
                     </div>
                   </div>
 
-                  <div className="border-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
+                  <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
                     <div className="mb-4 flex items-center gap-3">
                       <div className="flex h-12 w-12 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20">
                         <ClipboardList className="h-6 w-6 text-green-600 dark:text-green-400" />
@@ -67,7 +67,7 @@ export default function BoardsPage() {
                     </div>
                   </div>
 
-                  <div className="border-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
+                  <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
                     <div className="mb-4 flex items-center gap-3">
                       <div className="flex h-12 w-12 items-center justify-center border-2 border-gray-600 bg-gray-50 dark:bg-gray-800">
                         <Archive className="h-6 w-6 text-gray-600 dark:text-gray-400" />
@@ -81,12 +81,12 @@ export default function BoardsPage() {
                 </div>
 
                 {/* Tab Buttons */}
-                <div className="inline-flex border-2 border-gray-300 bg-white p-1 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                <div className="inline-flex rounded-md border-2 border-gray-300 bg-white p-1 shadow-sm dark:border-gray-700 dark:bg-gray-900">
                   <button
                     onClick={() => setShowArchived(false)}
                     className={`px-6 py-2.5 text-sm font-semibold transition-colors ${
                       !showArchived
-                        ? "border-2 border-blue-600 bg-blue-600 text-white"
+                        ? "border-2 border-green-600 bg-green-600 text-white"
                         : "border-2 border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
                     }`}
                   >
@@ -96,7 +96,7 @@ export default function BoardsPage() {
                     onClick={() => setShowArchived(true)}
                     className={`px-6 py-2.5 text-sm font-semibold transition-colors ${
                       showArchived
-                        ? "border-2 border-blue-600 bg-blue-600 text-white"
+                        ? "border-2 border-green-600 bg-green-600 text-white"
                         : "border-2 border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
                     }`}
                   >

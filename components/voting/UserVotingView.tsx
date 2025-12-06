@@ -79,12 +79,12 @@ const UserVotingView = memo(function UserVotingView({
 
   return (
     <div className="space-y-6">
-      <div className="border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+      <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">
             {activeTask.title}
           </h2>
-          <span className="flex items-center gap-1.5 rounded-lg border-2 border-blue-300 bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700 shadow-sm dark:border-blue-700 dark:bg-blue-900 dark:text-blue-300">
+          <span className="flex items-center gap-1.5 rounded-md border-2 border-blue-300 bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700 shadow-sm dark:border-blue-700 dark:bg-blue-900 dark:text-blue-300">
             {isVotingActive ? (
               <>
                 <RefreshCw className="h-3.5 w-3.5" />
@@ -124,7 +124,7 @@ const UserVotingView = memo(function UserVotingView({
       </div>
 
       {isVotingActive && (
-        <div className="border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+        <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
           <div className="mb-4 text-center">
             <p className="text-sm text-gray-600 dark:text-gray-400">
               Kalan Süre
@@ -137,7 +137,7 @@ const UserVotingView = memo(function UserVotingView({
       )}
 
       {isVotingActive && (
-        <div className="border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+        <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
           <VotingCardGrid
             selectedPoint={selectedPoint}
             hasVoted={hasVoted}
@@ -147,7 +147,7 @@ const UserVotingView = memo(function UserVotingView({
         </div>
       )}
 
-      <div className="border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+      <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
           Katılımcı Puanları
         </h3>
@@ -177,7 +177,7 @@ const UserVotingView = memo(function UserVotingView({
                     {vote.user_name}
                   </span>
                   {vote.user_key === userKey && (
-                    <span className="rounded-lg border-2 border-blue-300 bg-blue-100 px-2 py-0.5 text-xs text-blue-700 shadow-sm dark:border-blue-700 dark:bg-blue-900 dark:text-blue-300">
+                    <span className="rounded-md border-2 border-blue-300 bg-blue-100 px-2 py-0.5 text-xs text-blue-700 shadow-sm dark:border-blue-700 dark:bg-blue-900 dark:text-blue-300">
                       Sen
                     </span>
                   )}

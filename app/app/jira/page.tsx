@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Folder, ClipboardList, Pin, Search, ChevronRight } from "lucide-react";
+import Button from "@/components/ui/Button";
 import { getStatusColorClasses } from "@/lib/jira/colors";
 import type { JiraBoard, JiraTask } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
@@ -120,11 +121,11 @@ export default function JiraDashboardPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Link
           href="/app/jira/projects"
-          className="border-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+          className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
         >
           <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
-              <Folder className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+            <div className="flex h-12 w-12 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20">
+              <Folder className="h-6 w-6 text-purple-600 dark:text-purple-400" />
             </div>
             <div>
               <div className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -141,7 +142,7 @@ export default function JiraDashboardPage() {
 
         <Link
           href="/app/jira/issues"
-          className="border-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+          className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
         >
           <div className="mb-4 flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20">
@@ -162,11 +163,11 @@ export default function JiraDashboardPage() {
 
         <Link
           href="/app/jira/boards"
-          className="border-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+          className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
         >
           <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20">
-              <Pin className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+            <div className="flex h-12 w-12 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
+              <Pin className="h-6 w-6 text-blue-600 dark:text-blue-400" />
             </div>
             <div>
               <div className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -183,7 +184,7 @@ export default function JiraDashboardPage() {
 
         <Link
           href="/app/jira/search"
-          className="border-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+          className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
         >
           <div className="mb-4 flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center border-2 border-orange-600 bg-orange-50 dark:bg-orange-900/20">
@@ -198,24 +199,28 @@ export default function JiraDashboardPage() {
       </div>
 
       {/* Recent Projects & Issues */}
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2 sm:gap-4">
         {/* Recent Projects */}
-        <div className="border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+        <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg border-2 border-blue-600 bg-blue-600 text-white shadow-sm">
+              <div className="flex h-10 w-10 items-center justify-center rounded-md border-2 border-purple-600 bg-purple-600 text-white shadow-sm">
                 <Folder className="h-5 w-5" />
               </div>
               <h2 className="text-lg font-bold text-gray-900 dark:text-white">
                 Son Projeler
               </h2>
             </div>
-            <Link
+            <Button
+              variant="outline"
+              size="sm"
               href="/app/jira/projects"
-              className="text-sm font-semibold text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+              asLink
+              showArrow
+              className="border-purple-600 text-purple-600 hover:border-purple-700 hover:bg-purple-50 hover:text-purple-700 dark:border-purple-500 dark:text-purple-400 dark:hover:bg-purple-900/20"
             >
-              Tümünü Gör →
-            </Link>
+              Tümünü Gör
+            </Button>
           </div>
 
           {loading ? (
@@ -223,21 +228,21 @@ export default function JiraDashboardPage() {
               {[1, 2, 3, 4, 5].map((i) => (
                 <div
                   key={i}
-                  className="h-16 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800"
+                  className="h-16 animate-pulse rounded-md bg-gray-200 dark:bg-gray-800"
                 />
               ))}
             </div>
           ) : recentProjects.length > 0 ? (
-            <div className="space-y-2.5">
+            <div className="space-y-2 sm:space-y-3">
               {recentProjects.map((project) => (
                 <Link
                   key={project.id}
                   href={`/app/jira/${project.location?.projectKey || project.id}`}
-                  className="group block rounded-lg border-2 border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-blue-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:hover:border-blue-500"
+                  className="group block border-l-4 border-l-purple-600 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-l-purple-500 dark:border-gray-700 dark:bg-gray-900"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border-2 border-blue-600 bg-blue-600 text-white shadow-sm">
-                      <Folder className="h-5 w-5" />
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20">
+                      <Folder className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                     </div>
                     <div className="min-w-0 flex-1">
                       <h3 className="truncate font-semibold text-gray-900 dark:text-white">
@@ -255,8 +260,8 @@ export default function JiraDashboardPage() {
           ) : (
             <div className="py-12 text-center">
               <div className="mb-3 flex justify-center">
-                <div className="flex h-16 w-16 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
-                  <Folder className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                <div className="flex h-16 w-16 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20">
+                  <Folder className="h-8 w-8 text-purple-600 dark:text-purple-400" />
                 </div>
               </div>
               <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
@@ -267,7 +272,7 @@ export default function JiraDashboardPage() {
         </div>
 
         {/* Recent Issues */}
-        <div className="border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+        <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20">
@@ -277,12 +282,16 @@ export default function JiraDashboardPage() {
                 Son Issue&apos;lar
               </h2>
             </div>
-            <Link
+            <Button
+              variant="outline"
+              size="sm"
               href="/app/jira/issues"
-              className="text-sm font-semibold text-green-600 transition-colors hover:text-green-700 dark:text-green-400 dark:hover:text-green-300"
+              asLink
+              showArrow
+              className="border-green-600 text-green-600 hover:border-green-700 hover:bg-green-50 hover:text-green-700 dark:border-green-500 dark:text-green-400 dark:hover:bg-green-900/20"
             >
-              Tümünü Gör →
-            </Link>
+              Tümünü Gör
+            </Button>
           </div>
 
           {loading ? (
@@ -290,26 +299,26 @@ export default function JiraDashboardPage() {
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
                 <div
                   key={i}
-                  className="h-20 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800"
+                  className="h-20 animate-pulse rounded-md bg-gray-200 dark:bg-gray-800"
                 />
               ))}
             </div>
           ) : recentIssues.length > 0 ? (
-            <div className="space-y-2.5">
+            <div className="space-y-2 sm:space-y-3">
               {recentIssues.map((issue) => (
                 <a
                   key={issue.id}
                   href={issue.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group block rounded-lg border-2 border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-green-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:hover:border-green-500"
+                  className="group block border-l-4 border-l-green-600 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-l-green-500 dark:border-gray-700 dark:bg-gray-900"
                 >
                   <div className="mb-2 flex flex-wrap items-center gap-2">
-                    <span className="rounded-lg border-2 border-blue-300 bg-blue-100 px-2 py-0.5 font-mono text-xs font-bold text-blue-700 shadow-sm dark:border-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                    <span className="rounded-md border-2 border-blue-300 bg-blue-100 px-2 py-0.5 font-mono text-xs font-bold text-blue-700 shadow-sm dark:border-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
                       {issue.key}
                     </span>
                     <span
-                      className={`rounded-lg border-2 px-2 py-0.5 text-xs font-semibold ${getStatusColorClasses(
+                      className={`rounded-md border-2 px-2 py-0.5 text-xs font-semibold ${getStatusColorClasses(
                         issue.statusColor
                       )}`}
                     >
@@ -325,7 +334,7 @@ export default function JiraDashboardPage() {
           ) : (
             <div className="py-12 text-center">
               <div className="mb-3 flex justify-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-lg border-2 border-green-600 bg-green-50 dark:bg-green-900/20">
+                <div className="flex h-16 w-16 items-center justify-center rounded-md border-2 border-green-600 bg-green-50 dark:bg-green-900/20">
                   <ClipboardList className="h-8 w-8 text-green-400" />
                 </div>
               </div>

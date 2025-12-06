@@ -530,7 +530,7 @@ export default function JiraTestPage() {
         <Header navigationItems={navigationItems} />
         <main className="container mx-auto px-4 py-16">
           <div className="mx-auto max-w-3xl">
-            <div className="rounded-lg border-2 border-yellow-200/70 bg-yellow-50/50 p-6 shadow-sm dark:border-yellow-800/70 dark:bg-yellow-900/10">
+            <div className="rounded-md border-2 border-yellow-200/70 bg-yellow-50/50 p-6 shadow-sm dark:border-yellow-800/70 dark:bg-yellow-900/10">
               <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
                 Jira Bağlantısı Gerekli
               </h2>
@@ -551,7 +551,7 @@ export default function JiraTestPage() {
                     logger.error("Jira OAuth error:", err);
                   }
                 }}
-                className="rounded-lg border-2 border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 hover:border-blue-700"
+                className="rounded-md border-2 border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 hover:border-blue-700"
               >
                 Connect Jira
               </button>
@@ -607,7 +607,7 @@ export default function JiraTestPage() {
           </div>
 
           {/* Tab Content */}
-          <div className="rounded-lg border-2 border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+          <div className="rounded-md border-2 border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
             {/* Boards Tab */}
             {activeTab === "boards" && (
               <div>
@@ -618,14 +618,14 @@ export default function JiraTestPage() {
                   <button
                     onClick={fetchBoards}
                     disabled={boardsLoading}
-                    className="rounded-lg border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                    className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
                   >
                     {boardsLoading ? "Yükleniyor..." : "Yenile"}
                   </button>
                 </div>
 
                 {boardsError && (
-                  <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+                  <div className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
                     <div className="font-semibold mb-1">{boardsError.split("\n")[0]}</div>
                     {(boardsError.includes("token expired") ||
                       boardsError.includes("token invalid") ||
@@ -647,7 +647,7 @@ export default function JiraTestPage() {
                               logger.error("Jira OAuth error:", err);
                             }
                           }}
-                          className="rounded-lg border-2 border-blue-600 bg-blue-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-blue-700 hover:border-blue-700"
+                          className="rounded-md border-2 border-blue-600 bg-blue-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-blue-700 hover:border-blue-700"
                         >
                           Jira'yı Yeniden Bağla
                         </button>
@@ -657,7 +657,7 @@ export default function JiraTestPage() {
                 )}
 
                 {boardsResponse && (
-                  <div className="mb-4 rounded-lg border-2 border-blue-200 bg-blue-50 p-4 text-sm dark:border-blue-800 dark:bg-blue-900/20">
+                  <div className="mb-4 rounded-md border-2 border-blue-200 bg-blue-50 p-4 text-sm dark:border-blue-800 dark:bg-blue-900/20">
                     <div className="mb-2 flex items-center justify-between">
                       <h3 className="font-semibold text-blue-900 dark:text-blue-300">
                         API Response (Status: {boardsResponse.status})
@@ -678,7 +678,7 @@ export default function JiraTestPage() {
                     {boards.map((board) => (
                       <div
                         key={board.id}
-                        className="rounded-lg border-2 border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800"
+                        className="rounded-md border-2 border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800"
                       >
                         <h3 className="font-semibold text-gray-900 dark:text-white">
                           {board.name}
@@ -707,14 +707,14 @@ export default function JiraTestPage() {
                   <button
                     onClick={fetchIssues}
                     disabled={issuesLoading}
-                    className="rounded-lg border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                    className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
                   >
                     {issuesLoading ? "Yükleniyor..." : "Yenile"}
                   </button>
                 </div>
 
                 {issuesError && (
-                  <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+                  <div className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
                     <div className="font-semibold mb-1">{issuesError.split("\n")[0]}</div>
                     {(issuesError.includes("token expired") ||
                       issuesError.includes("token invalid") ||
@@ -736,7 +736,7 @@ export default function JiraTestPage() {
                               logger.error("Jira OAuth error:", err);
                             }
                           }}
-                          className="rounded-lg border-2 border-blue-600 bg-blue-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-blue-700 hover:border-blue-700"
+                          className="rounded-md border-2 border-blue-600 bg-blue-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-blue-700 hover:border-blue-700"
                         >
                           Jira'yı Yeniden Bağla
                         </button>
@@ -746,7 +746,7 @@ export default function JiraTestPage() {
                 )}
 
                 {issuesResponse && (
-                  <div className="mb-4 rounded-lg border-2 border-blue-200 bg-blue-50 p-4 text-sm dark:border-blue-800 dark:bg-blue-900/20">
+                  <div className="mb-4 rounded-md border-2 border-blue-200 bg-blue-50 p-4 text-sm dark:border-blue-800 dark:bg-blue-900/20">
                     <div className="mb-2 flex items-center justify-between">
                       <h3 className="font-semibold text-blue-900 dark:text-blue-300">
                         📡 API Response (Status: {issuesResponse.status})
@@ -770,7 +770,7 @@ export default function JiraTestPage() {
                         href={issue.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="block rounded-lg border-2 border-gray-200 bg-white p-4 transition hover:border-gray-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
+                        className="block rounded-md border-2 border-gray-200 bg-white p-4 transition hover:border-gray-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
@@ -779,7 +779,7 @@ export default function JiraTestPage() {
                                 {issue.key}
                               </span>
                               <span
-                                className={`rounded-lg border-2 px-2 py-0.5 text-xs font-medium shadow-sm ${
+                                className={`rounded-md border-2 px-2 py-0.5 text-xs font-medium shadow-sm ${
                                   issue.statusColor === "green"
                                     ? "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400"
                                     : issue.statusColor === "yellow"
@@ -819,20 +819,20 @@ export default function JiraTestPage() {
                   <button
                     onClick={fetchProjects}
                     disabled={projectsLoading}
-                    className="rounded-lg border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                    className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
                   >
                     {projectsLoading ? "Yükleniyor..." : "Yenile"}
                   </button>
                 </div>
 
                 {projectsError && (
-                  <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+                  <div className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
                     {projectsError}
                   </div>
                 )}
 
                 {projectsResponse && (
-                  <div className="mb-4 rounded-lg border-2 border-blue-200 bg-blue-50 p-4 text-sm dark:border-blue-800 dark:bg-blue-900/20">
+                  <div className="mb-4 rounded-md border-2 border-blue-200 bg-blue-50 p-4 text-sm dark:border-blue-800 dark:bg-blue-900/20">
                     <div className="mb-2 flex items-center justify-between">
                       <h3 className="font-semibold text-blue-900 dark:text-blue-300">
                         📡 API Response (Status: {projectsResponse.status})
@@ -853,7 +853,7 @@ export default function JiraTestPage() {
                     {projects.map((project: JiraBoard) => (
                       <div
                         key={project.id}
-                        className="rounded-lg border-2 border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800"
+                        className="rounded-md border-2 border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800"
                       >
                         <h3 className="font-semibold text-gray-900 dark:text-white">
                           {project.name}
@@ -882,20 +882,20 @@ export default function JiraTestPage() {
                   <button
                     onClick={fetchMyself}
                     disabled={myselfLoading}
-                    className="rounded-lg border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                    className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
                   >
                     {myselfLoading ? "Yükleniyor..." : "Yenile"}
                   </button>
                 </div>
 
                 {myselfError && (
-                  <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+                  <div className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
                     {myselfError}
                   </div>
                 )}
 
                 {myselfResponse && (
-                  <div className="mb-4 rounded-lg border-2 border-blue-200 bg-blue-50 p-4 text-sm dark:border-blue-800 dark:bg-blue-900/20">
+                  <div className="mb-4 rounded-md border-2 border-blue-200 bg-blue-50 p-4 text-sm dark:border-blue-800 dark:bg-blue-900/20">
                     <div className="mb-2 flex items-center justify-between">
                       <h3 className="font-semibold text-blue-900 dark:text-blue-300">
                         📡 API Response (Status: {myselfResponse.status})
@@ -913,7 +913,7 @@ export default function JiraTestPage() {
                   </div>
                 ) : myself ? (
                   <div className="space-y-4">
-                    <div className="rounded-lg border-2 border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+                    <div className="rounded-md border-2 border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
                       <h3 className="mb-2 font-semibold text-gray-900 dark:text-white">
                         Account Information
                       </h3>
@@ -947,7 +947,7 @@ export default function JiraTestPage() {
                       </div>
                     </div>
                     {myself.avatarUrls && (
-                      <div className="rounded-lg border-2 border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+                      <div className="rounded-md border-2 border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
                         <h3 className="mb-2 font-semibold text-gray-900 dark:text-white">Avatar</h3>
                         <img
                           src={myself.avatarUrls["48x48"]}
@@ -975,7 +975,7 @@ export default function JiraTestPage() {
                   <button
                     onClick={fetchSearch}
                     disabled={searchLoading || !searchJql.trim()}
-                    className="rounded-lg border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                    className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
                   >
                     {searchLoading ? "Aranıyor..." : "Ara"}
                   </button>
@@ -991,7 +991,7 @@ export default function JiraTestPage() {
                       onChange={(e) => setSearchJql(e.target.value)}
                       placeholder="assignee=currentuser()"
                       rows={3}
-                      className="w-full rounded-lg border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                      className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                     />
                     <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                       Örnek: assignee=currentuser(), project=SCRUM, status!=Done
@@ -1007,19 +1007,19 @@ export default function JiraTestPage() {
                       onChange={(e) => setSearchMaxResults(parseInt(e.target.value) || 50)}
                       min={1}
                       max={100}
-                      className="w-full rounded-lg border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                      className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                     />
                   </div>
                 </div>
 
                 {searchError && (
-                  <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+                  <div className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
                     {searchError}
                   </div>
                 )}
 
                 {searchResponse && (
-                  <div className="mb-4 rounded-lg border-2 border-blue-200 bg-blue-50 p-4 text-sm dark:border-blue-800 dark:bg-blue-900/20">
+                  <div className="mb-4 rounded-md border-2 border-blue-200 bg-blue-50 p-4 text-sm dark:border-blue-800 dark:bg-blue-900/20">
                     <div className="mb-2 flex items-center justify-between">
                       <h3 className="font-semibold text-blue-900 dark:text-blue-300">
                         📡 API Response (Status: {searchResponse.status})
@@ -1046,7 +1046,7 @@ export default function JiraTestPage() {
                         href={issue.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="block rounded-lg border-2 border-gray-200 bg-white p-4 transition hover:border-gray-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
+                        className="block rounded-md border-2 border-gray-200 bg-white p-4 transition hover:border-gray-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
@@ -1055,7 +1055,7 @@ export default function JiraTestPage() {
                                 {issue.key}
                               </span>
                               <span
-                                className={`rounded-lg border-2 px-2 py-0.5 text-xs font-medium shadow-sm ${
+                                className={`rounded-md border-2 px-2 py-0.5 text-xs font-medium shadow-sm ${
                                   issue.statusColor === "green"
                                     ? "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400"
                                     : issue.statusColor === "yellow"
@@ -1099,20 +1099,20 @@ export default function JiraTestPage() {
                   <button
                     onClick={testConnection}
                     disabled={testLoading}
-                    className="rounded-lg border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                    className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
                   >
                     {testLoading ? "Test Ediliyor..." : "Test Et"}
                   </button>
                 </div>
 
                 {testError && (
-                  <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+                  <div className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
                     {testError}
                   </div>
                 )}
 
                 {testResponse && (
-                  <div className="rounded-lg border-2 border-blue-200 bg-blue-50 p-4 text-sm dark:border-blue-800 dark:bg-blue-900/20">
+                  <div className="rounded-md border-2 border-blue-200 bg-blue-50 p-4 text-sm dark:border-blue-800 dark:bg-blue-900/20">
                     <div className="mb-2 flex items-center justify-between">
                       <h3 className="font-semibold text-blue-900 dark:text-blue-300">
                         Test Response (Status: {testResponse.status})
@@ -1150,12 +1150,12 @@ export default function JiraTestPage() {
                         value={jiraBaseUrlInput}
                         onChange={(e) => setJiraBaseUrlInput(e.target.value)}
                         placeholder="pointf.atlassian.net"
-                        className="flex-1 rounded-lg border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                        className="flex-1 rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                       />
                       <button
                         onClick={handleSaveUrl}
                         disabled={!jiraBaseUrlInput.trim() || savingUrl}
-                        className="rounded-lg border-2 border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 hover:border-blue-700 disabled:opacity-50"
+                        className="rounded-md border-2 border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 hover:border-blue-700 disabled:opacity-50"
                       >
                         {savingUrl ? "Kaydediliyor..." : "Kaydet"}
                       </button>
@@ -1167,7 +1167,7 @@ export default function JiraTestPage() {
                     )}
                   </div>
 
-                  <div className="rounded-lg border-2 border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900">
+                  <div className="rounded-md border-2 border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900">
                     <h3 className="mb-2 text-sm font-semibold text-gray-900 dark:text-white">
                       Connection Status
                     </h3>

@@ -33,7 +33,7 @@ const FilterDropdown = memo(function FilterDropdown({
   const displayLabel = selectedOption ? selectedOption.label : placeholder;
 
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
+    function handleClickOutside(event: MouseEvent | TouchEvent) {
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
@@ -43,11 +43,35 @@ const FilterDropdown = memo(function FilterDropdown({
     }
 
     if (isOpen) {
+      // Body scroll'unu disable et (mobil için)
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = "100%";
+      document.body.style.overflow = "hidden";
+      
       document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside);
+    } else {
+      // Scroll pozisyonunu geri yükle
+      const scrollY = document.body.style.top;
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || "0") * -1);
+      }
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+      // Cleanup body scroll lock
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
     };
   }, [isOpen]);
 
@@ -56,7 +80,7 @@ const FilterDropdown = memo(function FilterDropdown({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex min-h-[44px] w-full items-center justify-between gap-2 rounded-lg border-2 border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition-all active:border-blue-500 active:bg-gray-50 hover:border-blue-400 hover:bg-gray-50 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:active:border-blue-500 dark:active:bg-gray-700 dark:hover:border-blue-500 dark:hover:bg-gray-700"
+        className="flex min-h-[44px] w-full items-center justify-between gap-2 rounded-md border-2 border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition-all active:border-blue-500 active:bg-gray-50 hover:border-blue-400 hover:bg-gray-50 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:active:border-blue-500 dark:active:bg-gray-700 dark:hover:border-blue-500 dark:hover:bg-gray-700"
       >
         <div className="flex items-center gap-2">
           <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">
@@ -78,9 +102,30 @@ const FilterDropdown = memo(function FilterDropdown({
           <div
             className="fixed inset-0 z-10"
             onClick={() => setIsOpen(false)}
+            onTouchStart={(e) => {
+              // Backdrop'a dokunulduğunda scroll'u engelle
+              e.preventDefault();
+              setIsOpen(false);
+            }}
           />
-          <div className="absolute z-20 mt-1 w-full rounded-lg border-2 border-gray-300 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800">
-            <div className="max-h-64 overflow-y-auto">
+          <div 
+            className="absolute z-20 mt-1 w-full rounded-md border-2 border-gray-300 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800"
+            onTouchStart={(e) => {
+              // Dropdown içindeki touch event'lerini sayfa scroll'undan ayır
+              e.stopPropagation();
+            }}
+            onTouchMove={(e) => {
+              // Dropdown içindeki scroll'u sayfa scroll'undan ayır
+              e.stopPropagation();
+            }}
+          >
+            <div 
+              className="max-h-64 overflow-y-auto"
+              style={{
+                WebkitOverflowScrolling: 'touch',
+                touchAction: 'pan-y',
+              }}
+            >
               {options.map((option) => (
                 <button
                   key={option.value}

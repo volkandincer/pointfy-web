@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useState } from "react";
-import { Crown } from "lucide-react";
+import { Crown, Users, ChevronDown } from "lucide-react";
 import { useRoomParticipants } from "@/hooks/useRoomParticipants";
 import type { RoomParticipant } from "@/hooks/useRoomParticipants";
 
@@ -20,7 +20,7 @@ const RoomParticipants = memo(function RoomParticipants({
 
   if (loading) {
     return (
-      <div className="border-2 border-gray-300 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+      <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="flex items-center gap-2">
           <div className="h-8 w-8 animate-pulse border-2 border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
           <div className="h-4 w-24 animate-pulse rounded bg-gray-100 dark:bg-gray-800" />
@@ -40,7 +40,7 @@ const RoomParticipants = memo(function RoomParticipants({
   }
 
   return (
-    <div className="border-2 border-gray-300 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+    <div className="rounded-md border-2 border-gray-300 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
       {/* Accordion Header - Tıklanabilir */}
       <button
         onClick={() => participants.length > 0 && setShowAll(!showAll)}
@@ -195,14 +195,14 @@ const CompactParticipantCard = memo(function CompactParticipantCard({
             {participant.username}
           </p>
           {participant.is_admin && (
-            <span className="shrink-0 inline-flex items-center gap-0.5 rounded-lg border-2 border-amber-300 bg-amber-500 px-1.5 py-0.5 text-[9px] font-bold text-white shadow-sm dark:border-amber-600 dark:bg-amber-600">
+            <span className="shrink-0 inline-flex items-center gap-0.5 rounded-md border-2 border-amber-300 bg-amber-500 px-1.5 py-0.5 text-[9px] font-bold text-white shadow-sm dark:border-amber-600 dark:bg-amber-600">
               <Crown className="h-2.5 w-2.5" />
             </span>
           )}
         </div>
         <div className="flex items-center gap-1.5">
           {isActive ? (
-            <span className="flex items-center gap-1 rounded-lg border-2 border-green-300 bg-green-50 px-1.5 py-0.5 text-[10px] font-semibold text-green-700 shadow-sm dark:border-green-700 dark:bg-green-900/30 dark:text-green-400">
+            <span className="flex items-center gap-1 rounded-md border-2 border-green-300 bg-green-50 px-1.5 py-0.5 text-[10px] font-semibold text-green-700 shadow-sm dark:border-green-700 dark:bg-green-900/30 dark:text-green-400">
               <span className="h-1.5 w-1.5 border-2 border-green-600 bg-green-500 dark:border-green-400 dark:bg-green-400"></span>
               {status}
             </span>

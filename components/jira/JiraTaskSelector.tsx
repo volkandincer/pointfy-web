@@ -355,7 +355,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Issue ara..."
-                className="w-full rounded-lg border-2 border-gray-300 bg-white pl-10 pr-3 py-2 text-sm text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                className="w-full rounded-md border-2 border-gray-300 bg-white pl-10 pr-3 py-2 text-sm text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
               />
             </div>
           )}
@@ -380,14 +380,14 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
                   key={issue.id}
                   type="button"
                   onClick={() => handleTaskSelect(issue)}
-                  className="w-full border-2 border-gray-300 bg-white p-3 text-left transition-all hover:border-blue-600 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-500"
+                  className="w-full rounded-md border-2 border-gray-300 bg-white p-3 text-left transition-all hover:border-blue-600 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-500"
                 >
                   <div className="mb-1 flex items-center gap-2">
                     <span className="font-mono text-xs font-semibold text-blue-600 dark:text-blue-400">
                       {issue.key}
                     </span>
                     <span
-                      className={`rounded-lg border-2 px-2 py-0.5 text-[10px] font-semibold shadow-sm ${getStatusColorClasses(issue.statusColor || "gray")}`}
+                      className={`rounded-md border-2 px-2 py-0.5 text-[10px] font-semibold shadow-sm ${getStatusColorClasses(issue.statusColor || "gray")}`}
                     >
                       {issue.status}
                     </span>
@@ -402,12 +402,12 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
                   )}
                   <div className="mt-2 flex items-center gap-2">
                     {issue.priority && (
-                      <span className={`rounded-lg border-2 px-2 py-0.5 text-[10px] font-medium shadow-sm ${getPriorityColorClasses(issue.priority)}`}>
+                      <span className={`rounded-md border-2 px-2 py-0.5 text-[10px] font-medium shadow-sm ${getPriorityColorClasses(issue.priority)}`}>
                         {issue.priority}
                       </span>
                     )}
                     {issue.type && (
-                      <span className="rounded-lg border-2 border-purple-300 bg-purple-100 px-2 py-0.5 text-[10px] font-medium text-purple-700 shadow-sm dark:border-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
+                      <span className="rounded-md border-2 border-purple-300 bg-purple-100 px-2 py-0.5 text-[10px] font-medium text-purple-700 shadow-sm dark:border-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
                         {issue.type}
                       </span>
                     )}
@@ -424,7 +424,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
         <button
           type="button"
           onClick={onCancel}
-          className="inline-flex h-10 items-center justify-center rounded-lg border-2 border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+          className="inline-flex h-10 items-center justify-center rounded-md border-2 border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
         >
           İptal
         </button>

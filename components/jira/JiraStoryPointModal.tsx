@@ -126,7 +126,7 @@ const JiraStoryPointModal = memo(function JiraStoryPointModal({
           <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
             Issue
           </label>
-          <div className="rounded-lg border-2 border-gray-300 bg-gray-50 px-3 py-2 font-mono text-sm text-gray-900 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+          <div className="rounded-md border-2 border-gray-300 bg-gray-50 px-3 py-2 font-mono text-sm text-gray-900 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white">
             {issueKey}
           </div>
         </div>
@@ -155,7 +155,7 @@ const JiraStoryPointModal = memo(function JiraStoryPointModal({
                 setStoryPoints(0);
               }
             }}
-            className="w-full rounded-lg border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             placeholder="Story points"
           />
         </div>
@@ -165,7 +165,7 @@ const JiraStoryPointModal = memo(function JiraStoryPointModal({
             type="button"
             onClick={onClose}
             disabled={loading}
-            className="inline-flex h-10 items-center justify-center rounded-lg border-2 border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 disabled:opacity-60"
+            className="inline-flex h-10 items-center justify-center rounded-md border-2 border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 disabled:opacity-60"
           >
             {success ? "Kapat" : "İptal"}
           </button>
@@ -174,7 +174,7 @@ const JiraStoryPointModal = memo(function JiraStoryPointModal({
               type="button"
               onClick={handleSubmit}
               disabled={loading || storyPoints < 0}
-              className="inline-flex h-10 items-center justify-center rounded-lg border-2 border-blue-600 bg-blue-600 px-5 text-sm font-semibold text-white transition hover:border-blue-700 hover:bg-blue-700 disabled:opacity-60"
+              className="inline-flex h-10 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-600 px-5 text-sm font-semibold text-white transition hover:border-blue-700 hover:bg-blue-700 disabled:opacity-60"
             >
               {loading ? "Gönderiliyor..." : "Jira'ya Gönder"}
             </button>

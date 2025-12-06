@@ -125,7 +125,7 @@ export default function JiraProjectsPage() {
         <button
           onClick={fetchProjects}
           disabled={loading}
-          className="rounded-lg border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
+          className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
         >
           {loading ? "Yükleniyor..." : "Yenile"}
         </button>
@@ -139,14 +139,14 @@ export default function JiraProjectsPage() {
             placeholder="Proje ara..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border-2 border-gray-300 bg-white px-4 py-2.5 pl-10 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 sm:text-base"
+            className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 pl-10 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 sm:text-base"
           />
           <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
         </div>
-        <div className="flex items-center gap-2 rounded-lg border-2 border-gray-300 bg-white p-1 dark:border-gray-700 dark:bg-gray-800">
+        <div className="flex items-center gap-2 rounded-md border-2 border-gray-300 bg-white p-1 dark:border-gray-700 dark:bg-gray-800">
           <button
             onClick={() => setViewMode("grid")}
-            className={`rounded-lg px-3 py-1.5 text-sm transition ${
+            className={`rounded-md px-3 py-1.5 text-sm transition ${
               viewMode === "grid"
                 ? "bg-blue-600 text-white"
                 : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
@@ -156,7 +156,7 @@ export default function JiraProjectsPage() {
           </button>
           <button
             onClick={() => setViewMode("list")}
-            className={`rounded-lg px-3 py-1.5 text-sm transition ${
+            className={`rounded-md px-3 py-1.5 text-sm transition ${
               viewMode === "list"
                 ? "bg-blue-600 text-white"
                 : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
@@ -169,7 +169,7 @@ export default function JiraProjectsPage() {
 
       {/* Error Message */}
       {error && (
-        <div className="rounded-lg border-2 border-red-200 bg-red-50 p-4 text-sm text-red-600 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+        <div className="rounded-md border-2 border-red-200 bg-red-50 p-4 text-sm text-red-600 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
           {error}
         </div>
       )}
@@ -180,7 +180,7 @@ export default function JiraProjectsPage() {
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div
               key={i}
-              className={`h-32 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800 ${
+              className={`h-32 animate-pulse rounded-md bg-gray-200 dark:bg-gray-800 ${
                 viewMode === "list" ? "w-full" : ""
               }`}
             />
@@ -193,7 +193,7 @@ export default function JiraProjectsPage() {
               <Link
                 key={project.id}
                 href={`/app/jira/${project.location?.projectKey || project.id}`}
-                className="group block border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                className="group block rounded-md border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
                 style={{
                   borderLeftColor: '#2563eb',
                 }}
@@ -228,7 +228,7 @@ export default function JiraProjectsPage() {
               <Link
                 key={project.id}
                 href={`/app/jira/${project.location?.projectKey || project.id}`}
-                className="group block border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 sm:p-5"
+                className="group block rounded-md border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
                 style={{
                   borderLeftColor: '#2563eb',
                 }}

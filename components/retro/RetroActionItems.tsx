@@ -195,7 +195,7 @@ const RetroActionItems = memo(function RetroActionItems({
   // Kartlar açılmadıysa aksiyon maddelerini gösterme
   if (!cardsRevealed) {
     return (
-      <div className="border-2 border-gray-300 bg-white p-8 text-center shadow-sm dark:border-gray-700 dark:bg-gray-900">
+      <div className="rounded-md border-2 border-gray-300 bg-white p-8 text-center shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <ClipboardList className="mx-auto mb-3 h-12 w-12 text-gray-400 dark:text-gray-500" />
         <p className="font-medium text-gray-900 dark:text-white">
           Aksiyon Maddeleri
@@ -242,7 +242,7 @@ const RetroActionItems = memo(function RetroActionItems({
           <div className="flex flex-col gap-3 sm:flex-row">
             <button
               onClick={() => window.print()}
-              className="flex items-center justify-center gap-2 border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+              className="flex items-center justify-center gap-2 rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
               title="Yazdır/PDF"
             >
               <Printer className="h-4 w-4" />
@@ -292,7 +292,7 @@ const RetroActionItems = memo(function RetroActionItems({
             return (
               <div
                 key={item.id}
-                className="group relative border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                className="group relative rounded-md border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
                 style={{
                   borderLeftColor: '#f97316',
                 }}
@@ -301,7 +301,7 @@ const RetroActionItems = memo(function RetroActionItems({
                 {flagInfo && (
                   <div className="mb-3">
                     <span
-                      className="inline-flex items-center gap-1.5 rounded-lg border-2 px-3 py-1 text-xs font-bold shadow-sm"
+                      className="inline-flex items-center gap-1.5 rounded-md border-2 px-3 py-1 text-xs font-bold shadow-sm"
                       style={{
                         backgroundColor: `${flagColor}15`,
                         color: flagColor,
@@ -413,7 +413,7 @@ const RetroActionItems = memo(function RetroActionItems({
             return (
               <div
                 key={item.id}
-                className="group relative border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                className="group relative rounded-md border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
                 style={{
                   borderLeftColor: '#16a34a',
                 }}
@@ -429,7 +429,7 @@ const RetroActionItems = memo(function RetroActionItems({
                 {flagInfo && (
                   <div className="mb-3">
                     <span
-                      className="inline-flex items-center gap-1.5 rounded-lg border-2 px-3 py-1 text-xs font-bold shadow-sm opacity-75"
+                      className="inline-flex items-center gap-1.5 rounded-md border-2 px-3 py-1 text-xs font-bold shadow-sm opacity-75"
                       style={{
                         backgroundColor: `${flagColor}15`,
                         color: flagColor,
@@ -511,7 +511,7 @@ const RetroActionItems = memo(function RetroActionItems({
 
       {/* Empty State */}
       {actionItems.length === 0 && (
-        <div className="border-2 border-dashed border-gray-300 bg-white p-12 text-center dark:border-gray-700 dark:bg-gray-900">
+        <div className="rounded-md border-2 border-dashed border-gray-300 bg-white p-12 text-center dark:border-gray-700 dark:bg-gray-900">
           <div className="mb-4 flex justify-center">
             <div className="flex h-16 w-16 items-center justify-center border-2 border-indigo-600 bg-indigo-50 dark:bg-indigo-900/30">
               <ClipboardList className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />

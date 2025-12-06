@@ -1,7 +1,8 @@
 "use client";
 
 import { memo } from "react";
-import { Trash2, Edit, Calendar, RefreshCw, FileText } from "lucide-react";
+import { Trash2, Edit, Calendar, RefreshCw, FileText, MoreVertical } from "lucide-react";
+import Button from "@/components/ui/Button";
 import EmptyState from "@/components/jira/EmptyState";
 import type { Note } from "@/interfaces/Note.interface";
 
@@ -9,9 +10,10 @@ interface NoteListProps {
   notes: Note[];
   onDelete: (noteId: string) => Promise<void>;
   onEdit: (note: Note) => void;
+  onCreateNew?: () => void;
 }
 
-// Kategori label mapping (Supabase değerlerini Türkçe label'lara çevir)
+// Kategori label mapping
 const CATEGORY_LABELS: Record<string, string> = {
   personal: "Kişisel",
   work: "İş",
@@ -21,36 +23,36 @@ const CATEGORY_LABELS: Record<string, string> = {
   general: "Genel",
 };
 
-const CATEGORY_COLORS: Record<string, { bg: string; text: string; borderColor: string }> = {
+const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string }> = {
   personal: {
     bg: "bg-pink-50 dark:bg-pink-900/20",
     text: "text-pink-700 dark:text-pink-400",
-    borderColor: "#ec4899",
+    border: "border-pink-300 dark:border-pink-700",
   },
   work: {
     bg: "bg-blue-50 dark:bg-blue-900/20",
     text: "text-blue-700 dark:text-blue-400",
-    borderColor: "#2563eb",
+    border: "border-blue-300 dark:border-blue-700",
   },
   ideas: {
     bg: "bg-purple-50 dark:bg-purple-900/20",
     text: "text-purple-700 dark:text-purple-400",
-    borderColor: "#9333ea",
+    border: "border-purple-300 dark:border-purple-700",
   },
   todo: {
     bg: "bg-yellow-50 dark:bg-yellow-900/20",
     text: "text-yellow-700 dark:text-yellow-400",
-    borderColor: "#eab308",
+    border: "border-yellow-300 dark:border-yellow-700",
   },
   important: {
     bg: "bg-red-50 dark:bg-red-900/20",
     text: "text-red-700 dark:text-red-400",
-    borderColor: "#dc2626",
+    border: "border-red-300 dark:border-red-700",
   },
   general: {
     bg: "bg-gray-50 dark:bg-gray-800",
     text: "text-gray-700 dark:text-gray-300",
-    borderColor: "#6b7280",
+    border: "border-gray-300 dark:border-gray-700",
   },
 };
 
@@ -85,9 +87,22 @@ const NoteList = memo(function NoteList({
   notes,
   onDelete,
   onEdit,
+  onCreateNew,
 }: NoteListProps) {
+  if (notes.length === 0) {
+    return (
+      <EmptyState
+        icon={FileText}
+        title="Henüz not yok"
+        description="İlk notunuzu ekleyerek başlayın"
+        actionLabel={onCreateNew ? "Yeni Not Ekle" : undefined}
+        onAction={onCreateNew}
+      />
+    );
+  }
+
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 sm:gap-4">
       {notes.map((note) => {
         const categoryStyle = getCategoryStyle(note.category);
         const dateValue = note.createdAt || note.created_at;
@@ -97,92 +112,74 @@ const NoteList = memo(function NoteList({
         return (
           <div
             key={note.id}
-            className="group relative border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
-            style={{
-              borderLeftColor: categoryStyle.borderColor,
-            }}
+            className="group relative flex flex-col rounded-md border-2 border-gray-200 bg-white p-4 shadow-sm transition-all active:border-gray-300 active:shadow-md sm:p-5 hover:border-gray-300 hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
           >
+            {/* Header - Category Badge & Actions */}
+            <div className="mb-3 flex items-start justify-between gap-2">
+              <span
+                className={`rounded-md border-2 px-2.5 py-1 text-xs font-semibold ${categoryStyle.bg} ${categoryStyle.text} ${categoryStyle.border}`}
+              >
+                {getCategoryLabel(note.category)}
+              </span>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (confirm("Bu notu silmek istediğinize emin misiniz?")) {
+                    onDelete(note.id);
+                  }
+                }}
+                className="rounded-md border-2 border-transparent p-1.5 text-gray-400 transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-600 dark:text-gray-500 dark:hover:border-red-700 dark:hover:bg-red-900/20 dark:hover:text-red-400"
+                title="Sil"
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </div>
 
             {/* Content */}
-            <div className="relative">
-              {/* Header */}
-              <div className="mb-4">
-                <div className="mb-3 flex items-center justify-between gap-2">
-                  <span
-                    className={`border-2 px-3 py-1 text-xs font-semibold ${categoryStyle.bg} ${categoryStyle.text}`}
-                    style={{
-                      borderColor: categoryStyle.borderColor,
-                    }}
-                  >
-                    {getCategoryLabel(note.category)}
-                  </span>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (confirm("Bu notu silmek istediğinize emin misiniz?")) {
-                        onDelete(note.id);
-                      }
-                    }}
-                    className="border-2 border-red-600 bg-white p-1.5 text-red-600 transition-colors hover:bg-red-50 dark:bg-gray-900 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-900/20"
-                    title="Sil"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </div>
-                <p
-                  onClick={() => onEdit(note)}
-                  className="min-h-[4rem] cursor-pointer text-base leading-relaxed text-gray-900 dark:text-white"
-                >
-                  {note.content}
-                </p>
-              </div>
+            <div
+              onClick={() => onEdit(note)}
+              className="mb-4 flex-1 cursor-pointer"
+            >
+              <p className="line-clamp-4 text-sm leading-relaxed text-gray-900 dark:text-white">
+                {note.content}
+              </p>
+            </div>
 
-              {/* Info Section */}
-              <div className="mb-4 space-y-2 border-t-2 border-gray-300 pt-4 dark:border-gray-700">
-                {/* Created Date */}
+            {/* Footer - Date & Edit Button */}
+            <div className="mt-auto space-y-3 border-t-2 border-gray-100 pt-3 dark:border-gray-800">
+              {/* Date Info */}
+              <div className="space-y-1.5">
                 {dateValue && (
-                  <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                  <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
                     <Calendar className="h-3.5 w-3.5" />
-                    <span>Oluşturuldu: {formatDate(dateValue)}</span>
+                    <span>{formatDate(dateValue)}</span>
                     {formatTime(dateValue) && (
                       <span className="text-gray-400">• {formatTime(dateValue)}</span>
                     )}
                   </div>
                 )}
-
-                {/* Updated Date */}
                 {isUpdated && updatedValue && (
-                  <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                  <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
                     <RefreshCw className="h-3.5 w-3.5" />
                     <span>Güncellendi: {formatDate(updatedValue)}</span>
-                    {formatTime(updatedValue) && (
-                      <span className="text-gray-400">• {formatTime(updatedValue)}</span>
-                    )}
                   </div>
                 )}
               </div>
 
-              {/* Action Button */}
-              <button
+              {/* Edit Button */}
+              <Button
+                variant="outline"
+                size="sm"
+                fullWidth
                 onClick={() => onEdit(note)}
-                className="w-full inline-flex items-center justify-center gap-2 border-2 border-purple-600 bg-purple-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-purple-700 hover:border-purple-700"
+                icon={Edit}
               >
-                <Edit className="h-4 w-4" />
                 Düzenle
-              </button>
+              </Button>
             </div>
           </div>
         );
       })}
-      {notes.length === 0 && (
-        <div className="col-span-full">
-          <EmptyState
-            icon={FileText}
-            title="Henüz not yok"
-            description="İlk notunuzu ekleyerek başlayın"
-          />
-        </div>
-      )}
     </div>
   );
 });

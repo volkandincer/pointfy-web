@@ -15,7 +15,7 @@ const CompletedTasksView = memo(function CompletedTasksView({
 
   if (loading) {
     return (
-      <div className="rounded-lg border-2 border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
+      <div className="rounded-md border-2 border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
         <p className="text-sm text-gray-500 dark:text-gray-400">
           Yükleniyor...
         </p>
@@ -25,7 +25,7 @@ const CompletedTasksView = memo(function CompletedTasksView({
 
   if (completedTasks.length === 0) {
     return (
-      <div className="rounded-lg border-2 border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
+      <div className="rounded-md border-2 border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
         <div className="mb-4 flex items-center gap-3">
           <CheckCircle2 className="h-6 w-6 text-green-600 dark:text-green-400" />
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -46,7 +46,7 @@ const CompletedTasksView = memo(function CompletedTasksView({
   }
 
   return (
-    <div className="rounded-lg border-2 border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
+    <div className="rounded-md border-2 border-gray-200/70 bg-white p-6 shadow-sm dark:border-gray-800/70 dark:bg-gray-900">
       <div className="mb-4 flex items-center gap-3">
         <CheckCircle2 className="h-6 w-6 text-green-600 dark:text-green-400" />
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -57,13 +57,13 @@ const CompletedTasksView = memo(function CompletedTasksView({
         {completedTasks.map((task) => (
           <div
             key={task.id}
-            className="rounded-lg border-2 border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800"
+            className="rounded-md border-2 border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800"
           >
             <div className="mb-2 flex items-center justify-between">
               <h4 className="font-medium text-gray-900 dark:text-white">
                 {task.title}
               </h4>
-              <span className="inline-flex items-center gap-1 rounded-lg border-2 border-green-300 bg-green-50 px-2 py-0.5 text-xs font-semibold text-green-700 shadow-sm dark:border-green-700 dark:bg-green-900/20 dark:text-green-300">
+              <span className="inline-flex items-center gap-1 rounded-md border-2 border-green-300 bg-green-50 px-2 py-0.5 text-xs font-semibold text-green-700 shadow-sm dark:border-green-700 dark:bg-green-900/20 dark:text-green-300">
                 <CheckCircle2 className="h-3 w-3" />
                 Tamamlandı
               </span>

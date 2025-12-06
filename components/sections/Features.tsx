@@ -26,36 +26,30 @@ const featureConfig: Record<string, { icon: LucideIcon; color: string }> = {
   "6": { icon: Sparkles, color: "pink" },
 };
 
-const colorClasses: Record<string, { border: string; icon: string; iconBorder: string }> = {
+const colorClasses: Record<string, { border: string; icon: string }> = {
   blue: {
     border: "border-l-blue-600 dark:border-l-blue-500",
     icon: "text-blue-600 dark:text-blue-400",
-    iconBorder: "border-blue-600 dark:border-blue-500",
   },
   green: {
     border: "border-l-green-600 dark:border-l-green-500",
     icon: "text-green-600 dark:text-green-400",
-    iconBorder: "border-green-600 dark:border-green-500",
   },
   purple: {
     border: "border-l-purple-600 dark:border-l-purple-500",
     icon: "text-purple-600 dark:text-purple-400",
-    iconBorder: "border-purple-600 dark:border-purple-500",
   },
   orange: {
     border: "border-l-orange-600 dark:border-l-orange-500",
     icon: "text-orange-600 dark:text-orange-400",
-    iconBorder: "border-orange-600 dark:border-orange-500",
   },
   yellow: {
     border: "border-l-yellow-600 dark:border-l-yellow-500",
     icon: "text-yellow-600 dark:text-yellow-400",
-    iconBorder: "border-yellow-600 dark:border-yellow-500",
   },
   pink: {
     border: "border-l-pink-600 dark:border-l-pink-500",
     icon: "text-pink-600 dark:text-pink-400",
-    iconBorder: "border-pink-600 dark:border-pink-500",
   },
 };
 
@@ -82,17 +76,20 @@ const Features = memo(function Features({ features }: FeaturesProps) {
             return (
               <div
                 key={feature.id}
-                className={`group relative border-l-4 ${colors.border} border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900`}
+                className={`group relative flex min-h-[100px] flex-col items-center justify-center border-l-4 ${colors.border} border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 text-center shadow-sm transition-all active:border-gray-400 active:shadow-md sm:min-h-[120px] sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900`}
               >
-                <div className="mb-3 flex items-center gap-3">
-                  <div className={`flex h-10 w-10 items-center justify-center border-2 ${colors.iconBorder} bg-white dark:bg-gray-900`}>
-                    <IconComponent className={`h-5 w-5 ${colors.icon}`} />
-                  </div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    {feature.title}
-                  </h3>
+                {/* Icon */}
+                <div className="mb-2 sm:mb-2.5">
+                  <IconComponent className={`h-6 w-6 sm:h-7 sm:w-7 ${colors.icon}`} />
                 </div>
-                <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+
+                {/* Title */}
+                <h3 className="mb-1 text-xs font-semibold text-gray-900 dark:text-white sm:text-sm">
+                  {feature.title}
+                </h3>
+
+                {/* Description */}
+                <p className="hidden text-[10px] leading-tight text-gray-600 dark:text-gray-400 sm:block sm:text-xs">
                   {feature.description}
                 </p>
               </div>

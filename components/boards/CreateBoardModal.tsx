@@ -98,7 +98,7 @@ const CreateBoardModal = memo(function CreateBoardModal({
             maxLength={50}
             required
             disabled={loading}
-            className="w-full border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+            className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
           />
           <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
             {name.length}/50
@@ -120,7 +120,7 @@ const CreateBoardModal = memo(function CreateBoardModal({
             rows={2}
             maxLength={200}
             disabled={loading}
-            className="w-full border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+            className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
           />
           <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
             {description.length}/200
@@ -192,7 +192,7 @@ const CreateBoardModal = memo(function CreateBoardModal({
             type="button"
             onClick={handleClose}
             disabled={loading}
-            className="flex-1 border-2 border-gray-300 bg-white px-5 py-3 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 disabled:opacity-60 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+            className="flex-1 rounded-md border-2 border-gray-300 bg-white px-5 py-3 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 disabled:opacity-60 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
           >
             İptal
           </button>

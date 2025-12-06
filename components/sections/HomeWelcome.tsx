@@ -87,7 +87,7 @@ const HomeWelcome = memo(function HomeWelcome() {
         
         const { data, error } = await supabase
           .from("rooms")
-          .select("id, name, code, created_by_username, is_active, created_at")
+          .select("id, name, code, created_by_username, is_active, created_at, room_type")
           .eq("is_active", true)
           .eq("status", "active")
           .or(`name.ilike.%${query}%,code.ilike.%${query}%,created_by_username.ilike.%${query}%`)
@@ -197,7 +197,7 @@ const HomeWelcome = memo(function HomeWelcome() {
                   if (rooms.length > 0) setShowResults(true);
                 }}
                 placeholder="Oda ara (ad, kod veya oluşturan)..."
-                className="w-full border-2 border-gray-300 bg-white px-5 py-4 pl-12 pr-12 text-base outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
+                className="w-full rounded-md border-2 border-gray-300 bg-white px-5 py-4 pl-12 pr-12 text-base outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
               />
               <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
               {searchQuery && (
@@ -215,7 +215,7 @@ const HomeWelcome = memo(function HomeWelcome() {
 
             {/* Arama Sonuçları */}
             {showResults && searchQuery && (
-              <div className="absolute z-50 mt-2 w-full border-2 border-gray-300 bg-white shadow-md dark:border-gray-700 dark:bg-gray-900">
+              <div className="absolute z-50 mt-2 w-full rounded-md border-2 border-gray-300 bg-white shadow-md dark:border-gray-700 dark:bg-gray-900">
                 {loading ? (
                   <div className="p-4 text-center">
                     <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -234,22 +234,40 @@ const HomeWelcome = memo(function HomeWelcome() {
                   </div>
                 ) : (
                   <div className="max-h-[400px] overflow-y-auto p-2">
-                    {rooms.map((room) => (
+                    {rooms.map((room) => {
+                      const isRetro = room.room_type === "retro";
+                      const borderColor = isRetro 
+                        ? "border-l-purple-600 dark:border-l-purple-500" 
+                        : "border-l-blue-600 dark:border-l-blue-500";
+                      const iconBorderColor = isRetro
+                        ? "border-purple-600 dark:border-purple-500"
+                        : "border-blue-600 dark:border-blue-500";
+                      const iconBgColor = isRetro
+                        ? "bg-purple-50 dark:bg-purple-900/20"
+                        : "bg-blue-50 dark:bg-blue-900/20";
+                      const iconTextColor = isRetro
+                        ? "text-purple-600 dark:text-purple-400"
+                        : "text-blue-600 dark:text-blue-400";
+                      const arrowBorderColor = isRetro
+                        ? "border-purple-600 bg-purple-600 group-hover:bg-purple-700 group-hover:border-purple-700"
+                        : "border-blue-600 bg-blue-600 group-hover:bg-blue-700 group-hover:border-blue-700";
+                      
+                      return (
                       <button
                         key={room.id}
                         onClick={() => handleRoomClick(room.id)}
-                        className="group w-full border-l-4 border-l-blue-600 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-l-blue-500 dark:border-gray-700 dark:bg-gray-900"
+                        className={`group w-full rounded-md border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 text-left shadow-sm transition-all active:border-gray-400 active:shadow-md hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900`}
                       >
                         <div className="flex items-center gap-4">
-                          <div className="flex h-12 w-12 shrink-0 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
-                            <Home className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                          <div className={`flex h-12 w-12 shrink-0 items-center justify-center border-2 ${iconBorderColor} ${iconBgColor}`}>
+                            <Home className={`h-6 w-6 ${iconTextColor}`} />
                           </div>
                           <div className="min-w-0 flex-1">
                             <h3 className="mb-1 truncate text-base font-semibold text-gray-900 dark:text-white">
                               {room.name || "Oda"}
                             </h3>
                             <div className="flex items-center gap-2">
-                              <span className="rounded-lg border-2 border-gray-300 bg-white px-2 py-0.5 text-xs font-semibold text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                              <span className="rounded-md border-2 border-gray-300 bg-white px-2 py-0.5 text-xs font-semibold text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
                                 {room.code}
                               </span>
                               {room.created_by_username && (
@@ -259,12 +277,13 @@ const HomeWelcome = memo(function HomeWelcome() {
                               )}
                             </div>
                           </div>
-                          <div className="flex h-7 w-7 shrink-0 items-center justify-center border-2 border-blue-600 bg-blue-600 text-white shadow-sm transition group-hover:border-blue-700 group-hover:bg-blue-700">
+                          <div className={`flex h-7 w-7 shrink-0 items-center justify-center border-2 ${arrowBorderColor} text-white shadow-sm transition`}>
                             <ChevronRight className="h-4 w-4" />
                           </div>
                         </div>
                       </button>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -278,6 +297,11 @@ const HomeWelcome = memo(function HomeWelcome() {
         <div
           className="fixed inset-0 z-40"
           onClick={() => setShowResults(false)}
+          onTouchStart={(e) => {
+            // Backdrop'a dokunulduğunda scroll'u engelle
+            e.preventDefault();
+            setShowResults(false);
+          }}
         />
       )}
 

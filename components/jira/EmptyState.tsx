@@ -2,6 +2,7 @@
 
 import { memo } from "react";
 import { LucideIcon } from "lucide-react";
+import Button from "@/components/ui/Button";
 
 interface EmptyStateProps {
   icon: LucideIcon;
@@ -22,11 +23,11 @@ const EmptyState = memo(function EmptyState({
 }: EmptyStateProps) {
   return (
     <div
-      className={`flex flex-col items-center justify-center rounded-lg border-2 border-gray-300 bg-white p-6 text-center shadow-sm sm:p-8 md:p-12 dark:border-gray-700 dark:bg-gray-900 ${className}`}
+      className={`flex flex-col items-center justify-center rounded-md border-2 border-gray-300 bg-white p-6 text-center shadow-sm sm:p-8 md:p-12 dark:border-gray-700 dark:bg-gray-900 ${className}`}
     >
       <div className="mb-4 flex justify-center sm:mb-6">
         <div className="relative">
-          <div className="relative flex h-16 w-16 items-center justify-center rounded-lg border-2 border-gray-300 bg-gray-50 sm:h-20 sm:w-20 md:h-24 md:w-24 dark:border-gray-700 dark:bg-gray-800">
+          <div className="relative flex h-16 w-16 items-center justify-center rounded-md border-2 border-gray-300 bg-gray-50 sm:h-20 sm:w-20 md:h-24 md:w-24 dark:border-gray-700 dark:bg-gray-800">
             <Icon className="h-8 w-8 text-gray-400 sm:h-10 sm:w-10 md:h-12 md:w-12 dark:text-gray-500" />
           </div>
         </div>
@@ -40,12 +41,9 @@ const EmptyState = memo(function EmptyState({
         </p>
       )}
       {actionLabel && onAction && (
-        <button
-          onClick={onAction}
-          className="min-h-[44px] rounded-lg border-2 border-blue-600 bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all active:border-blue-700 active:bg-blue-700 active:shadow-md sm:px-6 sm:py-3 hover:border-blue-700 hover:bg-blue-700 hover:shadow-md"
-        >
+        <Button variant="primary" size="md" onClick={onAction}>
           {actionLabel}
-        </button>
+        </Button>
       )}
     </div>
   );

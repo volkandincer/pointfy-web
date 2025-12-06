@@ -21,7 +21,7 @@ const MobileSelect = memo(function MobileSelect({
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
 
-  // Dışarı tıklandığında kapat
+  // Dışarı tıklandığında kapat ve body scroll lock
   useEffect(() => {
     function handleClickOutside(event: MouseEvent | TouchEvent) {
       if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
@@ -30,13 +30,35 @@ const MobileSelect = memo(function MobileSelect({
     }
 
     if (isOpen) {
+      // Body scroll'unu disable et
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = "100%";
+      document.body.style.overflow = "hidden";
+      
       document.addEventListener("mousedown", handleClickOutside);
       document.addEventListener("touchstart", handleClickOutside);
+    } else {
+      // Scroll pozisyonunu geri yükle
+      const scrollY = document.body.style.top;
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || "0") * -1);
+      }
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("touchstart", handleClickOutside);
+      // Cleanup body scroll lock
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
     };
   }, [isOpen]);
 
@@ -50,7 +72,7 @@ const MobileSelect = memo(function MobileSelect({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full rounded-lg border-2 border-gray-300 bg-white px-3 py-3 text-base text-gray-900 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white sm:py-2.5 sm:text-sm"
+        className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-3 text-base text-gray-900 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white sm:py-2.5 sm:text-sm"
       >
         <div className="flex items-center justify-between">
           <span>{selectedOption.label}</span>
@@ -74,7 +96,7 @@ const MobileSelect = memo(function MobileSelect({
             }}
           />
           {/* Dropdown Menu */}
-          <div className="absolute z-[9999] mt-1 w-full rounded-lg border-2 border-gray-300 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800">
+          <div className="absolute z-[9999] mt-1 w-full rounded-md border-2 border-gray-300 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800">
             <div 
               className="max-h-[60vh] overflow-y-auto overscroll-contain"
               style={{ 

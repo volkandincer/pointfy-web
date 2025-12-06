@@ -3,6 +3,7 @@
 import { memo, useState } from "react";
 import { Eye, EyeOff, Check } from "lucide-react";
 import Modal from "@/components/ui/Modal";
+import Button from "@/components/ui/Button";
 import type { RoomSettings } from "@/interfaces/RoomCreate.interface";
 
 interface RoomSettingsModalProps {
@@ -51,11 +52,11 @@ const RoomSettingsModal = memo(function RoomSettingsModal({
                 )
               }
               disabled={localSettings.maxParticipants <= 2}
-              className="inline-flex h-12 w-12 items-center justify-center rounded-lg border-2 border-gray-300 bg-white text-lg font-bold text-gray-900 transition-all hover:border-gray-400 hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+              className="inline-flex h-12 w-12 items-center justify-center rounded-md border-2 border-gray-300 bg-white text-lg font-bold text-gray-900 transition-all hover:border-gray-400 hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
             >
               −
             </button>
-            <div className="flex h-16 w-20 items-center justify-center rounded-lg border-2 border-blue-600 bg-blue-50 dark:border-blue-500 dark:bg-blue-900/20">
+            <div className="flex h-16 w-20 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-50 dark:border-blue-500 dark:bg-blue-900/20">
               <span className="text-2xl font-bold text-blue-700 dark:text-blue-400">
                 {localSettings.maxParticipants}
               </span>
@@ -69,7 +70,7 @@ const RoomSettingsModal = memo(function RoomSettingsModal({
                 )
               }
               disabled={localSettings.maxParticipants >= 20}
-              className="inline-flex h-12 w-12 items-center justify-center rounded-lg border-2 border-gray-300 bg-white text-lg font-bold text-gray-900 transition-all hover:border-gray-400 hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+              className="inline-flex h-12 w-12 items-center justify-center rounded-md border-2 border-gray-300 bg-white text-lg font-bold text-gray-900 transition-all hover:border-gray-400 hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
             >
               +
             </button>
@@ -80,7 +81,7 @@ const RoomSettingsModal = memo(function RoomSettingsModal({
         </div>
 
         {/* Özel Oda Toggle */}
-        <div className="rounded-lg border-2 border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-800/50">
+        <div className="rounded-md border-2 border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-800/50">
           <label className="flex cursor-pointer items-center justify-between">
             <div>
               <span className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
@@ -120,12 +121,12 @@ const RoomSettingsModal = memo(function RoomSettingsModal({
                 }}
                 maxLength={4}
                 placeholder="4 karakterli şifre"
-                className="flex-1 rounded-lg border-2 border-gray-300 bg-white px-4 py-3 text-center text-lg font-bold tracking-widest text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-400"
+                className="flex-1 rounded-md border-2 border-gray-300 bg-white px-4 py-3 text-center text-lg font-bold tracking-widest text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-400"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
-                className="rounded-lg border-2 border-gray-300 bg-white p-3 text-gray-700 transition-all hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                className="rounded-md border-2 border-gray-300 bg-white p-3 text-gray-700 transition-all hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
               >
                 {showPassword ? (
                   <EyeOff className="h-5 w-5" />
@@ -148,7 +149,7 @@ const RoomSettingsModal = memo(function RoomSettingsModal({
         )}
 
         {/* İzleyicilere İzin Ver Toggle */}
-        <div className="rounded-lg border-2 border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-800/50">
+        <div className="rounded-md border-2 border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-800/50">
           <label className="flex cursor-pointer items-center justify-between">
             <div>
               <span className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
@@ -174,7 +175,7 @@ const RoomSettingsModal = memo(function RoomSettingsModal({
         </div>
 
         {/* Otomatik Açıklama Toggle */}
-        <div className="rounded-lg border-2 border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-800/50">
+        <div className="rounded-md border-2 border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-800/50">
           <label className="flex cursor-pointer items-center justify-between">
             <div>
               <span className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
@@ -199,20 +200,12 @@ const RoomSettingsModal = memo(function RoomSettingsModal({
 
         {/* Action Buttons */}
         <div className="flex items-center justify-end gap-3 pt-4">
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-lg border-2 border-gray-300 bg-white px-6 py-3 text-sm font-semibold text-gray-700 transition-all hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-          >
+          <Button variant="secondary" size="md" onClick={onClose}>
             İptal
-          </button>
-          <button
-            type="button"
-            onClick={handleSave}
-            className="min-h-[44px] rounded-lg border-2 border-blue-600 bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all active:border-blue-700 active:bg-blue-700 active:shadow-md sm:px-6 sm:py-3 hover:border-blue-700 hover:bg-blue-700 hover:shadow-md"
-          >
+          </Button>
+          <Button variant="primary" size="md" onClick={handleSave}>
             Kaydet
-          </button>
+          </Button>
         </div>
       </div>
     </Modal>

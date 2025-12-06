@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Edit, Plus, ClipboardList } from "lucide-react";
+import Button from "@/components/ui/Button";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import PersonalTaskList from "@/components/tasks/PersonalTaskList";
@@ -354,7 +355,7 @@ export default function BoardDetailPage() {
       <>
         <Header navigationItems={navigationItems} />
         <main className="container mx-auto px-4 py-16">
-          <div className="h-40 animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800" />
+          <div className="h-40 animate-pulse rounded-md bg-gray-100 dark:bg-gray-800" />
         </main>
         <Footer navigationItems={navigationItems} />
       </>
@@ -366,7 +367,7 @@ export default function BoardDetailPage() {
       <>
         <Header navigationItems={navigationItems} />
         <main className="container mx-auto px-4 py-16">
-          <div className="rounded-lg border-2 border-gray-200 bg-white p-8 text-center dark:border-gray-800 dark:bg-gray-900">
+          <div className="rounded-md border-2 border-gray-200 bg-white p-6 text-center sm:p-8 dark:border-gray-800 dark:bg-gray-900">
             <p className="text-gray-600 dark:text-gray-400">
               Board bulunamadı.
             </p>
@@ -387,7 +388,7 @@ export default function BoardDetailPage() {
             <div className="mx-auto max-w-6xl">
             {/* Board Header */}
             <div
-              className="group relative mb-8 overflow-hidden rounded-lg border-2 border-white/20 p-8 text-white shadow-md"
+              className="group relative mb-8 overflow-hidden rounded-md border-2 border-white/20 p-8 text-white shadow-md"
               style={{
                 background: `linear-gradient(135deg, ${boardColor} 0%, ${boardColor}dd 100%)`,
               }}
@@ -408,7 +409,7 @@ export default function BoardDetailPage() {
                 <div className="mb-4 flex items-start justify-between">
                   <div className="flex-1">
                     <div className="mb-3 flex items-center gap-3">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-white/20 backdrop-blur-sm">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-md bg-white/20 backdrop-blur-sm">
                         <ClipboardList className="h-8 w-8 text-white" />
                       </div>
                       <div>
@@ -423,7 +424,7 @@ export default function BoardDetailPage() {
                   </div>
                   <button
                     onClick={() => setShowEditBoardModal(true)}
-                    className="inline-flex items-center gap-2 border-2 border-white/30 bg-white/20 px-5 py-2.5 text-sm font-semibold backdrop-blur-sm transition-colors hover:bg-white/30"
+                    className="inline-flex items-center gap-2 rounded-md border-2 border-white/30 bg-white/20 px-5 py-2.5 text-sm font-semibold backdrop-blur-sm transition-colors hover:bg-white/30"
                   >
                     <Edit className="h-4 w-4" />
                     Düzenle
@@ -443,19 +444,20 @@ export default function BoardDetailPage() {
                     Bu board&apos;a ait görevleriniz
                   </p>
                 </div>
-                <button
+                <Button
+                  variant="primary"
+                  size="md"
                   onClick={() => {
                     setEditingTask(null);
                     setShowTaskModal(true);
                   }}
-                  className="inline-flex items-center gap-2 border-2 border-blue-600 bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700"
+                  icon={Plus}
                 >
-                  <Plus className="h-5 w-5" />
                   Yeni Task
-                </button>
+                </Button>
               </div>
               {tasksLoading ? (
-                <div className="h-40 animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800" />
+                <div className="h-40 animate-pulse rounded-md bg-gray-100 dark:bg-gray-800" />
               ) : (
                 <PersonalTaskList
                   tasks={tasks}

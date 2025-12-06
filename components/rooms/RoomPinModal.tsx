@@ -3,6 +3,7 @@
 import { memo, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import Modal from "@/components/ui/Modal";
+import Button from "@/components/ui/Button";
 
 interface RoomPinModalProps {
   open: boolean;
@@ -58,7 +59,7 @@ const RoomPinModal = memo(function RoomPinModal({
                 handleSubmit();
               }
             }}
-            className={`flex-1 rounded-lg border-2 px-4 py-3 text-center text-lg font-semibold tracking-widest outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-800 dark:text-white ${
+            className={`flex-1 rounded-md border-2 px-4 py-3 text-center text-lg font-semibold tracking-widest outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-800 dark:text-white ${
               pinInput.length > 0 && pinInput.length !== 4
                 ? "border-red-300 bg-red-50 dark:border-red-700 dark:bg-red-900/20"
                 : "border-gray-300 bg-white dark:border-gray-700"
@@ -67,7 +68,7 @@ const RoomPinModal = memo(function RoomPinModal({
           <button
             type="button"
             onClick={() => setShowPin((v) => !v)}
-            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border-2 border-gray-300 bg-white transition hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md border-2 border-gray-300 bg-white transition hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
             disabled={loading}
           >
             {showPin ? (
@@ -83,26 +84,31 @@ const RoomPinModal = memo(function RoomPinModal({
         </p>
 
         {error && (
-          <div className="rounded-lg border-2 border-red-200 bg-red-50 p-3 text-center text-sm text-red-600 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+          <div className="rounded-md border-2 border-red-200 bg-red-50 p-3 text-center text-sm text-red-600 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
             {error}
           </div>
         )}
 
         <div className="flex gap-3">
-          <button
+          <Button
+            variant="primary"
+            size="md"
+            fullWidth
             onClick={handleSubmit}
             disabled={pinInput.length !== 4 || loading}
-            className="flex-1 rounded-lg border-2 border-blue-600 bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:border-blue-700 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            loading={loading}
           >
             {loading ? "Kontrol ediliyor..." : "Onayla"}
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="secondary"
+            size="md"
+            fullWidth
             onClick={handleClose}
             disabled={loading}
-            className="flex-1 rounded-lg border-2 border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-gray-700 transition hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
           >
             İptal
-          </button>
+          </Button>
         </div>
       </div>
     </Modal>

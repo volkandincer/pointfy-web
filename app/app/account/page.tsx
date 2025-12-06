@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Modal from "@/components/ui/Modal";
+import Button from "@/components/ui/Button";
 import { useToastContext } from "@/contexts/ToastContext";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
@@ -325,7 +326,7 @@ export default function AccountPage() {
 
             {/* Error mesajı (OAuth callback'ten döndükten sonra) */}
             {errorMessage && (
-              <div className="mb-6 rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+              <div className="mb-6 rounded-md bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
                 Hata: {errorMessage}
                 <button
                   onClick={() => setErrorMessage(null)}
@@ -338,7 +339,7 @@ export default function AccountPage() {
             )}
 
             {/* Profil Bilgileri */}
-            <div className="mb-6 border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+            <div className="mb-6 rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
               <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
                 Profil Bilgileri
               </h2>
@@ -372,23 +373,25 @@ export default function AccountPage() {
                         onChange={(e) => setNewUsername(e.target.value)}
                         placeholder="Kullanıcı adı"
                         maxLength={50}
-                        className="flex-1 border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                        className="flex-1 rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                         disabled={saving}
                       />
-                      <button
+                      <Button
+                        variant="primary"
+                        size="sm"
                         onClick={handleUpdateUsername}
                         disabled={saving || !newUsername.trim()}
-                        className="border-2 border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700 disabled:opacity-50"
+                        loading={saving}
                       >
                         {saving ? "Kaydediliyor..." : "Kaydet"}
-                      </button>
+                      </Button>
                       <button
                         onClick={() => {
                           setNewUsername(username);
                           setEditingUsername(false);
                         }}
                         disabled={saving}
-                        className="border-2 border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                        className="rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
                       >
                         İptal
                       </button>
@@ -403,7 +406,7 @@ export default function AccountPage() {
                       />
                       <button
                         onClick={() => setEditingUsername(true)}
-                        className="border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                        className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
                       >
                         Düzenle
                       </button>
@@ -414,7 +417,7 @@ export default function AccountPage() {
             </div>
 
             {/* Jira Bağlantısı */}
-            <div className="mb-6 border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+            <div className="mb-6 rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
               <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
                 Jira Bağlantısı
               </h2>
@@ -432,7 +435,7 @@ export default function AccountPage() {
                   </button>
                   <button
                     onClick={handleDisconnectJira}
-                    className="w-full border-2 border-red-600 bg-white px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50 hover:border-red-700 dark:bg-gray-800 dark:text-red-500 dark:hover:bg-red-900/20"
+                    className="w-full rounded-md border-2 border-red-600 bg-white px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50 hover:border-red-700 dark:bg-gray-800 dark:text-red-500 dark:hover:bg-red-900/20"
                   >
                     Bağlantıyı Kopar
                   </button>
@@ -440,7 +443,7 @@ export default function AccountPage() {
               ) : (
                 <button
                   onClick={handleConnectJira}
-                  className="flex w-full items-center justify-center gap-3 border-2 border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                  className="flex w-full items-center justify-center gap-3 rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
                 >
                   <Link2 className="h-5 w-5" />
                   Jira Bağla
@@ -482,7 +485,7 @@ export default function AccountPage() {
 
             <div className="space-y-3 border-2 border-gray-300 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
               <div className="flex items-start gap-3">
-                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border-2 border-blue-600 bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:border-blue-500 dark:text-blue-400">
+                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:border-blue-500 dark:text-blue-400">
                   <span className="text-xs font-semibold">1</span>
                 </div>
                 <div className="flex-1">
@@ -501,7 +504,7 @@ export default function AccountPage() {
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border-2 border-blue-600 bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:border-blue-500 dark:text-blue-400">
+                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:border-blue-500 dark:text-blue-400">
                   <span className="text-xs font-semibold">2</span>
                 </div>
                 <div className="flex-1">
@@ -520,7 +523,7 @@ export default function AccountPage() {
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border-2 border-blue-600 bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:border-blue-500 dark:text-blue-400">
+                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:border-blue-500 dark:text-blue-400">
                   <span className="text-xs font-semibold">3</span>
                 </div>
                 <div className="flex-1">
@@ -539,7 +542,7 @@ export default function AccountPage() {
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border-2 border-green-600 bg-green-100 text-green-600 dark:bg-green-900/30 dark:border-green-500 dark:text-green-400">
+                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 border-green-600 bg-green-100 text-green-600 dark:bg-green-900/30 dark:border-green-500 dark:text-green-400">
                   <span className="text-xs font-semibold">✓</span>
                 </div>
                 <div className="flex-1">
@@ -568,7 +571,7 @@ export default function AccountPage() {
             <div className="flex gap-3">
               <button
                 onClick={() => setShowJiraPermissionModal(false)}
-                className="flex-1 border-2 border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                className="flex-1 rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
               >
                 İptal
               </button>

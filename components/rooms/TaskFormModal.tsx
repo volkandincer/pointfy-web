@@ -187,7 +187,7 @@ const TaskFormModal = memo(function TaskFormModal({
             <button
               type="button"
               onClick={() => setMode("create")}
-              className={`flex-1 rounded-lg px-3 py-2 text-sm font-semibold transition ${
+              className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
                 isCreateMode
                   ? "bg-blue-600 text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
@@ -199,7 +199,7 @@ const TaskFormModal = memo(function TaskFormModal({
             <button
               type="button"
               onClick={() => setMode("select")}
-              className={`flex-1 rounded-lg px-3 py-2 text-sm font-semibold transition ${
+              className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
                 isSelectMode
                   ? "bg-blue-600 text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
@@ -212,7 +212,7 @@ const TaskFormModal = memo(function TaskFormModal({
               <button
                 type="button"
                 onClick={() => setMode("jira")}
-                className={`flex-1 rounded-lg px-3 py-2 text-sm font-semibold transition ${
+                className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
                   isJiraMode
                     ? "bg-blue-600 text-white"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
@@ -245,7 +245,7 @@ const TaskFormModal = memo(function TaskFormModal({
                 placeholder="Task başlığı"
                 maxLength={200}
                 required
-                className="w-full rounded-lg border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
               />
             </div>
             <div>
@@ -262,21 +262,21 @@ const TaskFormModal = memo(function TaskFormModal({
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Task açıklaması"
                 maxLength={500}
-                className="w-full rounded-lg border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
               />
             </div>
             <div className="flex items-center justify-end gap-3 pt-4">
               <button
                 type="button"
                 onClick={onClose}
-                className="inline-flex h-10 items-center justify-center rounded-lg border-2 border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                className="inline-flex h-10 items-center justify-center rounded-md border-2 border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
               >
                 İptal
               </button>
               <button
                 type="submit"
                 disabled={loading || !title.trim()}
-                className="inline-flex h-10 items-center justify-center rounded-lg bg-indigo-600 px-5 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:opacity-60"
+                className="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-5 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:opacity-60"
               >
                 {loading ? "Ekleniyor..." : "Ekle"}
               </button>
@@ -290,7 +290,7 @@ const TaskFormModal = memo(function TaskFormModal({
             <button
               type="button"
               onClick={() => setMode("create")}
-              className={`flex-1 rounded-lg px-3 py-2 text-sm font-semibold transition ${
+              className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
                 isCreateMode
                   ? "bg-blue-600 text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
@@ -302,7 +302,7 @@ const TaskFormModal = memo(function TaskFormModal({
             <button
               type="button"
               onClick={() => setMode("select")}
-              className={`flex-1 rounded-lg px-3 py-2 text-sm font-semibold transition ${
+              className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
                 isSelectMode
                   ? "bg-blue-600 text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
@@ -315,7 +315,7 @@ const TaskFormModal = memo(function TaskFormModal({
               <button
                 type="button"
                 onClick={() => setMode("jira")}
-                className={`flex-1 rounded-lg px-3 py-2 text-sm font-semibold transition ${
+                className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
                   isJiraMode
                     ? "bg-blue-600 text-white"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
@@ -356,7 +356,7 @@ const TaskFormModal = memo(function TaskFormModal({
                     key={task.id}
                     type="button"
                     onClick={() => handleTaskSelect(task)}
-                    className={`w-full rounded-lg border-2 p-3 text-left transition-all hover:shadow-md ${
+                    className={`w-full rounded-md border-2 p-3 text-left transition-all hover:shadow-md ${
                       selectedTaskId === task.id
                         ? "border-blue-500 bg-blue-50 dark:border-blue-400 dark:bg-blue-900/20"
                         : "border-gray-200 bg-white hover:border-blue-300 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-500"
@@ -371,7 +371,7 @@ const TaskFormModal = memo(function TaskFormModal({
                       </p>
                     )}
                     <div className="mt-2 flex items-center gap-2">
-                      <span className="rounded-lg border-2 border-gray-300 bg-gray-100 px-2 py-0.5 text-[10px] font-semibold text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                      <span className="rounded-md border-2 border-gray-300 bg-gray-100 px-2 py-0.5 text-[10px] font-semibold text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300">
                         {task.category}
                       </span>
                       {task.priority > 1 && (
@@ -391,7 +391,7 @@ const TaskFormModal = memo(function TaskFormModal({
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex h-10 items-center justify-center rounded-lg border-2 border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+              className="inline-flex h-10 items-center justify-center rounded-md border-2 border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
             >
               İptal
             </button>
@@ -404,7 +404,7 @@ const TaskFormModal = memo(function TaskFormModal({
             <button
               type="button"
               onClick={() => setMode("create")}
-              className={`flex-1 rounded-lg px-3 py-2 text-sm font-semibold transition ${
+              className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
                 isCreateMode
                   ? "bg-blue-600 text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
@@ -416,7 +416,7 @@ const TaskFormModal = memo(function TaskFormModal({
             <button
               type="button"
               onClick={() => setMode("select")}
-              className={`flex-1 rounded-lg px-3 py-2 text-sm font-semibold transition ${
+              className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
                 isSelectMode
                   ? "bg-blue-600 text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
@@ -429,7 +429,7 @@ const TaskFormModal = memo(function TaskFormModal({
               <button
                 type="button"
                 onClick={() => setMode("jira")}
-                className={`flex-1 rounded-lg px-3 py-2 text-sm font-semibold transition ${
+                className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
                   isJiraMode
                     ? "bg-blue-600 text-white"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
@@ -449,7 +449,7 @@ const TaskFormModal = memo(function TaskFormModal({
               jiraBaseUrl={jiraBaseUrl}
             />
           ) : (
-            <div className="rounded-lg border-2 border-gray-200 bg-gray-50 p-8 text-center dark:border-gray-700 dark:bg-gray-800">
+            <div className="rounded-md border-2 border-gray-200 bg-gray-50 p-8 text-center dark:border-gray-700 dark:bg-gray-800">
               <p className="mb-2 text-4xl">⚠️</p>
               <p className="text-sm font-medium text-gray-900 dark:text-white">
                 Jira URL&apos;i bulunamadı

@@ -37,14 +37,14 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
   --radius-xl: calc(var(--radius) + 4px);
 }
 
 :root {
-  --radius: 0.625rem;
+  --radius: 0.375rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -126,36 +126,36 @@
   body * {
     visibility: hidden;
   }
-  
+
   .print-section,
   .print-section * {
     visibility: visible;
   }
-  
+
   .print-section {
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
   }
-  
+
   .print-header {
     display: block !important;
   }
-  
+
   .no-print {
     display: none !important;
   }
-  
+
   .print-section button {
     display: none !important;
   }
-  
-  .print-section .rounded-lg {
+
+  .print-section .rounded-md {
     break-inside: avoid;
     page-break-inside: avoid;
   }
-  
+
   @page {
     margin: 1cm;
   }

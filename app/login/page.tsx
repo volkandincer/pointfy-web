@@ -5,6 +5,7 @@ import { Layers } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import Button from "@/components/ui/Button";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import { getSupabase } from "@/lib/supabase";
@@ -228,16 +229,16 @@ function LoginPageContent() {
         <div className="container mx-auto flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-16">
           <div className="w-full max-w-md">
             {/* Card */}
-            <div className="border-2 border-gray-300 bg-white p-8 shadow-md dark:border-gray-700 dark:bg-gray-900">
+             <div className="rounded-md border-2 border-gray-300 bg-white p-8 shadow-md dark:border-gray-700 dark:bg-gray-900">
               {/* Logo */}
               <div className="mb-8 flex justify-center">
-                <div className="flex h-16 w-16 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
+                <div className="flex h-16 w-16 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
                   <Layers className="h-8 w-8 text-blue-600 dark:text-blue-400" />
                 </div>
               </div>
 
               {/* Tab buttons */}
-              <div className="mb-8 flex gap-2 border-2 border-gray-300 bg-gray-100 p-1 dark:border-gray-700 dark:bg-gray-800">
+              <div className="mb-8 flex gap-2 rounded-md border-2 border-gray-300 bg-gray-100 p-1 dark:border-gray-700 dark:bg-gray-800">
                 <button
                   className={`flex-1 border-2 px-4 py-2.5 text-sm font-semibold transition-colors ${
                     isLogin
@@ -289,7 +290,7 @@ function LoginPageContent() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
+                    className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
                     placeholder="ornek@email.com"
                   />
                 </div>
@@ -306,7 +307,7 @@ function LoginPageContent() {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
+                    className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
                     placeholder="••••••••"
                   />
                 </div>
@@ -324,15 +325,17 @@ function LoginPageContent() {
                       required
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
-                      className="w-full border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
+                      className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
                       placeholder="kullaniciadi"
                     />
                   </div>
                 )}
-                <button
+                <Button
                   type="submit"
-                  disabled={loading}
-                  className="w-full border-2 border-blue-600 bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700 disabled:opacity-60 disabled:cursor-not-allowed"
+                  variant="primary"
+                  size="md"
+                  fullWidth
+                  loading={loading}
                 >
                   {loading
                     ? isLogin
@@ -341,9 +344,9 @@ function LoginPageContent() {
                     : isLogin
                     ? "Giriş Yap"
                     : "Kayıt Ol"}
-                </button>
+                </Button>
                 {message && (
-                  <div className="border-2 border-red-300 bg-red-50 p-3 text-sm text-red-600 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400">
+                  <div className="rounded-md border-2 border-red-300 bg-red-50 p-3 text-sm text-red-600 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400">
                     {message}
                   </div>
                 )}

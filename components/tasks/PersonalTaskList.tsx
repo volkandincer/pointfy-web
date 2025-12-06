@@ -49,13 +49,13 @@ const PersonalTaskList = memo(function PersonalTaskList({
   };
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 sm:gap-4">
       {tasks.map((t) => {
         const priorityInfo = getPriorityInfo(t.priority ?? 1);
         return (
           <div
             key={t.id}
-            className="group relative border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+            className="group relative rounded-md border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
             style={{
               borderLeftColor: t.priority === 3 ? '#dc2626' : t.priority === 2 ? '#2563eb' : '#6b7280',
             }}
@@ -131,7 +131,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
                       onDelete(t.id);
                     }
                   }}
-                  className="inline-flex items-center justify-center border-2 border-red-600 bg-white px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50 dark:border-red-500 dark:bg-gray-900 dark:text-red-500 dark:hover:bg-red-900/20"
+                  className="inline-flex items-center justify-center rounded-md border-2 border-red-600 bg-white px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50 dark:border-red-500 dark:bg-gray-900 dark:text-red-500 dark:hover:bg-red-900/20"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>

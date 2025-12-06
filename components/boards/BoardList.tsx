@@ -134,7 +134,7 @@ const BoardList = memo(function BoardList({
         {[1, 2, 3].map((i) => (
           <div
             key={i}
-            className="h-40 animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800"
+            className="h-40 animate-pulse rounded-md bg-gray-100 dark:bg-gray-800"
           />
         ))}
       </div>
@@ -143,7 +143,7 @@ const BoardList = memo(function BoardList({
 
   if (error) {
     return (
-      <div className="rounded-lg border-2 border-red-200 bg-red-50 p-4 text-red-800 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+      <div className="rounded-md border-2 border-red-200 bg-red-50 p-4 text-red-800 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
         <p className="font-semibold">Hata:</p>
         <p>{error}</p>
       </div>
@@ -157,7 +157,7 @@ const BoardList = memo(function BoardList({
           <button
             onClick={() => setShowCreateModal(true)}
             disabled={actionLoading}
-            className="group inline-flex min-h-[44px] items-center gap-2 rounded-lg border-2 border-blue-600 bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all active:border-blue-700 active:bg-blue-700 active:shadow-md sm:px-6 sm:py-3 hover:border-blue-700 hover:bg-blue-700 hover:shadow-md disabled:opacity-60 disabled:hover:shadow-sm"
+            className="group inline-flex min-h-[44px] items-center gap-2 rounded-md border-2 border-green-600 bg-green-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all active:border-green-700 active:bg-green-700 active:shadow-md sm:px-6 sm:py-3 hover:border-green-700 hover:bg-green-700 hover:shadow-md disabled:opacity-60 disabled:hover:shadow-sm"
           >
             <Plus className="h-5 w-5 transition-transform group-hover:rotate-90" />
             Yeni Board Oluştur

@@ -94,13 +94,13 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
               {/* Sidebar Skeleton */}
               <aside className="hidden w-64 shrink-0 lg:block">
                 <div className="sticky top-6">
-                  <div className="rounded-lg border-2 border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+                  <div className="rounded-md border-2 border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                     <div className="mb-4 h-6 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
                     <div className="space-y-2">
                       {[1, 2, 3, 4, 5, 6].map((i) => (
                         <div
                           key={i}
-                          className="h-10 w-full animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800"
+                          className="h-10 w-full animate-pulse rounded-md bg-gray-200 dark:bg-gray-800"
                         />
                       ))}
                     </div>
@@ -110,12 +110,12 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
               {/* Content Skeleton */}
               <main className="flex-1">
                 <div className="space-y-6">
-                  <div className="h-8 w-48 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800" />
+                  <div className="h-8 w-48 animate-pulse rounded-md bg-gray-200 dark:bg-gray-800" />
                   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     {[1, 2, 3, 4].map((i) => (
                       <div
                         key={i}
-                        className="h-24 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800"
+                        className="h-24 animate-pulse rounded-md bg-gray-200 dark:bg-gray-800"
                       />
                     ))}
                   </div>
@@ -138,10 +138,10 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
         <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
           <div className="container mx-auto px-4 py-16">
             <div className="mx-auto max-w-2xl">
-              <div className="rounded-lg border-2 border-blue-600 bg-white p-8 shadow-sm dark:border-blue-500 dark:bg-gray-900">
+              <div className="rounded-md border-2 border-purple-600 bg-white p-6 shadow-sm sm:p-8 dark:border-purple-500 dark:bg-gray-900">
                 <div className="mb-6 text-center">
                   <div className="mb-4 flex justify-center">
-                    <div className="flex h-24 w-24 items-center justify-center rounded-lg border-2 border-blue-600 bg-blue-600 text-white shadow-sm">
+                    <div className="flex h-24 w-24 items-center justify-center rounded-md border-2 border-purple-600 bg-purple-600 text-white shadow-sm">
                       <Link2 className="h-12 w-12" />
                     </div>
                   </div>
@@ -166,7 +166,7 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
                       // Jira OAuth error
                     }
                   }}
-                  className="w-full rounded-lg border-2 border-blue-600 bg-blue-600 px-6 py-3 text-base font-semibold text-white shadow-sm transition-all hover:border-blue-700 hover:bg-blue-700 hover:shadow-md"
+                  className="w-full rounded-md border-2 border-purple-600 bg-purple-600 px-6 py-3 text-base font-semibold text-white shadow-sm transition-all hover:border-purple-700 hover:bg-purple-700 hover:shadow-md"
                 >
                   Jira&apos;yı Bağla
                 </button>
@@ -196,7 +196,7 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
             {/* Sidebar Navigation */}
             <aside className="hidden w-64 shrink-0 lg:block">
               <div className="sticky top-6">
-                <div className="rounded-lg border-2 border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+                <div className="rounded-md border-2 border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                   <div className="mb-4">
                     <h2 className="text-lg font-bold text-gray-900 dark:text-white">
                       Jira Modülü
@@ -213,9 +213,9 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
                         <Link
                           key={item.id}
                           href={item.href}
-                          className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
+                          className={`flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-all ${
                             active
-                              ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
+                              ? "bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400"
                               : "text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
                           }`}
                         >
@@ -242,21 +242,21 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
                         href={item.href}
                         className={`relative flex flex-col items-center gap-1 px-2 py-3 transition-all ${
                           active
-                            ? "text-blue-600 dark:text-blue-400"
+                            ? "text-purple-600 dark:text-purple-400"
                             : "text-gray-600 dark:text-gray-400"
                         }`}
                       >
                         <div className="relative">
                           <IconComponent className={`h-5 w-5 transition-transform ${active ? "scale-110" : ""}`} />
                           {active && (
-                            <div className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-blue-600 dark:bg-blue-400" />
+                            <div className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-purple-600 dark:bg-purple-400" />
                           )}
                         </div>
                         <span className={`text-[10px] font-medium ${active ? "font-semibold" : ""}`}>
                           {item.label.length > 8 ? item.label.substring(0, 7) + "..." : item.label}
                         </span>
                         {active && (
-                          <div className="absolute bottom-0 left-1/2 h-0.5 w-8 -translate-x-1/2 rounded-full bg-blue-600 dark:bg-blue-400" />
+                          <div className="absolute bottom-0 left-1/2 h-0.5 w-8 -translate-x-1/2 rounded-full bg-purple-600 dark:bg-purple-400" />
                         )}
                       </Link>
                     );

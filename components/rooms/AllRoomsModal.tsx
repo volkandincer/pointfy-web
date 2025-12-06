@@ -70,7 +70,7 @@ const AllRoomsModal = memo(function AllRoomsModal({
 
         const { data, error: fetchError } = await supabase
           .from("rooms")
-          .select("id, name, code, created_by_username, is_active, created_at")
+          .select("id, name, code, created_by_username, is_active, created_at, room_type")
           .eq("is_active", true)
           .eq("status", "active")
           .order("created_at", { ascending: false });
@@ -176,7 +176,7 @@ const AllRoomsModal = memo(function AllRoomsModal({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Oda adı, kod veya oluşturan ile ara..."
-            className="w-full border-2 border-gray-300 bg-white px-4 py-3 pl-10 text-sm outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
+            className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-3 pl-10 text-sm outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
           />
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
           {searchQuery && (
@@ -223,19 +223,34 @@ const AllRoomsModal = memo(function AllRoomsModal({
           />
         ) : (
           <div className="space-y-3">
-            {filteredRooms.map((room) => (
+            {filteredRooms.map((room) => {
+              const isRetro = room.room_type === "retro";
+              const borderColor = isRetro 
+                ? "border-l-purple-600 dark:border-l-purple-500" 
+                : "border-l-blue-600 dark:border-l-blue-500";
+              const iconBorderColor = isRetro
+                ? "border-purple-600 dark:border-purple-500"
+                : "border-blue-600 dark:border-blue-500";
+              const iconBgColor = isRetro
+                ? "bg-purple-50 dark:bg-purple-900/20"
+                : "bg-blue-50 dark:bg-blue-900/20";
+              const iconTextColor = isRetro
+                ? "text-purple-600 dark:text-purple-400"
+                : "text-blue-600 dark:text-blue-400";
+              const arrowBorderColor = isRetro
+                ? "border-purple-600 bg-purple-600 group-hover:bg-purple-700 group-hover:border-purple-700"
+                : "border-blue-600 bg-blue-600 group-hover:bg-blue-700 group-hover:border-blue-700";
+              
+              return (
               <button
                 key={room.id}
                 onClick={() => handleRoomClick(room.id)}
-                className="group w-full border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
-                style={{
-                  borderLeftColor: '#2563eb',
-                }}
+                className={`group w-full rounded-md border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 text-left shadow-sm transition-all active:border-gray-400 active:shadow-md hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900`}
               >
                 <div className="flex items-center gap-4">
                   {/* Icon Container */}
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
-                    <Home className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                  <div className={`flex h-12 w-12 shrink-0 items-center justify-center border-2 ${iconBorderColor} ${iconBgColor}`}>
+                    <Home className={`h-6 w-6 ${iconTextColor}`} />
                   </div>
 
                   {/* Content */}
@@ -244,7 +259,7 @@ const AllRoomsModal = memo(function AllRoomsModal({
                       {room.name || "Oda"}
                     </h3>
                     <div className="flex items-center gap-2">
-                      <span className="rounded-lg border-2 border-gray-300 bg-white px-2 py-0.5 text-xs font-semibold text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                      <span className="rounded-md border-2 border-gray-300 bg-white px-2 py-0.5 text-xs font-semibold text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
                         {room.code}
                       </span>
                       {room.created_by_username && (
@@ -256,19 +271,20 @@ const AllRoomsModal = memo(function AllRoomsModal({
                   </div>
 
                   {/* Arrow Icon */}
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center border-2 border-blue-600 bg-blue-600 text-white transition-colors group-hover:bg-blue-700 group-hover:border-blue-700">
+                  <div className={`flex h-7 w-7 shrink-0 items-center justify-center border-2 ${arrowBorderColor} text-white transition-colors`}>
                     <ChevronRight className="h-4 w-4" />
                   </div>
                 </div>
               </button>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
 
       <button
         onClick={onClose}
-        className="mt-6 w-full border-2 border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
+        className="mt-6 w-full rounded-md border-2 border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
       >
         Kapat
       </button>

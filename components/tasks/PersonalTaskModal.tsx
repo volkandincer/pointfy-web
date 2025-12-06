@@ -89,7 +89,7 @@ const PersonalTaskModal = memo(function PersonalTaskModal({
             placeholder="Task başlığı"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
         </div>
         <div>
@@ -97,7 +97,7 @@ const PersonalTaskModal = memo(function PersonalTaskModal({
             placeholder="Açıklama (isteğe bağlı)"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
         </div>
         <div>
@@ -146,7 +146,7 @@ const PersonalTaskModal = memo(function PersonalTaskModal({
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex h-10 items-center justify-center border-2 border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+            className="inline-flex h-10 items-center justify-center rounded-md border-2 border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
           >
             İptal
           </button>

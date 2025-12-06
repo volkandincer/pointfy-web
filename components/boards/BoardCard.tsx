@@ -47,7 +47,31 @@ const BoardCard = memo(function BoardCard({
     [board, onArchive]
   );
 
-  const boardColor = board.color || "#3B82F6";
+  // Board renk paleti - eğer board'un kendi rengi yoksa, ID'ye göre renk atanır
+  const boardColorPalette = [
+    "#3B82F6", // Blue
+    "#10B981", // Green
+    "#F59E0B", // Amber
+    "#EF4444", // Red
+    "#8B5CF6", // Purple
+    "#EC4899", // Pink
+    "#06B6D4", // Cyan
+    "#F97316", // Orange
+    "#84CC16", // Lime
+    "#6366F1", // Indigo
+  ];
+
+  // Board ID'sine göre renk seç (eğer board'un kendi rengi yoksa)
+  const getBoardColor = () => {
+    if (board.color) return board.color;
+    
+    // Board ID'sinin son karakterini al ve renk paletinden seç
+    const lastChar = board.id.slice(-1);
+    const colorIndex = parseInt(lastChar, 16) % boardColorPalette.length;
+    return boardColorPalette[colorIndex];
+  };
+
+  const boardColor = getBoardColor();
 
   // Renk için opacity değerleri
   const getColorWithOpacity = (color: string, opacity: number) => {
@@ -61,7 +85,7 @@ const BoardCard = memo(function BoardCard({
   return (
     <Link
       href={`/app/boards/${board.id}`}
-      className="group relative block border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-6 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+      className="group relative block rounded-md border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
       style={{
         borderLeftColor: boardColor,
       }}
@@ -103,7 +127,7 @@ const BoardCard = memo(function BoardCard({
             {onEdit && (
               <button
                 onClick={handleEdit}
-                className="flex h-9 w-9 items-center justify-center border-2 border-blue-600 bg-white text-blue-600 transition-colors active:bg-blue-50 sm:h-10 sm:w-10 dark:bg-gray-900 dark:border-blue-500 dark:text-blue-400 dark:active:bg-blue-900/20"
+                className="flex h-9 w-9 items-center justify-center rounded-md border-2 border-blue-600 bg-white text-blue-600 transition-colors active:bg-blue-50 sm:h-10 sm:w-10 dark:bg-gray-900 dark:border-blue-500 dark:text-blue-400 dark:active:bg-blue-900/20"
                 title="Düzenle"
               >
                 <Edit className="h-4 w-4" />
@@ -112,7 +136,7 @@ const BoardCard = memo(function BoardCard({
             {onArchive && (
               <button
                 onClick={handleArchive}
-                className="flex h-9 w-9 items-center justify-center border-2 border-gray-300 bg-white text-gray-600 transition-colors active:bg-gray-50 sm:h-10 sm:w-10 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:active:bg-gray-800"
+                className="flex h-9 w-9 items-center justify-center rounded-md border-2 border-gray-300 bg-white text-gray-600 transition-colors active:bg-gray-50 sm:h-10 sm:w-10 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:active:bg-gray-800"
                 title={board.is_archived ? "Arşivden Çıkar" : "Arşivle"}
               >
                 {board.is_archived ? (
@@ -125,7 +149,7 @@ const BoardCard = memo(function BoardCard({
             {onDelete && (
               <button
                 onClick={handleDelete}
-                className="flex h-9 w-9 items-center justify-center border-2 border-red-600 bg-white text-red-600 transition-colors active:bg-red-50 sm:h-10 sm:w-10 dark:bg-gray-900 dark:border-red-500 dark:text-red-400 dark:active:bg-red-900/20"
+                className="flex h-9 w-9 items-center justify-center rounded-md border-2 border-red-600 bg-white text-red-600 transition-colors active:bg-red-50 sm:h-10 sm:w-10 dark:bg-gray-900 dark:border-red-500 dark:text-red-400 dark:active:bg-red-900/20"
                 title="Sil"
               >
                 <Trash2 className="h-4 w-4" />

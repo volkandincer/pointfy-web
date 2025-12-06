@@ -43,7 +43,7 @@ const Toast = memo(function Toast({
 
   return (
     <div
-      className={`rounded-lg border-2 ${bgColor} px-6 py-3 text-white shadow-md transition-all duration-300 ${
+      className={`rounded-md border-2 ${bgColor} px-6 py-3 text-white shadow-md transition-all duration-300 ${
         visible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
       }`}
     >
@@ -63,7 +63,7 @@ const Toast = memo(function Toast({
                 onClose?.();
               }, 300);
             }}
-            className="rounded-lg border-2 border-white/30 bg-white/20 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-white/30"
+            className="rounded-md border-2 border-white/30 bg-white/20 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-white/30"
           >
             {action.label}
           </button>

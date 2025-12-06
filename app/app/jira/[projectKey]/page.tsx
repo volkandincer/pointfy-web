@@ -408,7 +408,7 @@ export default function JiraProjectDetailPage() {
                 {[1, 2, 3, 4].map((i) => (
                   <div
                     key={i}
-                    className="group relative border-2 border-gray-300 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900"
+                    className="group relative rounded-md border-2 border-gray-300 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900"
                   >
                     <div className="mb-2 h-10 w-10 animate-pulse border-2 border-gray-300 bg-gray-200 dark:border-gray-700 dark:bg-gray-800" />
                     <div className="mb-2 h-4 w-20 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
@@ -418,7 +418,7 @@ export default function JiraProjectDetailPage() {
               </div>
             ) : (
               <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
-                <div className="border-2 border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
+                <div className="rounded-md border-2 border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
                   <div className="mb-2 flex items-center justify-between">
                     <div className="border-2 border-blue-600 bg-blue-50 p-2 dark:bg-blue-900/20">
                       <ClipboardList className="h-5 w-5 text-blue-600 dark:text-blue-400" />
@@ -431,7 +431,7 @@ export default function JiraProjectDetailPage() {
                     {allIssues.length}
                   </div>
                 </div>
-                <div className="border-2 border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
+                <div className="rounded-md border-2 border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
                 <div className="mb-2 flex items-center justify-between">
                   <div className="border-2 border-orange-600 bg-orange-50 p-2 dark:bg-orange-900/20">
                     <Clock className="h-5 w-5 text-orange-600 dark:text-orange-400" />
@@ -442,7 +442,7 @@ export default function JiraProjectDetailPage() {
                   {allIssues.filter((i) => i.statusColor !== "green" && !i.resolved).length}
                 </div>
               </div>
-              <div className="border-2 border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
+              <div className="rounded-md border-2 border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
                 <div className="mb-2 flex items-center justify-between">
                   <div className="border-2 border-green-600 bg-green-50 p-2 dark:bg-green-900/20">
                     <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
@@ -455,7 +455,7 @@ export default function JiraProjectDetailPage() {
                   {allIssues.filter((i) => i.statusColor === "green" || i.resolved).length}
                 </div>
               </div>
-              <div className="border-2 border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
+              <div className="rounded-md border-2 border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
                 <div className="mb-2 flex items-center justify-between">
                   <div className="border-2 border-purple-600 bg-purple-50 p-2 dark:bg-purple-900/20">
                       <Filter className="h-5 w-5 text-purple-600 dark:text-purple-400" />
@@ -473,7 +473,7 @@ export default function JiraProjectDetailPage() {
 
             {/* Status Distribution Chart */}
             {issuesLoading && allIssues.length === 0 ? (
-              <div className="mb-6 border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+              <div className="mb-6 rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
                 <div className="mb-5 flex items-center gap-2">
                   <div className="h-9 w-9 animate-pulse border-2 border-gray-300 bg-gray-200 dark:border-gray-700 dark:bg-gray-800" />
                   <div className="h-5 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
@@ -489,7 +489,7 @@ export default function JiraProjectDetailPage() {
                 </div>
               </div>
             ) : (
-              <div className="mb-6 border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+              <div className="mb-6 rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
               <div className="mb-5 flex items-center gap-2">
                 <div className="border-2 border-indigo-600 bg-indigo-50 p-2 dark:bg-indigo-900/20">
                   <BarChart3 className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
@@ -517,7 +517,7 @@ export default function JiraProjectDetailPage() {
                         {status}
                       </div>
                       <div className="flex-1">
-                        <div className="relative h-3 overflow-hidden rounded-lg bg-gray-200 dark:bg-gray-800">
+                        <div className="relative h-3 overflow-hidden rounded-md bg-gray-200 dark:bg-gray-800">
                           <div
                             className={`h-full ${colorClass} transition-all duration-500 ease-out`}
                             style={{ width: `${percentage}%` }}
@@ -540,7 +540,7 @@ export default function JiraProjectDetailPage() {
             )}
 
             {/* Filters and Search */}
-            <div className="relative mb-6 border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+            <div className="relative mb-6 rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
               <div className="mb-5">
                 <div className="relative flex items-center gap-3">
                   <div className="absolute left-3 z-10">
@@ -551,12 +551,12 @@ export default function JiraProjectDetailPage() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Issue&apos;da ara (başlık, açıklama, key)..."
-                    className="w-full border-2 border-gray-300 bg-gray-50 pl-10 pr-10 py-3 text-base text-gray-900 outline-none transition-all focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:bg-gray-800 sm:text-sm"
+                    className="w-full rounded-md border-2 border-gray-300 bg-gray-50 pl-10 pr-10 py-3 text-base text-gray-900 outline-none transition-all focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:bg-gray-800 sm:text-sm"
                   />
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery("")}
-                      className="absolute right-3 z-10 rounded-lg p-1.5 text-gray-400 transition hover:bg-gray-200 hover:text-gray-600 dark:hover:bg-gray-700 dark:hover:text-gray-200"
+                      className="absolute right-3 z-10 rounded-md p-1.5 text-gray-400 transition hover:bg-gray-200 hover:text-gray-600 dark:hover:bg-gray-700 dark:hover:text-gray-200"
                     >
                       <X className="h-4 w-4" />
                     </button>
@@ -668,7 +668,7 @@ export default function JiraProjectDetailPage() {
                     )}
                     <button
                       onClick={clearAllFilters}
-                      className="ml-auto flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200"
+                      className="ml-auto flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200"
                     >
                       <X className="h-3 w-3" />
                       Tümünü Temizle
@@ -695,7 +695,7 @@ export default function JiraProjectDetailPage() {
             </div>
 
             {/* Issues List */}
-            <div className="border-2 border-gray-300 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+            <div className="rounded-md border-2 border-gray-300 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
               <div className="p-6">
                 <div className="mb-4 flex items-center justify-between">
                   <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
@@ -704,7 +704,7 @@ export default function JiraProjectDetailPage() {
                   <button
                     onClick={fetchProjectIssues}
                     disabled={issuesLoading}
-                    className="rounded-lg border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 disabled:opacity-50"
+                    className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 disabled:opacity-50"
                   >
                     {issuesLoading ? "Yükleniyor..." : "Yenile"}
                   </button>
@@ -721,24 +721,24 @@ export default function JiraProjectDetailPage() {
                     {[1, 2, 3, 4, 5].map((i) => (
                       <div
                         key={i}
-                        className="group relative block border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                        className="group relative block rounded-md border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
                       >
                         <div className="flex items-start gap-4">
                           <div className="flex-1">
                             <div className="mb-3 flex flex-wrap items-center gap-2">
-                              <div className="h-6 w-16 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800" />
+                              <div className="h-6 w-16 animate-pulse rounded-md bg-gray-200 dark:bg-gray-800" />
                               <div className="h-6 w-20 animate-pulse rounded-full bg-gray-200 dark:bg-gray-800" />
                               <div className="h-6 w-16 animate-pulse rounded-full bg-gray-200 dark:bg-gray-800" />
                             </div>
                             <div className="mb-2 h-6 w-3/4 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
                             <div className="mb-3 h-4 w-full animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
                             <div className="mb-2 h-4 w-2/3 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
-                            <div className="mt-3 flex flex-wrap items-center gap-4 rounded-lg bg-gray-50/50 px-3 py-2.5 dark:bg-gray-800/50">
+                            <div className="mt-3 flex flex-wrap items-center gap-4 rounded-md bg-gray-50/50 px-3 py-2.5 dark:bg-gray-800/50">
                               <div className="h-5 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
                               <div className="h-5 w-20 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
                             </div>
                           </div>
-                          <div className="h-10 w-10 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800" />
+                          <div className="h-10 w-10 animate-pulse rounded-md bg-gray-200 dark:bg-gray-800" />
                         </div>
                       </div>
                     ))}
@@ -759,7 +759,7 @@ export default function JiraProjectDetailPage() {
                                 <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                                   {status}
                                 </h3>
-                                <span className="rounded-lg border-2 border-gray-300 bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                                <span className="rounded-md border-2 border-gray-300 bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300">
                                   {statusIssues.length}
                                 </span>
                               </div>
@@ -771,14 +771,14 @@ export default function JiraProjectDetailPage() {
                                       setSelectedIssue(issue);
                                       setIsModalOpen(true);
                                     }}
-                                    className="group block cursor-pointer rounded-lg border-2 border-gray-200 bg-white p-3 shadow-sm transition-all hover:border-blue-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
+                                    className="group block cursor-pointer rounded-md border-2 border-gray-200 bg-white p-3 shadow-sm transition-all hover:border-blue-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
                                   >
                                     <div className="mb-1 flex items-center gap-1.5">
                                       <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400">
                                         {issue.key}
                                       </span>
                                       {issue.priority && (
-                                        <span className="rounded-lg border-2 border-gray-300 bg-gray-100 px-1.5 py-0.5 text-xs text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                                        <span className="rounded-md border-2 border-gray-300 bg-gray-100 px-1.5 py-0.5 text-xs text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300">
                                           {issue.priority}
                                         </span>
                                       )}
@@ -813,7 +813,7 @@ export default function JiraProjectDetailPage() {
                               setSelectedIssue(issue);
                               setIsModalOpen(true);
                             }}
-                            className="group flex cursor-pointer items-center gap-3 rounded-lg border-2 border-gray-200 bg-white p-3 transition hover:border-gray-300 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+                            className="group flex cursor-pointer items-center gap-3 rounded-md border-2 border-gray-200 bg-white p-3 transition hover:border-gray-300 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
                           >
                             <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400">
                               {issue.key}
@@ -822,7 +822,7 @@ export default function JiraProjectDetailPage() {
                               {issue.summary}
                             </span>
                             <span
-                                className={`rounded-lg border-2 px-2 py-0.5 text-xs font-medium shadow-sm ${getStatusColorClasses(
+                                className={`rounded-md border-2 px-2 py-0.5 text-xs font-medium shadow-sm ${getStatusColorClasses(
                                 issue.statusColor
                               )}`}
                             >
@@ -839,7 +839,7 @@ export default function JiraProjectDetailPage() {
                         {issues.map((issue) => (
                       <div
                         key={issue.id}
-                        className="group relative block overflow-hidden rounded-lg border-2 border-l-4 border-l-blue-600 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-blue-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:hover:border-blue-500 cursor-pointer"
+                        className="group relative block rounded-md border-l-4 border-l-purple-600 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-l-purple-500 dark:border-gray-700 dark:bg-gray-900 cursor-pointer"
                         onClick={() => {
                           setSelectedIssue(issue);
                           setIsModalOpen(true);
@@ -849,23 +849,23 @@ export default function JiraProjectDetailPage() {
                           <div className="flex-1">
                             {/* Header: Key, Status, Priority */}
                             <div className="mb-3 flex flex-wrap items-center gap-2">
-                              <span className="rounded-lg bg-blue-100 px-2.5 py-1 font-mono text-xs font-bold text-blue-700 shadow-sm dark:bg-blue-900/30 dark:text-blue-400">
+                              <span className="rounded-md bg-blue-100 px-2.5 py-1 font-mono text-xs font-bold text-blue-700 shadow-sm dark:bg-blue-900/30 dark:text-blue-400">
                                 {issue.key}
                               </span>
                               <span
-                                className={`rounded-lg border-2 px-3 py-1 text-xs font-semibold shadow-sm ${getStatusColorClasses(
+                                className={`rounded-md border-2 px-3 py-1 text-xs font-semibold shadow-sm ${getStatusColorClasses(
                                   issue.statusColor
                                 )}`}
                               >
                                 {issue.status}
                               </span>
                               {issue.priority && (
-                                <span className={`rounded-lg border-2 px-3 py-1 text-xs font-semibold shadow-sm ${getPriorityColorClasses(issue.priority)}`}>
+                                <span className={`rounded-md border-2 px-3 py-1 text-xs font-semibold shadow-sm ${getPriorityColorClasses(issue.priority)}`}>
                                   {issue.priority}
                                 </span>
                               )}
                               {issue.type && (
-                                <span className="rounded-lg border-2 border-purple-300 bg-purple-100 px-3 py-1 text-xs font-semibold text-purple-700 shadow-sm dark:border-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
+                                <span className="rounded-md border-2 border-purple-300 bg-purple-100 px-3 py-1 text-xs font-semibold text-purple-700 shadow-sm dark:border-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
                                   {issue.type}
                                 </span>
                               )}
@@ -884,7 +884,7 @@ export default function JiraProjectDetailPage() {
                             )}
 
                             {/* Footer: Metadata */}
-                            <div className="flex flex-wrap items-center gap-4 rounded-lg bg-gray-50/50 px-3 py-2.5 dark:bg-gray-800/50">
+                            <div className="flex flex-wrap items-center gap-4 rounded-md bg-gray-50/50 px-3 py-2.5 dark:bg-gray-800/50">
                               {issue.assignee && (
                                 <span className="flex items-center gap-2 text-xs font-medium text-gray-700 dark:text-gray-300">
                                   {issue.assignee.avatar && (
@@ -913,7 +913,7 @@ export default function JiraProjectDetailPage() {
 
                           {/* External Link Icon */}
                           <div className="flex-shrink-0">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 text-blue-600 opacity-0 transition-all group-hover:opacity-100 dark:bg-blue-900/30 dark:text-blue-400">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-blue-100 text-blue-600 opacity-0 transition-all group-hover:opacity-100 dark:bg-blue-900/30 dark:text-blue-400">
                               <ExternalLink className="h-5 w-5" />
                             </div>
                           </div>

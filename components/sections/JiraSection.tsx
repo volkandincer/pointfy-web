@@ -100,7 +100,7 @@ const JiraSection = memo(function JiraSection({
         {/* Ana Kategori Başlığı - Accordion Header */}
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="group mb-4 flex w-full items-center justify-between border-2 border-blue-600 bg-white p-5 text-left transition-all hover:border-blue-700 hover:shadow-md dark:bg-gray-900"
+          className="group mb-4 flex w-full items-center justify-between rounded-md border-2 border-blue-600 bg-white p-5 text-left transition-all hover:border-blue-700 hover:shadow-md dark:bg-gray-900"
         >
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
@@ -128,7 +128,7 @@ const JiraSection = memo(function JiraSection({
 
         {/* Alt Menü - Accordion Content */}
         {isExpanded && (
-          <div className="mb-4 border-2 border-blue-600 bg-white p-4 dark:bg-gray-900">
+          <div className="mb-4 rounded-md border-2 border-blue-600 bg-white p-4 dark:bg-gray-900">
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {jiraActions.map((action) =>
                 action.onClick ? (
@@ -293,7 +293,7 @@ const JiraSection = memo(function JiraSection({
           <div className="flex gap-3">
             <button
               onClick={() => setShowPermissionModal(false)}
-              className="flex-1 border-2 border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+              className="flex-1 rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
             >
               İptal
             </button>

@@ -1,9 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Search, ExternalLink } from "lucide-react";
+import { Search, ExternalLink, History } from "lucide-react";
 import EmptyState from "@/components/jira/EmptyState";
 import JqlInput from "@/components/jira/JqlInput";
+import Button from "@/components/ui/Button";
 import { getStatusColorClasses, getPriorityColorClasses } from "@/lib/jira/colors";
 import type { JiraTask } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
@@ -176,7 +177,7 @@ export default function JiraSearchPage() {
       </div>
 
       {/* Search Form */}
-      <div className="border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+      <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
         <div className="space-y-4">
           {/* JQL Input */}
           <div>
@@ -211,30 +212,35 @@ export default function JiraSearchPage() {
                 max="100"
                 value={maxResults}
                 onChange={(e) => setMaxResults(Math.min(100, Math.max(1, parseInt(e.target.value) || 50)))}
-                className="w-full border-2 border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white sm:w-32"
+                className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 focus:border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white sm:w-32"
               />
             </div>
             <div className="flex gap-3">
-              <button
+              <Button
+                variant="secondary"
+                size="md"
                 onClick={() => setShowHistory(!showHistory)}
-                className="min-h-[44px] border-2 border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                icon={History}
               >
                 {showHistory ? "Geçmişi Gizle" : "Geçmişi Göster"}
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="primary"
+                size="md"
                 onClick={() => performSearch()}
                 disabled={loading || !jql.trim()}
-                className="min-h-[44px] border-2 border-blue-600 bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700 disabled:opacity-50"
+                loading={loading}
+                icon={Search}
               >
                 {loading ? "Aranıyor..." : "Ara"}
-              </button>
+              </Button>
             </div>
           </div>
         </div>
       </div>
 
       {/* Quick Search Templates */}
-      <div className="border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+      <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
         <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
           Hızlı Arama Şablonları
         </h2>
@@ -246,7 +252,7 @@ export default function JiraSearchPage() {
                 setJql(template.jql);
                 performSearch(template.jql);
               }}
-              className="border-2 border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:border-blue-600 hover:bg-blue-50 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-blue-500 dark:hover:bg-blue-900/20 dark:hover:text-blue-400"
+              className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:border-purple-600 hover:bg-purple-50 hover:text-purple-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-purple-500 dark:hover:bg-purple-900/20 dark:hover:text-purple-400"
             >
               {template.label}
             </button>
@@ -256,7 +262,7 @@ export default function JiraSearchPage() {
 
       {/* Search History */}
       {showHistory && searchHistory.length > 0 && (
-        <div className="border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+        <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
           <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
             Arama Geçmişi
           </h2>
@@ -268,7 +274,7 @@ export default function JiraSearchPage() {
                   setJql(item.jql);
                   performSearch(item.jql);
                 }}
-                className="w-full border-2 border-gray-300 bg-gray-50 p-3 text-left transition-colors hover:border-blue-600 hover:bg-blue-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-500 dark:hover:bg-blue-900/20"
+                className="w-full border-2 border-gray-300 bg-gray-50 p-3 text-left transition-colors hover:border-purple-600 hover:bg-purple-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-purple-500 dark:hover:bg-purple-900/20"
               >
                 <div className="mb-1 flex items-center justify-between">
                   <code className="text-xs font-mono text-gray-700 dark:text-gray-300">
@@ -321,27 +327,27 @@ export default function JiraSearchPage() {
                 href={issue.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 sm:p-5"
+                className="group block rounded-md border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
               >
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex-1">
                     <div className="mb-2 flex flex-wrap items-center gap-2">
-                      <span className="rounded-lg border-2 border-blue-300 bg-blue-100 px-2 py-0.5 font-mono text-xs font-bold text-blue-700 shadow-sm dark:border-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                      <span className="rounded-md border-2 border-blue-300 bg-blue-100 px-2 py-0.5 font-mono text-xs font-bold text-blue-700 shadow-sm dark:border-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
                         {issue.key}
                       </span>
                       <span
-                        className={`rounded-lg border-2 px-2 py-0.5 text-xs font-semibold shadow-sm ${getStatusColorClasses(
+                        className={`rounded-md border-2 px-2 py-0.5 text-xs font-semibold shadow-sm ${getStatusColorClasses(
                           issue.statusColor
                         )}`}
                       >
                         {issue.status}
                       </span>
                       {issue.priority && (
-                        <span className={`rounded-lg border-2 px-2 py-0.5 text-xs font-semibold shadow-sm ${getPriorityColorClasses(issue.priority)}`}>
+                        <span className={`rounded-md border-2 px-2 py-0.5 text-xs font-semibold shadow-sm ${getPriorityColorClasses(issue.priority)}`}>
                           {issue.priority}
                         </span>
                       )}
-                      <span className="rounded-lg border-2 border-purple-300 bg-purple-100 px-2 py-0.5 text-xs font-semibold text-purple-700 shadow-sm dark:border-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
+                      <span className="rounded-md border-2 border-purple-300 bg-purple-100 px-2 py-0.5 text-xs font-semibold text-purple-700 shadow-sm dark:border-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
                         {issue.type}
                       </span>
                     </div>

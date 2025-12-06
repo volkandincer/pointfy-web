@@ -2,7 +2,8 @@
 
 import { memo, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Home, ClipboardList, ChevronRight } from "lucide-react";
+import { Home, ClipboardList } from "lucide-react";
+import Button from "@/components/ui/Button";
 import AllRoomsModal from "@/components/rooms/AllRoomsModal";
 import RoomPinModal from "@/components/rooms/RoomPinModal";
 import EmptyState from "@/components/jira/EmptyState";
@@ -37,7 +38,6 @@ const RecentRooms = memo(function RecentRooms() {
       try {
         const supabase = getSupabase();
         
-        // Kullanıcı bilgilerini al
         const { data: userData } = await supabase.auth.getUser();
         if (userData.user) {
           setUserKey(userData.user.id);
@@ -53,10 +53,9 @@ const RecentRooms = memo(function RecentRooms() {
           }
         }
 
-        // Mobil projede olduğu gibi: sadece aktif odaları göster, tüm odaları göster (createdByKey filtresi yok)
         const { data } = await supabase
           .from("rooms")
-          .select("id, name, code, created_by_username, is_active, created_at")
+          .select("id, name, code, created_by_username, is_active, created_at, room_type")
           .eq("is_active", true)
           .eq("status", "active")
           .order("created_at", { ascending: false })
@@ -76,9 +75,8 @@ const RecentRooms = memo(function RecentRooms() {
     };
   }, []);
 
-  // İlk 3 odayı göster (mobil projede olduğu gibi)
-  const displayedRooms = rooms ? rooms.slice(0, 3) : [];
-  const hasMoreRooms = rooms ? rooms.length > 3 : false;
+  const displayedRooms = rooms ? rooms.slice(0, 4) : [];
+  const hasMoreRooms = rooms ? rooms.length > 4 : false;
 
   const handleRoomClick = async (roomId: string) => {
     try {
@@ -90,7 +88,6 @@ const RecentRooms = memo(function RecentRooms() {
       }
 
       if (result.needsPin && result.room) {
-        // PIN gerekli
         setSelectedRoom({
           id: result.room.id,
           code: result.room.code,
@@ -99,7 +96,6 @@ const RecentRooms = memo(function RecentRooms() {
         return;
       }
 
-      // Şifresiz oda - direkt giriş yap
       if (result.room && userKey && username) {
         await addUserToRoom(result.room.code, userKey, username);
       }
@@ -124,7 +120,6 @@ const RecentRooms = memo(function RecentRooms() {
         return;
       }
 
-      // PIN doğru - kullanıcıyı odaya ekle
       if (userKey && username) {
         await addUserToRoom(selectedRoom.code, userKey, username);
       }
@@ -142,76 +137,81 @@ const RecentRooms = memo(function RecentRooms() {
   return (
     <section className="container mx-auto px-4 py-8">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-5">
-          <h2 className="mb-0.5 text-lg font-bold tracking-tight text-gray-900 dark:text-white sm:text-xl md:text-2xl">
+        {/* Header */}
+        <div className="mb-6">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
             Son Aktif Odalar
           </h2>
         </div>
+
         {loading ? (
-          <div className="space-y-3.5">
-            {Array.from({ length: 3 }).map((_, idx) => (
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, idx) => (
               <div
                 key={idx}
-                className="h-24 animate-pulse border-2 border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800"
+                className="h-24 animate-pulse rounded-md border-2 border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-800 sm:h-28"
               />
             ))}
           </div>
         ) : displayedRooms.length > 0 ? (
           <>
-            <div className="space-y-3.5">
-              {displayedRooms.map((r) => (
+            {/* Room Cards Grid - Same design language as QuickActions */}
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4">
+              {displayedRooms.map((r) => {
+                const isRetro = r.room_type === "retro";
+                const borderColor = isRetro 
+                  ? "border-l-purple-600 dark:border-l-purple-500" 
+                  : "border-l-blue-600 dark:border-l-blue-500";
+                const iconColor = isRetro
+                  ? "text-purple-600 dark:text-purple-400"
+                  : "text-blue-600 dark:text-blue-400";
+                
+                return (
                 <button
                   key={r.id}
                   onClick={() => handleRoomClick(r.id)}
-                  className="group relative w-full flex items-center gap-4 border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-5 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
-                  style={{
-                    borderLeftColor: '#2563eb',
-                  }}
+                  className={`group relative flex min-h-[100px] flex-col items-center justify-center border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 text-center shadow-sm transition-all active:border-gray-400 active:shadow-md sm:min-h-[120px] sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900`}
                 >
-                  {/* Icon Container */}
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
-                    <Home className="h-7 w-7 text-blue-600 dark:text-blue-400" />
+                  {/* Icon */}
+                  <div className="mb-2 sm:mb-2.5">
+                    <Home className={`h-6 w-6 ${iconColor} sm:h-7 sm:w-7`} />
                   </div>
 
-                  {/* Content */}
-                  <div className="min-w-0 flex-1">
-                    <h3 className="mb-1.5 truncate text-lg font-bold text-gray-900 dark:text-white">
-                      {r.name || "Oda"}
-                    </h3>
-                    <div className="flex items-center gap-3">
-                      <span className="rounded-lg border-2 border-gray-300 bg-white px-2.5 py-1 text-xs font-semibold text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
-                        {r.code}
+                  {/* Room Name */}
+                  <h3 className="mb-1 truncate w-full text-xs font-semibold text-gray-900 dark:text-white sm:text-sm">
+                    {r.name || "Oda"}
+                  </h3>
+
+                  {/* Room Code and Username */}
+                  <div className="flex flex-col items-center gap-1">
+                    <span className="rounded-md border-2 border-gray-200 bg-white px-2 py-0.5 text-[10px] font-medium text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 sm:text-xs">
+                      {r.code}
+                    </span>
+                    {r.created_by_username && (
+                      <span className="hidden text-[10px] font-semibold text-green-600 dark:text-green-400 sm:block sm:text-xs">
+                        {r.created_by_username}
                       </span>
-                      {r.created_by_username && (
-                        <span className="text-xs font-semibold text-green-600 dark:text-green-400">
-                          {r.created_by_username}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Arrow Icon */}
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-blue-600 bg-blue-600 text-white transition-colors group-hover:bg-blue-700 group-hover:border-blue-700">
-                    <ChevronRight className="h-5 w-5" />
+                    )}
                   </div>
                 </button>
-              ))}
+                );
+              })}
             </div>
 
-            {/* Tüm Odaları Gör Butonu */}
+            {/* View All Button */}
             {hasMoreRooms && (
-              <button
-                onClick={() => setShowAllRoomsModal(true)}
-                className="group mt-4 w-full flex items-center justify-center gap-2 border-2 border-blue-600 bg-white p-5 shadow-sm transition-all hover:border-blue-700 hover:shadow-md hover:bg-blue-50 dark:border-blue-500 dark:bg-gray-900 dark:hover:bg-blue-900/20"
-              >
-                <ClipboardList className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                  Tüm odaları gör
-                </span>
-                <div className="flex h-6 w-6 items-center justify-center border-2 border-blue-600 bg-blue-600 text-xs font-bold text-white dark:border-blue-500 dark:bg-blue-500">
-                  {(rooms?.length || 0) - 3}
-                </div>
-              </button>
+              <div className="mt-4">
+                <button
+                  onClick={() => setShowAllRoomsModal(true)}
+                  className="group flex w-full items-center justify-center gap-3 rounded-md border-2 border-blue-600 bg-white px-4 py-3 text-sm font-semibold text-blue-600 shadow-sm transition-all hover:border-blue-700 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md dark:border-blue-500 dark:bg-gray-900 dark:text-blue-400 dark:hover:bg-blue-900/20"
+                >
+                  <ClipboardList className="h-5 w-5" />
+                  <span>Tüm odaları gör</span>
+                  <span className="flex h-6 w-6 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-600 text-xs font-bold text-white dark:border-blue-500 dark:bg-blue-500">
+                    {(rooms?.length || 0) - 4}
+                  </span>
+                </button>
+              </div>
             )}
           </>
         ) : (

@@ -15,7 +15,7 @@ const GlobalNoteFab = memo(function GlobalNoteFab() {
     <>
       <button
         onClick={() => setShowModal(true)}
-        className="group fixed bottom-4 right-4 z-40 flex min-h-[56px] items-center gap-2 rounded-lg border-2 border-purple-600 bg-purple-600 px-4 py-3 text-white shadow-md transition-all sm:bottom-6 sm:right-6 sm:gap-3 sm:px-5 hover:border-purple-700 hover:bg-purple-700 hover:shadow-md"
+        className="group fixed bottom-4 right-4 z-40 flex min-h-[56px] items-center gap-2 rounded-md border-2 border-purple-600 bg-purple-600 px-4 py-3 text-white shadow-md transition-all sm:bottom-6 sm:right-6 sm:gap-3 sm:px-5 hover:border-purple-700 hover:bg-purple-700 hover:shadow-md"
         aria-label="Not ekle"
       >
         <FileText className="h-5 w-5 sm:h-6 sm:w-6" />

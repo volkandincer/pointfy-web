@@ -177,7 +177,7 @@ export default function JiraBoardsPage() {
         <button
           onClick={fetchBoards}
           disabled={loading}
-          className="rounded-lg border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
+          className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
         >
           {loading ? "Yükleniyor..." : "Yenile"}
         </button>
@@ -192,7 +192,7 @@ export default function JiraBoardsPage() {
             placeholder="Board ara (isim, proje)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border-2 border-gray-300 bg-white px-4 py-2.5 pl-10 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 sm:text-base"
+            className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 pl-10 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 sm:text-base"
           />
           <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
         </div>
@@ -212,10 +212,10 @@ export default function JiraBoardsPage() {
             />
 
             {/* View Mode Toggle */}
-            <div className="ml-auto flex items-center gap-2 rounded-lg border-2 border-gray-300 bg-white p-1 dark:border-gray-700 dark:bg-gray-800">
+            <div className="ml-auto flex items-center gap-2 rounded-md border-2 border-gray-300 bg-white p-1 dark:border-gray-700 dark:bg-gray-800">
               <button
                 onClick={() => setViewMode("list")}
-                className={`rounded-lg px-3 py-1.5 text-sm transition ${
+                className={`rounded-md px-3 py-1.5 text-sm transition ${
                   viewMode === "list"
                     ? "bg-blue-600 text-white"
                     : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
@@ -225,7 +225,7 @@ export default function JiraBoardsPage() {
               </button>
               <button
                 onClick={() => setViewMode("grid")}
-                className={`rounded-lg px-3 py-1.5 text-sm transition ${
+                className={`rounded-md px-3 py-1.5 text-sm transition ${
                   viewMode === "grid"
                     ? "bg-blue-600 text-white"
                     : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
@@ -238,7 +238,7 @@ export default function JiraBoardsPage() {
 
           {/* Active Filter Chips */}
           {(typeFilter !== "all" || searchQuery.trim()) && (
-            <div className="flex flex-wrap items-center gap-2 rounded-lg border-2 border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800/50">
+            <div className="flex flex-wrap items-center gap-2 rounded-md border-2 border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800/50">
               <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">
                 Aktif Filtreler:
               </span>
@@ -260,7 +260,7 @@ export default function JiraBoardsPage() {
               )}
               <button
                 onClick={clearAllFilters}
-                className="ml-auto flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200"
+                className="ml-auto flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200"
               >
                 <X className="h-3 w-3" />
                 Tümünü Temizle
@@ -272,7 +272,7 @@ export default function JiraBoardsPage() {
 
       {/* Error Message */}
       {error && (
-        <div className="rounded-lg border-2 border-red-200 bg-red-50 p-4 text-sm text-red-600 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+        <div className="rounded-md border-2 border-red-200 bg-red-50 p-4 text-sm text-red-600 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
           {error}
         </div>
       )}
@@ -289,7 +289,7 @@ export default function JiraBoardsPage() {
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div
               key={i}
-              className={`h-32 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800 ${
+              className={`h-32 animate-pulse rounded-md bg-gray-200 dark:bg-gray-800 ${
                 viewMode === "list" ? "w-full" : ""
               }`}
             />
@@ -302,7 +302,7 @@ export default function JiraBoardsPage() {
               <Link
                 key={board.id}
                 href={`/app/jira/${board.location?.projectKey || board.id}`}
-                className="group relative border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                className="group relative rounded-md border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
                 style={{
                   borderLeftColor: board.type === 'scrum' ? '#9333ea' : '#2563eb',
                 }}
@@ -356,7 +356,7 @@ export default function JiraBoardsPage() {
               <Link
                 key={board.id}
                 href={`/app/jira/${board.location?.projectKey || board.id}`}
-                className="group relative block border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                className="group relative block rounded-md border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
                 style={{
                   borderLeftColor: board.type === 'scrum' ? '#9333ea' : '#2563eb',
                 }}

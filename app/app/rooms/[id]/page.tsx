@@ -377,7 +377,7 @@ export default function RoomDetailPage() {
                 )}
                 <button
                   onClick={() => router.back()}
-                  className="border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                  className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
                 >
                   ← Geri
                 </button>
@@ -423,7 +423,7 @@ export default function RoomDetailPage() {
               </>
             ) : (
               <div className="space-y-6">
-                <div className="border-2 border-gray-300 bg-white p-8 text-center shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                <div className="rounded-md border-2 border-gray-300 bg-white p-6 text-center shadow-sm sm:p-8 dark:border-gray-700 dark:bg-gray-900">
                   <div className="mb-4 flex justify-center">
                     <div className="flex h-16 w-16 items-center justify-center border-2 border-amber-600 bg-amber-50 dark:bg-amber-900/20">
                       <Clock className="h-8 w-8 text-amber-600 dark:text-amber-400" />
@@ -492,7 +492,7 @@ export default function RoomDetailPage() {
                     })()}
 
                     {/* Diğer Task'lar (Active ve Completed) */}
-                    <div className="border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                    <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
                       <div className="mb-4 flex items-center justify-between">
                         <div>
                           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
