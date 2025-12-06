@@ -7,7 +7,8 @@ import { jiraConfig } from "@/lib/jiraConfig";
  * Kullanıcıyı Jira OAuth sayfasına yönlendirir
  */
 export async function GET(request: Request) {
-  const { clientId, appUrl } = jiraConfig;
+  const { clientId, getAppUrl } = jiraConfig;
+  const appUrl = getAppUrl(request);
   const { searchParams } = new URL(request.url);
   const returnUrl = searchParams.get("returnUrl") || "/app/jira-test";
   const userIdFromQuery = searchParams.get("userId");

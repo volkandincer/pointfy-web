@@ -23,7 +23,8 @@ export async function GET(request: Request) {
   const state = searchParams.get("state");
   const error = searchParams.get("error");
 
-  const { clientId, clientSecret, appUrl } = jiraConfig;
+  const { clientId, clientSecret, getAppUrl } = jiraConfig;
+  const appUrl = getAppUrl(request);
 
   if (error) {
     return NextResponse.redirect(
