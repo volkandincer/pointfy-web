@@ -4,9 +4,10 @@ import { memo, useEffect } from "react";
 
 interface ModalProps {
   open: boolean;
-  title?: string;
+  title?: string | React.ReactNode;
   onClose: () => void;
   children: React.ReactNode;
+  className?: string;
 }
 
 const Modal = memo(function Modal({
@@ -14,6 +15,7 @@ const Modal = memo(function Modal({
   title,
   onClose,
   children,
+  className = "",
 }: ModalProps) {
   // Modal açıkken body scroll'unu disable et
   useEffect(() => {
@@ -75,7 +77,7 @@ const Modal = memo(function Modal({
         }}
       />
       <div 
-        className="relative z-10 w-full max-h-[90vh] overflow-y-auto border-t-2 border-gray-300 bg-white p-4 shadow-md sm:max-w-lg sm:rounded-md sm:border-2 sm:border-gray-300 sm:p-6 dark:border-gray-700 dark:bg-gray-900"
+        className={`relative z-10 w-full max-h-[90vh] overflow-y-auto border-t-2 border-gray-300 bg-white p-4 shadow-md sm:max-w-lg sm:rounded-md sm:border-2 sm:border-gray-300 sm:p-6 dark:border-gray-700 dark:bg-gray-900 ${className}`}
         onClick={(e) => e.stopPropagation()}
         onTouchStart={(e) => {
           // Modal içindeki touch event'lerini sayfa scroll'undan ayır
@@ -91,9 +93,17 @@ const Modal = memo(function Modal({
         }}
       >
         {title && (
-          <h3 className="mb-4 text-center text-lg font-semibold text-gray-900 dark:text-white sm:text-xl">
-            {title}
-          </h3>
+          <div className="mb-6 flex items-center justify-center gap-3 border-b-2 border-gray-200 pb-4 dark:border-gray-800">
+            {typeof title === "string" ? (
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white sm:text-xl">
+                {title}
+              </h3>
+            ) : (
+              <div className="flex items-center justify-center gap-2">
+                {title}
+              </div>
+            )}
+          </div>
         )}
         {children}
       </div>

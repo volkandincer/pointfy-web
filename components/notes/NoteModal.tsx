@@ -95,7 +95,15 @@ const NoteModal = memo(function NoteModal({
     <Modal
       open={open}
       onClose={onClose}
-      title={initialNote ? "Notu Düzenle" : "Hızlı Not Ekle"}
+      title={
+        <div className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-md border-2 border-yellow-600 bg-yellow-50 dark:bg-yellow-900/20">
+            <FileText className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
+          </div>
+          <span className="font-bold">{initialNote ? "Notu Düzenle" : "Hızlı Not Ekle"}</span>
+        </div>
+      }
+      className="sm:border-yellow-600/30 dark:sm:border-yellow-500/30"
     >
       <div className="space-y-6">
         {/* Content Input */}
@@ -104,25 +112,27 @@ const NoteModal = memo(function NoteModal({
             htmlFor="note-content"
             className="mb-2 flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white"
           >
-            <FileText className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            <div className="flex h-6 w-6 items-center justify-center rounded-md border-2 border-yellow-600 bg-yellow-50 dark:bg-yellow-900/20">
+              <FileText className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
+            </div>
             Not İçeriği <span className="text-red-600 dark:text-red-400">*</span>
           </label>
           <textarea
             id="note-content"
-            placeholder="Notunuzu yazın..."
+            placeholder="Notunuzu buraya yazın..."
             rows={6}
             value={content}
             onChange={(e) => setContent(e.target.value)}
             maxLength={500}
             disabled={loading}
             autoFocus
-            className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-400"
+            className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none transition focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-yellow-400"
           />
           <div className="mt-2 flex items-center justify-between">
             <p className="text-xs text-gray-500 dark:text-gray-400">
               Minimum 1 karakter gerekli
             </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+            <p className="text-xs font-semibold text-yellow-600 dark:text-yellow-400">
               {content.length}/500
             </p>
           </div>
@@ -131,7 +141,9 @@ const NoteModal = memo(function NoteModal({
         {/* Category Selection */}
         <div>
           <label className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
-            <Tag className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            <div className="flex h-6 w-6 items-center justify-center rounded-md border-2 border-yellow-600 bg-yellow-50 dark:bg-yellow-900/20">
+              <Tag className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
+            </div>
             Kategori <span className="text-red-600 dark:text-red-400">*</span>
           </label>
           <div className="flex flex-wrap gap-2">
@@ -146,9 +158,9 @@ const NoteModal = memo(function NoteModal({
                   }
                 }}
                 disabled={loading}
-                className={`rounded-md border-2 px-3 py-2 text-sm font-semibold transition-colors ${
+                className={`rounded-md border-2 px-3 py-2 text-sm font-semibold transition-all ${
                   category === cat.value
-                    ? "border-blue-600 bg-blue-600 text-white shadow-sm"
+                    ? "border-yellow-600 bg-yellow-600 text-white shadow-sm hover:border-yellow-700 hover:bg-yellow-700 dark:border-yellow-500 dark:bg-yellow-600 dark:hover:border-yellow-400 dark:hover:bg-yellow-500"
                     : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
                 } disabled:opacity-50`}
               >
@@ -166,7 +178,7 @@ const NoteModal = memo(function NoteModal({
                 maxLength={20}
                 disabled={loading}
                 autoFocus
-                className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-400"
+                className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-yellow-400"
               />
               <p className="mt-1.5 text-xs text-gray-500 dark:text-gray-400">
                 Özel kategori adınızı yazın (max 20 karakter)
@@ -191,6 +203,7 @@ const NoteModal = memo(function NoteModal({
             disabled={!isFormValid || loading}
             onClick={submit}
             loading={loading}
+            className="border-yellow-600 bg-yellow-600 hover:border-yellow-700 hover:bg-yellow-700 dark:border-yellow-500 dark:bg-yellow-600 dark:hover:border-yellow-400 dark:hover:bg-yellow-500"
           >
             {loading ? "Kaydediliyor..." : initialNote ? "Kaydet" : "Kaydet"}
           </Button>
