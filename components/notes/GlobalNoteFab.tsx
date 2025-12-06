@@ -18,7 +18,7 @@ const GlobalNoteFab = memo(function GlobalNoteFab() {
         onClick={() => setShowModal(true)}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="group animate-float fixed bottom-6 right-6 z-40 flex min-h-[64px] min-w-[64px] items-center justify-center rounded-md border-2 border-yellow-600 bg-yellow-600 text-white shadow-sm transition-all duration-300 ease-out sm:bottom-8 sm:right-8 sm:min-h-[72px] sm:min-w-[72px] hover:border-yellow-700 hover:bg-yellow-700 hover:shadow-md hover:scale-110 active:scale-105 dark:border-yellow-500 dark:bg-yellow-600 dark:hover:border-yellow-400 dark:hover:bg-yellow-500"
+        className="group animate-float fixed bottom-20 right-4 z-[60] flex min-h-[64px] min-w-[64px] items-center justify-center rounded-md border-2 border-yellow-600 bg-yellow-600 text-white shadow-sm transition-all duration-300 ease-out sm:bottom-8 sm:right-8 sm:min-h-[72px] sm:min-w-[72px] hover:border-yellow-700 hover:bg-yellow-700 hover:shadow-md hover:scale-110 active:scale-105 dark:border-yellow-500 dark:bg-yellow-600 dark:hover:border-yellow-400 dark:hover:bg-yellow-500"
         aria-label="Not ekle"
       >
         {/* Pulse ring effect */}
