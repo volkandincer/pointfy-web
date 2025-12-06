@@ -618,40 +618,37 @@ const RetroRoomView = memo(function RetroRoomView({
             const canViewContent = card.is_revealed || isOwnCard;
             const categoryInfo = getCategoryInfo(card.category);
             
-            // Kategoriye göre renkler
+            // Kategoriye göre renkler - Sharp design system
             const cardStyles =
               categoryInfo.color === "red"
                 ? {
-                    bg: "bg-red-50 dark:bg-red-950/30",
-                    border: "border-red-200 dark:border-red-800/50",
+                    borderLeft: "border-l-red-600 dark:border-l-red-500",
                     accent: "text-red-600 dark:text-red-400",
-                    badge: "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300",
+                    badge: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
                   }
                 : categoryInfo.color === "blue"
                 ? {
-                    bg: "bg-blue-50 dark:bg-blue-950/30",
-                    border: "border-blue-200 dark:border-blue-800/50",
+                    borderLeft: "border-l-blue-600 dark:border-l-blue-500",
                     accent: "text-blue-600 dark:text-blue-400",
-                    badge: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
+                    badge: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
                   }
                 : {
-                    bg: "bg-green-50 dark:bg-green-950/30",
-                    border: "border-green-200 dark:border-green-800/50",
+                    borderLeft: "border-l-green-600 dark:border-l-green-500",
                     accent: "text-green-600 dark:text-green-400",
-                    badge: "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
+                    badge: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
                   };
 
             return (
               <div
                 key={card.id}
-                className={`group relative overflow-hidden rounded-md border-2 ${cardStyles.border} ${cardStyles.bg} p-5 shadow-sm transition-all hover:shadow-md dark:shadow-gray-900/20`}
+                className={`group relative border-l-4 ${cardStyles.borderLeft} border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900`}
               >
                 {/* Kategori Badge */}
-                <div className="mb-3 flex items-center justify-between">
+                <div className="mb-2 flex items-center justify-between">
                   <span
-                    className={`inline-flex items-center gap-1.5 rounded-md border-2 px-3 py-1 text-xs font-semibold shadow-sm ${cardStyles.badge}`}
+                    className={`inline-flex items-center gap-1.5 rounded-md border-2 px-2 py-0.5 text-xs font-semibold shadow-sm ${cardStyles.badge}`}
                   >
-                    <categoryInfo.icon className="h-4 w-4" />
+                    <categoryInfo.icon className="h-3.5 w-3.5" />
                     <span>{categoryInfo.title}</span>
                   </span>
                   <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
@@ -663,29 +660,29 @@ const RetroRoomView = memo(function RetroRoomView({
                 </div>
 
                 {/* Kullanıcı Adı */}
-                <div className="mb-3 flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-gray-200 text-xs font-bold text-gray-700 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                <div className="mb-2 flex items-center gap-2">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-gray-300 bg-gray-200 text-xs font-bold text-gray-700 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300">
                     {card.user_name.charAt(0).toUpperCase()}
                   </div>
-                  <span className="font-semibold text-gray-900 dark:text-white">
+                  <span className="text-sm font-semibold text-gray-900 dark:text-white">
                     {card.user_name}
                   </span>
                 </div>
 
                 {/* Kart İçeriği */}
                 {canViewContent ? (
-                  <div className="mb-4">
-                    <p className="leading-relaxed text-gray-800 dark:text-gray-200">
+                  <div className="mb-3">
+                    <p className="text-sm leading-relaxed text-gray-800 dark:text-gray-200">
                       {card.content}
                     </p>
                   </div>
                 ) : (
-                  <div className="mb-4 rounded-md border-2 border-dashed border-gray-300 bg-gray-50/50 p-6 text-center dark:border-gray-700 dark:bg-gray-800/50">
-                    <Lock className="mx-auto mb-2 h-12 w-12 text-gray-400 opacity-50 dark:text-gray-500" />
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <div className="mb-3 border-2 border-dashed border-gray-300 bg-gray-50 p-4 text-center dark:border-gray-700 dark:bg-gray-800/50">
+                    <Lock className="mx-auto mb-2 h-8 w-8 text-gray-400 opacity-50 dark:text-gray-500" />
+                    <p className="text-xs font-medium text-gray-600 dark:text-gray-400">
                       Kart Gizli
                     </p>
-                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-500">
+                    <p className="mt-1 text-[10px] text-gray-500 dark:text-gray-500">
                       Admin açana kadar bekleyin
                     </p>
                   </div>
@@ -696,13 +693,13 @@ const RetroRoomView = memo(function RetroRoomView({
                   <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
                     <button
                       onClick={() => handleOpenEdit(card)}
-                      className="flex-1 rounded-md border-2 border-blue-600 bg-blue-600 px-4 py-2 text-xs font-semibold text-white transition hover:border-blue-700 hover:bg-blue-700"
+                      className="flex-1 rounded-md border-2 border-blue-600 bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:border-blue-700 hover:bg-blue-700 hover:shadow-md active:border-blue-800 active:bg-blue-800"
                     >
                       ✎ Düzenle
                     </button>
                     <button
                       onClick={() => handleDeleteCard(card)}
-                      className="flex-1 rounded-md border-2 border-red-600 bg-red-600 px-4 py-2 text-xs font-semibold text-white transition hover:border-red-700 hover:bg-red-700"
+                      className="flex-1 rounded-md border-2 border-red-600 bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:border-red-700 hover:bg-red-700 hover:shadow-md active:border-red-800 active:bg-red-800"
                     >
                       🗑️ Sil
                     </button>
