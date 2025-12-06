@@ -123,11 +123,11 @@ const BoardCard = memo(function BoardCard({
           </div>
 
           {/* Action Buttons - Absolute positioned */}
-          <div className="absolute right-0 top-0 flex shrink-0 gap-1 opacity-0 transition-opacity group-hover:opacity-100 sm:gap-1.5">
+          <div className="absolute right-0 top-0 z-20 flex shrink-0 gap-1 opacity-0 transition-opacity group-hover:opacity-100 sm:gap-1.5">
             {onEdit && (
               <button
                 onClick={handleEdit}
-                className="flex h-9 w-9 items-center justify-center rounded-md border-2 border-blue-600 bg-white text-blue-600 transition-colors active:bg-blue-50 sm:h-10 sm:w-10 dark:bg-gray-900 dark:border-blue-500 dark:text-blue-400 dark:active:bg-blue-900/20"
+                className="flex h-9 w-9 items-center justify-center rounded-md border-2 border-blue-600 bg-white shadow-sm text-blue-600 transition-all hover:border-blue-700 hover:bg-blue-50 active:bg-blue-100 sm:h-10 sm:w-10 dark:bg-gray-900 dark:border-blue-500 dark:text-blue-400 dark:hover:bg-blue-900/20 dark:active:bg-blue-900/30"
                 title="Düzenle"
               >
                 <Edit className="h-4 w-4" />
@@ -136,7 +136,7 @@ const BoardCard = memo(function BoardCard({
             {onArchive && (
               <button
                 onClick={handleArchive}
-                className="flex h-9 w-9 items-center justify-center rounded-md border-2 border-gray-300 bg-white text-gray-600 transition-colors active:bg-gray-50 sm:h-10 sm:w-10 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:active:bg-gray-800"
+                className="flex h-9 w-9 items-center justify-center rounded-md border-2 border-gray-300 bg-white shadow-sm text-gray-600 transition-all hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 sm:h-10 sm:w-10 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:active:bg-gray-700"
                 title={board.is_archived ? "Arşivden Çıkar" : "Arşivle"}
               >
                 {board.is_archived ? (
@@ -149,7 +149,7 @@ const BoardCard = memo(function BoardCard({
             {onDelete && (
               <button
                 onClick={handleDelete}
-                className="flex h-9 w-9 items-center justify-center rounded-md border-2 border-red-600 bg-white text-red-600 transition-colors active:bg-red-50 sm:h-10 sm:w-10 dark:bg-gray-900 dark:border-red-500 dark:text-red-400 dark:active:bg-red-900/20"
+                className="flex h-9 w-9 items-center justify-center rounded-md border-2 border-red-600 bg-white shadow-sm text-red-600 transition-all hover:border-red-700 hover:bg-red-50 active:bg-red-100 sm:h-10 sm:w-10 dark:bg-gray-900 dark:border-red-500 dark:text-red-400 dark:hover:bg-red-900/20 dark:active:bg-red-900/30"
                 title="Sil"
               >
                 <Trash2 className="h-4 w-4" />

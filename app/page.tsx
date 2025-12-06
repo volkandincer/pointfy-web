@@ -34,18 +34,26 @@ function HomePageContent() {
         const supabase = getSupabase();
         // Use getSession first for faster check
         const { data: sessionData } = await supabase.auth.getSession();
-        if (!mounted) return;
+        if (!mounted) {
+          setCheckingAuth(false);
+          return;
+        }
 
         if (sessionData.session?.user) {
           setUserId(sessionData.session.user.id);
         } else {
           setUserId(null);
         }
-      } catch {
-        if (!mounted) return;
-        setUserId(null);
+      } catch (error) {
+        // Supabase bağlantı hatası veya env variable eksik
+        console.error("Auth check error:", error);
+        if (mounted) {
+          setUserId(null);
+        }
       } finally {
-        if (mounted) setCheckingAuth(false);
+        if (mounted) {
+          setCheckingAuth(false);
+        }
       }
     }
 

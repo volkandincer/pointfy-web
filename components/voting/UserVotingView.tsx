@@ -133,6 +133,16 @@ const UserVotingView = memo(function UserVotingView({
               {remainingTime} saniye
             </p>
           </div>
+          {remainingTime === 0 && votes.length === 0 && (
+            <div className="mt-4 border-2 border-yellow-300 bg-yellow-50 p-3 dark:border-yellow-700 dark:bg-yellow-900/20">
+              <p className="text-xs font-semibold text-yellow-800 dark:text-yellow-300">
+                ⏱️ Süre doldu ve henüz puan verilmedi
+              </p>
+              <p className="mt-1 text-xs text-yellow-700 dark:text-yellow-400">
+                Admin yeni bir task seçebilir veya oylamayı iptal edebilir
+              </p>
+            </div>
+          )}
         </div>
       )}
 

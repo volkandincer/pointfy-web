@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Plus, ClipboardList, AlertCircle, CheckCircle2 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import Button from "@/components/ui/Button";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type {
@@ -24,6 +25,7 @@ export default function PersonalTasksPage() {
   const [userKey, setUserKey] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
   const [editingTask, setEditingTask] = useState<PersonalTask | null>(null);
+  const [priorityFilter, setPriorityFilter] = useState<number | null>(null);
 
   const stats = useMemo(() => {
     const totalTasks = tasks.length;
@@ -32,6 +34,11 @@ export default function PersonalTasksPage() {
     const lowPriority = tasks.filter((t) => t.priority === 1).length;
     return { totalTasks, highPriority, mediumPriority, lowPriority };
   }, [tasks]);
+
+  const filteredTasks = useMemo(() => {
+    if (priorityFilter === null) return tasks;
+    return tasks.filter((t) => t.priority === priorityFilter);
+  }, [tasks, priorityFilter]);
 
   useEffect(() => {
     let mounted = true;
@@ -133,67 +140,89 @@ export default function PersonalTasksPage() {
                     Oda açarken kullanmak üzere task&apos;larını yönet
                   </p>
                 </div>
-                <button
+                <Button
                   onClick={() => {
                     setEditingTask(null);
                     setShowModal(true);
                   }}
-                  className="inline-flex h-10 items-center justify-center gap-2 rounded-md border-2 border-orange-600 bg-orange-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:border-orange-700 hover:bg-orange-700"
+                  variant="primary"
+                  size="md"
+                  icon={Plus}
+                  className="border-orange-600 bg-orange-600 hover:border-orange-700 hover:bg-orange-700"
                 >
-                  <Plus className="h-4 w-4" />
                   Yeni Task Ekle
-                </button>
+                </Button>
               </div>
 
-              {/* Stats Cards */}
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
-                  <div className="mb-4 flex items-center gap-3">
-                    <div className="flex h-12 w-12 items-center justify-center border-2 border-orange-600 bg-orange-50 dark:bg-orange-900/20">
-                      <ClipboardList className="h-6 w-6 text-orange-600 dark:text-orange-400" />
-                    </div>
-                    <div>
-                      <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalTasks}</div>
-                      <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Toplam Task</div>
-                    </div>
+              {/* Stats Cards - Minimal & Clickable Filters */}
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
+                <button
+                  onClick={() => setPriorityFilter(null)}
+                  className={`group flex items-center gap-2 border-2 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                    priorityFilter === null
+                      ? "border-orange-600 dark:border-orange-500"
+                      : "border-gray-300 dark:border-gray-700"
+                  }`}
+                >
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-orange-600 bg-orange-50 dark:bg-orange-900/20 sm:h-10 sm:w-10">
+                    <ClipboardList className="h-4 w-4 text-orange-600 dark:text-orange-400 sm:h-5 sm:w-5" />
                   </div>
-                </div>
+                  <div className="min-w-0 flex-1 text-left">
+                    <div className="text-lg font-bold text-gray-900 dark:text-white sm:text-xl">{stats.totalTasks}</div>
+                    <div className="text-xs font-medium text-gray-600 dark:text-gray-400 sm:text-sm">Toplam</div>
+                  </div>
+                </button>
 
-                <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
-                  <div className="mb-4 flex items-center gap-3">
-                    <div className="flex h-12 w-12 items-center justify-center border-2 border-red-600 bg-red-50 dark:bg-red-900/20">
-                      <AlertCircle className="h-6 w-6 text-red-600 dark:text-red-400" />
-                    </div>
-                    <div>
-                      <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats.highPriority}</div>
-                      <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Yüksek Öncelik</div>
-                    </div>
+                <button
+                  onClick={() => setPriorityFilter(priorityFilter === 3 ? null : 3)}
+                  className={`group flex items-center gap-2 border-2 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                    priorityFilter === 3
+                      ? "border-red-600 dark:border-red-500"
+                      : "border-gray-300 dark:border-gray-700"
+                  }`}
+                >
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-red-600 bg-red-50 dark:bg-red-900/20 sm:h-10 sm:w-10">
+                    <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400 sm:h-5 sm:w-5" />
                   </div>
-                </div>
+                  <div className="min-w-0 flex-1 text-left">
+                    <div className="text-lg font-bold text-gray-900 dark:text-white sm:text-xl">{stats.highPriority}</div>
+                    <div className="text-xs font-medium text-gray-600 dark:text-gray-400 sm:text-sm">Yüksek</div>
+                  </div>
+                </button>
 
-                <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
-                  <div className="mb-4 flex items-center gap-3">
-                    <div className="flex h-12 w-12 items-center justify-center border-2 border-yellow-600 bg-yellow-50 dark:bg-yellow-900/20">
-                      <AlertCircle className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
-                    </div>
-                    <div>
-                      <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats.mediumPriority}</div>
-                      <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Orta Öncelik</div>
-                    </div>
+                <button
+                  onClick={() => setPriorityFilter(priorityFilter === 2 ? null : 2)}
+                  className={`group flex items-center gap-2 border-2 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                    priorityFilter === 2
+                      ? "border-yellow-600 dark:border-yellow-500"
+                      : "border-gray-300 dark:border-gray-700"
+                  }`}
+                >
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-yellow-600 bg-yellow-50 dark:bg-yellow-900/20 sm:h-10 sm:w-10">
+                    <AlertCircle className="h-4 w-4 text-yellow-600 dark:text-yellow-400 sm:h-5 sm:w-5" />
                   </div>
-                </div>
+                  <div className="min-w-0 flex-1 text-left">
+                    <div className="text-lg font-bold text-gray-900 dark:text-white sm:text-xl">{stats.mediumPriority}</div>
+                    <div className="text-xs font-medium text-gray-600 dark:text-gray-400 sm:text-sm">Orta</div>
+                  </div>
+                </button>
 
-                <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
-                  <div className="mb-4 flex items-center gap-3">
-                    <div className="flex h-12 w-12 items-center justify-center border-2 border-gray-600 bg-gray-50 dark:bg-gray-800">
-                      <CheckCircle2 className="h-6 w-6 text-gray-600 dark:text-gray-400" />
-                    </div>
-                    <div>
-                      <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats.lowPriority}</div>
-                      <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Düşük Öncelik</div>
-                    </div>
+                <button
+                  onClick={() => setPriorityFilter(priorityFilter === 1 ? null : 1)}
+                  className={`group flex items-center gap-2 border-2 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                    priorityFilter === 1
+                      ? "border-gray-600 dark:border-gray-500"
+                      : "border-gray-300 dark:border-gray-700"
+                  }`}
+                >
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-gray-600 bg-gray-50 dark:bg-gray-800 sm:h-10 sm:w-10">
+                    <CheckCircle2 className="h-4 w-4 text-gray-600 dark:text-gray-400 sm:h-5 sm:w-5" />
                   </div>
-                </div>
+                  <div className="min-w-0 flex-1 text-left">
+                    <div className="text-lg font-bold text-gray-900 dark:text-white sm:text-xl">{stats.lowPriority}</div>
+                    <div className="text-xs font-medium text-gray-600 dark:text-gray-400 sm:text-sm">Düşük</div>
+                  </div>
+                </button>
               </div>
             </div>
             <div>
@@ -201,7 +230,7 @@ export default function PersonalTasksPage() {
                 <div className="h-40 animate-pulse border-l-4 border-l-orange-400 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm sm:p-4 dark:border-l-orange-500 dark:border-gray-700 dark:bg-gray-900" />
               ) : (
                 <PersonalTaskList
-                  tasks={tasks}
+                  tasks={filteredTasks}
                   onDelete={handleDelete}
                   onEdit={(t) => {
                     setEditingTask(t);

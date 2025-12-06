@@ -1,11 +1,12 @@
 "use client";
 
 import { memo, useCallback, useEffect, useState } from "react";
-import { RefreshCw, CheckCircle2, Pause, Crown, BarChart3 } from "lucide-react";
+import { RefreshCw, CheckCircle2, Pause, Crown, BarChart3, X, RotateCcw } from "lucide-react";
 import { getSupabase } from "@/lib/supabase";
 import { useVotes } from "@/hooks/useVotes";
 import { useVotingSession } from "@/hooks/useVotingSession";
 import { useToastContext } from "@/contexts/ToastContext";
+import Button from "@/components/ui/Button";
 import type { TaskInfo } from "@/interfaces/Voting.interface";
 
 interface AdminVotingViewProps {
@@ -23,7 +24,7 @@ const AdminVotingView = memo(function AdminVotingView({
   const { votes, loading: votesLoading } = useVotes(
     roomId,
     activeTask.id,
-    false
+    true // Admin her zaman tüm puanları görebilmeli
   );
   const { remainingTime, isVotingActive } = useVotingSession(roomId);
   const [taskCompleted, setTaskCompleted] = useState<boolean>(false);
@@ -51,6 +52,28 @@ const AdminVotingView = memo(function AdminVotingView({
       // Realtime subscription sayesinde activeTask null olacak ve "Aktif Task Yok" ekranı gösterilecek
     } catch {
       showToast("Task tamamlanamadı. Lütfen tekrar deneyin.", "error");
+    }
+  }, [activeTask.id, isAdmin, showToast]);
+
+  const handleCancelVoting = useCallback(async () => {
+    // Admin kontrolü - sadece admin oylamayı iptal edebilir
+    if (!isAdmin) {
+      showToast("Bu işlem için admin yetkisi gereklidir.", "error");
+      return;
+    }
+
+    try {
+      const supabase = getSupabase();
+      // Task'ı pending durumuna çevir
+      const { error } = await supabase
+        .from("tasks")
+        .update({ status: "pending" })
+        .eq("id", activeTask.id);
+      if (error) throw error;
+
+      showToast("Oylama iptal edildi, task beklemede durumuna alındı.", "success");
+    } catch {
+      showToast("Oylama iptal edilemedi. Lütfen tekrar deneyin.", "error");
     }
   }, [activeTask.id, isAdmin, showToast]);
 
@@ -191,13 +214,62 @@ const AdminVotingView = memo(function AdminVotingView({
       )}
 
       {isVotingActive && (
-        <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
-          <button
-            onClick={handleCompleteTask}
-            className="w-full rounded-md border-2 border-gray-900 bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-800 hover:border-gray-800 dark:border-white dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
-          >
-            Taskı Bitir
-          </button>
+        <div className="space-y-3">
+          {/* Puan Durumu */}
+          {validVotes.length === 0 && (
+            <div className="border-2 border-yellow-300 bg-yellow-50 p-4 dark:border-yellow-700 dark:bg-yellow-900/20">
+              <p className="text-sm font-semibold text-yellow-800 dark:text-yellow-300">
+                ⚠️ Henüz hiç puan verilmedi
+              </p>
+              <p className="mt-1 text-xs text-yellow-700 dark:text-yellow-400">
+                Katılımcılar puan vermeye başladığında burada görünecek
+              </p>
+            </div>
+          )}
+
+          {/* Admin Aksiyon Butonları */}
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <Button
+              onClick={handleCompleteTask}
+              variant="primary"
+              size="md"
+              fullWidth
+              icon={CheckCircle2}
+              disabled={validVotes.length === 0}
+            >
+              Task&apos;ı Bitir
+            </Button>
+            <Button
+              onClick={handleCancelVoting}
+              variant="secondary"
+              size="md"
+              fullWidth
+              icon={X}
+            >
+              Oylamayı İptal Et
+            </Button>
+            <Button
+              onClick={handleCancelVoting}
+              variant="outline"
+              size="md"
+              fullWidth
+              icon={RotateCcw}
+            >
+              Başka Task Seç
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Oylama aktif değilse ve task pending ise */}
+      {!isVotingActive && activeTask.status === "pending" && (
+        <div className="border-2 border-gray-300 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
+          <p className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">
+            Oylama beklemede
+          </p>
+          <p className="text-xs text-gray-600 dark:text-gray-400">
+            Task listesinden yeni bir task seçebilir veya bu task&apos;ı tekrar aktif edebilirsiniz.
+          </p>
         </div>
       )}
 
