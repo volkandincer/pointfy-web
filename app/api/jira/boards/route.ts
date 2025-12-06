@@ -221,11 +221,30 @@ async function handleJiraRequestWithJiraToken(
         refreshError instanceof Error
           ? refreshError.message
           : "Failed to refresh token";
+      
+      // Refresh token geçersizse, kullanıcının token'larını temizle (opsiyonel)
+      // Bu sayede kullanıcı tekrar bağlanmak zorunda kalır
+      if (errorMessage.includes("refresh_token is invalid") || errorMessage.includes("Refresh token geçersiz")) {
+        try {
+          await supabase
+            .from("users")
+            .update({
+              jira_access_token: null,
+              jira_refresh_token: null,
+              jira_token_expires_at: null,
+            })
+            .eq("id", userId);
+        } catch (cleanupError) {
+          // Token cleanup error - ignore
+        }
+      }
+      
       return NextResponse.json(
         {
           error:
             "Jira token expired and refresh failed. Please reconnect Jira.",
           details: errorMessage,
+          suggestion: "Lütfen /app/account sayfasından Jira bağlantınızı koparıp tekrar bağlayın.",
         },
         { status: 401 }
       );
