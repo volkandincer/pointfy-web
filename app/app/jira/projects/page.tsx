@@ -139,7 +139,7 @@ export default function JiraProjectsPage() {
             placeholder="Proje ara..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 pl-10 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 sm:text-base"
+              className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 pl-10 text-sm text-gray-900 placeholder-gray-500 focus:border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 sm:text-base"
           />
           <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
         </div>
@@ -148,7 +148,7 @@ export default function JiraProjectsPage() {
             onClick={() => setViewMode("grid")}
             className={`rounded-md px-3 py-1.5 text-sm transition ${
               viewMode === "grid"
-                ? "bg-blue-600 text-white"
+                ? "bg-purple-600 text-white"
                 : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
             }`}
           >
@@ -158,7 +158,7 @@ export default function JiraProjectsPage() {
             onClick={() => setViewMode("list")}
             className={`rounded-md px-3 py-1.5 text-sm transition ${
               viewMode === "list"
-                ? "bg-blue-600 text-white"
+                ? "bg-purple-600 text-white"
                 : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
             }`}
           >
@@ -210,7 +210,7 @@ export default function JiraProjectsPage() {
                 <div className="space-y-1">
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     <span className="font-medium">Key:</span>{" "}
-                    <span className="font-mono text-blue-600 dark:text-blue-400">
+                    <span className="font-mono text-purple-600 dark:text-purple-400">
                       {project.location?.projectKey || "N/A"}
                     </span>
                   </p>
@@ -235,8 +235,8 @@ export default function JiraProjectsPage() {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
-                      <Folder className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                    <div className="flex h-12 w-12 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20">
+                      <Folder className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                     </div>
                     <div>
                       <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
@@ -245,7 +245,7 @@ export default function JiraProjectsPage() {
                       <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
                         <span>
                           <span className="font-medium">Key:</span>{" "}
-                          <span className="font-mono text-blue-600 dark:text-blue-400">
+                          <span className="font-mono text-purple-600 dark:text-purple-400">
                             {project.location?.projectKey || "N/A"}
                           </span>
                         </span>

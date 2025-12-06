@@ -373,7 +373,7 @@ export default function AccountPage() {
                         onChange={(e) => setNewUsername(e.target.value)}
                         placeholder="Kullanıcı adı"
                         maxLength={50}
-                        className="flex-1 rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                        className="flex-1 rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-cyan-600 focus:ring-2 focus:ring-cyan-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-cyan-500"
                         disabled={saving}
                       />
                       <Button
@@ -382,6 +382,7 @@ export default function AccountPage() {
                         onClick={handleUpdateUsername}
                         disabled={saving || !newUsername.trim()}
                         loading={saving}
+                        className="border-cyan-600 bg-cyan-600 hover:border-cyan-700 hover:bg-cyan-700 dark:border-cyan-500 dark:bg-cyan-600 dark:hover:bg-cyan-500"
                       >
                         {saving ? "Kaydediliyor..." : "Kaydet"}
                       </Button>
@@ -485,7 +486,7 @@ export default function AccountPage() {
 
             <div className="space-y-3 border-2 border-gray-300 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
               <div className="flex items-start gap-3">
-                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:border-blue-500 dark:text-blue-400">
+                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 border-cyan-600 bg-cyan-100 text-cyan-600 dark:bg-cyan-900/30 dark:border-cyan-500 dark:text-cyan-400">
                   <span className="text-xs font-semibold">1</span>
                 </div>
                 <div className="flex-1">
@@ -504,7 +505,7 @@ export default function AccountPage() {
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:border-blue-500 dark:text-blue-400">
+                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 border-cyan-600 bg-cyan-100 text-cyan-600 dark:bg-cyan-900/30 dark:border-cyan-500 dark:text-cyan-400">
                   <span className="text-xs font-semibold">2</span>
                 </div>
                 <div className="flex-1">
@@ -523,7 +524,7 @@ export default function AccountPage() {
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:border-blue-500 dark:text-blue-400">
+                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 border-cyan-600 bg-cyan-100 text-cyan-600 dark:bg-cyan-900/30 dark:border-cyan-500 dark:text-cyan-400">
                   <span className="text-xs font-semibold">3</span>
                 </div>
                 <div className="flex-1">
@@ -577,7 +578,7 @@ export default function AccountPage() {
               </button>
               <button
                 onClick={handleConfirmJiraConnection}
-                className="flex-1 border-2 border-blue-600 bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700"
+                className="flex-1 border-2 border-cyan-600 bg-cyan-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-cyan-700 hover:border-cyan-700 dark:border-cyan-500 dark:bg-cyan-600 dark:hover:bg-cyan-500"
               >
                 Devam Et
               </button>

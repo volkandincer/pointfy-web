@@ -486,7 +486,7 @@ export default function BoardDetailPage() {
                     setEditingNote(null);
                     setShowNoteModal(true);
                   }}
-                  className="inline-flex items-center gap-2 border-2 border-purple-600 bg-purple-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-purple-700 hover:border-purple-700"
+                  className="inline-flex items-center gap-2 border-2 border-green-600 bg-green-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-700 hover:border-green-700 dark:border-green-500 dark:bg-green-600 dark:hover:bg-green-500"
                 >
                   <Plus className="h-5 w-5" />
                   Yeni Not

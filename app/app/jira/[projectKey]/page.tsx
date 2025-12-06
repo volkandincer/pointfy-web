@@ -372,7 +372,7 @@ export default function JiraProjectDetailPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-16">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-purple-600 border-t-transparent dark:border-purple-500" />
       </div>
     );
   }
@@ -394,7 +394,7 @@ export default function JiraProjectDetailPage() {
               {projectName || projectKey}
             </h1>
             {projectKey && (
-              <span className="border-2 border-blue-600 bg-blue-50 px-3 py-1.5 font-mono text-sm font-bold text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+              <span className="border-2 border-purple-600 bg-purple-50 px-3 py-1.5 font-mono text-sm font-bold text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
                 {projectKey}
               </span>
             )}
@@ -420,8 +420,8 @@ export default function JiraProjectDetailPage() {
               <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
                 <div className="border-2 border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-gray-400 hover:shadow-md sm:p-5 dark:border-gray-700 dark:bg-gray-900">
                   <div className="mb-2 flex items-center justify-between">
-                    <div className="border-2 border-blue-600 bg-blue-50 p-2 dark:bg-blue-900/20">
-                      <ClipboardList className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                    <div className="border-2 border-purple-600 bg-purple-50 p-2 dark:bg-purple-900/20">
+                      <ClipboardList className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                     </div>
                   </div>
                   <div className="text-xs font-medium text-gray-600 dark:text-gray-400">
@@ -551,7 +551,7 @@ export default function JiraProjectDetailPage() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Issue&apos;da ara (başlık, açıklama, key)..."
-                    className="w-full rounded-md border-2 border-gray-300 bg-gray-50 pl-10 pr-10 py-3 text-base text-gray-900 outline-none transition-all focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:bg-gray-800 sm:text-sm"
+                    className="w-full rounded-md border-2 border-gray-300 bg-gray-50 pl-10 pr-10 py-3 text-base text-gray-900 outline-none transition-all focus:border-purple-600 focus:bg-white focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-purple-500 dark:focus:bg-gray-800 sm:text-sm"
                   />
                   {searchQuery && (
                     <button
@@ -679,15 +679,15 @@ export default function JiraProjectDetailPage() {
 
 
               {/* Results Count */}
-              <div className="mt-4 flex items-center justify-between border-2 border-blue-300 bg-blue-50 px-4 py-2.5 dark:border-blue-700 dark:bg-blue-950/20">
+              <div className="mt-4 flex items-center justify-between border-2 border-purple-300 bg-purple-50 px-4 py-2.5 dark:border-purple-700 dark:bg-purple-950/20">
                 <div className="flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                  <span className="text-sm font-semibold text-blue-700 dark:text-blue-300">
+                  <FileText className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                  <span className="text-sm font-semibold text-purple-700 dark:text-purple-300">
                     {filteredIssues.length} / {allIssues.length} issue gösteriliyor
                   </span>
                 </div>
                 {filteredIssues.length !== allIssues.length && (
-                  <span className="text-xs text-blue-600 dark:text-blue-400">
+                  <span className="text-xs text-purple-600 dark:text-purple-400">
                     {((filteredIssues.length / allIssues.length) * 100).toFixed(0)}% eşleşti
                   </span>
                 )}
@@ -774,7 +774,7 @@ export default function JiraProjectDetailPage() {
                                     className="group block cursor-pointer rounded-md border-2 border-gray-200 bg-white p-3 shadow-sm transition-all hover:border-blue-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
                                   >
                                     <div className="mb-1 flex items-center gap-1.5">
-                                      <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400">
+                                      <span className="font-mono text-xs font-bold text-purple-600 dark:text-purple-400">
                                         {issue.key}
                                       </span>
                                       {issue.priority && (
@@ -815,7 +815,7 @@ export default function JiraProjectDetailPage() {
                             }}
                             className="group flex cursor-pointer items-center gap-3 rounded-md border-2 border-gray-200 bg-white p-3 transition hover:border-gray-300 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
                           >
-                            <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400">
+                            <span className="font-mono text-xs font-bold text-purple-600 dark:text-purple-400">
                               {issue.key}
                             </span>
                             <span className="flex-1 truncate text-sm font-medium text-gray-900 dark:text-white">
@@ -913,7 +913,7 @@ export default function JiraProjectDetailPage() {
 
                           {/* External Link Icon */}
                           <div className="flex-shrink-0">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-blue-100 text-blue-600 opacity-0 transition-all group-hover:opacity-100 dark:bg-blue-900/30 dark:text-blue-400">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-purple-100 text-purple-600 opacity-0 transition-all group-hover:opacity-100 dark:bg-purple-900/30 dark:text-purple-400">
                               <ExternalLink className="h-5 w-5" />
                             </div>
                           </div>

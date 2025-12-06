@@ -375,7 +375,7 @@ export default function JiraSettingsPage() {
             </p>
             <button
               onClick={connectJira}
-              className="border-2 border-blue-600 bg-blue-600 px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700"
+              className="border-2 border-purple-600 bg-purple-600 px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-purple-700 hover:border-purple-700 dark:border-purple-500 dark:bg-purple-600 dark:hover:bg-purple-500"
             >
               Jira&apos;yı Bağla
             </button>
@@ -402,7 +402,7 @@ export default function JiraSettingsPage() {
               value={baseUrlInput}
               onChange={(e) => setBaseUrlInput(e.target.value)}
               placeholder="örn: pointf.atlassian.net"
-              className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 sm:text-base"
+              className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 focus:border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 sm:text-base"
             />
             <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
               Jira instance&apos;ınızın base URL&apos;i (örn: pointf.atlassian.net)
@@ -411,7 +411,7 @@ export default function JiraSettingsPage() {
           <button
             onClick={saveBaseUrl}
             disabled={saving || baseUrlInput === baseUrl}
-            className="border-2 border-blue-600 bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700 disabled:opacity-50"
+            className="border-2 border-purple-600 bg-purple-600 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-purple-700 hover:border-purple-700 disabled:opacity-50 dark:border-purple-500 dark:bg-purple-600 dark:hover:bg-purple-500"
           >
             {saving ? "Kaydediliyor..." : "Kaydet"}
           </button>

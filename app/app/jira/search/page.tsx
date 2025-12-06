@@ -357,7 +357,7 @@ export default function JiraSearchPage() {
                     <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
                       <span>
                         <span className="font-medium">Proje:</span>{" "}
-                        <span className="font-mono text-blue-600 dark:text-blue-400">
+                        <span className="font-mono text-purple-600 dark:text-purple-400">
                           {issue.project.key}
                         </span>
                       </span>

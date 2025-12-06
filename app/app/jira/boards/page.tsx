@@ -217,7 +217,7 @@ export default function JiraBoardsPage() {
                 onClick={() => setViewMode("list")}
                 className={`rounded-md px-3 py-1.5 text-sm transition ${
                   viewMode === "list"
-                    ? "bg-blue-600 text-white"
+                    ? "bg-green-600 text-white"
                     : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
                 }`}
               >
@@ -227,7 +227,7 @@ export default function JiraBoardsPage() {
                 onClick={() => setViewMode("grid")}
                 className={`rounded-md px-3 py-1.5 text-sm transition ${
                   viewMode === "grid"
-                    ? "bg-blue-600 text-white"
+                    ? "bg-green-600 text-white"
                     : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
                 }`}
               >
@@ -336,7 +336,7 @@ export default function JiraBoardsPage() {
                 <div className="relative space-y-2 text-sm text-gray-600 dark:text-gray-400">
                   <div>
                     <span className="font-semibold">Proje:</span>{" "}
-                    <span className="font-mono font-semibold text-blue-600 dark:text-blue-400">
+                    <span className="font-mono font-semibold text-green-600 dark:text-green-400"
                       {board.location?.projectKey}
                     </span>
                   </div>
@@ -389,7 +389,7 @@ export default function JiraBoardsPage() {
                     <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
                       <span>
                         <span className="font-semibold">Proje:</span>{" "}
-                        <span className="font-mono font-semibold text-blue-600 dark:text-blue-400">
+                        <span className="font-mono font-semibold text-green-600 dark:text-green-400"
                           {board.location?.projectKey}
                         </span>
                       </span>
