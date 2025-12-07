@@ -12,7 +12,7 @@ interface CreateJiraIssueModalProps {
   open: boolean;
   onClose: () => void;
   onSuccess: (issueKey: string, issueUrl: string) => void;
-  personalTask: PersonalTask;
+  personalTask?: PersonalTask;
 }
 
 interface IssueType {
@@ -183,11 +183,15 @@ const CreateJiraIssueModal = memo(function CreateJiraIssueModal({
     };
   }, [open, selectedProjectKey, jiraBaseUrl]);
 
-  // Personal task bilgilerini form'a doldur
+  // Personal task bilgilerini form'a doldur (varsa)
   useEffect(() => {
     if (open && personalTask) {
       setSummary(personalTask.title);
       setDescription(personalTask.description || "");
+    } else if (open && !personalTask) {
+      // Personal task yoksa form'u temizle
+      setSummary("");
+      setDescription("");
     }
   }, [open, personalTask]);
 

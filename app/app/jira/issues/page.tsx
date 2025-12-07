@@ -2,16 +2,20 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ClipboardList, X, Search, ExternalLink, ChevronRight, ChevronDown, Filter } from "lucide-react";
+import { ClipboardList, X, Search, ExternalLink, ChevronRight, ChevronDown, Filter, Plus } from "lucide-react";
 import FilterDropdown from "@/components/jira/FilterDropdown";
 import FilterChip from "@/components/jira/FilterChip";
 import EmptyState from "@/components/jira/EmptyState";
+import CreateJiraIssueModal from "@/components/tasks/CreateJiraIssueModal";
+import Button from "@/components/ui/Button";
 import { getStatusColorClasses, getPriorityColorClasses } from "@/lib/jira/colors";
 import type { JiraTask } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
+import { useToastContext } from "@/contexts/ToastContext";
 
 export default function JiraIssuesPage() {
   const router = useRouter();
+  const { showToast } = useToastContext();
   const [jiraBaseUrl, setJiraBaseUrl] = useState<string>("");
 
   // Issues state
@@ -22,6 +26,9 @@ export default function JiraIssuesPage() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
   const [filtersOpen, setFiltersOpen] = useState<boolean>(false);
+  
+  // Create issue modal state
+  const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
 
   // Filter state
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -217,13 +224,26 @@ export default function JiraIssuesPage() {
             Size atanmış Jira issue&apos;larınızı görüntüleyin ve yönetin
           </p>
         </div>
-        <button
-          onClick={fetchIssues}
-          disabled={loading}
-          className="min-h-[44px] rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
-        >
-          {loading ? "Yükleniyor..." : "Yenile"}
-        </button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="secondary"
+            size="md"
+            onClick={fetchIssues}
+            disabled={loading}
+            className="!border-gray-300 !bg-white !text-gray-700 hover:!border-gray-400 hover:!bg-gray-50 dark:!border-gray-700 dark:!bg-gray-800 dark:!text-gray-300 dark:hover:!border-gray-600 dark:hover:!bg-gray-700"
+          >
+            {loading ? "Yükleniyor..." : "Yenile"}
+          </Button>
+          <Button
+            variant="primary"
+            size="md"
+            onClick={() => setShowCreateModal(true)}
+            icon={Plus}
+            className="!border-purple-600 !bg-purple-600 hover:!border-purple-700 hover:!bg-purple-700 dark:!border-purple-500 dark:!bg-purple-600 dark:hover:!border-purple-400 dark:hover:!bg-purple-500"
+          >
+            Yeni Issue
+          </Button>
+        </div>
       </div>
 
       {/* Search and View Toggle */}
@@ -558,6 +578,20 @@ export default function JiraIssuesPage() {
           )}
         </div>
       )}
+
+      {/* Create Issue Modal */}
+      <CreateJiraIssueModal
+        open={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onSuccess={async (issueKey, issueUrl) => {
+          showToast(`Issue başarıyla oluşturuldu: ${issueKey}`, "success");
+          setShowCreateModal(false);
+          // Issues listesini yenile
+          await fetchIssues();
+          // Yeni oluşturulan issue'ya yönlendir
+          router.push(`/app/jira/issues/${issueKey}`);
+        }}
+      />
     </div>
   );
 }
