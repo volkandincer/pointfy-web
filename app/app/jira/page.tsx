@@ -292,9 +292,7 @@ export default function JiraDashboardPage() {
               {recentIssues.map((issue) => (
                 <a
                   key={issue.id}
-                  href={issue.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={issue.key ? `/app/jira/issues/${issue.key}` : issue.url}
                   className="group block border-l-4 border-l-green-600 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-l-green-500 dark:border-gray-700 dark:bg-gray-900"
                 >
                   <div className="mb-2 flex flex-wrap items-center gap-2">

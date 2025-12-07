@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { ClipboardList, X, Search, ExternalLink, ChevronRight, ChevronDown, Filter } from "lucide-react";
 import FilterDropdown from "@/components/jira/FilterDropdown";
 import FilterChip from "@/components/jira/FilterChip";
@@ -10,6 +11,7 @@ import type { JiraTask } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
 
 export default function JiraIssuesPage() {
+  const router = useRouter();
   const [jiraBaseUrl, setJiraBaseUrl] = useState<string>("");
 
   // Issues state
@@ -408,12 +410,15 @@ export default function JiraIssuesPage() {
         viewMode === "grid" ? (
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 sm:gap-4">
             {filteredIssues.map((issue) => (
-              <a
+              <button
                 key={issue.id}
-                href={issue.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative block border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                onClick={() => {
+                  if (issue.key) {
+                    router.push(`/app/jira/issues/${issue.key}`);
+                  }
+                }}
+                disabled={!issue.key}
+                className="group relative block w-full border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900"
                 style={{
                   borderLeftColor: issue.statusColor === 'green' ? '#16a34a' : issue.statusColor === 'yellow' ? '#eab308' : issue.statusColor === 'blue' ? '#2563eb' : '#6b7280',
                 }}
@@ -449,18 +454,21 @@ export default function JiraIssuesPage() {
                     {issue.type}
                   </span>
                 </div>
-              </a>
+              </button>
             ))}
           </div>
         ) : (
           <div className="space-y-3 sm:space-y-4">
             {filteredIssues.map((issue) => (
-              <a
+              <button
                 key={issue.id}
-                href={issue.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative block border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                onClick={() => {
+                  if (issue.key) {
+                    router.push(`/app/jira/issues/${issue.key}`);
+                  }
+                }}
+                disabled={!issue.key}
+                className="group relative block w-full border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900"
                 style={{
                   borderLeftColor: issue.statusColor === 'green' ? '#16a34a' : issue.statusColor === 'yellow' ? '#eab308' : issue.statusColor === 'blue' ? '#2563eb' : '#6b7280',
                 }}
@@ -511,7 +519,7 @@ export default function JiraIssuesPage() {
                   </div>
                   <ChevronRight className="h-5 w-5 shrink-0 text-purple-600 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100 dark:text-purple-400" />
                 </div>
-              </a>
+              </button>
             ))}
           </div>
         )

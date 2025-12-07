@@ -765,13 +765,15 @@ export default function JiraProjectDetailPage() {
                               </div>
                               <div className="space-y-2">
                                 {statusIssues.map((issue) => (
-                                  <div
+                                  <button
                                     key={issue.id}
                                     onClick={() => {
-                                      setSelectedIssue(issue);
-                                      setIsModalOpen(true);
+                                      if (issue.key) {
+                                        router.push(`/app/jira/issues/${issue.key}`);
+                                      }
                                     }}
-                                    className="group block cursor-pointer rounded-md border-2 border-gray-200 bg-white p-3 shadow-sm transition-all hover:border-blue-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
+                                    disabled={!issue.key}
+                                    className="group block w-full cursor-pointer rounded-md border-2 border-gray-200 bg-white p-3 text-left shadow-sm transition-all hover:border-purple-300 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800"
                                   >
                                     <div className="mb-1 flex items-center gap-1.5">
                                       <span className="font-mono text-xs font-bold text-purple-600 dark:text-purple-400">
@@ -794,7 +796,7 @@ export default function JiraProjectDetailPage() {
                                         </span>
                                       </div>
                                     )}
-                                  </div>
+                                  </button>
                                 ))}
                               </div>
                             </div>
@@ -807,13 +809,15 @@ export default function JiraProjectDetailPage() {
                     {viewMode === "compact" && (
                       <div className="space-y-2">
                         {issues.map((issue) => (
-                          <div
+                          <button
                             key={issue.id}
                             onClick={() => {
-                              setSelectedIssue(issue);
-                              setIsModalOpen(true);
+                              if (issue.key) {
+                                router.push(`/app/jira/issues/${issue.key}`);
+                              }
                             }}
-                            className="group flex cursor-pointer items-center gap-3 rounded-md border-2 border-gray-200 bg-white p-3 transition hover:border-gray-300 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+                            disabled={!issue.key}
+                            className="group flex w-full cursor-pointer items-center gap-3 rounded-md border-2 border-gray-200 bg-white p-3 text-left transition hover:border-purple-300 hover:bg-purple-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-purple-900/20"
                           >
                             <span className="font-mono text-xs font-bold text-purple-600 dark:text-purple-400">
                               {issue.key}
@@ -828,7 +832,7 @@ export default function JiraProjectDetailPage() {
                             >
                               {issue.status}
                             </span>
-                          </div>
+                          </button>
                         ))}
                       </div>
                     )}
@@ -837,13 +841,15 @@ export default function JiraProjectDetailPage() {
                     {viewMode === "list" && (
                       <div className="space-y-4">
                         {issues.map((issue) => (
-                      <div
+                      <button
                         key={issue.id}
-                        className="group relative block border-l-4 border-l-purple-600 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-l-purple-500 dark:border-gray-700 dark:bg-gray-900 cursor-pointer"
                         onClick={() => {
-                          setSelectedIssue(issue);
-                          setIsModalOpen(true);
+                          if (issue.key) {
+                            router.push(`/app/jira/issues/${issue.key}`);
+                          }
                         }}
+                        disabled={!issue.key}
+                        className="group relative block w-full border-l-4 border-l-purple-600 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 text-left shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 dark:border-l-purple-500 dark:border-gray-700 dark:bg-gray-900"
                       >
                         <div className="flex items-start gap-4">
                           <div className="flex-1">
@@ -918,7 +924,7 @@ export default function JiraProjectDetailPage() {
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </button>
                       ))}
                       </div>
                     )}

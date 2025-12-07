@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Search, ExternalLink, History } from "lucide-react";
 import EmptyState from "@/components/jira/EmptyState";
 import JqlInput from "@/components/jira/JqlInput";
@@ -26,6 +27,7 @@ const QUICK_SEARCH_TEMPLATES = [
 ];
 
 export default function JiraSearchPage() {
+  const router = useRouter();
   const { showToast } = useToastContext();
   const [jiraBaseUrl, setJiraBaseUrl] = useState<string>("");
   const [jql, setJql] = useState<string>("");
@@ -322,12 +324,15 @@ export default function JiraSearchPage() {
           </div>
           <div className="space-y-3">
             {results.map((issue) => (
-              <a
+              <button
                 key={issue.id}
-                href={issue.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group block border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                onClick={() => {
+                  if (issue.key) {
+                    router.push(`/app/jira/issues/${issue.key}`);
+                  }
+                }}
+                disabled={!issue.key}
+                className="group block w-full border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 text-left shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900"
               >
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex-1">
@@ -368,9 +373,9 @@ export default function JiraSearchPage() {
                       )}
                     </div>
                   </div>
-                  <ExternalLink className="h-5 w-5 shrink-0 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100" />
+                  <ExternalLink className="h-5 w-5 shrink-0 text-purple-600 opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-100 dark:text-purple-400" />
                 </div>
-              </a>
+              </button>
             ))}
           </div>
         </div>

@@ -64,6 +64,7 @@ export interface JiraTask {
   assignee?: {
     name: string;
     avatar?: string;
+    accountId?: string;
   };
   priority?: string;
   type: string;
@@ -81,6 +82,20 @@ export interface JiraTask {
     name: string;
     state: string;
   };
+}
+
+export interface JiraComment {
+  id: string;
+  body: string;
+  author: {
+    accountId: string;
+    displayName: string;
+    avatarUrls: {
+      "48x48": string;
+    };
+  };
+  created: string;
+  updated?: string;
 }
 
 export interface JiraBoard {
