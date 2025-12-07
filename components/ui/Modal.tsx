@@ -93,9 +93,9 @@ const Modal = memo(function Modal({
         }}
       >
         {title && (
-          <div className="mb-6 flex items-center justify-center gap-3 border-b-2 border-gray-200 pb-4 dark:border-gray-800">
+          <div className="mb-4 flex items-center justify-center gap-2 border-b-2 border-gray-200 pb-3 dark:border-gray-800 sm:mb-6 sm:gap-3 sm:pb-4">
             {typeof title === "string" ? (
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white sm:text-xl">
+              <h3 className="text-base font-bold text-gray-900 dark:text-white sm:text-lg sm:text-xl">
                 {title}
               </h3>
             ) : (
