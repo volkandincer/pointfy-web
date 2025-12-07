@@ -107,7 +107,8 @@ async function getJiraApiDetails(userId: string, jiraBaseUrlFromQuery?: string |
   return { jiraToken, apiUrl, cloudId, jiraBaseUrl };
 }
 
-function getUserIdFromCookie(cookieStore: ReturnType<typeof cookies>): string | undefined {
+async function getUserIdFromCookie(): Promise<string | undefined> {
+  const cookieStore = await cookies();
   const accessToken = cookieStore.get("sb-access-token")?.value;
   if (accessToken) {
     try {
@@ -131,7 +132,7 @@ export async function POST(request: Request) {
     const { searchParams } = new URL(request.url);
     let userId: string | undefined = searchParams.get("userId") || undefined;
 
-    if (!userId) userId = getUserIdFromCookie(cookies());
+    if (!userId) userId = await getUserIdFromCookie();
     if (!userId) return NextResponse.json({ error: "Unauthorized: Please log in first" }, { status: 401 });
 
     const body = await request.json();
