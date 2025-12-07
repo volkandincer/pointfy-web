@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useCallback, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Plus, ClipboardList } from "lucide-react";
 import BoardCard from "./BoardCard";
 import CreateBoardModal from "./CreateBoardModal";
@@ -17,6 +18,7 @@ interface BoardListProps {
 const BoardList = memo(function BoardList({
   showArchived = false,
 }: BoardListProps) {
+  const router = useRouter();
   const {
     boards,
     loading,
@@ -42,9 +44,11 @@ const BoardList = memo(function BoardList({
     async (input: BoardInput) => {
       setActionLoading(true);
       try {
-        await addBoard(input);
+        const newBoard = await addBoard(input);
         setShowCreateModal(false);
         showToast("Board başarıyla oluşturuldu!", "success");
+        // Yeni oluşturulan board'a yönlendir (new=true parametresi ile)
+        router.push(`/app/boards/${newBoard.id}?new=true`);
       } catch (err) {
         showToast(
           err instanceof Error ? err.message : "Board oluşturulamadı.",
@@ -54,7 +58,7 @@ const BoardList = memo(function BoardList({
         setActionLoading(false);
       }
     },
-    [addBoard, showToast]
+    [addBoard, showToast, router]
   );
 
   const handleEdit = useCallback((board: Board) => {

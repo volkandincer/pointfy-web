@@ -134,7 +134,13 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
 
     async function fetchIssues() {
       if (!selectedProjectKey || !jiraBaseUrl) {
+        console.log("JiraTaskSelector: Missing projectKey or jiraBaseUrl", {
+          selectedProjectKey,
+          jiraBaseUrl,
+          selectedBoardId,
+        });
         setIssues([]);
+        setError(null);
         return;
       }
 
@@ -156,7 +162,14 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
         urlParams.set("userId", userData.user.id);
         urlParams.set("jql", `project=${selectedProjectKey}`);
 
-        const response = await fetch(`/api/jira/search?${urlParams.toString()}`, {
+        const apiUrl = `/api/jira/search?${urlParams.toString()}`;
+        console.log("JiraTaskSelector: Fetching issues", {
+          apiUrl,
+          projectKey: selectedProjectKey,
+          jql: `project=${selectedProjectKey}`,
+        });
+
+        const response = await fetch(apiUrl, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -172,54 +185,104 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
 
         if (!mounted) return;
 
+        console.log("JiraTaskSelector: API Response", {
+          ok: response.ok,
+          status: response.status,
+          dataKeys: Object.keys(data),
+          issuesCount: data.issues?.length || 0,
+          error: data.error,
+        });
+
         if (!response.ok) {
           const errorMessage = data.error || "Issue'lar yüklenemedi";
+          console.error("JiraTaskSelector: API Error", {
+            status: response.status,
+            error: errorMessage,
+            data,
+          });
           throw new Error(errorMessage);
         }
 
-        // JiraSearchResponse formatından JiraTask formatına çevir
-        const issuesArray = (data.issues || []).map((issue: {
-          id: string;
-          key: string;
-          fields: {
-            summary: string;
-            description?: string | JiraAdfDocument | { type?: string; version?: number; content?: unknown };
-            status: { name: string; statusCategory: { colorName: string } };
-            assignee?: { displayName: string; avatarUrls: { "48x48": string } };
-            priority?: { name: string };
-            issuetype: { name: string };
-            project: { key: string; name: string };
-            created: string;
-            updated: string;
-            resolutiondate?: string;
-          };
-        }) => ({
-          id: issue.id,
-          key: issue.key,
-          summary: issue.fields.summary,
-          description: extractDescription(issue.fields.description),
-          status: issue.fields.status.name,
-          statusColor: issue.fields.status.statusCategory.colorName,
-          assignee: issue.fields.assignee
-            ? {
-                name: issue.fields.assignee.displayName,
-                avatar: issue.fields.assignee.avatarUrls["48x48"],
-              }
-            : undefined,
-          priority: issue.fields.priority?.name,
-          type: issue.fields.issuetype.name,
-          project: {
-            key: issue.fields.project.key,
-            name: issue.fields.project.name,
-          },
-          created: issue.fields.created,
-          updated: issue.fields.updated,
-          resolved: issue.fields.resolutiondate,
-          url: jiraBaseUrl 
-            ? `https://${jiraBaseUrl}/browse/${issue.key}`
-            : `https://${jiraBaseUrl}/browse/${issue.key}`,
-          boardId: selectedBoardId || undefined,
-        }));
+        // API'den dönen data formatını kontrol et
+        // Eğer data zaten JiraTask formatındaysa (issues array), direkt kullan
+        // Eğer JiraIssue formatındaysa (fields içeren), dönüştür
+        let issuesArray: JiraTask[] = [];
+
+        if (data.issues && Array.isArray(data.issues)) {
+          // Eğer issues zaten JiraTask formatındaysa (summary, status, vs. direkt var)
+          if (data.issues.length > 0 && data.issues[0].summary !== undefined) {
+            // Zaten JiraTask formatında
+            issuesArray = data.issues.filter(
+              (task: JiraTask) => task.key && task.summary
+            );
+          } else {
+            // JiraIssue formatında (fields içeren), dönüştür
+            issuesArray = (data.issues || [])
+              .filter((issue: {
+                id: string;
+                key: string;
+                fields?: {
+                  summary?: string;
+                  description?: string | JiraAdfDocument | { type?: string; version?: number; content?: unknown };
+                  status?: { name: string; statusCategory: { colorName: string } };
+                  assignee?: { displayName: string; avatarUrls: { "48x48": string } };
+                  priority?: { name: string };
+                  issuetype?: { name: string };
+                  project?: { key: string; name: string };
+                  created?: string;
+                  updated?: string;
+                  resolutiondate?: string;
+                };
+              }) => issue.key && issue.fields?.summary) // Geçerli key ve summary olanları filtrele
+              .map((issue: {
+                id: string;
+                key: string;
+                fields: {
+                  summary: string;
+                  description?: string | JiraAdfDocument | { type?: string; version?: number; content?: unknown };
+                  status: { name: string; statusCategory: { colorName: string } };
+                  assignee?: { displayName: string; avatarUrls: { "48x48": string } };
+                  priority?: { name: string };
+                  issuetype: { name: string };
+                  project: { key: string; name: string };
+                  created: string;
+                  updated: string;
+                  resolutiondate?: string;
+                };
+              }) => ({
+                id: issue.id,
+                key: issue.key,
+                summary: issue.fields.summary || "",
+                description: extractDescription(issue.fields.description),
+                status: issue.fields.status.name,
+                statusColor: issue.fields.status.statusCategory.colorName,
+                assignee: issue.fields.assignee
+                  ? {
+                      name: issue.fields.assignee.displayName,
+                      avatar: issue.fields.assignee.avatarUrls["48x48"],
+                    }
+                  : undefined,
+                priority: issue.fields.priority?.name,
+                type: issue.fields.issuetype.name,
+                project: {
+                  key: issue.fields.project.key,
+                  name: issue.fields.project.name,
+                },
+                created: issue.fields.created,
+                updated: issue.fields.updated,
+                resolved: issue.fields.resolutiondate,
+                url: jiraBaseUrl 
+                  ? `https://${jiraBaseUrl}/browse/${issue.key}`
+                  : "",
+                boardId: selectedBoardId || undefined,
+              }));
+          }
+        }
+
+        console.log("JiraTaskSelector: Processed issues", {
+          originalCount: data.issues?.length || 0,
+          processedCount: issuesArray.length,
+        });
 
         setIssues(issuesArray);
       } catch (err) {
@@ -254,6 +317,12 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
 
   const handleTaskSelect = useCallback(
     (task: JiraTask) => {
+      // Task validasyonu
+      if (!task || !task.key || !task.summary || !task.url) {
+        console.error("Geçersiz task seçildi:", task);
+        return;
+      }
+      
       // Task seçildiğinde board ID'yi kaydet (zaten kayıtlı olmalı ama emin olmak için)
       if (selectedBoardId) {
         try {

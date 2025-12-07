@@ -11,6 +11,9 @@ import PersonalTaskModal from "@/components/tasks/PersonalTaskModal";
 import NoteList from "@/components/notes/NoteList";
 import NoteModal from "@/components/notes/NoteModal";
 import EditBoardModal from "@/components/boards/EditBoardModal";
+import JiraTaskPromptModal from "@/components/boards/JiraTaskPromptModal";
+import JiraTaskSelector from "@/components/jira/JiraTaskSelector";
+import Modal from "@/components/ui/Modal";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type { Board, BoardInput } from "@/interfaces/Board.interface";
@@ -48,13 +51,34 @@ export default function BoardDetailPage() {
   const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [actionLoading, setActionLoading] = useState<boolean>(false);
   const [filterType, setFilterType] = useState<number | "jira" | string | null>(null);
+  const [jiraBaseUrl, setJiraBaseUrl] = useState<string | null>(null);
+  const [jiraConnected, setJiraConnected] = useState<boolean>(false);
+  const [showJiraPrompt, setShowJiraPrompt] = useState<boolean>(false);
+  const [showJiraTaskSelector, setShowJiraTaskSelector] = useState<boolean>(false);
 
-  // Board'ı bul
+  // Board'ı bul ve yeni oluşturulmuşsa Jira prompt'u göster
   useEffect(() => {
     const foundBoard = boards.find((b) => b.id === boardId);
     if (foundBoard) {
       setBoard(foundBoard);
       setLoading(false);
+      
+      // URL'den "new" parametresini kontrol et (board yeni oluşturulmuşsa)
+      if (typeof window !== "undefined") {
+        const urlParams = new URLSearchParams(window.location.search);
+        const isNewBoard = urlParams.get("new") === "true";
+        
+        // Jira bağlıysa ve yeni board ise prompt göster
+        if (isNewBoard && jiraConnected && !showJiraPrompt && !showJiraTaskSelector) {
+          // LocalStorage'da bu board için daha önce soruldu mu kontrol et
+          const askedKey = `jira_prompt_asked_${boardId}`;
+          const alreadyAsked = localStorage.getItem(askedKey);
+          
+          if (!alreadyAsked) {
+            setShowJiraPrompt(true);
+          }
+        }
+      }
     } else if (!boards.length) {
       // Boards henüz yüklenmediyse bekle
       setLoading(true);
@@ -63,9 +87,9 @@ export default function BoardDetailPage() {
       setLoading(false);
       router.replace("/app/boards");
     }
-  }, [boards, boardId, router]);
+  }, [boards, boardId, router, jiraConnected, showJiraPrompt, showJiraTaskSelector]);
 
-  // User key'i al
+  // User key'i al ve Jira bağlantısını kontrol et
   useEffect(() => {
     let mounted = true;
     (async () => {
@@ -74,6 +98,21 @@ export default function BoardDetailPage() {
       if (!mounted) return;
       if (data.user) {
         setUserKey(data.user.id);
+        
+        // Jira bağlantısını kontrol et
+        const { data: userRow } = await supabase
+          .from("users")
+          .select("jira_access_token, jira_base_url")
+          .eq("id", data.user.id)
+          .maybeSingle();
+        
+        if (mounted && userRow) {
+          const connected = !!userRow.jira_access_token;
+          setJiraConnected(connected);
+          if (connected && userRow.jira_base_url) {
+            setJiraBaseUrl(userRow.jira_base_url);
+          }
+        }
       }
     })();
     return () => {
@@ -301,6 +340,128 @@ export default function BoardDetailPage() {
       }
     },
     [boardId, availableTasks, showToast]
+  );
+
+  // Jira task'ını board'a ekle
+  const handleAddJiraTask = useCallback(
+    async (jiraTask: { key: string; summary: string; description?: string; url: string }) => {
+      console.log("handleAddJiraTask: Called with", { jiraTask, boardId, userKey });
+      if (!boardId || !userKey) {
+        console.error("handleAddJiraTask: Missing boardId or userKey");
+        return;
+      }
+      if (!jiraTask || !jiraTask.key || !jiraTask.summary || !jiraTask.url) {
+        showToast("Geçersiz task bilgisi", "error");
+        return;
+      }
+      setActionLoading(true);
+      try {
+        const supabase = getSupabase();
+        
+        // Önce bu Jira task'ı zaten personal task olarak var mı kontrol et
+        const { data: existingTask } = await supabase
+          .from("user_personal_tasks")
+          .select("id, board_id")
+          .eq("user_key", userKey)
+          .eq("jira_issue_key", jiraTask.key)
+          .maybeSingle();
+
+        if (existingTask) {
+          // Zaten varsa, sadece board_id'yi güncelle
+          if (existingTask.board_id !== boardId) {
+            const { data: updatedTask, error: updateError } = await supabase
+              .from("user_personal_tasks")
+              .update({ board_id: boardId })
+              .eq("id", existingTask.id)
+              .select()
+              .single();
+            if (updateError) throw updateError;
+            
+            console.log("handleAddJiraTask: Existing task updated", updatedTask);
+            
+            // Güncellenmiş task'ı listeye ekle
+            if (updatedTask) {
+              setTasks((prev) => {
+                const exists = prev.some((t) => t.id === updatedTask.id);
+                if (exists) {
+                  // Zaten varsa güncelle
+                  return prev.map((t) =>
+                    t.id === updatedTask.id ? (updatedTask as PersonalTask) : t
+                  );
+                }
+                // Yoksa ekle
+                return [updatedTask as PersonalTask, ...prev];
+              });
+            }
+            
+            showToast("Jira task board'a eklendi!", "success");
+          } else {
+            // Task zaten bu board'da, listeye ekle (eğer yoksa)
+            const { data: currentTask } = await supabase
+              .from("user_personal_tasks")
+              .select("*")
+              .eq("id", existingTask.id)
+              .single();
+            
+            if (currentTask) {
+              setTasks((prev) => {
+                const exists = prev.some((t) => t.id === currentTask.id);
+                if (!exists) {
+                  return [currentTask as PersonalTask, ...prev];
+                }
+                return prev;
+              });
+            }
+            
+            showToast("Bu task zaten bu board'da!", "info");
+          }
+        } else {
+          // Yeni personal task oluştur
+          const { data: newTask, error } = await supabase
+            .from("user_personal_tasks")
+            .insert({
+              user_key: userKey,
+              title: jiraTask.summary,
+              description: jiraTask.description || null,
+              category: "work",
+              priority: 2, // Default: Orta
+              board_id: boardId,
+              jira_issue_key: jiraTask.key,
+              jira_issue_url: jiraTask.url,
+            })
+            .select()
+            .single();
+          
+          if (error) throw error;
+          
+          // Realtime subscription çalışmıyorsa fallback olarak manuel ekle
+          if (newTask) {
+            console.log("handleAddJiraTask: New task created", newTask);
+            setTasks((prev) => {
+              const exists = prev.some((t) => t.id === newTask.id);
+              if (exists) {
+                console.log("handleAddJiraTask: Task already exists in list, updating");
+                return prev.map((t) =>
+                  t.id === newTask.id ? (newTask as PersonalTask) : t
+                );
+              }
+              console.log("handleAddJiraTask: Adding new task to list");
+              return [newTask as PersonalTask, ...prev];
+            });
+          }
+          
+          showToast("Jira task board'a eklendi!", "success");
+        }
+      } catch (err) {
+        showToast(
+          err instanceof Error ? err.message : "Jira task eklenemedi.",
+          "error"
+        );
+      } finally {
+        setActionLoading(false);
+      }
+    },
+    [boardId, userKey, showToast]
   );
 
   const handleUpdateTask = useCallback(
@@ -929,6 +1090,64 @@ export default function BoardDetailPage() {
               </div>
             </div>
           </div>
+        )}
+
+        {/* Jira Task Prompt Modal */}
+        <JiraTaskPromptModal
+          open={showJiraPrompt}
+          onClose={() => {
+            setShowJiraPrompt(false);
+            // LocalStorage'a kaydet ki bir daha sormasın
+            const askedKey = `jira_prompt_asked_${boardId}`;
+            localStorage.setItem(askedKey, "true");
+          }}
+          onConfirm={() => {
+            setShowJiraPrompt(false);
+            setShowJiraTaskSelector(true);
+            // LocalStorage'a kaydet ki bir daha sormasın
+            const askedKey = `jira_prompt_asked_${boardId}`;
+            localStorage.setItem(askedKey, "true");
+          }}
+        />
+
+        {/* Jira Task Selector Modal */}
+        {jiraBaseUrl && (
+          <Modal
+            open={showJiraTaskSelector}
+            onClose={() => setShowJiraTaskSelector(false)}
+            title={
+              <div className="flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-md border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20">
+                  <Link2 className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                </div>
+                <span className="font-bold">Jira Task&apos;larından Seç</span>
+              </div>
+            }
+            className="sm:border-purple-600/30 dark:sm:border-purple-500/30"
+          >
+              <JiraTaskSelector
+                jiraBaseUrl={jiraBaseUrl}
+                onTaskSelect={async (task) => {
+                  if (!task || !task.key || !task.summary || !task.url) {
+                    showToast("Geçersiz task seçildi", "error");
+                    return;
+                  }
+                  console.log("JiraTaskSelector: Task selected", task);
+                  try {
+                    await handleAddJiraTask({
+                      key: task.key,
+                      summary: task.summary,
+                      description: task.description,
+                      url: task.url,
+                    });
+                    setShowJiraTaskSelector(false);
+                  } catch (error) {
+                    console.error("JiraTaskSelector: Error adding task", error);
+                  }
+                }}
+                onCancel={() => setShowJiraTaskSelector(false)}
+              />
+          </Modal>
         )}
 
         <Footer navigationItems={navigationItems} />
