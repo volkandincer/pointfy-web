@@ -118,83 +118,67 @@ export default function JiraDashboardPage() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-4 gap-2 sm:gap-4">
         <Link
           href="/app/jira/projects"
-          className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+          className="flex flex-col items-center justify-center border-2 border-gray-300 bg-white p-2 text-center shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
         >
-          <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20">
-              <Folder className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                {loading ? (
-                  <span className="inline-block h-8 w-12 animate-pulse bg-gray-200 dark:bg-gray-800" />
-                ) : (
-                  projectsCount
-                )}
-              </div>
-              <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Proje</div>
-            </div>
+          <div className="mb-2 flex h-8 w-8 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20 sm:mb-3 sm:h-12 sm:w-12">
+            <Folder className="h-4 w-4 text-purple-600 dark:text-purple-400 sm:h-6 sm:w-6" />
           </div>
+          <div className="text-lg font-bold text-gray-900 dark:text-white sm:text-2xl">
+            {loading ? (
+              <span className="inline-block h-5 w-8 animate-pulse bg-gray-200 dark:bg-gray-800 sm:h-8 sm:w-12" />
+            ) : (
+              projectsCount
+            )}
+          </div>
+          <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-sm">Proje</div>
         </Link>
 
         <Link
           href="/app/jira/issues"
-          className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+          className="flex flex-col items-center justify-center border-2 border-gray-300 bg-white p-2 text-center shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
         >
-          <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20">
-              <ClipboardList className="h-6 w-6 text-green-600 dark:text-green-400" />
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                {loading ? (
-                  <span className="inline-block h-8 w-12 animate-pulse bg-gray-200 dark:bg-gray-800" />
-                ) : (
-                  issuesCount
-                )}
-              </div>
-              <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Issue</div>
-            </div>
+          <div className="mb-2 flex h-8 w-8 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20 sm:mb-3 sm:h-12 sm:w-12">
+            <ClipboardList className="h-4 w-4 text-green-600 dark:text-green-400 sm:h-6 sm:w-6" />
           </div>
+          <div className="text-lg font-bold text-gray-900 dark:text-white sm:text-2xl">
+            {loading ? (
+              <span className="inline-block h-5 w-8 animate-pulse bg-gray-200 dark:bg-gray-800 sm:h-8 sm:w-12" />
+            ) : (
+              issuesCount
+            )}
+          </div>
+          <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-sm">Issue</div>
         </Link>
 
         <Link
           href="/app/jira/boards"
-          className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+          className="flex flex-col items-center justify-center border-2 border-gray-300 bg-white p-2 text-center shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
         >
-          <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
-              <Pin className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                {loading ? (
-                  <span className="inline-block h-8 w-12 animate-pulse bg-gray-200 dark:bg-gray-800" />
-                ) : (
-                  boardsCount
-                )}
-              </div>
-              <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Board</div>
-            </div>
+          <div className="mb-2 flex h-8 w-8 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20 sm:mb-3 sm:h-12 sm:w-12">
+            <Pin className="h-4 w-4 text-blue-600 dark:text-blue-400 sm:h-6 sm:w-6" />
           </div>
+          <div className="text-lg font-bold text-gray-900 dark:text-white sm:text-2xl">
+            {loading ? (
+              <span className="inline-block h-5 w-8 animate-pulse bg-gray-200 dark:bg-gray-800 sm:h-8 sm:w-12" />
+            ) : (
+              boardsCount
+            )}
+          </div>
+          <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-sm">Board</div>
         </Link>
 
         <Link
           href="/app/jira/search"
-          className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+          className="flex flex-col items-center justify-center border-2 border-gray-300 bg-white p-2 text-center shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
         >
-          <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center border-2 border-orange-600 bg-orange-50 dark:bg-orange-900/20">
-              <Search className="h-6 w-6 text-orange-600 dark:text-orange-400" />
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-gray-900 dark:text-white">—</div>
-              <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Arama</div>
-            </div>
+          <div className="mb-2 flex h-8 w-8 items-center justify-center border-2 border-orange-600 bg-orange-50 dark:bg-orange-900/20 sm:mb-3 sm:h-12 sm:w-12">
+            <Search className="h-4 w-4 text-orange-600 dark:text-orange-400 sm:h-6 sm:w-6" />
           </div>
+          <div className="text-lg font-bold text-gray-900 dark:text-white sm:text-2xl">—</div>
+          <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-sm">Arama</div>
         </Link>
       </div>
 
