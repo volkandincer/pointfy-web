@@ -300,159 +300,177 @@ export default function PersonalTasksPage() {
                   </div>
                 </button>
 
-                <button
-                  onClick={() => setFilterType(filterType === 3 ? null : 3)}
-                  className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
-                    filterType === 3
-                      ? "border-red-600 dark:border-red-500"
-                      : "border-gray-300 dark:border-gray-700"
-                  }`}
-                >
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-red-600 bg-red-50 dark:bg-red-900/20 sm:h-10 sm:w-10">
-                    <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400 sm:h-5 sm:w-5" />
-                  </div>
-                  <div className="text-center">
-                    <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.highPriority}</div>
-                    <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Yüksek</div>
-                  </div>
-                </button>
+                {stats.highPriority > 0 && (
+                  <button
+                    onClick={() => setFilterType(filterType === 3 ? null : 3)}
+                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                      filterType === 3
+                        ? "border-red-600 dark:border-red-500"
+                        : "border-gray-300 dark:border-gray-700"
+                    }`}
+                  >
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-red-600 bg-red-50 dark:bg-red-900/20 sm:h-10 sm:w-10">
+                      <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400 sm:h-5 sm:w-5" />
+                    </div>
+                    <div className="text-center">
+                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.highPriority}</div>
+                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Yüksek</div>
+                    </div>
+                  </button>
+                )}
 
-                <button
-                  onClick={() => setFilterType(filterType === 2 ? null : 2)}
-                  className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
-                    filterType === 2
-                      ? "border-yellow-600 dark:border-yellow-500"
-                      : "border-gray-300 dark:border-gray-700"
-                  }`}
-                >
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-yellow-600 bg-yellow-50 dark:bg-yellow-900/20 sm:h-10 sm:w-10">
-                    <AlertCircle className="h-4 w-4 text-yellow-600 dark:text-yellow-400 sm:h-5 sm:w-5" />
-                  </div>
-                  <div className="text-center">
-                    <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.mediumPriority}</div>
-                    <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Orta</div>
-                  </div>
-                </button>
+                {stats.mediumPriority > 0 && (
+                  <button
+                    onClick={() => setFilterType(filterType === 2 ? null : 2)}
+                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                      filterType === 2
+                        ? "border-yellow-600 dark:border-yellow-500"
+                        : "border-gray-300 dark:border-gray-700"
+                    }`}
+                  >
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-yellow-600 bg-yellow-50 dark:bg-yellow-900/20 sm:h-10 sm:w-10">
+                      <AlertCircle className="h-4 w-4 text-yellow-600 dark:text-yellow-400 sm:h-5 sm:w-5" />
+                    </div>
+                    <div className="text-center">
+                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.mediumPriority}</div>
+                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Orta</div>
+                    </div>
+                  </button>
+                )}
 
-                <button
-                  onClick={() => setFilterType(filterType === 1 ? null : 1)}
-                  className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
-                    filterType === 1
-                      ? "border-gray-600 dark:border-gray-500"
-                      : "border-gray-300 dark:border-gray-700"
-                  }`}
-                >
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-gray-600 bg-gray-50 dark:bg-gray-800 sm:h-10 sm:w-10">
-                    <CheckCircle2 className="h-4 w-4 text-gray-600 dark:text-gray-400 sm:h-5 sm:w-5" />
-                  </div>
-                  <div className="text-center">
-                    <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.lowPriority}</div>
-                    <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Düşük</div>
-                  </div>
-                </button>
+                {stats.lowPriority > 0 && (
+                  <button
+                    onClick={() => setFilterType(filterType === 1 ? null : 1)}
+                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                      filterType === 1
+                        ? "border-gray-600 dark:border-gray-500"
+                        : "border-gray-300 dark:border-gray-700"
+                    }`}
+                  >
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-gray-600 bg-gray-50 dark:bg-gray-800 sm:h-10 sm:w-10">
+                      <CheckCircle2 className="h-4 w-4 text-gray-600 dark:text-gray-400 sm:h-5 sm:w-5" />
+                    </div>
+                    <div className="text-center">
+                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.lowPriority}</div>
+                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Düşük</div>
+                    </div>
+                  </button>
+                )}
 
-                <button
-                  onClick={() => setFilterType(filterType === "jira" ? null : "jira")}
-                  className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
-                    filterType === "jira"
-                      ? "border-purple-600 dark:border-purple-500"
-                      : "border-gray-300 dark:border-gray-700"
-                  }`}
-                >
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20 sm:h-10 sm:w-10">
-                    <Link2 className="h-4 w-4 text-purple-600 dark:text-purple-400 sm:h-5 sm:w-5" />
-                  </div>
-                  <div className="text-center">
-                    <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.jiraTasks}</div>
-                    <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Jira&apos;da</div>
-                  </div>
-                </button>
+                {stats.jiraTasks > 0 && (
+                  <button
+                    onClick={() => setFilterType(filterType === "jira" ? null : "jira")}
+                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                      filterType === "jira"
+                        ? "border-purple-600 dark:border-purple-500"
+                        : "border-gray-300 dark:border-gray-700"
+                    }`}
+                  >
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20 sm:h-10 sm:w-10">
+                      <Link2 className="h-4 w-4 text-purple-600 dark:text-purple-400 sm:h-5 sm:w-5" />
+                    </div>
+                    <div className="text-center">
+                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.jiraTasks}</div>
+                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Jira&apos;da</div>
+                    </div>
+                  </button>
+                )}
 
                 {/* Category Filters */}
-                <button
-                  onClick={() => setFilterType(filterType === "general" ? null : "general")}
-                  className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
-                    filterType === "general"
-                      ? "border-blue-600 dark:border-blue-500"
-                      : "border-gray-300 dark:border-gray-700"
-                  }`}
-                >
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20 sm:h-10 sm:w-10">
-                    <Folder className="h-4 w-4 text-blue-600 dark:text-blue-400 sm:h-5 sm:w-5" />
-                  </div>
-                  <div className="text-center">
-                    <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.generalCategory}</div>
-                    <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Genel</div>
-                  </div>
-                </button>
+                {stats.generalCategory > 0 && (
+                  <button
+                    onClick={() => setFilterType(filterType === "general" ? null : "general")}
+                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                      filterType === "general"
+                        ? "border-blue-600 dark:border-blue-500"
+                        : "border-gray-300 dark:border-gray-700"
+                    }`}
+                  >
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20 sm:h-10 sm:w-10">
+                      <Folder className="h-4 w-4 text-blue-600 dark:text-blue-400 sm:h-5 sm:w-5" />
+                    </div>
+                    <div className="text-center">
+                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.generalCategory}</div>
+                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Genel</div>
+                    </div>
+                  </button>
+                )}
 
-                <button
-                  onClick={() => setFilterType(filterType === "work" ? null : "work")}
-                  className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
-                    filterType === "work"
-                      ? "border-green-600 dark:border-green-500"
-                      : "border-gray-300 dark:border-gray-700"
-                  }`}
-                >
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20 sm:h-10 sm:w-10">
-                    <Folder className="h-4 w-4 text-green-600 dark:text-green-400 sm:h-5 sm:w-5" />
-                  </div>
-                  <div className="text-center">
-                    <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.workCategory}</div>
-                    <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">İş</div>
-                  </div>
-                </button>
+                {stats.workCategory > 0 && (
+                  <button
+                    onClick={() => setFilterType(filterType === "work" ? null : "work")}
+                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                      filterType === "work"
+                        ? "border-green-600 dark:border-green-500"
+                        : "border-gray-300 dark:border-gray-700"
+                    }`}
+                  >
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20 sm:h-10 sm:w-10">
+                      <Folder className="h-4 w-4 text-green-600 dark:text-green-400 sm:h-5 sm:w-5" />
+                    </div>
+                    <div className="text-center">
+                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.workCategory}</div>
+                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">İş</div>
+                    </div>
+                  </button>
+                )}
 
-                <button
-                  onClick={() => setFilterType(filterType === "personal" ? null : "personal")}
-                  className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
-                    filterType === "personal"
-                      ? "border-pink-600 dark:border-pink-500"
-                      : "border-gray-300 dark:border-gray-700"
-                  }`}
-                >
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-pink-600 bg-pink-50 dark:bg-pink-900/20 sm:h-10 sm:w-10">
-                    <Folder className="h-4 w-4 text-pink-600 dark:text-pink-400 sm:h-5 sm:w-5" />
-                  </div>
-                  <div className="text-center">
-                    <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.personalCategory}</div>
-                    <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Kişisel</div>
-                  </div>
-                </button>
+                {stats.personalCategory > 0 && (
+                  <button
+                    onClick={() => setFilterType(filterType === "personal" ? null : "personal")}
+                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                      filterType === "personal"
+                        ? "border-pink-600 dark:border-pink-500"
+                        : "border-gray-300 dark:border-gray-700"
+                    }`}
+                  >
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-pink-600 bg-pink-50 dark:bg-pink-900/20 sm:h-10 sm:w-10">
+                      <Folder className="h-4 w-4 text-pink-600 dark:text-pink-400 sm:h-5 sm:w-5" />
+                    </div>
+                    <div className="text-center">
+                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.personalCategory}</div>
+                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Kişisel</div>
+                    </div>
+                  </button>
+                )}
 
-                <button
-                  onClick={() => setFilterType(filterType === "meeting" ? null : "meeting")}
-                  className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
-                    filterType === "meeting"
-                      ? "border-indigo-600 dark:border-indigo-500"
-                      : "border-gray-300 dark:border-gray-700"
-                  }`}
-                >
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20 sm:h-10 sm:w-10">
-                    <Folder className="h-4 w-4 text-indigo-600 dark:text-indigo-400 sm:h-5 sm:w-5" />
-                  </div>
-                  <div className="text-center">
-                    <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.meetingCategory}</div>
-                    <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Toplantı</div>
-                  </div>
-                </button>
+                {stats.meetingCategory > 0 && (
+                  <button
+                    onClick={() => setFilterType(filterType === "meeting" ? null : "meeting")}
+                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                      filterType === "meeting"
+                        ? "border-indigo-600 dark:border-indigo-500"
+                        : "border-gray-300 dark:border-gray-700"
+                    }`}
+                  >
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20 sm:h-10 sm:w-10">
+                      <Folder className="h-4 w-4 text-indigo-600 dark:text-indigo-400 sm:h-5 sm:w-5" />
+                    </div>
+                    <div className="text-center">
+                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.meetingCategory}</div>
+                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Toplantı</div>
+                    </div>
+                  </button>
+                )}
 
-                <button
-                  onClick={() => setFilterType(filterType === "project" ? null : "project")}
-                  className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
-                    filterType === "project"
-                      ? "border-cyan-600 dark:border-cyan-500"
-                      : "border-gray-300 dark:border-gray-700"
-                  }`}
-                >
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-cyan-600 bg-cyan-50 dark:bg-cyan-900/20 sm:h-10 sm:w-10">
-                    <Folder className="h-4 w-4 text-cyan-600 dark:text-cyan-400 sm:h-5 sm:w-5" />
-                  </div>
-                  <div className="text-center">
-                    <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.projectCategory}</div>
-                    <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Proje</div>
-                  </div>
-                </button>
+                {stats.projectCategory > 0 && (
+                  <button
+                    onClick={() => setFilterType(filterType === "project" ? null : "project")}
+                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                      filterType === "project"
+                        ? "border-cyan-600 dark:border-cyan-500"
+                        : "border-gray-300 dark:border-gray-700"
+                    }`}
+                  >
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-cyan-600 bg-cyan-50 dark:bg-cyan-900/20 sm:h-10 sm:w-10">
+                      <Folder className="h-4 w-4 text-cyan-600 dark:text-cyan-400 sm:h-5 sm:w-5" />
+                    </div>
+                    <div className="text-center">
+                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.projectCategory}</div>
+                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Proje</div>
+                    </div>
+                  </button>
+                )}
               </div>
             </div>
             <div>
