@@ -91,7 +91,7 @@ export default function BoardDetailPage() {
       const { data: rows } = await supabase
         .from("user_personal_tasks")
         .select(
-          "id, user_key, title, description, category, priority, created_at, board_id"
+          "id, user_key, title, description, category, priority, created_at, board_id, jira_issue_key, jira_issue_url"
         )
         .eq("user_key", userKey)
         .eq("board_id", boardId)

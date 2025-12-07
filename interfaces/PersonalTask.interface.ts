@@ -7,6 +7,8 @@ export interface PersonalTask {
   priority: number;
   board_id?: string | null;
   created_at?: string;
+  jira_issue_key?: string | null;
+  jira_issue_url?: string | null;
 }
 
 export interface PersonalTaskInput {

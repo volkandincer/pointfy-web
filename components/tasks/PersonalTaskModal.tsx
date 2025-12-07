@@ -1,7 +1,9 @@
 "use client";
 
-import { memo, useCallback, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { CheckSquare } from "lucide-react";
 import Modal from "@/components/ui/Modal";
+import Button from "@/components/ui/Button";
 import type {
   PersonalTask,
   PersonalTaskInput,
@@ -15,11 +17,11 @@ interface PersonalTaskModalProps {
 }
 
 const CATEGORY_PRESETS = [
-  "general",
-  "work",
-  "personal",
-  "meeting",
-  "project",
+  { value: "general", label: "Genel" },
+  { value: "work", label: "İş" },
+  { value: "personal", label: "Kişisel" },
+  { value: "meeting", label: "Toplantı" },
+  { value: "project", label: "Proje" },
 ] as const;
 const PRIORITY_PRESETS = [
   { key: 1, label: "Düşük" },
@@ -33,18 +35,24 @@ const PersonalTaskModal = memo(function PersonalTaskModal({
   onSubmit,
   initialTask,
 }: PersonalTaskModalProps) {
-  const [title, setTitle] = useState<string>(initialTask?.title || "");
-  const [description, setDescription] = useState<string>(
-    initialTask?.description || ""
-  );
-  const [category, setCategory] = useState<string>(
-    initialTask?.category || "general"
-  );
-  const [priority, setPriority] = useState<number>(initialTask?.priority || 1);
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [category, setCategory] = useState<string>("general");
+  const [priority, setPriority] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
 
   const categories = useMemo(() => CATEGORY_PRESETS, []);
   const priorities = useMemo(() => PRIORITY_PRESETS, []);
+
+  // Modal açıldığında veya initialTask değiştiğinde state'leri güncelle
+  useEffect(() => {
+    if (open) {
+      setTitle(initialTask?.title || "");
+      setDescription(initialTask?.description || "");
+      setCategory(initialTask?.category || "general");
+      setPriority(initialTask?.priority || 1);
+    }
+  }, [open, initialTask]);
 
   const submit = useCallback(async () => {
     if (!title.trim()) return;
@@ -81,60 +89,74 @@ const PersonalTaskModal = memo(function PersonalTaskModal({
     <Modal
       open={open}
       onClose={onClose}
-      title={initialTask ? "Taskı Düzenle" : "Yeni Task Ekle"}
+      title={
+        <div className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-md border-2 border-orange-600 bg-orange-50 dark:bg-orange-900/20">
+            <CheckSquare className="h-5 w-5 text-orange-600 dark:text-orange-400" />
+          </div>
+          <span className="font-bold">{initialTask ? "Taskı Düzenle" : "Yeni Task Ekle"}</span>
+        </div>
+      }
+      className="sm:border-orange-600/30 dark:sm:border-orange-500/30"
     >
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         <div>
+          <label className="mb-1.5 block text-sm font-semibold text-gray-900 dark:text-white">
+            Task Başlığı <span className="text-red-600 dark:text-red-400">*</span>
+          </label>
           <input
-            placeholder="Task başlığı"
+            placeholder="Task başlığı..."
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 outline-none transition focus:border-orange-600 focus:ring-2 focus:ring-orange-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-orange-500"
           />
         </div>
         <div>
+          <label className="mb-1.5 block text-sm font-semibold text-gray-900 dark:text-white">
+            Açıklama <span className="text-xs font-normal text-gray-500 dark:text-gray-400">(İsteğe Bağlı)</span>
+          </label>
           <input
-            placeholder="Açıklama (isteğe bağlı)"
+            placeholder="Açıklama..."
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 outline-none transition focus:border-orange-600 focus:ring-2 focus:ring-orange-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-orange-500"
           />
         </div>
         <div>
-          <p className="mb-2 text-xs font-medium text-gray-700 dark:text-gray-300">
+          <label className="mb-1.5 block text-sm font-semibold text-gray-900 dark:text-white">
             Kategori
-          </p>
+          </label>
           <div className="flex flex-wrap gap-2">
             {categories.map((c) => (
               <button
-                key={c}
+                key={c.value}
                 type="button"
-                onClick={() => setCategory(c)}
-                className={`border-2 px-3 py-1 text-xs transition-colors ${
-                  category === c
-                    ? "border-blue-600 bg-blue-600 text-white"
-                    : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                onClick={() => setCategory(c.value)}
+                className={`rounded-md border-2 px-3 py-1.5 text-xs font-semibold transition-all ${
+                  category === c.value
+                    ? "border-orange-600 bg-orange-600 text-white shadow-sm dark:border-orange-500 dark:bg-orange-600"
+                    : "border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:bg-gray-700"
                 }`}
               >
-                {c}
+                {c.label}
               </button>
             ))}
           </div>
         </div>
         <div>
-          <p className="mb-2 text-xs font-medium text-gray-700 dark:text-gray-300">
+          <label className="mb-1.5 block text-sm font-semibold text-gray-900 dark:text-white">
             Öncelik
-          </p>
+          </label>
           <div className="flex flex-wrap gap-2">
             {priorities.map((p) => (
               <button
                 key={p.key}
                 type="button"
                 onClick={() => setPriority(p.key)}
-                className={`border-2 px-3 py-1 text-xs transition-colors ${
+                className={`rounded-md border-2 px-3 py-1.5 text-xs font-semibold transition-all ${
                   priority === p.key
-                    ? "border-blue-600 bg-blue-600 text-white"
-                    : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                    ? "border-orange-600 bg-orange-600 text-white shadow-sm dark:border-orange-500 dark:bg-orange-600"
+                    : "border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:bg-gray-700"
                 }`}
               >
                 {p.label}
@@ -142,22 +164,25 @@ const PersonalTaskModal = memo(function PersonalTaskModal({
             ))}
           </div>
         </div>
-        <div className="mt-2 flex items-center justify-end gap-3">
-          <button
-            type="button"
+        <div className="flex items-center justify-end gap-2 border-t-2 border-gray-200 pt-3 dark:border-gray-800 sm:gap-3">
+          <Button
+            variant="secondary"
+            size="md"
             onClick={onClose}
-            className="inline-flex h-10 items-center justify-center rounded-md border-2 border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+            disabled={loading}
           >
             İptal
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            variant="primary"
+            size="md"
             disabled={loading || !title.trim()}
             onClick={submit}
-            className="inline-flex h-10 items-center justify-center border-2 border-indigo-600 bg-indigo-600 px-5 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 hover:border-indigo-700 disabled:opacity-60"
+            loading={loading}
+            className="!border-orange-600 !bg-orange-600 hover:!border-orange-700 hover:!bg-orange-700 dark:!border-orange-500 dark:!bg-orange-600 dark:hover:!border-orange-400 dark:hover:!bg-orange-500"
           >
             {initialTask ? "Kaydet" : "Ekle"}
-          </button>
+          </Button>
         </div>
       </div>
     </Modal>
