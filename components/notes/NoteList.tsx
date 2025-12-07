@@ -109,18 +109,30 @@ const NoteList = memo(function NoteList({
         const updatedValue = note.updated_at;
         const isUpdated = updatedValue && updatedValue !== note.created_at;
 
+        // Border color mapping
+        const getBorderColor = (borderClass: string): string => {
+          if (borderClass.includes('yellow')) return '#eab308';
+          if (borderClass.includes('purple')) return '#a855f7';
+          if (borderClass.includes('blue')) return '#2563eb';
+          if (borderClass.includes('green')) return '#16a34a';
+          if (borderClass.includes('red')) return '#dc2626';
+          if (borderClass.includes('orange')) return '#f97316';
+          if (borderClass.includes('pink')) return '#ec4899';
+          return '#6b7280';
+        };
+
         return (
           <div
             key={note.id}
-            className="group relative flex flex-col border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+            className="group relative flex flex-col border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
             style={{
-              borderLeftColor: categoryStyle.border.includes('yellow') ? '#eab308' : categoryStyle.border.includes('purple') ? '#a855f7' : categoryStyle.border.includes('blue') ? '#2563eb' : categoryStyle.border.includes('green') ? '#16a34a' : categoryStyle.border.includes('red') ? '#dc2626' : categoryStyle.border.includes('orange') ? '#f97316' : categoryStyle.border.includes('pink') ? '#ec4899' : '#6b7280',
+              borderLeftColor: getBorderColor(categoryStyle.border),
             }}
           >
             {/* Header - Category Badge & Actions */}
             <div className="mb-3 flex items-start justify-between gap-2">
               <span
-                className={`border-2 px-2.5 py-1 text-xs font-semibold ${categoryStyle.bg} ${categoryStyle.text} ${categoryStyle.border}`}
+                className={`rounded-md border-2 px-2.5 py-1 text-xs font-semibold shadow-sm ${categoryStyle.bg} ${categoryStyle.text} ${categoryStyle.border}`}
               >
                 {getCategoryLabel(note.category)}
               </span>
@@ -141,7 +153,7 @@ const NoteList = memo(function NoteList({
             {/* Content */}
             <div
               onClick={() => onEdit(note)}
-              className="mb-4 flex-1 cursor-pointer"
+              className="mb-3 flex-1 cursor-pointer"
             >
               <p className="line-clamp-4 text-sm leading-relaxed text-gray-900 dark:text-white">
                 {note.content}
@@ -149,23 +161,20 @@ const NoteList = memo(function NoteList({
             </div>
 
             {/* Footer - Date & Edit Button */}
-            <div className="mt-auto space-y-3 border-t-2 border-gray-100 pt-3 dark:border-gray-800">
+            <div className="mt-auto space-y-2.5 border-t-2 border-gray-200 pt-3 dark:border-gray-800">
               {/* Date Info */}
-              <div className="space-y-1.5">
-                {dateValue && (
-                  <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
-                    <Calendar className="h-3.5 w-3.5" />
-                    <span>{formatDate(dateValue)}</span>
-                    {formatTime(dateValue) && (
-                      <span className="text-gray-400">• {formatTime(dateValue)}</span>
-                    )}
-                  </div>
+              <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+                <Calendar className="h-3.5 w-3.5 shrink-0" />
+                <span>{formatDate(dateValue)}</span>
+                {formatTime(dateValue) && (
+                  <span className="text-gray-400">• {formatTime(dateValue)}</span>
                 )}
                 {isUpdated && updatedValue && (
-                  <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
-                    <RefreshCw className="h-3.5 w-3.5" />
-                    <span>Güncellendi: {formatDate(updatedValue)}</span>
-                  </div>
+                  <>
+                    <span className="text-gray-400">•</span>
+                    <RefreshCw className="h-3.5 w-3.5 shrink-0" />
+                    <span>Güncellendi</span>
+                  </>
                 )}
               </div>
 
@@ -176,6 +185,7 @@ const NoteList = memo(function NoteList({
                 fullWidth
                 onClick={() => onEdit(note)}
                 icon={Edit}
+                className="border-yellow-600 text-yellow-600 hover:border-yellow-700 hover:bg-yellow-50 hover:text-yellow-700 dark:border-yellow-500 dark:text-yellow-400 dark:hover:border-yellow-400 dark:hover:bg-yellow-900/20"
               >
                 Düzenle
               </Button>

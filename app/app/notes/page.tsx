@@ -1,10 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { FileText, Plus } from "lucide-react";
+import { FileText } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import Button from "@/components/ui/Button";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type { Note } from "@/interfaces/Note.interface";
@@ -64,47 +63,34 @@ export default function NotesPage() {
           <div className="mx-auto max-w-7xl">
             {/* Header Section */}
             <div className="mb-8">
-              <div className="mb-6 flex items-center justify-between">
-                <div>
-                  <div className="mb-2 flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-md border-2 border-yellow-600 bg-yellow-50 dark:bg-yellow-900/20">
-                      <FileText className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
-                    </div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
-                      Notlarım
-                    </h1>
+              <div className="mb-6">
+                <div className="mb-2 flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-md border-2 border-yellow-600 bg-yellow-50 dark:bg-yellow-900/20">
+                    <FileText className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
                   </div>
-                  <p className="ml-13 text-sm text-gray-600 dark:text-gray-400 sm:ml-0">
-                    Kişisel notlarınızı kategorilere ayırın ve organize edin
-                  </p>
+                  <h1 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
+                    Notlarım
+                  </h1>
                 </div>
-                <Button
-                  variant="primary"
-                  size="md"
-                  onClick={() => {
-                    setEditingNote(null);
-                    setShowModal(true);
-                  }}
-                  icon={Plus}
-                >
-                  Yeni Not
-                </Button>
+                <p className="ml-13 text-sm text-gray-600 dark:text-gray-400 sm:ml-0">
+                  Kişisel notlarınızı kategorilere ayırın ve organize edin
+                </p>
               </div>
 
-              {/* Category Filter - Minimal Tabs */}
+              {/* Category Filter - Pill Style Tabs */}
               {categories.length > 1 && (
-                <div className="mb-6 border-b-2 border-gray-200 dark:border-gray-700">
-                  <div className="flex gap-1 overflow-x-auto">
+                <div className="mb-6">
+                  <div className="flex flex-wrap gap-2">
                     {categories.map((cat) => {
                       const isActive = selectedCategory === cat;
                       return (
                         <button
                           key={cat}
                           onClick={() => setSelectedCategory(cat)}
-                          className={`whitespace-nowrap border-b-2 px-4 py-3 text-sm font-semibold transition ${
+                          className={`whitespace-nowrap rounded-md border-2 px-4 py-2 text-sm font-semibold transition ${
                             isActive
-                              ? "border-yellow-600 text-yellow-600 dark:text-yellow-400"
-                              : "border-transparent text-gray-600 hover:border-gray-300 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+                              ? "border-yellow-600 bg-yellow-600 text-white shadow-sm hover:border-yellow-700 hover:bg-yellow-700 dark:border-yellow-500 dark:bg-yellow-600 dark:hover:border-yellow-400 dark:hover:bg-yellow-500"
+                              : "border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:bg-gray-700"
                           }`}
                         >
                           {getCategoryLabel(cat)}

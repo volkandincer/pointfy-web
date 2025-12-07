@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ClipboardList, X, Search, ExternalLink, ChevronRight } from "lucide-react";
+import { ClipboardList, X, Search, ExternalLink, ChevronRight, ChevronDown, Filter } from "lucide-react";
 import FilterDropdown from "@/components/jira/FilterDropdown";
 import FilterChip from "@/components/jira/FilterChip";
 import EmptyState from "@/components/jira/EmptyState";
@@ -19,6 +19,7 @@ export default function JiraIssuesPage() {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
+  const [filtersOpen, setFiltersOpen] = useState<boolean>(false);
 
   // Filter state
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -223,138 +224,165 @@ export default function JiraIssuesPage() {
         </button>
       </div>
 
-      {/* Search and Filters */}
-      <div className="space-y-4">
-        {/* Search */}
-        <div className="relative">
+      {/* Search and View Toggle */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        <div className="relative flex-1">
           <input
             type="text"
             placeholder="Issue ara (key, summary, project)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 pl-10 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 sm:text-base"
+            className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 pl-10 text-sm text-gray-900 placeholder-gray-500 focus:border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 sm:text-base"
           />
           <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
         </div>
-
-        {/* Filters */}
-        <div className="space-y-3">
-          {/* Filter Dropdowns */}
-          <div className="flex flex-wrap gap-3">
-            <FilterDropdown
-              label="Durum"
-              value={statusFilter}
-              options={[
-                { value: "all", label: "Tüm Durumlar" },
-                ...statusOptions,
-              ]}
-              onChange={setStatusFilter}
-              className="min-w-[160px]"
-            />
-            <FilterDropdown
-              label="Öncelik"
-              value={priorityFilter}
-              options={[
-                { value: "all", label: "Tüm Öncelikler" },
-                ...priorityOptions,
-              ]}
-              onChange={setPriorityFilter}
-              className="min-w-[160px]"
-            />
-            <FilterDropdown
-              label="Proje"
-              value={projectFilter}
-              options={[
-                { value: "all", label: "Tüm Projeler" },
-                ...projectOptions,
-              ]}
-              onChange={setProjectFilter}
-              className="min-w-[160px]"
-            />
-            <FilterDropdown
-              label="Tip"
-              value={typeFilter}
-              options={[
-                { value: "all", label: "Tüm Tipler" },
-                ...typeOptions,
-              ]}
-              onChange={setTypeFilter}
-              className="min-w-[160px]"
-            />
-
-            {/* View Mode Toggle */}
-            <div className="ml-auto flex items-center gap-2 rounded-md border-2 border-gray-300 bg-white p-1 dark:border-gray-700 dark:bg-gray-800">
-              <button
-                onClick={() => setViewMode("list")}
-                className={`min-h-[44px] rounded-md px-3 py-1.5 text-sm transition ${
-                  viewMode === "list"
-                    ? "bg-purple-600 text-white"
-                    : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
-                }`}
-              >
-                List
-              </button>
-              <button
-                onClick={() => setViewMode("grid")}
-                className={`min-h-[44px] rounded-md px-3 py-1.5 text-sm transition ${
-                  viewMode === "grid"
-                    ? "bg-purple-600 text-white"
-                    : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
-                }`}
-              >
-                Grid
-              </button>
-            </div>
-          </div>
-
-          {/* Active Filter Chips */}
-          {activeFiltersCount > 0 && (
-            <div className="flex flex-wrap items-center gap-2 rounded-md border-2 border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800/50">
-              <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">
-                Aktif Filtreler:
-              </span>
-              {statusFilter !== "all" && (
-                <FilterChip
-                  label={`Durum: ${statusOptions.find((s) => s.value === statusFilter)?.label || statusFilter}`}
-                  value={statusFilter}
-                  onRemove={() => setStatusFilter("all")}
-                  color="blue"
-                />
-              )}
-              {priorityFilter !== "all" && (
-                <FilterChip
-                  label={`Öncelik: ${priorityOptions.find((p) => p.value === priorityFilter)?.label || priorityFilter}`}
-                  value={priorityFilter}
-                  onRemove={() => setPriorityFilter("all")}
-                  color="green"
-                />
-              )}
-              {projectFilter !== "all" && (
-                <FilterChip
-                  label={`Proje: ${projectFilter}`}
-                  value={projectFilter}
-                  onRemove={() => setProjectFilter("all")}
-                  color="purple"
-                />
-              )}
-              {typeFilter !== "all" && (
-                <FilterChip
-                  label={`Tip: ${typeOptions.find((t) => t.value === typeFilter)?.label || typeFilter}`}
-                  value={typeFilter}
-                  onRemove={() => setTypeFilter("all")}
-                  color="orange"
-                />
-              )}
-              <button
-                onClick={clearAllFilters}
-                className="ml-auto flex min-h-[44px] items-center gap-1 rounded-md px-2.5 py-1 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200"
-              >
-                <X className="h-3 w-3" />
-                Tümünü Temizle
-              </button>
-            </div>
-          )}
+        <div className="flex items-center gap-2 rounded-md border-2 border-gray-300 bg-white p-1 dark:border-gray-700 dark:bg-gray-800">
+          <button
+            onClick={() => setViewMode("list")}
+            className={`min-h-[44px] rounded-md px-3 py-1.5 text-sm transition ${
+              viewMode === "list"
+                ? "bg-purple-600 text-white"
+                : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
+            }`}
+          >
+            List
+          </button>
+          <button
+            onClick={() => setViewMode("grid")}
+            className={`min-h-[44px] rounded-md px-3 py-1.5 text-sm transition ${
+              viewMode === "grid"
+                ? "bg-purple-600 text-white"
+                : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
+            }`}
+          >
+            Grid
+          </button>
         </div>
+      </div>
+
+      {/* Filters Accordion */}
+      <div className="space-y-3">
+        {/* Accordion Header */}
+        <button
+          onClick={() => setFiltersOpen(!filtersOpen)}
+          className="flex w-full items-center justify-between rounded-md border-2 border-gray-300 bg-white p-3 transition-all hover:border-gray-400 hover:shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:hover:border-gray-600"
+        >
+          <div className="flex items-center gap-2">
+            <Filter className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+            <span className="text-sm font-semibold text-gray-900 dark:text-white">
+              Filtreler
+            </span>
+            {activeFiltersCount > 0 && (
+              <span className="rounded-md border-2 border-purple-600 bg-purple-600 px-2 py-0.5 text-xs font-bold text-white dark:border-purple-500 dark:bg-purple-600">
+                {activeFiltersCount}
+              </span>
+            )}
+          </div>
+          <ChevronDown
+            className={`h-5 w-5 text-gray-600 transition-transform duration-200 dark:text-gray-400 ${
+              filtersOpen ? "rotate-180" : ""
+            }`}
+          />
+        </button>
+
+        {/* Accordion Content */}
+        <div
+          className={`overflow-hidden transition-all duration-300 ease-in-out ${
+            filtersOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
+          <div className="space-y-3 rounded-md border-2 border-gray-300 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
+            {/* Filter Dropdowns */}
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <FilterDropdown
+                label="Durum"
+                value={statusFilter}
+                options={[
+                  { value: "all", label: "Tüm Durumlar" },
+                  ...statusOptions,
+                ]}
+                onChange={setStatusFilter}
+                className="w-full"
+              />
+              <FilterDropdown
+                label="Öncelik"
+                value={priorityFilter}
+                options={[
+                  { value: "all", label: "Tüm Öncelikler" },
+                  ...priorityOptions,
+                ]}
+                onChange={setPriorityFilter}
+                className="w-full"
+              />
+              <FilterDropdown
+                label="Proje"
+                value={projectFilter}
+                options={[
+                  { value: "all", label: "Tüm Projeler" },
+                  ...projectOptions,
+                ]}
+                onChange={setProjectFilter}
+                className="w-full"
+              />
+              <FilterDropdown
+                label="Tip"
+                value={typeFilter}
+                options={[
+                  { value: "all", label: "Tüm Tipler" },
+                  ...typeOptions,
+                ]}
+                onChange={setTypeFilter}
+                className="w-full"
+              />
+            </div>
+
+          </div>
+        </div>
+
+        {/* Active Filter Chips - Always Visible (Outside Accordion) */}
+        {activeFiltersCount > 0 && (
+          <div className="flex flex-wrap items-center gap-2 rounded-md border-2 border-gray-300 bg-white p-3 dark:border-gray-700 dark:bg-gray-900">
+            {statusFilter !== "all" && (
+              <FilterChip
+                label={`Durum: ${statusOptions.find((s) => s.value === statusFilter)?.label || statusFilter}`}
+                value={statusFilter}
+                onRemove={() => setStatusFilter("all")}
+                color="blue"
+              />
+            )}
+            {priorityFilter !== "all" && (
+              <FilterChip
+                label={`Öncelik: ${priorityOptions.find((p) => p.value === priorityFilter)?.label || priorityFilter}`}
+                value={priorityFilter}
+                onRemove={() => setPriorityFilter("all")}
+                color="green"
+              />
+            )}
+            {projectFilter !== "all" && (
+              <FilterChip
+                label={`Proje: ${projectFilter}`}
+                value={projectFilter}
+                onRemove={() => setProjectFilter("all")}
+                color="purple"
+              />
+            )}
+            {typeFilter !== "all" && (
+              <FilterChip
+                label={`Tip: ${typeOptions.find((t) => t.value === typeFilter)?.label || typeFilter}`}
+                value={typeFilter}
+                onRemove={() => setTypeFilter("all")}
+                color="orange"
+              />
+            )}
+            <button
+              onClick={clearAllFilters}
+              className="ml-auto flex min-h-[36px] items-center gap-1 rounded-md border-2 border-gray-300 bg-white px-2.5 py-1 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
+            >
+              <X className="h-3 w-3" />
+              Temizle
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Error Message */}
@@ -385,14 +413,14 @@ export default function JiraIssuesPage() {
                 href={issue.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                className="group relative block border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
                 style={{
                   borderLeftColor: issue.statusColor === 'green' ? '#16a34a' : issue.statusColor === 'yellow' ? '#eab308' : issue.statusColor === 'blue' ? '#2563eb' : '#6b7280',
                 }}
               >
-                <div className="relative mb-4 flex items-start justify-between">
+                <div className="mb-3 flex items-start justify-between gap-2">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="rounded-md border-2 border-blue-300 bg-blue-100 px-2.5 py-1 font-mono text-xs font-bold text-blue-700 shadow-sm dark:border-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                    <span className="rounded-md border-2 border-purple-300 bg-purple-100 px-2.5 py-1 font-mono text-xs font-bold text-purple-700 shadow-sm dark:border-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
                       {issue.key}
                     </span>
                     <span
@@ -403,21 +431,21 @@ export default function JiraIssuesPage() {
                       {issue.status}
                     </span>
                   </div>
-                  <ExternalLink className="h-5 w-5 shrink-0 text-blue-400 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
+                  <ExternalLink className="h-4 w-4 shrink-0 text-purple-600 opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-100 dark:text-purple-400" />
                 </div>
-                <h3 className="relative mb-4 line-clamp-2 text-base font-bold text-gray-900 dark:text-white">
+                <h3 className="mb-3 line-clamp-2 text-sm font-bold text-gray-900 dark:text-white">
                   {issue.summary}
                 </h3>
-                <div className="relative flex flex-wrap items-center gap-2">
-                  <span className="rounded-md border-2 border-blue-300 bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700 shadow-sm dark:border-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="rounded-md border-2 border-purple-300 bg-purple-100 px-2 py-0.5 font-mono text-xs font-semibold text-purple-700 shadow-sm dark:border-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
                     {issue.project.key}
                   </span>
                   {issue.priority && (
-                    <span className={`rounded-md border-2 px-2 py-1 text-xs font-semibold shadow-sm ${getPriorityColorClasses(issue.priority)}`}>
+                    <span className={`rounded-md border-2 px-2 py-0.5 text-xs font-semibold shadow-sm ${getPriorityColorClasses(issue.priority)}`}>
                       {issue.priority}
                     </span>
                   )}
-                  <span className="rounded-md bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                  <span className="rounded-md border-2 border-gray-300 bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
                     {issue.type}
                   </span>
                 </div>
@@ -432,15 +460,15 @@ export default function JiraIssuesPage() {
                 href={issue.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative block border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                className="group relative block border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
                 style={{
                   borderLeftColor: issue.statusColor === 'green' ? '#16a34a' : issue.statusColor === 'yellow' ? '#eab308' : issue.statusColor === 'blue' ? '#2563eb' : '#6b7280',
                 }}
               >
-                <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="flex-1 space-y-3">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex-1 space-y-2">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="rounded-md bg-blue-100 px-2.5 py-1 font-mono text-xs font-bold text-blue-700 shadow-sm dark:bg-blue-900/30 dark:text-blue-400">
+                      <span className="rounded-md border-2 border-purple-300 bg-purple-100 px-2.5 py-1 font-mono text-xs font-bold text-purple-700 shadow-sm dark:border-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
                         {issue.key}
                       </span>
                       <span
@@ -459,17 +487,17 @@ export default function JiraIssuesPage() {
                           {issue.priority}
                         </span>
                       )}
-                      <span className="rounded-md border-2 border-purple-300 bg-purple-100 px-2 py-1 text-xs font-semibold text-purple-700 shadow-sm dark:border-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
+                      <span className="rounded-md border-2 border-gray-300 bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
                         {issue.type}
                       </span>
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white sm:text-xl">
+                    <h3 className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">
                       {issue.summary}
                     </h3>
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                    <div className="flex flex-wrap items-center gap-3 text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
                       <span>
                         <span className="font-semibold">Proje:</span>{" "}
-                        <span className="font-mono font-semibold text-green-600 dark:text-green-400">
+                        <span className="font-mono font-semibold text-purple-600 dark:text-purple-400">
                           {issue.project.key}
                         </span>
                       </span>
@@ -481,7 +509,7 @@ export default function JiraIssuesPage() {
                       )}
                     </div>
                   </div>
-                  <ChevronRight className="h-6 w-6 shrink-0 text-blue-400 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
+                  <ChevronRight className="h-5 w-5 shrink-0 text-purple-600 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100 dark:text-purple-400" />
                 </div>
               </a>
             ))}
