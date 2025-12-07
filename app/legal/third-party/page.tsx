@@ -1,3 +1,4 @@
+import { Link2 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import type { Metadata } from "next";
@@ -15,12 +16,24 @@ export default function ThirdPartyPage() {
   return (
     <>
       <Header navigationItems={navigationItems} />
-      <main className="container mx-auto px-4 py-12">
+      <main className="container mx-auto px-4 py-12 sm:py-16">
         <div className="mx-auto max-w-4xl">
-          <h1 className="mb-8 text-4xl font-bold text-gray-900 dark:text-white">
-            Üçüncü Taraf Hizmetler
-          </h1>
-          <div className="prose prose-gray max-w-none dark:prose-invert">
+          {/* Header Section */}
+          <div className="mb-8 text-center">
+            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
+              <Link2 className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+            </div>
+            <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+              Üçüncü Taraf Hizmetler
+            </h1>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Pointfy tarafından kullanılan üçüncü taraf hizmetler hakkında bilgi edinin.
+            </p>
+          </div>
+
+          {/* Content Card */}
+          <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:p-8">
+            <div className="prose prose-gray max-w-none dark:prose-invert">
             <p className="mb-4 text-gray-600 dark:text-gray-400">
               <strong>Son Güncelleme:</strong> {new Date().toLocaleDateString("tr-TR", { year: "numeric", month: "long", day: "numeric" })}
             </p>
@@ -146,6 +159,7 @@ export default function ThirdPartyPage() {
               </a>{" "}
               sayfasını ziyaret edebilirsiniz.
             </p>
+            </div>
           </div>
         </div>
       </main>
