@@ -302,49 +302,34 @@ export default function JiraBoardsPage() {
               <Link
                 key={board.id}
                 href={`/app/jira/${board.location?.projectKey || board.id}`}
-                className="group relative border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
-                style={{
-                  borderLeftColor: board.type === 'scrum' ? '#9333ea' : '#2563eb',
-                }}
+                className="group relative block border-l-4 border-l-purple-600 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-l-purple-500 dark:border-gray-700 dark:bg-gray-900"
               >
                 <div className="mb-4 flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    {(() => {
-                      const IconComponent = getBoardTypeIcon(board.type);
-                      return (
-                        <div className="flex h-12 w-12 items-center justify-center border-2 bg-purple-50 dark:bg-purple-900/20" style={{ borderColor: board.type === 'scrum' ? '#9333ea' : '#2563eb' }}>
-                          <IconComponent className="h-6 w-6" style={{ color: board.type === 'scrum' ? '#9333ea' : '#2563eb' }} />
-                        </div>
-                      );
-                    })()}
-                    <span
-                      className={`border-2 px-2.5 py-1 text-xs font-semibold ${getBoardTypeColor(
-                        board.type
-                      )}`}
-                      style={{
-                        borderColor: board.type === 'scrum' ? '#9333ea' : '#2563eb',
-                      }}
-                    >
-                      {board.type}
-                    </span>
-                  </div>
-                  <ChevronRight className="h-5 w-5 shrink-0 text-gray-400 opacity-0 transition-all group-hover:opacity-100" />
+                  {(() => {
+                    const IconComponent = getBoardTypeIcon(board.type);
+                    return (
+                      <div className="flex h-12 w-12 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20 sm:h-14 sm:w-14">
+                        <IconComponent className="h-6 w-6 text-purple-600 dark:text-purple-400 sm:h-8 sm:w-8" />
+                      </div>
+                    );
+                  })()}
+                  <ChevronRight className="h-5 w-5 shrink-0 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100" />
                 </div>
-                <h3 className="relative mb-3 text-lg font-bold text-gray-900 dark:text-white">
+                <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
                   {board.name}
                 </h3>
-                <div className="relative space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                  <div>
-                    <span className="font-semibold">Proje:</span>{" "}
+                <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
+                  <p>
+                    <span className="font-medium">Proje:</span>{" "}
                     <span className="font-mono font-semibold text-purple-600 dark:text-purple-400">
-                      {board.location?.projectKey}
+                      {board.location?.projectKey || "N/A"}
                     </span>
-                  </div>
+                  </p>
                   {board.location?.displayName && (
-                    <div>
-                      <span className="font-semibold">Görünen İsim:</span>{" "}
+                    <p>
+                      <span className="font-medium">Görünen İsim:</span>{" "}
                       <span className="font-medium">{board.location.displayName}</span>
-                    </div>
+                    </p>
                   )}
                 </div>
               </Link>
