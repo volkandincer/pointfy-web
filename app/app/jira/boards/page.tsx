@@ -341,52 +341,39 @@ export default function JiraBoardsPage() {
               <Link
                 key={board.id}
                 href={`/app/jira/${board.location?.projectKey || board.id}`}
-                className="group relative block border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
-                style={{
-                  borderLeftColor: board.type === 'scrum' ? '#9333ea' : '#2563eb',
-                }}
+                className="group relative block border-l-4 border-l-purple-600 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-l-purple-500 dark:border-gray-700 dark:bg-gray-900"
               >
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="flex-1 space-y-3">
-                    <div className="flex flex-wrap items-center gap-3">
-                      {(() => {
-                        const IconComponent = getBoardTypeIcon(board.type);
-                        return (
-                          <div className="flex h-12 w-12 items-center justify-center border-2 bg-purple-50 dark:bg-purple-900/20" style={{ borderColor: board.type === 'scrum' ? '#9333ea' : '#2563eb' }}>
-                            <IconComponent className="h-6 w-6" style={{ color: board.type === 'scrum' ? '#9333ea' : '#2563eb' }} />
-                          </div>
-                        );
-                      })()}
-                      <h3 className="text-lg font-bold text-gray-900 dark:text-white sm:text-xl">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    {(() => {
+                      const IconComponent = getBoardTypeIcon(board.type);
+                      return (
+                        <div className="flex h-12 w-12 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20">
+                          <IconComponent className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                        </div>
+                      );
+                    })()}
+                    <div>
+                      <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
                         {board.name}
                       </h3>
-                      <span
-                        className={`border-2 px-2.5 py-1 text-xs font-semibold ${getBoardTypeColor(
-                          board.type
-                        )}`}
-                        style={{
-                          borderColor: board.type === 'scrum' ? '#9333ea' : '#2563eb',
-                        }}
-                      >
-                        {board.type}
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-                      <span>
-                        <span className="font-semibold">Proje:</span>{" "}
-                        <span className="font-mono font-semibold text-purple-600 dark:text-purple-400">
-                          {board.location?.projectKey}
-                        </span>
-                      </span>
-                      {board.location?.displayName && (
+                      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
                         <span>
-                          <span className="font-semibold">Görünen İsim:</span>{" "}
-                          <span className="font-medium">{board.location.displayName}</span>
+                          <span className="font-semibold">Proje:</span>{" "}
+                          <span className="font-mono font-semibold text-purple-600 dark:text-purple-400">
+                            {board.location?.projectKey || "N/A"}
+                          </span>
                         </span>
-                      )}
+                        {board.location?.displayName && (
+                          <span>
+                            <span className="font-semibold">Görünen İsim:</span>{" "}
+                            <span className="font-medium">{board.location.displayName}</span>
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
-                  <ChevronRight className="h-6 w-6 shrink-0 text-purple-400 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
+                  <ChevronRight className="h-5 w-5 shrink-0 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100" />
                 </div>
               </Link>
             ))}
