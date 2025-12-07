@@ -121,7 +121,7 @@ export default function JiraDashboardPage() {
       <div className="grid grid-cols-4 gap-2 sm:gap-4">
         <Link
           href="/app/jira/projects"
-          className="flex flex-col items-center justify-center border-2 border-gray-300 bg-white p-2 text-center shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+          className="flex flex-col items-center justify-center border-2 border-gray-300 bg-white p-2 text-center shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
         >
           <div className="mb-2 flex h-8 w-8 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20 sm:mb-3 sm:h-12 sm:w-12">
             <Folder className="h-4 w-4 text-purple-600 dark:text-purple-400 sm:h-6 sm:w-6" />
@@ -138,7 +138,7 @@ export default function JiraDashboardPage() {
 
         <Link
           href="/app/jira/issues"
-          className="flex flex-col items-center justify-center border-2 border-gray-300 bg-white p-2 text-center shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+          className="flex flex-col items-center justify-center border-2 border-gray-300 bg-white p-2 text-center shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
         >
           <div className="mb-2 flex h-8 w-8 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20 sm:mb-3 sm:h-12 sm:w-12">
             <ClipboardList className="h-4 w-4 text-green-600 dark:text-green-400 sm:h-6 sm:w-6" />
@@ -155,7 +155,7 @@ export default function JiraDashboardPage() {
 
         <Link
           href="/app/jira/boards"
-          className="flex flex-col items-center justify-center border-2 border-gray-300 bg-white p-2 text-center shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+          className="flex flex-col items-center justify-center border-2 border-gray-300 bg-white p-2 text-center shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
         >
           <div className="mb-2 flex h-8 w-8 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20 sm:mb-3 sm:h-12 sm:w-12">
             <Pin className="h-4 w-4 text-blue-600 dark:text-blue-400 sm:h-6 sm:w-6" />
@@ -172,7 +172,7 @@ export default function JiraDashboardPage() {
 
         <Link
           href="/app/jira/search"
-          className="flex flex-col items-center justify-center border-2 border-gray-300 bg-white p-2 text-center shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+          className="flex flex-col items-center justify-center border-2 border-gray-300 bg-white p-2 text-center shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
         >
           <div className="mb-2 flex h-8 w-8 items-center justify-center border-2 border-orange-600 bg-orange-50 dark:bg-orange-900/20 sm:mb-3 sm:h-12 sm:w-12">
             <Search className="h-4 w-4 text-orange-600 dark:text-orange-400 sm:h-6 sm:w-6" />
