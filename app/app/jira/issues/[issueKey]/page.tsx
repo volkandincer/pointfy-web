@@ -561,7 +561,7 @@ export default function JiraIssueDetailPage() {
         <div className="flex items-center gap-3">
           <Button
             variant="secondary"
-            size="sm"
+            size="md"
             onClick={() => router.back()}
             icon={ArrowLeft}
           >
@@ -571,10 +571,10 @@ export default function JiraIssueDetailPage() {
             href={issue.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex min-h-[44px] shrink-0 items-center gap-2 rounded-md border-2 border-purple-600 bg-purple-600 px-4 py-2 text-sm font-semibold text-white transition hover:border-purple-700 hover:bg-purple-700 dark:border-purple-500 dark:bg-purple-600 dark:hover:border-purple-400 dark:hover:bg-purple-500"
+            className="flex min-h-[44px] shrink-0 items-center justify-center gap-2 rounded-md border-2 border-purple-600 bg-purple-600 px-4 py-2 text-sm font-semibold text-white transition hover:border-purple-700 hover:bg-purple-700 dark:border-purple-500 dark:bg-purple-600 dark:hover:border-purple-400 dark:hover:bg-purple-500"
           >
             <ExternalLink className="h-4 w-4" />
-            <span className="hidden sm:inline">Jira'da Aç</span>
+            <span className="hidden sm:inline">Jira&apos;da Aç</span>
           </a>
         </div>
       </div>
@@ -967,7 +967,7 @@ export default function JiraIssueDetailPage() {
                         Atamayı Kaldır
                       </p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">
-                        Issue'u atanmamış olarak işaretle
+                        Issue&apos;u atanmamış olarak işaretle
                       </p>
                     </div>
                   </button>

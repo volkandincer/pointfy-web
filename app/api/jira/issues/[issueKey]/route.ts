@@ -297,7 +297,7 @@ export async function GET(
       id: issue.id,
       key: issue.key,
       summary: issue.fields.summary,
-      description: extractDescription(issue.fields.description as any),
+      description: extractDescription(issue.fields.description as JiraAdfDocument | string | undefined),
       status: issue.fields.status.name,
       statusColor: issue.fields.status.statusCategory.colorName,
       assignee: issue.fields.assignee

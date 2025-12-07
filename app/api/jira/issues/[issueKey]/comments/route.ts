@@ -126,7 +126,7 @@ export async function GET(
             jira_token_expires_at: expiresAt.toISOString(),
           })
           .eq("id", userId);
-      } catch (refreshError: any) {
+      } catch (refreshError: unknown) {
         const errorMessage = refreshError instanceof Error ? refreshError.message : JSON.stringify(refreshError);
         return NextResponse.json(
           {
@@ -401,7 +401,7 @@ export async function POST(
             jira_token_expires_at: expiresAt.toISOString(),
           })
           .eq("id", userId);
-      } catch (refreshError: any) {
+      } catch (refreshError: unknown) {
         const errorMessage = refreshError instanceof Error ? refreshError.message : JSON.stringify(refreshError);
         return NextResponse.json(
           {
@@ -544,7 +544,7 @@ export async function POST(
 
     const comment: JiraComment = {
       id: newComment.id,
-      body: extractCommentBody(newComment.body as any),
+      body: extractCommentBody(newComment.body as JiraAdfDocument | string),
       author: newComment.author,
       created: newComment.created,
       updated: newComment.updated,

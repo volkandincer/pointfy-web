@@ -15,7 +15,8 @@ const GlobalNoteFab = memo(function GlobalNoteFab() {
   // Modal açıldığında hover state'ini sıfırla
   useEffect(() => {
     if (showModal) {
-      setIsHovered(false);
+      // Use setTimeout to avoid setState in effect
+      setTimeout(() => setIsHovered(false), 0);
     }
   }, [showModal]);
 
