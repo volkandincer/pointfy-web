@@ -19,6 +19,9 @@ const GlobalNoteFab = memo(function GlobalNoteFab() {
           onClick={() => setShowModal(true)}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
+          onTouchStart={() => setIsHovered(true)}
+          onTouchEnd={() => setIsHovered(false)}
+          onBlur={() => setIsHovered(false)}
           className="group animate-float fixed bottom-20 right-4 z-[60] flex min-h-[64px] min-w-[64px] items-center justify-center rounded-md border-2 border-yellow-600 bg-yellow-600 text-white shadow-sm transition-all duration-300 ease-out sm:bottom-8 sm:right-8 sm:min-h-[72px] sm:min-w-[72px] hover:border-yellow-700 hover:bg-yellow-700 hover:shadow-md hover:scale-110 active:scale-105 dark:border-yellow-500 dark:bg-yellow-600 dark:hover:border-yellow-400 dark:hover:bg-yellow-500"
           aria-label="Not ekle"
         >
@@ -38,9 +41,9 @@ const GlobalNoteFab = memo(function GlobalNoteFab() {
           )}
         </div>
 
-        {/* Text label - appears on hover */}
+        {/* Text label - appears on hover (desktop only) */}
         <span
-          className={`absolute right-full mr-3 whitespace-nowrap rounded-md border-2 border-yellow-600 bg-yellow-600 px-3 py-2 text-sm font-semibold text-white shadow-md transition-all duration-300 ${
+          className={`absolute right-full mr-3 hidden whitespace-nowrap rounded-md border-2 border-yellow-600 bg-yellow-600 px-3 py-2 text-sm font-semibold text-white shadow-md transition-all duration-300 sm:block ${
             isHovered
               ? "translate-x-0 opacity-100"
               : "translate-x-2 opacity-0 pointer-events-none"
