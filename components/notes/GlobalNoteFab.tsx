@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useState } from "react";
+import { memo, useState, useEffect } from "react";
 import { FileText, Plus } from "lucide-react";
 import NoteModal from "./NoteModal";
 import { useNotes } from "@/hooks/useNotes";
@@ -11,6 +11,13 @@ const GlobalNoteFab = memo(function GlobalNoteFab() {
   const { showToast } = useToastContext();
   const [showModal, setShowModal] = useState<boolean>(false);
   const [isHovered, setIsHovered] = useState<boolean>(false);
+
+  // Modal açıldığında hover state'ini sıfırla
+  useEffect(() => {
+    if (showModal) {
+      setIsHovered(false);
+    }
+  }, [showModal]);
 
   return (
     <>
