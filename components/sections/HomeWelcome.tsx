@@ -4,7 +4,9 @@ import { memo, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Search, X, Home, ChevronRight } from "lucide-react";
 import RoomPinModal from "@/components/rooms/RoomPinModal";
+import OnboardingModal from "@/components/onboarding/OnboardingModal";
 import { useToastContext } from "@/contexts/ToastContext";
+import { useOnboarding } from "@/hooks/useOnboarding";
 import type { RoomInfo } from "@/interfaces/Room.interface";
 import { getSupabase } from "@/lib/supabase";
 import { checkRoomEntry, verifyRoomPin, addUserToRoom } from "@/lib/roomUtils";
@@ -12,6 +14,7 @@ import { checkRoomEntry, verifyRoomPin, addUserToRoom } from "@/lib/roomUtils";
 const HomeWelcome = memo(function HomeWelcome() {
   const router = useRouter();
   const { showToast } = useToastContext();
+  const [userId, setUserId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [rooms, setRooms] = useState<RoomInfo[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -34,6 +37,7 @@ const HomeWelcome = memo(function HomeWelcome() {
         const { data: userData } = await supabase.auth.getUser();
         if (!mounted) return;
         if (userData.user) {
+          setUserId(userData.user.id);
           setUserKey(userData.user.id);
           const { data: userRow } = await supabase
             .from("users")
@@ -56,6 +60,9 @@ const HomeWelcome = memo(function HomeWelcome() {
       mounted = false;
     };
   }, []);
+
+  // Onboarding hook
+  const onboarding = useOnboarding(userId);
 
   // Arama yapıldığında odaları getir
   useEffect(() => {
@@ -103,7 +110,7 @@ const HomeWelcome = memo(function HomeWelcome() {
           setRooms(data || []);
           setShowResults(true);
         }
-      } catch (err) {
+      } catch {
         // Search exception
         if (mounted) setRooms([]);
       } finally {
@@ -145,7 +152,7 @@ const HomeWelcome = memo(function HomeWelcome() {
       setSearchQuery("");
       setShowResults(false);
       router.push(`/app/rooms/${roomId}`);
-    } catch (err) {
+    } catch {
       showToast("Odaya giriş yapılırken bir hata oluştu.", "error");
     }
   };
@@ -184,6 +191,21 @@ const HomeWelcome = memo(function HomeWelcome() {
 
   return (
     <>
+      {/* Onboarding Modal */}
+      {onboarding.showOnboarding && (
+        <OnboardingModal
+          open={onboarding.showOnboarding}
+          onClose={onboarding.onClose}
+          onComplete={onboarding.onComplete}
+          currentStep={onboarding.currentStep}
+          steps={onboarding.steps}
+          onNext={onboarding.onNext}
+          onPrevious={onboarding.onPrevious}
+          onSkip={onboarding.onSkip}
+          onOptionSelect={onboarding.onOptionSelect}
+        />
+      )}
+
       <section className="container mx-auto px-4 pt-8 pb-4">
         <div className="mx-auto max-w-6xl">
           <div className="relative">

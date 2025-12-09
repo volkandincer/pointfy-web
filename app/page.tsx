@@ -180,10 +180,14 @@ function HomePageContent() {
       <Header navigationItems={navigationItems} />
       <main>
         {userId ? <HomeWelcome /> : <Hero />}
-        <QuickActions actions={actions} />
-        <RecentRooms />
-        <Features features={features} />
-        <CTA />
+        {!userId && (
+          <>
+            <QuickActions actions={actions} />
+            <RecentRooms />
+            <Features features={features} />
+            <CTA />
+          </>
+        )}
       </main>
       {userId ? <GlobalNoteFab /> : null}
       <ToastContainer toasts={toasts} onRemove={removeToast} />
