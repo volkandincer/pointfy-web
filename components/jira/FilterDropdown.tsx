@@ -76,7 +76,7 @@ const FilterDropdown = memo(function FilterDropdown({
   }, [isOpen]);
 
   return (
-    <div className={`relative ${className}`} ref={dropdownRef}>
+    <div className={`relative z-50 ${className}`} ref={dropdownRef}>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
@@ -100,7 +100,7 @@ const FilterDropdown = memo(function FilterDropdown({
       {isOpen && (
         <>
           <div
-            className="fixed inset-0 z-10"
+            className="fixed inset-0 z-[40]"
             onClick={() => setIsOpen(false)}
             onTouchStart={(e) => {
               // Backdrop'a dokunulduğunda scroll'u engelle
@@ -109,7 +109,7 @@ const FilterDropdown = memo(function FilterDropdown({
             }}
           />
           <div 
-            className="absolute z-20 mt-1 w-full rounded-md border-2 border-gray-300 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800"
+            className="absolute z-[50] mt-1 w-full rounded-md border-2 border-gray-300 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800"
             onTouchStart={(e) => {
               // Dropdown içindeki touch event'lerini sayfa scroll'undan ayır
               e.stopPropagation();
