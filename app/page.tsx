@@ -180,10 +180,10 @@ function HomePageContent() {
       <Header navigationItems={navigationItems} />
       <main>
         {userId ? <HomeWelcome /> : <Hero />}
+        <QuickActions actions={actions} />
+        <RecentRooms />
         {!userId && (
           <>
-            <QuickActions actions={actions} />
-            <RecentRooms />
             <Features features={features} />
             <CTA />
           </>

@@ -6,28 +6,26 @@ import Button from "@/components/ui/Button";
 
 const Hero = memo(function Hero() {
   return (
-    <section className="relative overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-gray-50 dark:bg-gray-950" />
-
-      <div className="container mx-auto px-4 py-20 md:py-32">
-        <div className="mx-auto max-w-4xl text-center">
-          <div className="mx-auto mb-5 inline-flex items-center gap-2 rounded-md border-2 border-blue-600 bg-white px-3 py-1.5 text-xs font-semibold text-blue-700 shadow-sm dark:border-blue-500 dark:bg-gray-900 dark:text-blue-400">
-            <span className="inline-block h-2 w-2 border-2 border-blue-600 bg-blue-600 dark:border-blue-500 dark:bg-blue-500" /> Realtime Destekli
+    <section className="relative">
+      <div className="container mx-auto px-4 py-12 sm:py-16 md:py-20">
+        <div className="mx-auto max-w-3xl text-center">
+          <div className="mx-auto mb-3 inline-flex items-center gap-1.5 rounded-md border-2 border-blue-300 bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700 shadow-sm dark:border-blue-700 dark:bg-blue-900/20 dark:text-blue-400">
+            <span className="inline-block h-1.5 w-1.5 rounded-full border-2 border-blue-600 bg-blue-600 dark:border-blue-400 dark:bg-blue-400" /> Realtime Destekli
           </div>
-          <h1 className="mb-6 text-4xl font-bold tracking-tight text-gray-900 dark:text-white md:text-6xl">
+          <h1 className="mb-4 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl md:text-5xl">
             Takım İşbirliği için
             <br />
             <span className="text-blue-600 dark:text-blue-400">
               Güçlü Bir Platform
             </span>
           </h1>
-          <p className="mx-auto mb-10 max-w-2xl text-lg text-gray-600 dark:text-gray-400 md:text-xl">
+          <p className="mx-auto mb-6 max-w-2xl text-sm text-gray-600 dark:text-gray-400 sm:text-base">
             Poker planning, retrospektif ve görev yönetimi ile tek yerde. Gerçek zamanlı işbirliği sayesinde daha hızlı kararlar alın.
           </p>
-          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <div className="flex flex-col items-center justify-center gap-2.5 sm:flex-row">
             <Button
               variant="primary"
-              size="lg"
+              size="sm"
               disabled
               icon={Smartphone}
               className="disabled:opacity-60 disabled:cursor-not-allowed"
@@ -36,7 +34,7 @@ const Hero = memo(function Hero() {
             </Button>
             <Button
               variant="secondary"
-              size="lg"
+              size="sm"
               disabled
               icon={Smartphone}
               className="disabled:opacity-60 disabled:cursor-not-allowed"
