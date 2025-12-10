@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
 import { jiraConfig } from "@/lib/jiraConfig";
 import { resolveEnvValue } from "@/lib/appEnvironment";
+import { formatErrorMessage } from "@/lib/utils/errorHandler";
 import type { JiraApiErrorResponse } from "@/interfaces/Jira.interface";
 
 const { clientId: jiraClientId, clientSecret: jiraClientSecret } = jiraConfig;
@@ -159,7 +160,7 @@ export async function GET(
         errorData = JSON.parse(errorText) as JiraApiErrorResponse;
       } catch { /* empty */ }
       const errorMessage = errorData?.errorMessages?.[0] || errorData?.error || errorData?.message || `Failed to fetch project: ${response.status} ${response.statusText}`;
-      return NextResponse.json({ error: errorMessage, details: errorText }, { status: response.status });
+      return NextResponse.json({ error: formatErrorMessage(errorMessage), details: errorText }, { status: response.status });
     }
 
     const projectData = await response.json();
@@ -189,7 +190,7 @@ export async function GET(
     return NextResponse.json({ issueTypes });
   } catch (error) {
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Internal server error" },
+      { error: formatErrorMessage(error) },
       { status: 500 }
     );
   }

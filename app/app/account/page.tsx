@@ -11,6 +11,7 @@ import { useToastContext } from "@/contexts/ToastContext";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import { getSupabase } from "@/lib/supabase";
+import { formatErrorMessage } from "@/lib/utils/errorHandler";
 
 export default function AccountPage() {
   const navigationItems: NavigationItem[] = useMemo(
@@ -218,7 +219,7 @@ export default function AccountPage() {
       setEditingUsername(false);
       showToast("Kullanıcı adı başarıyla güncellendi!", "success");
     } catch (err) {
-      showToast("Kullanıcı adı güncellenemedi.", "error");
+      showToast(formatErrorMessage(err), "error");
     } finally {
       setSaving(false);
     }
@@ -264,7 +265,7 @@ export default function AccountPage() {
 
     // Modal'ı kapat ve OAuth akışını başlat
     setShowJiraPermissionModal(false);
-    const returnUrl = encodeURIComponent("/app/account");
+    const returnUrl = encodeURIComponent("/app/jira");
     const encodedUserId = encodeURIComponent(userId);
     window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
   };
@@ -294,7 +295,7 @@ export default function AccountPage() {
       setJiraConnected(false);
       showToast("Jira hesabı bağlantıdan koparıldı.", "success");
     } catch (err) {
-      showToast("Jira bağlantısı koparılamadı.", "error");
+      showToast(formatErrorMessage(err), "error");
     }
   };
 

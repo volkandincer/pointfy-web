@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useEffect } from "react";
+import { lockBodyScroll, unlockBodyScroll } from "@/lib/utils/scrollLock";
 
 interface ModalProps {
   open: boolean;
@@ -20,30 +21,16 @@ const Modal = memo(function Modal({
   // Modal açıkken body scroll'unu disable et
   useEffect(() => {
     if (open) {
-      // Scroll pozisyonunu kaydet
-      const scrollY = window.scrollY;
-      document.body.style.position = "fixed";
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = "100%";
-      document.body.style.overflow = "hidden";
+      lockBodyScroll();
     } else {
-      // Scroll pozisyonunu geri yükle
-      const scrollY = document.body.style.top;
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
-      document.body.style.overflow = "";
-      if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || "0") * -1);
-      }
+      unlockBodyScroll();
     }
 
     return () => {
-      // Cleanup
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
-      document.body.style.overflow = "";
+      // Cleanup - sadece modal açıkken cleanup yap
+      if (open) {
+        unlockBodyScroll();
+      }
     };
   }, [open]);
 

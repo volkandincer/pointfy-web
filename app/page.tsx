@@ -17,6 +17,7 @@ import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type { QuickAction } from "@/interfaces/QuickAction.interface";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import { getSupabase } from "@/lib/supabase";
+import { forceUnlockBodyScroll } from "@/lib/utils/scrollLock";
 
 function HomePageContent() {
   const navigationItems: NavigationItem[] = useMemo(
@@ -26,6 +27,21 @@ function HomePageContent() {
   const [userId, setUserId] = useState<string | null>(null);
   const [checkingAuth, setCheckingAuth] = useState<boolean>(true);
   const { toasts, removeToast } = useToastContext();
+
+  // Sayfa yüklendiğinde scroll lock'u temizle
+  useEffect(() => {
+    // Sayfa yüklendiğinde scroll lock'u zorla temizle
+    forceUnlockBodyScroll();
+
+    // Ayrıca body'nin scroll durumunu kontrol et ve düzelt
+    if (document.body.style.position === "fixed") {
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
+      document.body.removeAttribute("data-scroll-y");
+    }
+  }, []);
 
   useEffect(() => {
     let mounted = true;

@@ -9,6 +9,7 @@ import Button from "@/components/ui/Button";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import { getSupabase } from "@/lib/supabase";
+import { formatErrorMessage } from "@/lib/utils/errorHandler";
 
 function LoginPageContent() {
   const navigationItems: NavigationItem[] = getDefaultNavigationItems();
@@ -159,7 +160,7 @@ function LoginPageContent() {
           : "/";
       router.replace(targetUrl);
     } catch (err: unknown) {
-      setMessage((err as Error).message || "Giriş başarısız.");
+      setMessage(formatErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -213,7 +214,7 @@ function LoginPageContent() {
           : "/";
       router.replace(targetUrl);
     } catch (err: unknown) {
-      setMessage((err as Error).message || "Kayıt başarısız.");
+      setMessage(formatErrorMessage(err));
     } finally {
       setLoading(false);
     }

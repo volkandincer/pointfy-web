@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { memo, useState, useEffect, useRef } from "react";
-import { Layers, X, Menu, Home, Zap, ClipboardList, FileText, Settings, CheckSquare, Sparkles, Info, Mail, ChevronDown } from "lucide-react";
-import { usePathname } from "next/navigation";
-import UserNav from "./UserNav";
+import { Layers, X, Menu, Home, Zap, ClipboardList, FileText, Settings, CheckSquare, Sparkles, Info, Mail, ChevronDown, User, LogOut } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { getSupabase } from "@/lib/supabase";
+import { lockBodyScroll, unlockBodyScroll } from "@/lib/utils/scrollLock";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 
 interface HeaderProps {
@@ -27,39 +28,60 @@ const getNavIcon = (href: string) => {
 
 const Header = memo(function Header({ navigationItems }: HeaderProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
+  const [isAuthed, setIsAuthed] = useState<boolean>(false);
   const moreMenuRef = useRef<HTMLDivElement>(null);
 
   // Mobile menu açıkken body scroll'unu disable et
   useEffect(() => {
     if (mobileMenuOpen) {
-      // Scroll pozisyonunu kaydet
-      const scrollY = window.scrollY;
-      document.body.style.position = "fixed";
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = "100%";
-      document.body.style.overflow = "hidden";
+      lockBodyScroll();
     } else {
-      // Scroll pozisyonunu geri yükle
-      const scrollY = document.body.style.top;
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
-      document.body.style.overflow = "";
-      if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || "0") * -1);
-      }
+      unlockBodyScroll();
     }
 
     return () => {
-      // Cleanup
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
-      document.body.style.overflow = "";
+      // Cleanup - sadece menu açıkken cleanup yap
+      if (mobileMenuOpen) {
+        unlockBodyScroll();
+      }
     };
   }, [mobileMenuOpen]);
+
+  // Auth state kontrolü
+  useEffect(() => {
+    let isMounted = true;
+    async function check() {
+      try {
+        const supabase = getSupabase();
+        const { data } = await supabase.auth.getSession();
+        if (!isMounted) return;
+        setIsAuthed(Boolean(data.session));
+      } catch {
+        if (!isMounted) return;
+        setIsAuthed(false);
+      }
+    }
+    check();
+    let unsubscribe: (() => void) | undefined;
+    try {
+      const supabase = getSupabase();
+      const { data: listener } = supabase.auth.onAuthStateChange(
+        (_e, session) => {
+          setIsAuthed(Boolean(session));
+        }
+      );
+      unsubscribe = () => listener.subscription.unsubscribe();
+    } catch {
+      unsubscribe = undefined;
+    }
+    return () => {
+      isMounted = false;
+      if (unsubscribe) unsubscribe();
+    };
+  }, []);
 
   // More menu dışına tıklanınca kapat
   useEffect(() => {
@@ -80,6 +102,18 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
 
   const closeMobileMenu = () => {
     setMobileMenuOpen(false);
+  };
+
+  const handleSignOut = async () => {
+    try {
+      const supabase = getSupabase();
+      await supabase.auth.signOut();
+      setIsAuthed(false);
+      router.replace("/login");
+      router.refresh();
+    } catch {
+      router.replace("/login");
+    }
   };
 
   return (
@@ -219,19 +253,54 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                     <Mail className="h-4 w-4" />
                     <span>İletişim</span>
                   </Link>
+                  {isAuthed && (
+                    <>
+                      <div className="my-1 border-t-2 border-gray-200 dark:border-gray-700" />
+                      <Link
+                        href="/app/account"
+                        onClick={() => setMoreMenuOpen(false)}
+                        className={`flex min-h-[44px] items-center gap-3 px-4 py-2 text-sm font-semibold transition-all ${
+                          pathname?.startsWith("/app/account")
+                            ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
+                            : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                        }`}
+                      >
+                        <User className="h-4 w-4" />
+                        <span>Hesabım</span>
+                      </Link>
+                      <button
+                        onClick={() => {
+                          setMoreMenuOpen(false);
+                          handleSignOut();
+                        }}
+                        className="flex min-h-[44px] w-full items-center gap-3 px-4 py-2 text-left text-sm font-semibold text-red-600 transition-all hover:bg-red-50 hover:text-red-700 dark:text-red-400 dark:hover:bg-red-900/20 dark:hover:text-red-300"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        <span>Çıkış Yap</span>
+                      </button>
+                    </>
+                  )}
+                  {!isAuthed && (
+                    <>
+                      <div className="my-1 border-t-2 border-gray-200 dark:border-gray-700" />
+                      <Link
+                        href="/login"
+                        onClick={() => setMoreMenuOpen(false)}
+                        className="flex min-h-[44px] items-center gap-3 px-4 py-2 text-sm font-semibold text-blue-600 transition-all hover:bg-blue-50 hover:text-blue-700 dark:text-blue-400 dark:hover:bg-blue-900/20 dark:hover:text-blue-300"
+                      >
+                        <User className="h-4 w-4" />
+                        <span>Giriş Yap</span>
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
             )}
-          </div>
-
-          <div className="ml-2 border-l-2 border-gray-200 pl-2 dark:border-gray-700">
-            <UserNav />
           </div>
         </nav>
 
         {/* Mobile Navigation - Right Side */}
         <div className="flex items-center gap-2 md:hidden">
-          <UserNav />
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md border-2 border-gray-300 bg-white text-gray-700 transition-all hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
@@ -384,6 +453,54 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                   <Mail className="h-5 w-5 shrink-0" />
                   <span>İletişim</span>
                 </Link>
+
+                {isAuthed && (
+                  <>
+                    <div className="my-1 border-t-2 border-gray-200 dark:border-gray-700" />
+                    {/* Hesabım */}
+                    <Link
+                      href="/app/account"
+                      onClick={closeMobileMenu}
+                      onTouchStart={(e) => e.stopPropagation()}
+                      className={`flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-base font-semibold transition-all active:bg-gray-200 dark:active:bg-gray-700 ${
+                        pathname?.startsWith("/app/account")
+                          ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
+                          : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                      }`}
+                    >
+                      <User className="h-5 w-5 shrink-0" />
+                      <span>Hesabım</span>
+                    </Link>
+                    {/* Çıkış Yap */}
+                    <button
+                      onClick={() => {
+                        closeMobileMenu();
+                        handleSignOut();
+                      }}
+                      onTouchStart={(e) => e.stopPropagation()}
+                      className="flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-left text-base font-semibold text-red-600 transition-all active:bg-red-100 dark:active:bg-red-900/20 dark:text-red-400"
+                    >
+                      <LogOut className="h-5 w-5 shrink-0" />
+                      <span>Çıkış Yap</span>
+                    </button>
+                  </>
+                )}
+
+                {!isAuthed && (
+                  <>
+                    <div className="my-1 border-t-2 border-gray-200 dark:border-gray-700" />
+                    {/* Giriş Yap */}
+                    <Link
+                      href="/login"
+                      onClick={closeMobileMenu}
+                      onTouchStart={(e) => e.stopPropagation()}
+                      className="flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-base font-semibold text-blue-600 transition-all active:bg-blue-100 dark:active:bg-blue-900/20 dark:text-blue-400"
+                    >
+                      <User className="h-5 w-5 shrink-0" />
+                      <span>Giriş Yap</span>
+                    </Link>
+                  </>
+                )}
               </div>
             </nav>
           </div>

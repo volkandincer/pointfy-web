@@ -25,7 +25,10 @@ export function useOnboarding(userId: string | null) {
   // Check if user needs onboarding (only for logged-in users)
   useEffect(() => {
     if (!userId) {
-      setLoading(false);
+      // Use setTimeout to avoid calling setState synchronously in effect
+      setTimeout(() => {
+        setLoading(false);
+      }, 0);
       return;
     }
 

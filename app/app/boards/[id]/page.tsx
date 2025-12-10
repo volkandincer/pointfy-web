@@ -23,6 +23,7 @@ import { getSupabase } from "@/lib/supabase";
 import { useBoards } from "@/hooks/useBoards";
 import { useNotes } from "@/hooks/useNotes";
 import { useToastContext } from "@/contexts/ToastContext";
+import { formatErrorMessage } from "@/lib/utils/errorHandler";
 
 export default function BoardDetailPage() {
   const navigationItems: NavigationItem[] = useMemo(
@@ -263,10 +264,7 @@ export default function BoardDetailPage() {
         showToast("Task başarıyla eklendi!", "success");
       } catch (err) {
         // Task oluşturma hatası
-        showToast(
-          err instanceof Error ? err.message : "Task oluşturulamadı.",
-          "error"
-        );
+        showToast(formatErrorMessage(err), "error");
       } finally {
         setActionLoading(false);
       }
@@ -331,10 +329,7 @@ export default function BoardDetailPage() {
         setShowAddTaskModal(false);
         showToast("Task board'a eklendi!", "success");
       } catch (err) {
-        showToast(
-          err instanceof Error ? err.message : "Task eklenemedi.",
-          "error"
-        );
+        showToast(formatErrorMessage(err), "error");
       } finally {
         setActionLoading(false);
       }
@@ -453,10 +448,7 @@ export default function BoardDetailPage() {
           showToast("Jira task board'a eklendi!", "success");
         }
       } catch (err) {
-        showToast(
-          err instanceof Error ? err.message : "Jira task eklenemedi.",
-          "error"
-        );
+        showToast(formatErrorMessage(err), "error");
       } finally {
         setActionLoading(false);
       }
@@ -496,10 +488,7 @@ export default function BoardDetailPage() {
         showToast("Task başarıyla güncellendi!", "success");
       } catch (err) {
         // Task güncelleme hatası
-        showToast(
-          err instanceof Error ? err.message : "Task güncellenemedi.",
-          "error"
-        );
+        showToast(formatErrorMessage(err), "error");
       } finally {
         setActionLoading(false);
       }
@@ -523,10 +512,7 @@ export default function BoardDetailPage() {
         showToast("Task başarıyla silindi!", "success");
       } catch (err) {
         // Task silme hatası
-        showToast(
-          err instanceof Error ? err.message : "Task silinemedi.",
-          "error"
-        );
+        showToast(formatErrorMessage(err), "error");
       }
     },
     [showToast]
@@ -577,10 +563,7 @@ export default function BoardDetailPage() {
         setEditingNote(null);
       } catch (err) {
         // Not ekleme/güncelleme hatası
-        showToast(
-          err instanceof Error ? err.message : "Not kaydedilemedi.",
-          "error"
-        );
+        showToast(formatErrorMessage(err), "error");
       }
     },
     [boardId, updateNote, showToast]
@@ -592,10 +575,7 @@ export default function BoardDetailPage() {
         await removeNote(noteId);
         showToast("Not başarıyla silindi!", "success");
       } catch (err) {
-        showToast(
-          err instanceof Error ? err.message : "Not silinemedi.",
-          "error"
-        );
+        showToast(formatErrorMessage(err), "error");
       }
     },
     [removeNote, showToast]
@@ -610,10 +590,7 @@ export default function BoardDetailPage() {
         showToast("Board başarıyla güncellendi!", "success");
       } catch (err) {
         // Board güncelleme hatası
-        showToast(
-          err instanceof Error ? err.message : "Board güncellenemedi.",
-          "error"
-        );
+        showToast(formatErrorMessage(err), "error");
       } finally {
         setActionLoading(false);
       }

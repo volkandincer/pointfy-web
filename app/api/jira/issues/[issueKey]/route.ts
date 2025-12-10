@@ -10,6 +10,7 @@ import type {
   JiraAdfNode,
 } from "@/interfaces/Jira.interface";
 import { resolveEnvValue } from "@/lib/appEnvironment";
+import { formatErrorMessage } from "@/lib/utils/errorHandler";
 
 const { clientId: jiraClientId, clientSecret: jiraClientSecret } = jiraConfig;
 const fallbackJiraBaseUrl = resolveEnvValue("JIRA_BASE_URL");
@@ -248,7 +249,7 @@ export async function GET(
         `Failed to fetch issue: ${response.status} ${response.statusText}`;
 
       return NextResponse.json(
-        { error: errorMessage },
+        { error: formatErrorMessage(errorMessage) },
         { status: response.status }
       );
     }
@@ -326,7 +327,7 @@ export async function GET(
     return NextResponse.json({ issue: task });
   } catch (error) {
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Internal server error" },
+      { error: formatErrorMessage(error) },
       { status: 500 }
     );
   }

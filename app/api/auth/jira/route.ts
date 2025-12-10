@@ -10,7 +10,7 @@ export async function GET(request: Request) {
   const { clientId, getAppUrl } = jiraConfig;
   const appUrl = getAppUrl(request);
   const { searchParams } = new URL(request.url);
-  const returnUrl = searchParams.get("returnUrl") || "/app/jira-test";
+  const returnUrl = searchParams.get("returnUrl") || "/app/jira";
   const userIdFromQuery = searchParams.get("userId");
 
   if (!clientId) {

@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
 import { resolveEnvValue } from "@/lib/appEnvironment";
 import { jiraConfig } from "@/lib/jiraConfig";
+import { formatErrorMessage } from "@/lib/utils/errorHandler";
 import type { JiraApiErrorResponse, JiraTask, JiraAdfDocument, JiraAdfNode } from "@/interfaces/Jira.interface";
 
 const { clientId: jiraClientId, clientSecret: jiraClientSecret } = jiraConfig;
@@ -245,7 +246,7 @@ export async function POST(request: Request) {
         errorData = JSON.parse(errorText) as JiraApiErrorResponse;
       } catch { /* empty */ }
       const errorMessage = errorData?.errorMessages?.[0] || errorData?.error || errorData?.message || `Failed to fetch Jira issues: ${searchResponse.status} ${searchResponse.statusText}`;
-      return NextResponse.json({ error: errorMessage, details: errorText }, { status: searchResponse.status });
+      return NextResponse.json({ error: formatErrorMessage(errorMessage), details: errorText }, { status: searchResponse.status });
     }
 
     const searchData = await searchResponse.json();
@@ -337,7 +338,7 @@ export async function POST(request: Request) {
             .eq("id", existingTask.id);
 
           if (updateError) {
-            errors.push({ key: jiraTask.key, error: updateError.message });
+            errors.push({ key: jiraTask.key, error: formatErrorMessage(updateError) });
           } else {
             syncedTasks.push({ key: jiraTask.key, action: "updated" });
           }
@@ -348,7 +349,7 @@ export async function POST(request: Request) {
             .insert(personalTaskData);
 
           if (insertError) {
-            errors.push({ key: jiraTask.key, error: insertError.message });
+            errors.push({ key: jiraTask.key, error: formatErrorMessage(insertError) });
           } else {
             syncedTasks.push({ key: jiraTask.key, action: "created" });
           }
@@ -356,7 +357,7 @@ export async function POST(request: Request) {
       } catch (taskError) {
         errors.push({
           key: jiraTask.key,
-          error: taskError instanceof Error ? taskError.message : "Unknown error",
+          error: formatErrorMessage(taskError),
         });
       }
     }
@@ -374,7 +375,7 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Internal server error" },
+      { error: formatErrorMessage(error) },
       { status: 500 }
     );
   }

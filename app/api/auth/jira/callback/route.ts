@@ -28,19 +28,19 @@ export async function GET(request: Request) {
 
   if (error) {
     return NextResponse.redirect(
-      `${appUrl}/app/jira-test?error=${encodeURIComponent("Jira OAuth hatası: " + error)}`
+      `${appUrl}/app/jira?error=${encodeURIComponent("Jira OAuth hatası: " + error)}`
     );
   }
 
   if (!code || !state) {
     return NextResponse.redirect(
-      `${appUrl}/app/jira-test?error=${encodeURIComponent("Eksik OAuth parametreleri")}`
+      `${appUrl}/app/jira?error=${encodeURIComponent("Eksik OAuth parametreleri")}`
     );
   }
 
   if (!clientId || !clientSecret) {
     return NextResponse.redirect(
-      `${appUrl}/app/jira-test?error=${encodeURIComponent(
+      `${appUrl}/app/jira?error=${encodeURIComponent(
         "Jira OAuth yapılandırma hatası. Lütfen JIRA_CLIENT_ID_TEST / JIRA_CLIENT_ID_PROD (ve secret) değişkenlerini docs/env.md'deki yönergelere göre ekleyin."
       )}`
     );
@@ -48,7 +48,7 @@ export async function GET(request: Request) {
 
   const cookieStore = await cookies();
   const storedState = cookieStore.get("jira_oauth_state")?.value;
-  const returnUrl = cookieStore.get("jira_oauth_return_url")?.value || "/app/jira-test";
+  const returnUrl = cookieStore.get("jira_oauth_return_url")?.value || "/app/jira";
   
   // State'ten user ID'yi decode et
   let userIdFromState: string | undefined;
@@ -66,7 +66,7 @@ export async function GET(request: Request) {
 
   if (!storedState || storedState !== randomStateFromUrl) {
     return NextResponse.redirect(
-      `${appUrl}/app/jira-test?error=${encodeURIComponent("Geçersiz state")}`
+      `${appUrl}/app/jira?error=${encodeURIComponent("Geçersiz state")}`
     );
   }
 
@@ -131,18 +131,71 @@ export async function GET(request: Request) {
       throw new Error("Kullanıcı bulunamadı. Lütfen tekrar giriş yapın.");
     }
 
+    // 3. Jira base URL'ini al (accessible resources API'sinden)
+    let jiraBaseUrl: string | null = null;
+    try {
+      const resourcesResponse = await fetch(
+        "https://api.atlassian.com/oauth/token/accessible-resources",
+        {
+          headers: {
+            Authorization: `Bearer ${tokenData.access_token}`,
+            Accept: "application/json",
+          },
+        }
+      );
 
-    // 3. Jira token'ını users tablosuna kaydet
+      if (resourcesResponse.ok) {
+        const resources: Array<{ id: string; name?: string; url: string }> =
+          await resourcesResponse.json();
+        
+        const jiraResource = resources.find(
+          (r) =>
+            r.url.includes("atlassian.net") || 
+            r.url.includes("atlassian.com") ||
+            r.name?.toLowerCase().includes("jira")
+        );
+
+        if (jiraResource) {
+          jiraBaseUrl = jiraResource.url;
+          // URL'yi normalize et
+          if (jiraBaseUrl.endsWith("/")) {
+            jiraBaseUrl = jiraBaseUrl.slice(0, -1);
+          }
+        } else if (resources.length > 0) {
+          // İlk resource'u kullan
+          jiraBaseUrl = resources[0].url;
+          if (jiraBaseUrl.endsWith("/")) {
+            jiraBaseUrl = jiraBaseUrl.slice(0, -1);
+          }
+        }
+      }
+    } catch {
+      // Jira base URL fetch hatası - devam et, sadece token'ı kaydet
+    }
+
+    // 4. Jira token'ını ve base URL'ini users tablosuna kaydet
     const expiresAt = new Date();
     expiresAt.setSeconds(expiresAt.getSeconds() + tokenData.expires_in);
 
+    const updatePayload: {
+      jira_access_token: string;
+      jira_refresh_token: string | null;
+      jira_token_expires_at: string;
+      jira_base_url?: string | null;
+    } = {
+      jira_access_token: tokenData.access_token,
+      jira_refresh_token: tokenData.refresh_token || null,
+      jira_token_expires_at: expiresAt.toISOString(),
+    };
+
+    // Base URL varsa ekle
+    if (jiraBaseUrl) {
+      updatePayload.jira_base_url = jiraBaseUrl;
+    }
+
     const { data: updateData, error: updateError } = await supabase
       .from("users")
-      .update({
-        jira_access_token: tokenData.access_token,
-        jira_refresh_token: tokenData.refresh_token || null,
-        jira_token_expires_at: expiresAt.toISOString(),
-      })
+      .update(updatePayload)
       .eq("id", currentUserId)
       .select("id");
 
@@ -151,9 +204,9 @@ export async function GET(request: Request) {
       throw new Error(`Jira token kaydedilemedi: ${updateError.message}`);
     }
 
-    // 4. Cookie'leri temizle ve yönlendir
+    // 5. Cookie'leri temizle ve yönlendir
     const decodedReturnUrl = decodeURIComponent(returnUrl);
-    const finalUrl = decodedReturnUrl.startsWith("/") ? decodedReturnUrl : "/app/jira-test";
+    const finalUrl = decodedReturnUrl.startsWith("/") ? decodedReturnUrl : "/app/jira";
     const redirectUrl = `${appUrl}${finalUrl}?jira_connected=true`;
     const response = NextResponse.redirect(redirectUrl);
     response.cookies.delete("jira_oauth_state");
@@ -165,7 +218,7 @@ export async function GET(request: Request) {
       err instanceof Error ? err.message : "Jira OAuth hatası";
     // Jira OAuth callback hatası
     return NextResponse.redirect(
-      `${appUrl}/app/jira-test?error=${encodeURIComponent(errorMessage)}`
+      `${appUrl}/app/jira?error=${encodeURIComponent(errorMessage)}`
     );
   }
 }

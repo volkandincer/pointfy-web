@@ -2,6 +2,7 @@
 
 import { memo, useState, useRef, useEffect } from "react";
 import { ChevronDown, Check } from "lucide-react";
+import { lockBodyScroll, unlockBodyScroll } from "@/lib/utils/scrollLock";
 
 interface FilterOption {
   value: string;
@@ -43,35 +44,20 @@ const FilterDropdown = memo(function FilterDropdown({
     }
 
     if (isOpen) {
-      // Body scroll'unu disable et (mobil için)
-      const scrollY = window.scrollY;
-      document.body.style.position = "fixed";
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = "100%";
-      document.body.style.overflow = "hidden";
-      
+      lockBodyScroll();
       document.addEventListener("mousedown", handleClickOutside);
       document.addEventListener("touchstart", handleClickOutside);
     } else {
-      // Scroll pozisyonunu geri yükle
-      const scrollY = document.body.style.top;
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
-      document.body.style.overflow = "";
-      if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || "0") * -1);
-      }
+      unlockBodyScroll();
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("touchstart", handleClickOutside);
-      // Cleanup body scroll lock
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
-      document.body.style.overflow = "";
+      // Cleanup body scroll lock - sadece açıkken cleanup yap
+      if (isOpen) {
+        unlockBodyScroll();
+      }
     };
   }, [isOpen]);
 

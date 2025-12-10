@@ -6,6 +6,7 @@ import { X, ExternalLink } from "lucide-react";
 import Button from "@/components/ui/Button";
 import type { JiraTask } from "@/interfaces/Jira.interface";
 import { getStatusColorClasses, getPriorityColorClasses } from "@/lib/jira/colors";
+import { lockBodyScroll, unlockBodyScroll } from "@/lib/utils/scrollLock";
 
 interface JiraIssueModalProps {
   issue: JiraTask | null;
@@ -21,30 +22,16 @@ const JiraIssueModal = memo(function JiraIssueModal({
   // Modal açıkken body scroll'unu disable et
   useEffect(() => {
     if (isOpen) {
-      // Scroll pozisyonunu kaydet
-      const scrollY = window.scrollY;
-      document.body.style.position = "fixed";
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = "100%";
-      document.body.style.overflow = "hidden";
+      lockBodyScroll();
     } else {
-      // Scroll pozisyonunu geri yükle
-      const scrollY = document.body.style.top;
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
-      document.body.style.overflow = "";
-      if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || "0") * -1);
-      }
+      unlockBodyScroll();
     }
 
     return () => {
-      // Cleanup
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
-      document.body.style.overflow = "";
+      // Cleanup - sadece modal açıkken cleanup yap
+      if (isOpen) {
+        unlockBodyScroll();
+      }
     };
   }, [isOpen]);
 
