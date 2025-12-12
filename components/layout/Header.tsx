@@ -129,7 +129,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
             <Layers className="h-5 w-5 text-white" />
           </div>
           <span className="font-bold text-gray-900 dark:text-white">
-            Pointfy
+            TeamHubX
           </span>
         </Link>
 

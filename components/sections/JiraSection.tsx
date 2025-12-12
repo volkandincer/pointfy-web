@@ -220,7 +220,7 @@ const JiraSection = memo(function JiraSection({
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-500">
                   Bu izin sayesinde Jira&apos;daki tüm projelerinizi ve size atanan görevleri
-                  Pointfy&apos;de görüntüleyebilirsiniz.
+                  TeamHubX&apos;de görüntüleyebilirsiniz.
                 </p>
               </div>
             </div>
@@ -258,7 +258,7 @@ const JiraSection = memo(function JiraSection({
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-500">
                   Scrum ve Kanban board&apos;larınızı, aktif sprint&apos;lerinizi ve sprint
-                  içindeki görevleri Pointfy&apos;de görebilirsiniz.
+                  içindeki görevleri TeamHubX&apos;de görebilirsiniz.
                 </p>
               </div>
             </div>

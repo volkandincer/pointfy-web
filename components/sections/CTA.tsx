@@ -17,7 +17,7 @@ const CTA = memo(function CTA() {
           Hemen Başlayın
         </h2>
         <p className="mb-8 text-base text-blue-50 md:text-lg">
-          Pointfy&apos;ı indirin ve takımınızla daha verimli çalışmaya başlayın.
+          TeamHubX&apos;ı indirin ve takımınızla daha verimli çalışmaya başlayın.
         </p>
         <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:justify-center">
           <Button

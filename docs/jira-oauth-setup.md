@@ -39,7 +39,7 @@ http://localhost:3000/api/auth/jira/callback
 
 **Production:**
 ```
-https://pointfy-web.vercel.app/api/auth/jira/callback
+https://teamhubx-web.vercel.app/api/auth/jira/callback
 ```
 
 Veya custom domain kullanıyorsanız:
@@ -88,7 +88,7 @@ Production için:
 ```bash
 JIRA_CLIENT_ID_PROD=your_client_id_here
 JIRA_CLIENT_SECRET_PROD=your_client_secret_here
-NEXT_PUBLIC_APP_URL_PROD=https://pointfy-web.vercel.app
+NEXT_PUBLIC_APP_URL_PROD=https://teamhubx-web.vercel.app
 ```
 
 ## Test Etme

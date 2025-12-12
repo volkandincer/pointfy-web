@@ -17,7 +17,7 @@ const Footer = memo(function Footer({ navigationItems }: FooterProps) {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div className="col-span-1 md:col-span-2">
             <h3 className="mb-4 text-lg font-bold text-gray-900 dark:text-white">
-              Pointfy
+              TeamHubX
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
               Takım işbirliği için güçlü bir platform. Poker planning,
@@ -84,7 +84,7 @@ const Footer = memo(function Footer({ navigationItems }: FooterProps) {
           </div>
         </div>
         <div className="mt-8 border-t-2 border-gray-200 pt-8 text-center text-sm text-gray-600 dark:border-gray-800 dark:text-gray-400">
-          <p>© {currentYear} Pointfy. Tüm hakları saklıdır.</p>
+          <p>© {currentYear} TeamHubX. Tüm hakları saklıdır.</p>
         </div>
       </div>
     </footer>

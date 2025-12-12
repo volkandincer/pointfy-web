@@ -5,8 +5,8 @@ import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import { getDefaultNavigationItems } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Fiyatlandırma | Pointfy",
-  description: "Pointfy fiyatlandırma seçenekleri ve planlar.",
+  title: "Fiyatlandırma | TeamHubX",
+  description: "TeamHubX fiyatlandırma seçenekleri ve planlar.",
 };
 
 export default function PricingPage() {

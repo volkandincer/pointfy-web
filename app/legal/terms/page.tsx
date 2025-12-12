@@ -6,8 +6,8 @@ import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import { getDefaultNavigationItems } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Kullanım Şartları | Pointfy",
-  description: "Pointfy kullanım şartları: hizmet koşulları ve sorumluluklar.",
+  title: "Kullanım Şartları | TeamHubX",
+  description: "TeamHubX kullanım şartları: hizmet koşulları ve sorumluluklar.",
   alternates: { canonical: "/legal/terms" },
 };
 
@@ -38,7 +38,7 @@ export default function TermsPage() {
               <strong>Son Güncelleme:</strong> {new Date().toLocaleDateString("tr-TR", { year: "numeric", month: "long", day: "numeric" })}
             </p>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
-              Pointfy uygulamasını kullanarak aşağıdaki kullanım şartlarını
+              TeamHubX uygulamasını kullanarak aşağıdaki kullanım şartlarını
               kabul etmiş sayılırsınız. Lütfen bu şartları dikkatlice okuyun.
             </p>
 
@@ -46,7 +46,7 @@ export default function TermsPage() {
               1. Hizmetin Kapsamı
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
-              Pointfy, takım işbirliği için poker planning, retrospektif
+              TeamHubX, takım işbirliği için poker planning, retrospektif
               toplantıları ve görev yönetimi araçları sunan bir platformdur.
               Hizmetlerimiz web uygulaması ve mobil uygulama üzerinden
               sağlanmaktadır.
@@ -67,7 +67,7 @@ export default function TermsPage() {
               3. Kullanım Koşulları
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
-              Pointfy uygulamasını yalnızca yasal ve meşru amaçlar için
+              TeamHubX uygulamasını yalnızca yasal ve meşru amaçlar için
               kullanabilirsiniz. Aşağıdaki faaliyetler kesinlikle yasaktır:
             </p>
             <ul className="mb-4 ml-6 list-disc text-gray-600 dark:text-gray-400">
@@ -87,7 +87,7 @@ export default function TermsPage() {
               Uygulama içinde oluşturduğunuz içeriklerden (odalar, görevler,
               notlar vb.) siz sorumlusunuz. İçeriklerinizin yasalara uygun
               olduğundan ve başkalarının haklarını ihlal etmediğinden emin
-              olmalısınız. Pointfy, kullanıcı içeriklerini kontrol etme veya
+              olmalısınız. TeamHubX, kullanıcı içeriklerini kontrol etme veya
               onaylama yükümlülüğü taşımaz.
             </p>
 
@@ -95,7 +95,7 @@ export default function TermsPage() {
               5. Fikri Mülkiyet Hakları
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
-              Pointfy platformu, yazılımı, tasarımı ve markaları Pointfy&apos;a
+              TeamHubX platformu, yazılımı, tasarımı ve markaları TeamHubX&apos;a
               aittir ve telif hakkı, marka hakkı ve diğer fikri mülkiyet
               yasaları ile korunmaktadır. Hizmetlerimizi kullanmanız size
               herhangi bir fikri mülkiyet hakkı vermez.
@@ -110,7 +110,7 @@ export default function TermsPage() {
               6. Hizmet Kesintileri ve Değişiklikler
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
-              Pointfy, bakım, güncelleme, teknik sorunlar veya beklenmeyen
+              TeamHubX, bakım, güncelleme, teknik sorunlar veya beklenmeyen
               durumlar nedeniyle hizmet kesintileri yaşayabilir. Bu durumlardan
               sorumlu tutulamayız. Hizmetlerimizi önceden haber vermeksizin
               değiştirme, askıya alma veya sonlandırma hakkını saklı tutarız.
@@ -120,7 +120,7 @@ export default function TermsPage() {
               7. Sorumluluk Reddi
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
-              Pointfy, hizmetlerin &quot;olduğu gibi&quot; ve &quot;müsait
+              TeamHubX, hizmetlerin &quot;olduğu gibi&quot; ve &quot;müsait
               olduğu şekilde&quot; sağlandığını beyan eder. Hizmetlerimizin
               kesintisiz, hatasız veya güvenli olacağını garanti etmeyiz.
               Hizmetlerimizin kullanımından kaynaklanan doğrudan, dolaylı,

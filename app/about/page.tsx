@@ -5,9 +5,9 @@ import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import { getDefaultNavigationItems } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Hakkında | Pointfy",
+  title: "Hakkında | TeamHubX",
   description:
-    "Pointfy hakkında bilgi edinin: takım işbirliği, poker planning, retrospektif ve görev yönetimi.",
+    "TeamHubX hakkında bilgi edinin: takım işbirliği, poker planning, retrospektif ve görev yönetimi.",
 };
 
 export default function AboutPage() {
@@ -22,7 +22,7 @@ export default function AboutPage() {
             Hakkında
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Pointfy, ekiplerin planlama, geri bildirim ve görev yönetimi
+            TeamHubX, ekiplerin planlama, geri bildirim ve görev yönetimi
             süreçlerini tek bir yerde toplamasına yardımcı olan modern bir takım
             işbirliği platformudur.
           </p>

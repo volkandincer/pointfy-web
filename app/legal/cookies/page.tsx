@@ -6,8 +6,8 @@ import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import { getDefaultNavigationItems } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Çerez Politikası | Pointfy",
-  description: "Pointfy çerez politikası: hangi çerezleri neden kullanıyoruz.",
+  title: "Çerez Politikası | TeamHubX",
+  description: "TeamHubX çerez politikası: hangi çerezleri neden kullanıyoruz.",
   alternates: { canonical: "/legal/cookies" },
 };
 
@@ -38,7 +38,7 @@ export default function CookiesPage() {
               <strong>Son Güncelleme:</strong> {new Date().toLocaleDateString("tr-TR", { year: "numeric", month: "long", day: "numeric" })}
             </p>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
-              Pointfy web sitesi, hizmetlerimizi iyileştirmek ve size daha iyi
+              TeamHubX web sitesi, hizmetlerimizi iyileştirmek ve size daha iyi
               bir deneyim sunmak için çerezler kullanmaktadır. Bu politika,
               hangi çerezleri kullandığımızı ve bunları nasıl yönetebileceğinizi
               açıklamaktadır.
@@ -58,7 +58,7 @@ export default function CookiesPage() {
               2. Kullandığımız Çerez Türleri
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
-              Pointfy, aşağıdaki türde çerezler kullanmaktadır:
+              TeamHubX, aşağıdaki türde çerezler kullanmaktadır:
             </p>
 
             <h3 className="mt-6 text-xl font-semibold text-gray-900 dark:text-white">

@@ -6,9 +6,9 @@ import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import { getDefaultNavigationItems } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Gizlilik Politikası | Pointfy",
+  title: "Gizlilik Politikası | TeamHubX",
   description:
-    "Pointfy gizlilik politikası: hangi verileri topluyoruz ve nasıl koruyoruz.",
+    "TeamHubX gizlilik politikası: hangi verileri topluyoruz ve nasıl koruyoruz.",
   alternates: { canonical: "/legal/privacy" },
 };
 
@@ -39,7 +39,7 @@ export default function PrivacyPage() {
               <strong>Son Güncelleme:</strong> {new Date().toLocaleDateString("tr-TR", { year: "numeric", month: "long", day: "numeric" })}
             </p>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
-              Bu gizlilik politikası, Pointfy uygulamasını kullandığınızda
+              Bu gizlilik politikası, TeamHubX uygulamasını kullandığınızda
               kişisel verilerinizin nasıl toplandığını, kullanıldığını ve
               korunduğunu açıklamaktadır. Bu politikayı dikkatlice okuyun.
             </p>
@@ -48,7 +48,7 @@ export default function PrivacyPage() {
               1. Veri Sorumlusu
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
-              Pointfy, kişisel verilerinizin veri sorumlusudur. Bu politika
+              TeamHubX, kişisel verilerinizin veri sorumlusudur. Bu politika
               kapsamındaki tüm veri işleme faaliyetlerinden sorumluyuz.
             </p>
 
@@ -56,7 +56,7 @@ export default function PrivacyPage() {
               2. Toplanan Veriler
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
-              Pointfy, hizmetlerimizi sağlamak için gerekli olan minimum düzeyde
+              TeamHubX, hizmetlerimizi sağlamak için gerekli olan minimum düzeyde
               veri toplamaktadır. Topladığımız veriler arasında:
             </p>
             <ul className="mb-4 ml-6 list-disc text-gray-600 dark:text-gray-400">
@@ -226,7 +226,7 @@ export default function PrivacyPage() {
               10. Çocukların Gizliliği
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
-              Pointfy, 13 yaşın altındaki çocuklardan bilerek veri toplamaz. 13
+              TeamHubX, 13 yaşın altındaki çocuklardan bilerek veri toplamaz. 13
               yaşın altındaki bir çocuğun verilerini topladığımızı fark edersek,
               bu verileri derhal sileriz.
             </p>

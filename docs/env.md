@@ -19,7 +19,7 @@ Set the following variables to keep local/test and production credentials separa
 | `NEXT_PUBLIC_APP_URL_TEST`                  | `http://localhost:3000`                 | –                                                   | Redirect base for dev                             |
 | `JIRA_CLIENT_ID_PROD`                       | –                                       | Atlassian OAuth client id (prod app)                | Production                                        |
 | `JIRA_CLIENT_SECRET_PROD`                   | –                                       | Atlassian OAuth client secret (prod app)            | Production                                        |
-| `NEXT_PUBLIC_APP_URL_PROD`                  | –                                       | `https://pointfy-web.vercel.app` (or custom domain) | Redirect base for prod                            |
+| `NEXT_PUBLIC_APP_URL_PROD`                  | –                                       | `https://teamhubx-web.vercel.app` (or custom domain) | Redirect base for prod                            |
 
 ### Local setup (`.env.local`)
 
@@ -48,7 +48,7 @@ SUPABASE_SERVICE_ROLE_KEY_PROD=...
 
 JIRA_CLIENT_ID_PROD=...
 JIRA_CLIENT_SECRET_PROD=...
-NEXT_PUBLIC_APP_URL_PROD=https://pointfy-web.vercel.app
+NEXT_PUBLIC_APP_URL_PROD=https://teamhubx-web.vercel.app
 ```
 
 Preview deployments can either copy the test values above or override with their own `_TEST` entries.
@@ -64,10 +64,10 @@ SUPABASE_SERVICE_ROLE_KEY=<Supabase service role key>
 
 JIRA_CLIENT_ID=<Atlassian OAuth client id>
 JIRA_CLIENT_SECRET=<Atlassian OAuth client secret>
-JIRA_BASE_URL=<örn. pointfy.atlassian.net>   # opsiyonel; kullanıcı verisi yoksa fallback
-NEXT_PUBLIC_APP_URL=<https://pointfy-web.vercel.app>  # OAuth redirect base
+JIRA_BASE_URL=<örn. teamhubx.atlassian.net>   # opsiyonel; kullanıcı verisi yoksa fallback
+NEXT_PUBLIC_APP_URL=<https://teamhubx-web.vercel.app>  # OAuth redirect base
 
-NEXT_PUBLIC_SITE_URL=<https://pointfy-web.vercel.app> # robots/sitemap için
+NEXT_PUBLIC_SITE_URL=<https://teamhubx-web.vercel.app> # robots/sitemap için
 ```
 
 `.env.local` dosyanıza aynı değerleri girin, Vercel → Production sekmesine de birebir kopyalayın. Prod/test ayrımı yok; tüm kod bu isimleri bekliyor.
