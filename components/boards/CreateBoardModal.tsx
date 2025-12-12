@@ -199,7 +199,7 @@ const CreateBoardModal = memo(function CreateBoardModal({
           <button
             type="submit"
             disabled={!isFormValid || loading}
-            className="flex-1 border-2 border-blue-600 bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700 disabled:opacity-60"
+            className="flex-1 border-2 border-blue-600 bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700 disabled:opacity-60 dark:border-blue-500 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700"
           >
             {loading ? (
               <span className="inline-flex items-center gap-2">

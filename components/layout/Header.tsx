@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { memo, useState, useEffect, useRef } from "react";
-import { Layers, X, Menu, Home, Zap, ClipboardList, FileText, Settings, CheckSquare, Sparkles, Info, Mail, ChevronDown, User, LogOut } from "lucide-react";
+import { Layers, X, Menu, Home, Zap, ClipboardList, FileText, Settings, CheckSquare, Sparkles, Info, Mail, ChevronDown, User, LogOut, Sun, Moon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { getSupabase } from "@/lib/supabase";
 import { lockBodyScroll, unlockBodyScroll } from "@/lib/utils/scrollLock";
+import { useTheme } from "@/hooks/useTheme";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 
 interface HeaderProps {
@@ -29,6 +30,7 @@ const getNavIcon = (href: string) => {
 const Header = memo(function Header({ navigationItems }: HeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const { theme, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const [isAuthed, setIsAuthed] = useState<boolean>(false);
@@ -117,7 +119,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b-2 border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+    <header className="sticky top-0 z-50 w-full border-b-2 border-border bg-background shadow-sm">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
         {/* Logo */}
         <Link
@@ -128,7 +130,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
           <div className="flex h-9 w-9 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-600 shadow-sm transition-all group-hover:border-blue-700 group-hover:bg-blue-700 group-hover:shadow-md">
             <Layers className="h-5 w-5 text-white" />
           </div>
-          <span className="font-bold text-gray-900 dark:text-white">
+          <span className="font-bold text-foreground">
             TeamHubX
           </span>
         </Link>
@@ -140,8 +142,8 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
             href="/"
             className={`group flex min-h-[44px] items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold transition-all ${
               pathname === "/"
-                ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
-                : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
             }`}
           >
             <Home className="h-4 w-4" />
@@ -153,8 +155,8 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
             href="/app/jira"
             className={`group flex min-h-[44px] items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold transition-all ${
               pathname?.startsWith("/app/jira")
-                ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
-                : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
             }`}
           >
             <Zap className="h-4 w-4" />
@@ -166,8 +168,8 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
             href="/app/boards"
             className={`group flex min-h-[44px] items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold transition-all ${
               pathname?.startsWith("/app/boards")
-                ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
-                : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
             }`}
           >
             <ClipboardList className="h-4 w-4" />
@@ -180,8 +182,8 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
               onClick={() => setMoreMenuOpen(!moreMenuOpen)}
               className={`group flex min-h-[44px] items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold transition-all ${
                 moreMenuOpen || pathname?.startsWith("/app/tasks") || pathname?.startsWith("/app/notes") || pathname === "/features" || pathname === "/about" || pathname === "/contact"
-                  ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
-                  : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
               }`}
             >
               <span>Daha Fazla</span>
@@ -190,15 +192,15 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
 
             {/* Dropdown Menu */}
             {moreMenuOpen && (
-              <div className="absolute right-0 top-full z-50 mt-1 w-48 border-2 border-gray-300 bg-white shadow-md dark:border-gray-700 dark:bg-gray-900">
+              <div className="absolute right-0 top-full z-50 mt-1 w-48 border-2 border-border bg-popover shadow-md">
                 <div className="py-1">
                   <Link
                     href="/app/tasks"
                     onClick={() => setMoreMenuOpen(false)}
                     className={`flex min-h-[44px] items-center gap-3 px-4 py-2 text-sm font-semibold transition-all ${
                       pathname?.startsWith("/app/tasks")
-                        ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
-                        : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                     }`}
                   >
                     <CheckSquare className="h-4 w-4" />
@@ -209,21 +211,21 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                     onClick={() => setMoreMenuOpen(false)}
                     className={`flex min-h-[44px] items-center gap-3 px-4 py-2 text-sm font-semibold transition-all ${
                       pathname?.startsWith("/app/notes")
-                        ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
-                        : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                     }`}
                   >
                     <FileText className="h-4 w-4" />
                     <span>Notlarım</span>
                   </Link>
-                  <div className="my-1 border-t-2 border-gray-200 dark:border-gray-700" />
+                  <div className="my-1 border-t-2 border-border" />
                   <Link
                     href="/features"
                     onClick={() => setMoreMenuOpen(false)}
                     className={`flex min-h-[44px] items-center gap-3 px-4 py-2 text-sm font-semibold transition-all ${
                       pathname === "/features"
-                        ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
-                        : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                     }`}
                   >
                     <Sparkles className="h-4 w-4" />
@@ -234,8 +236,8 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                     onClick={() => setMoreMenuOpen(false)}
                     className={`flex min-h-[44px] items-center gap-3 px-4 py-2 text-sm font-semibold transition-all ${
                       pathname === "/about"
-                        ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
-                        : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                     }`}
                   >
                     <Info className="h-4 w-4" />
@@ -246,23 +248,55 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                     onClick={() => setMoreMenuOpen(false)}
                     className={`flex min-h-[44px] items-center gap-3 px-4 py-2 text-sm font-semibold transition-all ${
                       pathname === "/contact"
-                        ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
-                        : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                     }`}
                   >
                     <Mail className="h-4 w-4" />
                     <span>İletişim</span>
                   </Link>
+                  
+                  {/* Theme Switcher */}
+                  <div className="my-1 border-t-2 border-border" />
+                  <div className="flex min-h-[44px] items-center justify-between gap-3 px-4 py-2">
+                    <div className="flex items-center gap-3">
+                      {theme === "dark" ? (
+                        <Moon className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <Sun className="h-4 w-4 text-muted-foreground" />
+                      )}
+                      <span className="text-sm font-semibold text-muted-foreground">
+                        {theme === "dark" ? "Dark Mode" : "Light Mode"}
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setMoreMenuOpen(false);
+                        toggleTheme();
+                      }}
+                      className={`relative flex h-6 w-11 items-center rounded-full border-2 border-border transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+                        theme === "dark" ? "bg-primary" : "bg-muted"
+                      }`}
+                      aria-label={theme === "dark" ? "Light mode'a geç" : "Dark mode'a geç"}
+                    >
+                      <span
+                        className={`block h-4 w-4 rounded-full bg-background transition-transform ${
+                          theme === "dark" ? "translate-x-5" : "translate-x-0.5"
+                        }`}
+                      />
+                    </button>
+                  </div>
+                  
                   {isAuthed && (
                     <>
-                      <div className="my-1 border-t-2 border-gray-200 dark:border-gray-700" />
+                      <div className="my-1 border-t-2 border-border" />
                       <Link
                         href="/app/account"
                         onClick={() => setMoreMenuOpen(false)}
                         className={`flex min-h-[44px] items-center gap-3 px-4 py-2 text-sm font-semibold transition-all ${
                           pathname?.startsWith("/app/account")
-                            ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
-                            : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                            ? "bg-primary/10 text-primary"
+                            : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                         }`}
                       >
                         <User className="h-4 w-4" />
@@ -282,11 +316,11 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                   )}
                   {!isAuthed && (
                     <>
-                      <div className="my-1 border-t-2 border-gray-200 dark:border-gray-700" />
+                      <div className="my-1 border-t-2 border-border" />
                       <Link
                         href="/login"
                         onClick={() => setMoreMenuOpen(false)}
-                        className="flex min-h-[44px] items-center gap-3 px-4 py-2 text-sm font-semibold text-blue-600 transition-all hover:bg-blue-50 hover:text-blue-700 dark:text-blue-400 dark:hover:bg-blue-900/20 dark:hover:text-blue-300"
+                        className="flex min-h-[44px] items-center gap-3 px-4 py-2 text-sm font-semibold text-primary transition-all hover:bg-primary/10 hover:text-primary"
                       >
                         <User className="h-4 w-4" />
                         <span>Giriş Yap</span>
@@ -303,7 +337,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
         <div className="flex items-center gap-2 md:hidden">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md border-2 border-gray-300 bg-white text-gray-700 transition-all hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md border-2 border-border bg-card text-foreground transition-all hover:border-border hover:bg-accent active:bg-accent"
             aria-label={mobileMenuOpen ? "Menüyü Kapat" : "Menüyü Aç"}
             aria-expanded={mobileMenuOpen}
           >
@@ -329,7 +363,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
             }}
           />
           {/* Menu Content */}
-          <div className="absolute left-0 right-0 z-50 border-t-2 border-gray-200 bg-white shadow-md dark:border-gray-800 dark:bg-gray-900 md:hidden">
+          <div className="absolute left-0 right-0 z-50 border-t-2 border-border bg-background shadow-md md:hidden">
             <nav className="container mx-auto px-4 py-3">
               <div className="flex flex-col gap-1">
                 {/* Ana Sayfa */}
@@ -337,10 +371,10 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                   href="/"
                   onClick={closeMobileMenu}
                   onTouchStart={(e) => e.stopPropagation()}
-                  className={`flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-base font-semibold transition-all active:bg-gray-200 dark:active:bg-gray-700 ${
+                  className={`flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-base font-semibold transition-all active:bg-accent ${
                     pathname === "/"
-                      ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
-                      : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                   }`}
                 >
                   <Home className="h-5 w-5 shrink-0" />
@@ -354,7 +388,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                   onTouchStart={(e) => e.stopPropagation()}
                   className={`flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-base font-semibold transition-all active:bg-gray-200 dark:active:bg-gray-700 ${
                     pathname?.startsWith("/app/jira")
-                      ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
+                      ? "bg-primary/10 text-primary"
                       : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
                   }`}
                 >
@@ -369,7 +403,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                   onTouchStart={(e) => e.stopPropagation()}
                   className={`flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-base font-semibold transition-all active:bg-gray-200 dark:active:bg-gray-700 ${
                     pathname?.startsWith("/app/boards")
-                      ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
+                      ? "bg-primary/10 text-primary"
                       : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
                   }`}
                 >
@@ -384,7 +418,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                   onTouchStart={(e) => e.stopPropagation()}
                   className={`flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-base font-semibold transition-all active:bg-gray-200 dark:active:bg-gray-700 ${
                     pathname?.startsWith("/app/tasks")
-                      ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
+                      ? "bg-primary/10 text-primary"
                       : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
                   }`}
                 >
@@ -399,7 +433,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                   onTouchStart={(e) => e.stopPropagation()}
                   className={`flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-base font-semibold transition-all active:bg-gray-200 dark:active:bg-gray-700 ${
                     pathname?.startsWith("/app/notes")
-                      ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
+                      ? "bg-primary/10 text-primary"
                       : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
                   }`}
                 >
@@ -416,7 +450,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                   onTouchStart={(e) => e.stopPropagation()}
                   className={`flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-base font-semibold transition-all active:bg-gray-200 dark:active:bg-gray-700 ${
                     pathname === "/features"
-                      ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
+                      ? "bg-primary/10 text-primary"
                       : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
                   }`}
                 >
@@ -431,7 +465,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                   onTouchStart={(e) => e.stopPropagation()}
                   className={`flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-base font-semibold transition-all active:bg-gray-200 dark:active:bg-gray-700 ${
                     pathname === "/about"
-                      ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
+                      ? "bg-primary/10 text-primary"
                       : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
                   }`}
                 >
@@ -446,7 +480,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                   onTouchStart={(e) => e.stopPropagation()}
                   className={`flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-base font-semibold transition-all active:bg-gray-200 dark:active:bg-gray-700 ${
                     pathname === "/contact"
-                      ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
+                      ? "bg-primary/10 text-primary"
                       : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
                   }`}
                 >
@@ -456,7 +490,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
 
                 {isAuthed && (
                   <>
-                    <div className="my-1 border-t-2 border-gray-200 dark:border-gray-700" />
+                    <div className="my-1 border-t-2 border-border" />
                     {/* Hesabım */}
                     <Link
                       href="/app/account"
@@ -464,8 +498,8 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                       onTouchStart={(e) => e.stopPropagation()}
                       className={`flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-base font-semibold transition-all active:bg-gray-200 dark:active:bg-gray-700 ${
                         pathname?.startsWith("/app/account")
-                          ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
-                          : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                          ? "bg-primary/10 text-primary"
+                          : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                       }`}
                     >
                       <User className="h-5 w-5 shrink-0" />
@@ -478,7 +512,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                         handleSignOut();
                       }}
                       onTouchStart={(e) => e.stopPropagation()}
-                      className="flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-left text-base font-semibold text-red-600 transition-all active:bg-red-100 dark:active:bg-red-900/20 dark:text-red-400"
+                      className="flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-left text-base font-semibold text-destructive transition-all active:bg-destructive/10"
                     >
                       <LogOut className="h-5 w-5 shrink-0" />
                       <span>Çıkış Yap</span>
@@ -488,19 +522,51 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
 
                 {!isAuthed && (
                   <>
-                    <div className="my-1 border-t-2 border-gray-200 dark:border-gray-700" />
+                    <div className="my-1 border-t-2 border-border" />
                     {/* Giriş Yap */}
                     <Link
                       href="/login"
                       onClick={closeMobileMenu}
                       onTouchStart={(e) => e.stopPropagation()}
-                      className="flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-base font-semibold text-blue-600 transition-all active:bg-blue-100 dark:active:bg-blue-900/20 dark:text-blue-400"
+                      className="flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-base font-semibold text-primary transition-all active:bg-primary/10"
                     >
                       <User className="h-5 w-5 shrink-0" />
                       <span>Giriş Yap</span>
                     </Link>
                   </>
                 )}
+                
+                {/* Theme Switcher - Mobile */}
+                <div className="my-1 border-t-2 border-border" />
+                <div className="flex min-h-[48px] items-center justify-between gap-3 rounded-md border-2 border-border bg-card px-4 py-3">
+                  <div className="flex items-center gap-3">
+                    {theme === "dark" ? (
+                      <Moon className="h-5 w-5 text-muted-foreground" />
+                    ) : (
+                      <Sun className="h-5 w-5 text-muted-foreground" />
+                    )}
+                    <span className="text-base font-semibold text-foreground">
+                      {theme === "dark" ? "Dark Mode" : "Light Mode"}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => {
+                      closeMobileMenu();
+                      toggleTheme();
+                    }}
+                    onTouchStart={(e) => e.stopPropagation()}
+                    className={`relative flex h-7 w-12 items-center rounded-full border-2 border-border transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+                      theme === "dark" ? "bg-primary" : "bg-muted"
+                    }`}
+                    aria-label={theme === "dark" ? "Light mode'a geç" : "Dark mode'a geç"}
+                  >
+                    <span
+                      className={`block h-5 w-5 rounded-full bg-background transition-transform ${
+                        theme === "dark" ? "translate-x-5" : "translate-x-0.5"
+                      }`}
+                    />
+                  </button>
+                </div>
               </div>
             </nav>
           </div>

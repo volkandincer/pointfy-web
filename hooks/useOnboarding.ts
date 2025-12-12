@@ -38,8 +38,10 @@ export function useOnboarding(userId: string | null) {
       .find((row) => row.startsWith(`${ONBOARDING_COOKIE_NAME}=`));
 
     if (!onboardingCompleted) {
-      // Cookie yoksa onboarding göster
-      setShowOnboarding(true);
+      // Cookie yoksa onboarding göster - setTimeout ile async yap
+      setTimeout(() => {
+        setShowOnboarding(true);
+      }, 0);
     }
 
     setLoading(false);

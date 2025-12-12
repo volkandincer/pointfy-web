@@ -384,7 +384,7 @@ const RetroRoomView = memo(function RetroRoomView({
               {isAdmin && !timerActive && (
                 <button
                   onClick={() => setShowTimerModal(true)}
-                  className="rounded-md border-2 border-purple-600 bg-purple-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:border-purple-700 hover:bg-purple-700 hover:shadow-md"
+                  className="rounded-md border-2 border-purple-600 bg-purple-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:border-purple-700 hover:bg-purple-700 hover:shadow-md dark:border-purple-500 dark:bg-purple-600 dark:text-white dark:hover:bg-purple-700"
                 >
                   <Timer className="mr-1.5 h-4 w-4" />
                   Timer Başlat
@@ -394,7 +394,7 @@ const RetroRoomView = memo(function RetroRoomView({
                 <button
                   onClick={handleRevealAll}
                   disabled={isRevealing}
-                  className="rounded-md border-2 border-green-600 bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:border-green-700 hover:bg-green-700 hover:shadow-md disabled:opacity-50 disabled:hover:shadow-sm"
+                  className="rounded-md border-2 border-green-600 bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:border-green-700 hover:bg-green-700 hover:shadow-md disabled:opacity-50 disabled:hover:shadow-sm dark:border-green-500 dark:bg-green-600 dark:text-white dark:hover:bg-green-700"
                 >
                   {isRevealing ? (
                     <span className="flex items-center gap-2">
@@ -586,7 +586,7 @@ const RetroRoomView = memo(function RetroRoomView({
               <button
                 onClick={handleStartTimer}
                 disabled={selectedDuration === null}
-                className="flex-1 rounded-md border-2 border-purple-600 bg-purple-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:border-purple-700 hover:bg-purple-700 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 rounded-md border-2 border-purple-600 bg-purple-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:border-purple-700 hover:bg-purple-700 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed dark:border-purple-500 dark:bg-purple-600 dark:text-white dark:hover:bg-purple-700"
               >
                 Başlat
               </button>
@@ -693,13 +693,13 @@ const RetroRoomView = memo(function RetroRoomView({
                   <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
                     <button
                       onClick={() => handleOpenEdit(card)}
-                      className="flex-1 rounded-md border-2 border-blue-600 bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:border-blue-700 hover:bg-blue-700 hover:shadow-md active:border-blue-800 active:bg-blue-800"
+                      className="flex-1 rounded-md border-2 border-blue-600 bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:border-blue-700 hover:bg-blue-700 hover:shadow-md active:border-blue-800 active:bg-blue-800 dark:border-blue-500 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700"
                     >
                       ✎ Düzenle
                     </button>
                     <button
                       onClick={() => handleDeleteCard(card)}
-                      className="flex-1 rounded-md border-2 border-red-600 bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:border-red-700 hover:bg-red-700 hover:shadow-md active:border-red-800 active:bg-red-800"
+                      className="flex-1 rounded-md border-2 border-red-600 bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:border-red-700 hover:bg-red-700 hover:shadow-md active:border-red-800 active:bg-red-800 dark:border-red-500 dark:bg-red-600 dark:text-white dark:hover:bg-red-700"
                     >
                       🗑️ Sil
                     </button>

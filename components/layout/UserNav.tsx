@@ -46,7 +46,7 @@ const UserNav = memo(function UserNav() {
     return (
       <Link
         href="/login"
-        className="min-h-[44px] rounded-md border-2 border-blue-600 bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all active:border-blue-700 active:bg-blue-700 active:shadow-md hover:border-blue-700 hover:bg-blue-700 hover:shadow-md"
+        className="min-h-[44px] rounded-md border-2 border-blue-600 bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all active:border-blue-700 active:bg-blue-700 active:shadow-md hover:border-blue-700 hover:bg-blue-700 hover:shadow-md dark:border-blue-500 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700"
       >
         Giriş Yap
       </Link>
@@ -78,7 +78,7 @@ const UserNav = memo(function UserNav() {
         }}
         className="group relative flex min-h-[44px] items-center gap-2 rounded-md border-2 border-red-200/70 bg-white px-3 py-2 text-sm font-semibold text-gray-600 shadow-sm transition-all active:border-red-300 active:bg-red-50 active:text-red-700 hover:border-red-300 hover:bg-red-50 hover:text-red-700 dark:border-red-500/40 dark:bg-gray-800 dark:text-gray-300 dark:active:border-red-500 dark:active:bg-red-900/20 dark:active:text-red-400 dark:hover:border-red-500 dark:hover:bg-red-900/20 dark:hover:text-red-400"
       >
-        <div className="flex h-8 w-8 items-center justify-center rounded-md border-2 border-red-600 bg-red-600 text-white">
+        <div className="flex h-8 w-8 items-center justify-center rounded-md border-2 border-red-600 bg-red-600 text-white dark:border-red-500 dark:bg-red-600 dark:text-white">
           <LogOut className="h-4 w-4" />
         </div>
         <span className="hidden sm:inline">Çıkış Yap</span>

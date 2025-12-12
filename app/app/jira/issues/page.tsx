@@ -251,7 +251,7 @@ export default function JiraIssuesPage() {
           size="sm"
           onClick={() => setShowCreateModal(true)}
           icon={Plus}
-          className="!h-10 !min-h-10 !py-2 !border-purple-600 !bg-purple-600 hover:!border-purple-700 hover:!bg-purple-700 dark:!border-purple-500 dark:!bg-purple-600 dark:hover:!border-purple-400 dark:hover:!bg-purple-500"
+          className="!h-10 !min-h-10 !py-2 !border-purple-600 !bg-purple-600 !text-white hover:!border-purple-700 hover:!bg-purple-700 dark:!border-purple-500 dark:!bg-purple-600 dark:!text-white dark:hover:!border-purple-400 dark:hover:!bg-purple-500"
         >
           Yeni Issue
         </Button>
@@ -266,7 +266,7 @@ export default function JiraIssuesPage() {
         >
           Filtrele
           {activeFiltersCount > 0 && (
-            <span className="ml-1.5 rounded-md border-2 border-purple-600 bg-purple-600 px-1.5 py-0.5 text-[10px] font-bold text-white dark:border-purple-500 dark:bg-purple-600">
+            <span className="ml-1.5 rounded-md border-2 border-purple-600 bg-purple-600 px-1.5 py-0.5 text-[10px] font-bold text-white dark:border-purple-500 dark:bg-purple-600 dark:text-white">
               {activeFiltersCount}
             </span>
           )}
