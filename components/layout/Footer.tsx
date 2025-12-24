@@ -16,9 +16,7 @@ const Footer = memo(function Footer({ navigationItems }: FooterProps) {
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div className="col-span-1 md:col-span-2">
-            <h3 className="mb-4 text-lg font-bold text-foreground">
-              TeamHubX
-            </h3>
+            <h3 className="mb-4 text-lg font-bold text-foreground">TeamHubX</h3>
             <p className="text-sm text-muted-foreground">
               Takım işbirliği için güçlü bir platform. Poker planning,
               retrospektif toplantıları ve görev yönetimi araçları.
