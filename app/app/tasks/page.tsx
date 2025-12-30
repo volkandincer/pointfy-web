@@ -227,7 +227,7 @@ export default function PersonalTasksPage() {
         `${data.synced} task sync edildi (${data.created} yeni, ${data.updated} güncellendi)`,
         "success"
       );
-    } catch {
+    } catch (err) {
       showToast(
         err instanceof Error ? err.message : "Sync sırasında hata oluştu",
         "error"

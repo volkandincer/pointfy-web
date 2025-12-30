@@ -60,7 +60,7 @@ function HomePageContent() {
         } else {
           setUserId(null);
         }
-      } catch {
+      } catch (error) {
         // Supabase bağlantı hatası veya env variable eksik
         console.error("Auth check error:", error);
         if (mounted) {
