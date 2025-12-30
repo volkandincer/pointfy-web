@@ -166,7 +166,7 @@ export default function JiraSearchPage() {
         setTotalResults(0);
         showToast(data.error || "Arama başarısız oldu.", "error");
       }
-    } catch {
+    } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Bilinmeyen hata";
       setError(errorMessage);
       setResults([]);

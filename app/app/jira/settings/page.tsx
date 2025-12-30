@@ -127,7 +127,7 @@ export default function JiraSettingsPage() {
         }));
         showToast(data.error || "Bağlantı testi başarısız.", "error");
       }
-    } catch {
+    } catch (err) {
       setConnectionStatus((prev) => ({
         ...prev,
         lastTest: {
