@@ -158,7 +158,7 @@ export default function VotedTasksPage() {
           );
         channel.subscribe();
         unsubscribe = () => channel.unsubscribe();
-      } catch (err) {
+      } catch {
         // Fetch voted tasks error
         if (mounted) {
           setVotedTasks([]);

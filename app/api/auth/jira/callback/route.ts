@@ -16,8 +16,6 @@ interface JiraTokenResponse {
  * Authorization code'u access token'a çevirir ve kullanıcının Jira bilgilerini kaydeder
  */
 export async function GET(request: Request) {
-  const timestamp = new Date().toISOString();
-  
   const { searchParams } = new URL(request.url);
   const code = searchParams.get("code");
   const state = searchParams.get("state");
@@ -56,7 +54,7 @@ export async function GET(request: Request) {
   if (stateParts.length === 2) {
     try {
       userIdFromState = Buffer.from(stateParts[1], "base64").toString();
-    } catch (decodeError) {
+    } catch {
       // State decode hatası
     }
   }
@@ -91,7 +89,6 @@ export async function GET(request: Request) {
     );
 
     if (!tokenResponse.ok) {
-      const errorText = await tokenResponse.text();
       // Token exchange hatası
       throw new Error(
         `Token exchange başarısız: ${tokenResponse.status} ${tokenResponse.statusText}`
@@ -104,7 +101,7 @@ export async function GET(request: Request) {
     let supabase;
     try {
       supabase = getSupabaseServer();
-    } catch (serviceError) {
+    } catch {
       // Service role key bulunamadı, anon key kullanılıyor
       supabase = getSupabase();
     }
@@ -121,7 +118,7 @@ export async function GET(request: Request) {
             const payload = JSON.parse(Buffer.from(tokenParts[1], "base64").toString());
             currentUserId = payload.sub;
           }
-        } catch (tokenError) {
+        } catch {
           // JWT decode hatası
         }
       }
@@ -193,7 +190,7 @@ export async function GET(request: Request) {
       updatePayload.jira_base_url = jiraBaseUrl;
     }
 
-    const { data: updateData, error: updateError } = await supabase
+    const { error: updateError } = await supabase
       .from("users")
       .update(updatePayload)
       .eq("id", currentUserId)

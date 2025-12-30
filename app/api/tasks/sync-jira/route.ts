@@ -9,6 +9,7 @@ import type { JiraApiErrorResponse, JiraTask, JiraAdfDocument, JiraAdfNode } fro
 const { clientId: jiraClientId, clientSecret: jiraClientSecret } = jiraConfig;
 const fallbackJiraBaseUrl = resolveEnvValue("JIRA_BASE_URL");
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const isJiraApiErrorResponse = (value: unknown): value is JiraApiErrorResponse =>
   typeof value === "object" && value !== null;
 
@@ -200,7 +201,7 @@ async function getUserIdFromCookie(): Promise<string | undefined> {
         const payload = JSON.parse(Buffer.from(tokenParts[1], "base64").toString());
         return payload.sub;
       }
-    } catch (error) {
+    } catch {
       // JWT decode başarısız
     }
   }

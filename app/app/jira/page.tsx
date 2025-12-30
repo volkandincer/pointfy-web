@@ -37,7 +37,7 @@ export default function JiraDashboardPage() {
         if (mounted && userRow?.jira_base_url) {
           setJiraBaseUrl(userRow.jira_base_url);
         }
-      } catch (err) {
+      } catch {
         // Jira base URL fetch error
       }
     }
@@ -75,8 +75,25 @@ export default function JiraDashboardPage() {
         }),
       ]);
 
-      const projectsData = await projectsResponse.json();
-      const issuesData = await issuesResponse.json();
+      // Parse responses safely
+      let projectsData: { boards?: JiraBoard[] } = {};
+      let issuesData: { issues?: unknown[] } = {};
+
+      if (projectsResponse.ok) {
+        try {
+          projectsData = await projectsResponse.json();
+        } catch {
+          // JSON parse failed, skip
+        }
+      }
+
+      if (issuesResponse.ok) {
+        try {
+          issuesData = await issuesResponse.json();
+        } catch {
+          // JSON parse failed, skip
+        }
+      }
 
       if (projectsResponse.ok && projectsData.boards) {
         const boards = projectsData.boards || [];
@@ -90,10 +107,11 @@ export default function JiraDashboardPage() {
 
       if (issuesResponse.ok && issuesData.issues) {
         setIssuesCount(issuesData.issues.length);
-        setRecentIssues(issuesData.issues.slice(0, 10));
+        setRecentIssues(issuesData.issues.slice(0, 10) as JiraTask[]);
       }
     } catch (err) {
-      // Dashboard fetch error
+      // Dashboard fetch error - silently fail for dashboard
+      console.error("Dashboard fetch error:", err);
     } finally {
       setLoading(false);
     }
@@ -133,7 +151,9 @@ export default function JiraDashboardPage() {
               projectsCount
             )}
           </div>
-          <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-sm">Proje</div>
+          <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-sm">
+            Proje
+          </div>
         </Link>
 
         <Link
@@ -150,7 +170,9 @@ export default function JiraDashboardPage() {
               issuesCount
             )}
           </div>
-          <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-sm">Issue</div>
+          <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-sm">
+            Issue
+          </div>
         </Link>
 
         <Link
@@ -167,7 +189,9 @@ export default function JiraDashboardPage() {
               boardsCount
             )}
           </div>
-          <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-sm">Board</div>
+          <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-sm">
+            Board
+          </div>
         </Link>
 
         <Link
@@ -177,8 +201,12 @@ export default function JiraDashboardPage() {
           <div className="mb-2 flex h-8 w-8 items-center justify-center border-2 border-orange-600 bg-orange-50 dark:bg-orange-900/20 sm:mb-3 sm:h-12 sm:w-12">
             <Search className="h-4 w-4 text-orange-600 dark:text-orange-400 sm:h-6 sm:w-6" />
           </div>
-          <div className="text-lg font-bold text-gray-900 dark:text-white sm:text-2xl">—</div>
-          <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-sm">Arama</div>
+          <div className="text-lg font-bold text-gray-900 dark:text-white sm:text-2xl">
+            —
+          </div>
+          <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-sm">
+            Arama
+          </div>
         </Link>
       </div>
 
@@ -221,7 +249,9 @@ export default function JiraDashboardPage() {
               {recentProjects.map((project) => (
                 <Link
                   key={project.id}
-                  href={`/app/jira/${project.location?.projectKey || project.id}`}
+                  href={`/app/jira/${
+                    project.location?.projectKey || project.id
+                  }`}
                   className="group block border-l-4 border-l-purple-600 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-l-purple-500 dark:border-gray-700 dark:bg-gray-900"
                 >
                   <div className="flex items-center gap-3">
@@ -233,7 +263,8 @@ export default function JiraDashboardPage() {
                         {project.name}
                       </h3>
                       <p className="truncate text-sm text-gray-600 dark:text-gray-400">
-                        {project.location?.projectKey || project.location?.projectName}
+                        {project.location?.projectKey ||
+                          project.location?.projectName}
                       </p>
                     </div>
                     <ChevronRight className="h-5 w-5 shrink-0 text-gray-400 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />

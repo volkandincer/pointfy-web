@@ -27,11 +27,11 @@ export async function GET(request: Request) {
               );
               userId = payload.sub;
             }
-          } catch (error) {
+          } catch {
             // JWT decode başarısız
           }
         }
-      } catch (authError) {
+      } catch {
         // Auth error
       }
     }
@@ -94,7 +94,7 @@ export async function GET(request: Request) {
           cloudId = resources[0].id;
         }
       }
-    } catch (error) {
+    } catch {
       // CloudId alınamadı
     }
 
@@ -149,7 +149,7 @@ export async function GET(request: Request) {
 
     const data = await response.json();
     return NextResponse.json(data);
-  } catch (error) {
+  } catch {
     // Jira myself API error
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Internal server error" },

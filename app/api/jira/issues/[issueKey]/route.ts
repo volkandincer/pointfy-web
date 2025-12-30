@@ -44,11 +44,11 @@ export async function GET(
               );
               userId = payload.sub;
             }
-          } catch (error) {
+          } catch {
             // JWT decode başarısız
           }
         }
-      } catch (authError) {
+      } catch {
         // Auth error
       }
     }
@@ -138,7 +138,7 @@ export async function GET(
             jira_token_expires_at: expiresAt.toISOString(),
           })
           .eq("id", userId);
-      } catch (refreshError) {
+      } catch {
         return NextResponse.json(
           { error: "Failed to refresh Jira token" },
           { status: 401 }
@@ -192,7 +192,7 @@ export async function GET(
             apiUrl = `https://api.atlassian.com/ex/jira/${cloudId}`;
           }
         }
-      } catch (error) {
+      } catch {
         // Cloud ID fetch error
       }
     }
@@ -325,7 +325,7 @@ export async function GET(
     };
 
     return NextResponse.json({ issue: task });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: formatErrorMessage(error) },
       { status: 500 }

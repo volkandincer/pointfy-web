@@ -211,7 +211,7 @@ export default function RoomDetailPage() {
           }
         }
         // Admin kontrolü useRoomAdmin hook'u tarafından yapılıyor
-      } catch (err) {
+      } catch {
         // Room detail fetch error
         if (mounted) {
           showToast("Oda yüklenirken bir hata oluştu.", "error");
@@ -257,7 +257,7 @@ export default function RoomDetailPage() {
 
         setShowPinModal(false);
         setPinError(null);
-      } catch (err) {
+      } catch {
         setPinError(err instanceof Error ? err.message : "Bilinmeyen hata");
       } finally {
         setPinLoading(false);
@@ -291,7 +291,7 @@ export default function RoomDetailPage() {
           .eq("id", taskId);
         if (error) throw error;
         showToast("Task başarıyla aktif yapıldı!", "success");
-      } catch (err) {
+      } catch {
         showToast("Task aktif yapılamadı.", "error");
       }
     },
@@ -331,7 +331,7 @@ export default function RoomDetailPage() {
         });
         if (error) throw error;
         showToast("Task başarıyla oluşturuldu!", "success");
-      } catch (err) {
+      } catch {
         showToast("Task oluşturulamadı.", "error");
         throw err;
       } finally {

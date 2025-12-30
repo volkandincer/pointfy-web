@@ -18,19 +18,22 @@ export function useTheme() {
   };
 
   useEffect(() => {
-    setMounted(true);
-    // localStorage'dan theme'i oku
-    const savedTheme = localStorage.getItem("theme") as Theme | null;
-    if (savedTheme) {
-      setTheme(savedTheme);
-      applyTheme(savedTheme);
-    } else {
-      // Sistem tercihini kontrol et
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      const initialTheme: Theme = prefersDark ? "dark" : "light";
-      setTheme(initialTheme);
-      applyTheme(initialTheme);
-    }
+    // Use setTimeout to avoid calling setState synchronously in effect
+    setTimeout(() => {
+      setMounted(true);
+      // localStorage'dan theme'i oku
+      const savedTheme = localStorage.getItem("theme") as Theme | null;
+      if (savedTheme) {
+        setTheme(savedTheme);
+        applyTheme(savedTheme);
+      } else {
+        // Sistem tercihini kontrol et
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const initialTheme: Theme = prefersDark ? "dark" : "light";
+        setTheme(initialTheme);
+        applyTheme(initialTheme);
+      }
+    }, 0);
   }, []);
 
   const toggleTheme = () => {

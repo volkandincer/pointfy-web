@@ -36,11 +36,11 @@ export async function POST(
               );
               userId = payload.sub;
             }
-          } catch (error) {
+          } catch {
             // JWT decode başarısız
           }
         }
-      } catch (authError) {
+      } catch {
         // Auth error
       }
     }
@@ -130,7 +130,7 @@ export async function POST(
             jira_token_expires_at: expiresAt.toISOString(),
           })
           .eq("id", userId);
-      } catch (refreshError) {
+      } catch {
         return NextResponse.json(
           { error: "Jira token expired and refresh failed. Please reconnect Jira." },
           { status: 401 }
@@ -180,7 +180,7 @@ export async function POST(
             apiUrl = `https://api.atlassian.com/ex/jira/${cloudId}`;
           }
         }
-      } catch (error) {
+      } catch {
         // Cloud ID fetch error
       }
     }

@@ -44,7 +44,7 @@ export async function GET(request: Request) {
               const payload = JSON.parse(Buffer.from(tokenParts[1], "base64").toString());
               userId = payload.sub;
             }
-          } catch (error) {
+          } catch {
             // JWT decode başarısız, Supabase API'ye istek yapılacak
           }
         }
@@ -66,7 +66,7 @@ export async function GET(request: Request) {
               const userData = await userResponse.json();
               userId = userData.id;
             }
-          } catch (apiError) {
+          } catch {
             // Supabase API error
           }
         }
@@ -80,7 +80,7 @@ export async function GET(request: Request) {
             userId = user.id;
           }
         }
-      } catch (authError) {
+      } catch {
         // Auth error
       }
     }
@@ -318,7 +318,7 @@ async function handleJiraIssuesRequestWithJiraToken(
             } else {
               throw new Error("Jira OAuth configuration missing");
             }
-          } catch (refreshError) {
+          } catch {
             // Token refresh başarısız
             return NextResponse.json(
               { 
@@ -360,7 +360,7 @@ async function handleJiraIssuesRequestWithJiraToken(
         cloudId = resources[0].id;
       }
     }
-  } catch (error) {
+  } catch {
     // CloudId alınamadı
   }
 

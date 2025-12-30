@@ -41,10 +41,14 @@ export function useOnboarding(userId: string | null) {
       // Cookie yoksa onboarding göster - setTimeout ile async yap
       setTimeout(() => {
         setShowOnboarding(true);
+        setLoading(false);
+      }, 0);
+    } else {
+      // Use setTimeout to avoid calling setState synchronously in effect
+      setTimeout(() => {
+        setLoading(false);
       }, 0);
     }
-
-    setLoading(false);
   }, [userId]);
 
   // Onboarding steps

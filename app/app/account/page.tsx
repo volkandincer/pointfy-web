@@ -111,11 +111,11 @@ export default function AccountPage() {
           } else {
             setJiraConnected(false);
           }
-        } catch (jiraError) {
+        } catch {
           // Jira kontrol hatası
           setJiraConnected(false);
         }
-      } catch (err) {
+      } catch {
         // Account fetch error
       } finally {
         if (mounted) setLoading(false);
@@ -230,7 +230,7 @@ export default function AccountPage() {
       const supabase = getSupabase();
       await supabase.auth.signOut();
       router.replace("/");
-    } catch (err) {
+    } catch {
       // Sign out error
     }
   };
@@ -250,7 +250,7 @@ export default function AccountPage() {
         if (userData?.user?.id) {
           userId = userData.user.id;
         }
-      } catch (err) {
+      } catch {
         showToast("Kullanıcı bilgileri alınamadı. Lütfen sayfayı yenileyin.", "error");
         setShowJiraPermissionModal(false);
         return;

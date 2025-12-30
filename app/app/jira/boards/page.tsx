@@ -39,7 +39,7 @@ export default function JiraBoardsPage() {
         if (mounted && userRow?.jira_base_url) {
           setJiraBaseUrl(userRow.jira_base_url);
         }
-      } catch (err) {
+      } catch {
         // Jira base URL fetch error
       }
     }
@@ -74,15 +74,22 @@ export default function JiraBoardsPage() {
         credentials: "include",
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.error || "Failed to fetch boards");
+        let errorMessage = "Failed to fetch boards";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch {
+          // JSON parse failed, use status text
+          errorMessage = `${response.status} ${response.statusText}`;
+        }
+        throw new Error(errorMessage);
       }
 
+      const data = await response.json();
       setBoards(data.boards || []);
       setFilteredBoards(data.boards || []);
-    } catch (err) {
+    } catch {
       setError(err instanceof Error ? err.message : "Failed to load boards");
     } finally {
       setLoading(false);

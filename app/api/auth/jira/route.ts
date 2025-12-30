@@ -41,7 +41,7 @@ export async function GET(request: Request) {
           );
           currentUserId = payload.sub;
         }
-      } catch (error) {
+      } catch {
         // JWT decode başarısız
       }
     }

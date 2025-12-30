@@ -88,7 +88,7 @@ export default function PersonalTasksPage() {
         if (mounted && userRow?.jira_base_url) {
           setJiraBaseUrl(userRow.jira_base_url);
         }
-      } catch (err) {
+      } catch {
         // Jira base URL fetch error
       }
     }
@@ -227,7 +227,7 @@ export default function PersonalTasksPage() {
         `${data.synced} task sync edildi (${data.created} yeni, ${data.updated} güncellendi)`,
         "success"
       );
-    } catch (err) {
+    } catch {
       showToast(
         err instanceof Error ? err.message : "Sync sırasında hata oluştu",
         "error"

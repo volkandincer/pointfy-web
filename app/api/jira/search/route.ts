@@ -7,7 +7,6 @@ import type {
   JiraAdfDocument,
   JiraAdfNode,
   JiraApiErrorResponse,
-  JiraIssue,
   JiraSearchResponse,
   JiraTask,
 } from "@/interfaces/Jira.interface";
@@ -39,11 +38,11 @@ export async function POST(request: Request) {
               );
               userId = payload.sub;
             }
-          } catch (error) {
+          } catch {
             // JWT decode başarısız
           }
         }
-      } catch (authError) {
+      } catch {
         // Auth error
       }
     }
@@ -186,7 +185,7 @@ export async function POST(request: Request) {
           cloudId = resources[0].id;
         }
       }
-    } catch (error) {
+    } catch {
       // CloudId alınamadı
     }
 
@@ -397,7 +396,7 @@ export async function POST(request: Request) {
               });
             }
           }
-        } catch (refreshError) {
+        } catch {
           // Token refresh başarısız
         }
       }

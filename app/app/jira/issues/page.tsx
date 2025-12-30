@@ -56,7 +56,7 @@ export default function JiraIssuesPage() {
         if (mounted && userRow?.jira_base_url) {
           setJiraBaseUrl(userRow.jira_base_url);
         }
-      } catch (err) {
+      } catch {
         // Jira base URL fetch error
       }
     }
@@ -92,15 +92,22 @@ export default function JiraIssuesPage() {
         credentials: "include",
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.error || "Failed to fetch issues");
+        let errorMessage = "Failed to fetch issues";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch {
+          // JSON parse failed, use status text
+          errorMessage = `${response.status} ${response.statusText}`;
+        }
+        throw new Error(errorMessage);
       }
 
+      const data = await response.json();
       setIssues(data.issues || []);
       setFilteredIssues(data.issues || []);
-    } catch (err) {
+    } catch {
       setError(formatErrorMessage(err));
     } finally {
       setLoading(false);

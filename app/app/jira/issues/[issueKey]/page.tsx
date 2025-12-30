@@ -27,6 +27,7 @@ import { getSupabase } from "@/lib/supabase";
 import Button from "@/components/ui/Button";
 import { useToastContext } from "@/contexts/ToastContext";
 import Modal from "@/components/ui/Modal";
+import { formatErrorMessage } from "@/lib/utils/errorHandler";
 
 interface AssignableUser {
   accountId: string;
@@ -82,7 +83,7 @@ export default function JiraIssueDetailPage() {
         if (mounted && userRow?.jira_base_url) {
           setJiraBaseUrl(userRow.jira_base_url);
         }
-      } catch (err) {
+      } catch {
         // Jira base URL fetch error
       }
     }
@@ -120,15 +121,23 @@ export default function JiraIssueDetailPage() {
         }
       );
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.error || "Failed to fetch issue");
+        let errorMessage = "Failed to fetch issue";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch {
+          // JSON parse failed, use status text
+          errorMessage = `${response.status} ${response.statusText}`;
+        }
+        throw new Error(errorMessage);
       }
 
+      const data = await response.json();
       setIssue(data.issue);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load issue");
+    } catch {
+      const errorMessage = err instanceof Error ? err.message : "Failed to load issue";
+      setError(formatErrorMessage(errorMessage));
     } finally {
       setLoading(false);
     }
@@ -169,7 +178,7 @@ export default function JiraIssueDetailPage() {
         setStoryPoints(data.storyPoints);
         setStoryPointsInput(String(data.storyPoints));
       }
-    } catch (err) {
+    } catch {
       // Story points fetch error
     } finally {
       setStoryPointsLoading(false);
@@ -221,7 +230,7 @@ export default function JiraIssueDetailPage() {
         );
         setAssignableUsers([]);
       }
-    } catch (err) {
+    } catch {
       showToast(
         err instanceof Error ? err.message : "Kullanıcılar yüklenirken hata oluştu",
         "error"
@@ -300,7 +309,7 @@ export default function JiraIssueDetailPage() {
       setStoryPointsEditing(false);
       showToast("Story points başarıyla güncellendi", "success");
       fetchIssue(); // Issue'u yeniden yükle
-    } catch (err) {
+    } catch {
       showToast(
         err instanceof Error ? err.message : "Story points güncellenemedi",
         "error"
@@ -354,7 +363,7 @@ export default function JiraIssueDetailPage() {
         "success"
       );
       fetchIssue(); // Issue'u yeniden yükle
-    } catch (err) {
+    } catch {
       showToast(
         err instanceof Error ? err.message : "Issue atanamadı",
         "error"
@@ -438,7 +447,7 @@ export default function JiraIssueDetailPage() {
       if (response.ok) {
         setComments(data.comments || []);
       }
-    } catch (err) {
+    } catch {
       // Comments fetch error
     } finally {
       setCommentsLoading(false);
@@ -491,7 +500,7 @@ export default function JiraIssueDetailPage() {
       } else {
         showToast(data.error || "Yorum eklenemedi", "error");
       }
-    } catch (err) {
+    } catch {
       showToast(
         err instanceof Error ? err.message : "Yorum eklenirken hata oluştu",
         "error"
