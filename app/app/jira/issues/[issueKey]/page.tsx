@@ -135,7 +135,7 @@ export default function JiraIssueDetailPage() {
 
       const data = await response.json();
       setIssue(data.issue);
-    } catch {
+    } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Failed to load issue";
       setError(formatErrorMessage(errorMessage));
     } finally {
@@ -230,7 +230,7 @@ export default function JiraIssueDetailPage() {
         );
         setAssignableUsers([]);
       }
-    } catch {
+    } catch (err) {
       showToast(
         err instanceof Error ? err.message : "Kullanıcılar yüklenirken hata oluştu",
         "error"
@@ -309,7 +309,7 @@ export default function JiraIssueDetailPage() {
       setStoryPointsEditing(false);
       showToast("Story points başarıyla güncellendi", "success");
       fetchIssue(); // Issue'u yeniden yükle
-    } catch {
+    } catch (err) {
       showToast(
         err instanceof Error ? err.message : "Story points güncellenemedi",
         "error"
@@ -363,7 +363,7 @@ export default function JiraIssueDetailPage() {
         "success"
       );
       fetchIssue(); // Issue'u yeniden yükle
-    } catch {
+    } catch (err) {
       showToast(
         err instanceof Error ? err.message : "Issue atanamadı",
         "error"
@@ -500,7 +500,7 @@ export default function JiraIssueDetailPage() {
       } else {
         showToast(data.error || "Yorum eklenemedi", "error");
       }
-    } catch {
+    } catch (err) {
       showToast(
         err instanceof Error ? err.message : "Yorum eklenirken hata oluştu",
         "error"

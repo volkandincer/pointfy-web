@@ -107,7 +107,7 @@ export default function JiraIssuesPage() {
       const data = await response.json();
       setIssues(data.issues || []);
       setFilteredIssues(data.issues || []);
-    } catch {
+    } catch (err) {
       setError(formatErrorMessage(err));
     } finally {
       setLoading(false);

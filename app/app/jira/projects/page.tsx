@@ -86,7 +86,7 @@ export default function JiraProjectsPage() {
       const data = await response.json();
       setProjects(data.boards || []);
       setFilteredProjects(data.boards || []);
-    } catch {
+    } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load projects");
     } finally {
       setLoading(false);
