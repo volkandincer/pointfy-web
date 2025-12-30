@@ -257,7 +257,7 @@ export default function RoomDetailPage() {
 
         setShowPinModal(false);
         setPinError(null);
-      } catch {
+      } catch (err) {
         setPinError(err instanceof Error ? err.message : "Bilinmeyen hata");
       } finally {
         setPinLoading(false);
@@ -331,7 +331,7 @@ export default function RoomDetailPage() {
         });
         if (error) throw error;
         showToast("Task başarıyla oluşturuldu!", "success");
-      } catch {
+      } catch (err) {
         showToast("Task oluşturulamadı.", "error");
         throw err;
       } finally {
