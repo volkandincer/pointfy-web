@@ -67,7 +67,7 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
           // jiraConnected'ı set et - null'dan false veya true'ya geçer
           setJiraConnected(!!userRow?.jira_access_token);
         }
-      } catch (err) {
+      } catch {
         if (mounted) {
           // Hata durumunda jiraConnected false olarak set et
           setJiraConnected(false);
@@ -162,7 +162,7 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
                       const returnUrl = encodeURIComponent(pathname || "/app/jira");
                       const encodedUserId = encodeURIComponent(userData.user.id);
                       window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
-                    } catch (err) {
+                    } catch {
                       // Jira OAuth error
                     }
                   }}

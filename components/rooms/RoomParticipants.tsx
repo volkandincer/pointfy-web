@@ -49,7 +49,7 @@ const RoomParticipants = memo(function RoomParticipants({
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center border-2 border-blue-600 bg-blue-600 text-white dark:bg-blue-500">
+            <div className="flex h-8 w-8 items-center justify-center border-2 border-blue-600 bg-blue-600 text-white dark:border-blue-500 dark:bg-blue-600 dark:text-white">
               <Users className="h-4 w-4" />
             </div>
             <div>

@@ -6,8 +6,8 @@ import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import { getDefaultNavigationItems } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Üçüncü Taraf Hizmetler | Pointfy",
-  description: "Pointfy tarafından kullanılan üçüncü taraf hizmetler.",
+  title: "Üçüncü Taraf Hizmetler | TeamHubX",
+  description: "TeamHubX tarafından kullanılan üçüncü taraf hizmetler.",
   alternates: { canonical: "/legal/third-party" },
 };
 
@@ -27,7 +27,7 @@ export default function ThirdPartyPage() {
               Üçüncü Taraf Hizmetler
             </h1>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Pointfy tarafından kullanılan üçüncü taraf hizmetler hakkında bilgi edinin.
+              TeamHubX tarafından kullanılan üçüncü taraf hizmetler hakkında bilgi edinin.
             </p>
           </div>
 
@@ -38,7 +38,7 @@ export default function ThirdPartyPage() {
               <strong>Son Güncelleme:</strong> {new Date().toLocaleDateString("tr-TR", { year: "numeric", month: "long", day: "numeric" })}
             </p>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
-              Pointfy, hizmetlerini sağlamak için aşağıdaki üçüncü taraf
+              TeamHubX, hizmetlerini sağlamak için aşağıdaki üçüncü taraf
               hizmetleri kullanmaktadır. Bu hizmetler, verilerinizin işlenmesi
               ve saklanması konusunda rol oynayabilir.
             </p>
@@ -47,7 +47,7 @@ export default function ThirdPartyPage() {
               1. Veri Depolama ve Altyapı Hizmetleri
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
-              Pointfy, veri depolama, gerçek zamanlı işbirliği özellikleri ve
+              TeamHubX, veri depolama, gerçek zamanlı işbirliği özellikleri ve
               kimlik doğrulama için güvenli bulut altyapı hizmetleri
               kullanmaktadır. Bu hizmetler:
             </p>
@@ -110,7 +110,7 @@ export default function ThirdPartyPage() {
               5. Veri Paylaşımı ve Aktarımı
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
-              Pointfy, yukarıda belirtilen hizmetler dışında verilerinizi üçüncü
+              TeamHubX, yukarıda belirtilen hizmetler dışında verilerinizi üçüncü
               taraflarla paylaşmaz. Tüm veri işlemleri, bu hizmetlerin gizlilik
               politikalarına ve veri koruma yasalarına uygun olarak
               gerçekleştirilir.

@@ -43,15 +43,15 @@ const Button = memo(
       // Variant classes
       const variantClasses = {
         primary:
-          "border-blue-600 bg-blue-600 text-white shadow-sm hover:border-blue-700 hover:bg-blue-700 hover:shadow-md active:border-blue-800 active:bg-blue-800 active:shadow-md focus:ring-blue-500/20 dark:border-blue-500 dark:bg-blue-600 dark:hover:border-blue-600 dark:hover:bg-blue-700",
+          "border-primary bg-primary text-primary-foreground shadow-sm hover:border-primary hover:bg-primary/90 hover:shadow-md active:border-primary active:bg-primary/80 active:shadow-md focus:ring-primary/20",
         secondary:
-          "border-gray-300 bg-white text-gray-900 shadow-sm hover:border-gray-400 hover:bg-gray-50 hover:shadow-md active:border-gray-500 active:bg-gray-100 active:shadow-md focus:ring-gray-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700",
+          "border-border bg-card text-card-foreground shadow-sm hover:border-border hover:bg-accent hover:text-accent-foreground hover:shadow-md active:border-border active:bg-accent active:shadow-md focus:ring-border/20",
         outline:
-          "border-blue-600 bg-transparent text-blue-600 hover:border-blue-700 hover:bg-blue-50 hover:text-blue-700 active:border-blue-800 active:bg-blue-100 active:text-blue-800 focus:ring-blue-500/20 dark:border-blue-500 dark:text-blue-400 dark:hover:border-blue-400 dark:hover:bg-blue-900/20",
+          "border-primary bg-transparent text-primary hover:border-primary hover:bg-primary/10 hover:text-primary active:border-primary active:bg-primary/20 active:text-primary focus:ring-primary/20",
         ghost:
-          "border-transparent bg-transparent text-gray-700 hover:bg-gray-100 hover:text-gray-900 active:bg-gray-200 active:text-gray-900 focus:ring-gray-500/20 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white",
+          "border-transparent bg-transparent text-foreground hover:bg-accent hover:text-accent-foreground active:bg-accent active:text-accent-foreground focus:ring-border/20",
         danger:
-          "border-red-600 bg-red-600 text-white shadow-sm hover:border-red-700 hover:bg-red-700 hover:shadow-md active:border-red-800 active:bg-red-800 active:shadow-md focus:ring-red-500/20 dark:border-red-500 dark:bg-red-600 dark:hover:border-red-600 dark:hover:bg-red-700",
+          "border-destructive bg-destructive text-destructive-foreground shadow-sm hover:border-destructive hover:bg-destructive/90 hover:shadow-md active:border-destructive active:bg-destructive/80 active:shadow-md focus:ring-destructive/20",
       };
 
       // Size classes

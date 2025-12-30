@@ -88,7 +88,7 @@ export default function PersonalTasksPage() {
         if (mounted && userRow?.jira_base_url) {
           setJiraBaseUrl(userRow.jira_base_url);
         }
-      } catch (err) {
+      } catch {
         // Jira base URL fetch error
       }
     }

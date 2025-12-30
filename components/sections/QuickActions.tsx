@@ -70,10 +70,10 @@ const QuickActions = memo(function QuickActions({ actions }: QuickActionsProps) 
     <section className="container mx-auto px-4 py-4 sm:py-6">
       <div className="mx-auto max-w-6xl">
         <div className="mb-3 sm:mb-4">
-          <h2 className="mb-0.5 text-lg font-bold tracking-tight text-gray-900 dark:text-white sm:text-xl md:text-2xl">
+          <h2 className="mb-0.5 text-lg font-bold tracking-tight text-foreground sm:text-xl md:text-2xl">
             Hızlı İşlemler
           </h2>
-          <p className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
+          <p className="text-xs text-muted-foreground sm:text-sm">
             Takım çalışmanızı başlatın
           </p>
         </div>
@@ -84,7 +84,7 @@ const QuickActions = memo(function QuickActions({ actions }: QuickActionsProps) 
             const IconComponent = getIcon(action.id);
             const borderColor = getBorderColor(action.id);
             
-            const baseClasses = `group relative flex min-h-[100px] flex-col items-center justify-center border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 text-center shadow-sm transition-all active:border-gray-400 active:shadow-md sm:min-h-[120px] sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900`;
+            const baseClasses = `group relative flex min-h-[100px] flex-col items-center justify-center border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-border bg-card p-3 text-center shadow-sm transition-all active:border-border active:shadow-md sm:min-h-[120px] sm:p-4 hover:border-border hover:shadow-md`;
             
             return action.onClick ? (
               <button
@@ -95,10 +95,10 @@ const QuickActions = memo(function QuickActions({ actions }: QuickActionsProps) 
                 <div className="mb-2 sm:mb-2.5">
                   {IconComponent}
                 </div>
-                <h3 className="mb-1 text-xs font-semibold text-gray-900 dark:text-white sm:text-sm">
+                <h3 className="mb-1 text-xs font-semibold text-card-foreground sm:text-sm">
                   {action.title}
                 </h3>
-                <p className="hidden text-[10px] leading-tight text-gray-600 dark:text-gray-400 sm:block sm:text-xs">
+                <p className="hidden text-[10px] leading-tight text-muted-foreground sm:block sm:text-xs">
                   {action.description}
                 </p>
               </button>
@@ -111,10 +111,10 @@ const QuickActions = memo(function QuickActions({ actions }: QuickActionsProps) 
                 <div className="mb-2 sm:mb-2.5">
                   {IconComponent}
                 </div>
-                <h3 className="mb-1 text-xs font-semibold text-gray-900 dark:text-white sm:text-sm">
+                <h3 className="mb-1 text-xs font-semibold text-card-foreground sm:text-sm">
                   {action.title}
                 </h3>
-                <p className="hidden text-[10px] leading-tight text-gray-600 dark:text-gray-400 sm:block sm:text-xs">
+                <p className="hidden text-[10px] leading-tight text-muted-foreground sm:block sm:text-xs">
                   {action.description}
                 </p>
               </Link>

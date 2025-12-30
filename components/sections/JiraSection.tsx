@@ -107,7 +107,7 @@ const JiraSection = memo(function JiraSection({
               <Link2 className="h-6 w-6 text-blue-600 dark:text-blue-400" />
             </div>
             <div>
-              <h2 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white md:text-2xl">
+              <h2 className="text-xl font-bold tracking-tight text-foreground md:text-2xl">
                 Jira
               </h2>
               <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -149,7 +149,7 @@ const JiraSection = memo(function JiraSection({
                           </div>
                         );
                       })()}
-                      <h3 className="text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
+                      <h3 className="text-base font-semibold text-foreground sm:text-lg">
                         {action.title}
                       </h3>
                     </div>
@@ -175,7 +175,7 @@ const JiraSection = memo(function JiraSection({
                           </div>
                         );
                       })()}
-                      <h3 className="text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
+                      <h3 className="text-base font-semibold text-foreground sm:text-lg">
                         {action.title}
                       </h3>
                     </div>
@@ -211,7 +211,7 @@ const JiraSection = memo(function JiraSection({
                 <span className="text-xs font-semibold">1</span>
               </div>
               <div className="flex-1">
-                <h4 className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">
+                <h4 className="mb-1 text-sm font-semibold text-foreground">
                   Jira Verilerini Okuma
                 </h4>
                 <p className="mb-1 text-xs text-gray-600 dark:text-gray-400">
@@ -220,7 +220,7 @@ const JiraSection = memo(function JiraSection({
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-500">
                   Bu izin sayesinde Jira&apos;daki tüm projelerinizi ve size atanan görevleri
-                  Pointfy&apos;de görüntüleyebilirsiniz.
+                  TeamHubX&apos;de görüntüleyebilirsiniz.
                 </p>
               </div>
             </div>
@@ -230,7 +230,7 @@ const JiraSection = memo(function JiraSection({
                 <span className="text-xs font-semibold">2</span>
               </div>
               <div className="flex-1">
-                <h4 className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">
+                <h4 className="mb-1 text-sm font-semibold text-foreground">
                   Jira Verilerini Güncelleme
                 </h4>
                 <p className="mb-1 text-xs text-gray-600 dark:text-gray-400">
@@ -249,7 +249,7 @@ const JiraSection = memo(function JiraSection({
                 <span className="text-xs font-semibold">3</span>
               </div>
               <div className="flex-1">
-                <h4 className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">
+                <h4 className="mb-1 text-sm font-semibold text-foreground">
                   Board ve Sprint Erişimi
                 </h4>
                 <p className="mb-1 text-xs text-gray-600 dark:text-gray-400">
@@ -258,7 +258,7 @@ const JiraSection = memo(function JiraSection({
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-500">
                   Scrum ve Kanban board&apos;larınızı, aktif sprint&apos;lerinizi ve sprint
-                  içindeki görevleri Pointfy&apos;de görebilirsiniz.
+                  içindeki görevleri TeamHubX&apos;de görebilirsiniz.
                 </p>
               </div>
             </div>
@@ -268,7 +268,7 @@ const JiraSection = memo(function JiraSection({
                 <span className="text-xs font-semibold">✓</span>
               </div>
               <div className="flex-1">
-                <h4 className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">
+                <h4 className="mb-1 text-sm font-semibold text-foreground">
                   Otomatik Yenileme
                 </h4>
                 <p className="mb-1 text-xs text-gray-600 dark:text-gray-400">
@@ -293,7 +293,7 @@ const JiraSection = memo(function JiraSection({
           <div className="flex gap-3">
             <button
               onClick={() => setShowPermissionModal(false)}
-              className="flex-1 rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+              className="flex-1 rounded-md border-2 border-border bg-card px-4 py-2.5 text-sm font-semibold text-card-foreground transition-colors hover:bg-accent hover:border-border hover:text-accent-foreground"
             >
               İptal
             </button>
@@ -309,7 +309,7 @@ const JiraSection = memo(function JiraSection({
                   // Jira OAuth error
                 }
               }}
-              className="flex-1 border-2 border-blue-600 bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700"
+              className="flex-1 border-2 border-primary bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 hover:border-primary"
             >
               Devam Et
             </button>

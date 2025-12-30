@@ -27,11 +27,11 @@ export async function GET(request: Request) {
               );
               userId = payload.sub;
             }
-          } catch (error) {
+          } catch {
             // JWT decode başarısız
           }
         }
-      } catch (authError) {
+      } catch {
         // Auth error
       }
     }
@@ -94,7 +94,7 @@ export async function GET(request: Request) {
           cloudId = resources[0].id;
         }
       }
-    } catch (error) {
+    } catch {
       // CloudId alınamadı
     }
 

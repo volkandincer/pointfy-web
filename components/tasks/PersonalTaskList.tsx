@@ -205,7 +205,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
               </h3>
               <div className="flex shrink-0 items-center gap-1.5">
                 {hasJiraIssue && (
-                  <span className="rounded-md border-2 border-purple-600 bg-purple-600 px-2 py-0.5 font-mono text-xs font-bold text-white shadow-sm dark:border-purple-500 dark:bg-purple-600">
+                  <span className="rounded-md border-2 border-purple-600 bg-purple-600 px-2 py-0.5 font-mono text-xs font-bold text-white shadow-sm dark:border-purple-500 dark:bg-purple-600 dark:text-white">
                     {t.jira_issue_key}
                   </span>
                 )}

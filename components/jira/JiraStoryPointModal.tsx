@@ -174,7 +174,7 @@ const JiraStoryPointModal = memo(function JiraStoryPointModal({
               type="button"
               onClick={handleSubmit}
               disabled={loading || storyPoints < 0}
-              className="inline-flex h-10 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-600 px-5 text-sm font-semibold text-white transition hover:border-blue-700 hover:bg-blue-700 disabled:opacity-60"
+              className="inline-flex h-10 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-600 px-5 text-sm font-semibold text-white transition hover:border-blue-700 hover:bg-blue-700 disabled:opacity-60 dark:border-blue-500 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700"
             >
               {loading ? "Gönderiliyor..." : "Jira'ya Gönder"}
             </button>

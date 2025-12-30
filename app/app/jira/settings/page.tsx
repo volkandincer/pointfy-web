@@ -60,7 +60,7 @@ export default function JiraSettingsPage() {
           setBaseUrlInput(userRow?.jira_base_url || "");
           setLoading(false);
         }
-      } catch (err) {
+      } catch {
         if (mounted) {
           setLoading(false);
           showToast("Bağlantı durumu yüklenirken bir hata oluştu.", "error");
@@ -183,7 +183,7 @@ export default function JiraSettingsPage() {
       } else {
         showToast(data.error || "Base URL kaydedilemedi.", "error");
       }
-    } catch (err) {
+    } catch {
       showToast("Base URL kaydedilirken bir hata oluştu.", "error");
     } finally {
       setSaving(false);
@@ -226,7 +226,7 @@ export default function JiraSettingsPage() {
       setBaseUrlInput("");
       showToast("Jira bağlantısı kesildi.", "success");
       router.refresh();
-    } catch (err) {
+    } catch {
       showToast("Bağlantı kesilirken bir hata oluştu.", "error");
     }
   }, [showToast, router]);
@@ -245,7 +245,7 @@ export default function JiraSettingsPage() {
       const returnUrl = encodeURIComponent("/app/jira/settings");
       const encodedUserId = encodeURIComponent(userData.user.id);
       window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
-    } catch (err) {
+    } catch {
       showToast("Jira bağlantısı başlatılamadı.", "error");
     }
   }, [showToast]);

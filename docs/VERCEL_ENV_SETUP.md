@@ -15,15 +15,15 @@ Vercel Dashboard → Projeniz → Settings → Environment Variables → **Produ
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY_PROD` | `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxybGx0Y3RteHJ0amtmcHl0aXp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM5MDEwMzUsImV4cCI6MjA2OTQ3NzAzNX0.Ql7mvjObHprB15JeQ-9ZQ6Z3FFpVBUzUxpSuys4m_0I`            | Supabase anon public key (Production)      |
 | `SUPABASE_SERVICE_ROLE_KEY_PROD`     | `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxybGx0Y3RteHJ0amtmcHl0aXp6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MzkwMTAzNSwiZXhwIjoyMDY5NDc3MDM1fQ.n6YBv8AH2YeRiTGQ0bfPLvXyZBfHuWz5-k5rDYGw4uI` | Supabase service role key (Production)     |
 | `JIRA_CLIENT_ID_PROD`                | `sr2AffUsK3F8rDRuKYhfUV41l642nAyS`                                                                                                                                                                                            | Atlassian OAuth client ID (Production)     |
-| `JIRA_CLIENT_SECRET_PROD`            | `<your-jira-client-secret-prod>`                                                                                                                                                | Atlassian OAuth client secret (Production) |
-| `NEXT_PUBLIC_SITE_URL_PROD`          | `https://pointfy.vercel.app`                                                                                                                                                                                                  | Site URL (robots.txt ve sitemap için)      |
+| `JIRA_CLIENT_SECRET_PROD`            | `<your-jira-client-secret-prod>`                                                                                                                                                                                              | Atlassian OAuth client secret (Production) |
+| `NEXT_PUBLIC_SITE_URL_PROD`          | `https://teamhubx.vercel.app`                                                                                                                                                                                                 | Site URL (robots.txt ve sitemap için)      |
 
 ### Opsiyonel Değişkenler (Fallback için)
 
-| Variable                   | Değer                        | Açıklama                                             |
-| -------------------------- | ---------------------------- | ---------------------------------------------------- |
-| `NEXT_PUBLIC_APP_URL_PROD` | `https://pointfy.vercel.app` | App URL (artık zorunlu değil, dinamik detection var) |
-| `JIRA_BASE_URL_PROD`       | `pointfy.atlassian.net`      | Jira base URL (fallback için)                        |
+| Variable                   | Değer                         | Açıklama                                             |
+| -------------------------- | ----------------------------- | ---------------------------------------------------- |
+| `NEXT_PUBLIC_APP_URL_PROD` | `https://teamhubx.vercel.app` | App URL (artık zorunlu değil, dinamik detection var) |
+| `JIRA_BASE_URL_PROD`       | `teamhubx.atlassian.net`      | Jira base URL (fallback için)                        |
 
 ---
 
@@ -65,18 +65,18 @@ NEXT_PUBLIC_APP_URL_TEST=http://localhost:3000
 # ============================================
 JIRA_CLIENT_ID_PROD=sr2AffUsK3F8rDRuKYhfUV41l642nAyS
 JIRA_CLIENT_SECRET_PROD=ATOAZncXgo-IMT6BV8wYWy7orxGuDAHRe262696fGh4p16QjXBxvVzDgRk7GI-f-9VojB46D242D
-NEXT_PUBLIC_APP_URL_PROD=https://pointfy.vercel.app
+NEXT_PUBLIC_APP_URL_PROD=https://teamhubx.vercel.app
 
 # ============================================
 # Jira Base URL (Opsiyonel - Fallback)
 # ============================================
-JIRA_BASE_URL=pointfy.atlassian.net
+JIRA_BASE_URL=teamhubx.atlassian.net
 
 # ============================================
 # Site URL
 # ============================================
 NEXT_PUBLIC_SITE_URL_TEST=http://localhost:3000
-NEXT_PUBLIC_SITE_URL_PROD=https://pointfy.vercel.app
+NEXT_PUBLIC_SITE_URL_PROD=https://teamhubx.vercel.app
 
 # ============================================
 # Bitbucket (Opsiyonel - Eğer kullanıyorsanız)
@@ -100,7 +100,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzd
 SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxybGx0Y3RteHJ0amtmcHl0aXp6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MzkwMTAzNSwiZXhwIjoyMDY5NDc3MDM1fQ.n6YBv8AH2YeRiTGQ0bfPLvXyZBfHuWz5-k5rDYGw4uI
 JIRA_CLIENT_ID=sr2AffUsK3F8rDRuKYhfUV41l642nAyS
 JIRA_CLIENT_SECRET=ATOAZncXgo-IMT6BV8wYWy7orxGuDAHRe262696fGh4p16QjXBxvVzDgRk7GI-f-9VojB46D242D
-NEXT_PUBLIC_SITE_URL=https://pointfy.vercel.app
+NEXT_PUBLIC_SITE_URL=https://teamhubx.vercel.app
 ```
 
 ### Local `.env.local` (Suffix'siz)
@@ -132,7 +132,7 @@ Vercel otomatik olarak şu değişkenleri sağlar (manuel set etmeyin):
 Atlassian Developer Console'da şu callback URL'leri tanımlı olmalı:
 
 - `http://localhost:3000/api/auth/jira/callback` (Local)
-- `https://pointfy.vercel.app/api/auth/jira/callback` (Production)
+- `https://teamhubx.vercel.app/api/auth/jira/callback` (Production)
 
 ### 3. Environment Detection
 
@@ -172,7 +172,7 @@ Callback URL'ler artık dinamik olarak request'ten alınır:
 ### Atlassian Developer Console
 
 - [ ] Local callback URL tanımlı: `http://localhost:3000/api/auth/jira/callback`
-- [ ] Production callback URL tanımlı: `https://pointfy.vercel.app/api/auth/jira/callback`
+- [ ] Production callback URL tanımlı: `https://teamhubx.vercel.app/api/auth/jira/callback`
 
 ---
 

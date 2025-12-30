@@ -161,7 +161,7 @@ const BoardList = memo(function BoardList({
           <button
             onClick={() => setShowCreateModal(true)}
             disabled={actionLoading}
-            className="group inline-flex min-h-[44px] items-center gap-2 rounded-md border-2 border-green-600 bg-green-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all active:border-green-700 active:bg-green-700 active:shadow-md sm:px-6 sm:py-3 hover:border-green-700 hover:bg-green-700 hover:shadow-md disabled:opacity-60 disabled:hover:shadow-sm"
+            className="group inline-flex min-h-[44px] items-center gap-2 rounded-md border-2 border-green-600 bg-green-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all active:border-green-700 active:bg-green-700 active:shadow-md sm:px-6 sm:py-3 hover:border-green-700 hover:bg-green-700 hover:shadow-md disabled:opacity-60 disabled:hover:shadow-sm dark:border-green-500 dark:bg-green-600 dark:text-white dark:hover:bg-green-700"
           >
             <Plus className="h-5 w-5 transition-transform group-hover:rotate-90" />
             Yeni Board Oluştur

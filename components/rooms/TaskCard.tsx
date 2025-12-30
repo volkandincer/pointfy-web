@@ -673,7 +673,7 @@ const TaskCard = memo(function TaskCard({
                     storyPointsInput < 0 ||
                     !hasInputChanged
                   }
-                  className="inline-flex min-h-[44px] items-center gap-2 rounded-md border-2 border-blue-600 bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all active:border-blue-700 active:bg-blue-700 active:shadow-md hover:border-blue-700 hover:bg-blue-700 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-sm"
+                  className="inline-flex min-h-[44px] items-center gap-2 rounded-md border-2 border-blue-600 bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all active:border-blue-700 active:bg-blue-700 active:shadow-md hover:border-blue-700 hover:bg-blue-700 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-sm dark:border-blue-500 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700"
                   title={
                     jiraStoryPoints !== null && jiraStoryPoints > 0
                       ? "Jira'daki Story Point'i Güncelle"

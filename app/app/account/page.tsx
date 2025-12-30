@@ -111,11 +111,11 @@ export default function AccountPage() {
           } else {
             setJiraConnected(false);
           }
-        } catch (jiraError) {
+        } catch {
           // Jira kontrol hatası
           setJiraConnected(false);
         }
-      } catch (err) {
+      } catch {
         // Account fetch error
       } finally {
         if (mounted) setLoading(false);
@@ -230,7 +230,7 @@ export default function AccountPage() {
       const supabase = getSupabase();
       await supabase.auth.signOut();
       router.replace("/");
-    } catch (err) {
+    } catch {
       // Sign out error
     }
   };
@@ -250,7 +250,7 @@ export default function AccountPage() {
         if (userData?.user?.id) {
           userId = userData.user.id;
         }
-      } catch (err) {
+      } catch {
         showToast("Kullanıcı bilgileri alınamadı. Lütfen sayfayı yenileyin.", "error");
         setShowJiraPermissionModal(false);
         return;
@@ -500,7 +500,7 @@ export default function AccountPage() {
                   </p>
                   <p className="text-xs text-gray-500 dark:text-gray-500">
                     Bu izin sayesinde Jira&apos;daki tüm projelerinizi ve size atanan görevleri
-                    Pointfy&apos;de görüntüleyebilirsiniz.
+                    TeamHubX&apos;de görüntüleyebilirsiniz.
                   </p>
                 </div>
               </div>
@@ -538,7 +538,7 @@ export default function AccountPage() {
                   </p>
                   <p className="text-xs text-gray-500 dark:text-gray-500">
                     Scrum ve Kanban board&apos;larınızı, aktif sprint&apos;lerinizi ve sprint
-                    içindeki görevleri Pointfy&apos;de görebilirsiniz.
+                    içindeki görevleri TeamHubX&apos;de görebilirsiniz.
                   </p>
                 </div>
               </div>

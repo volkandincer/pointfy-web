@@ -56,7 +56,7 @@ export default function JiraIssuesPage() {
         if (mounted && userRow?.jira_base_url) {
           setJiraBaseUrl(userRow.jira_base_url);
         }
-      } catch (err) {
+      } catch {
         // Jira base URL fetch error
       }
     }
@@ -92,12 +92,19 @@ export default function JiraIssuesPage() {
         credentials: "include",
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.error || "Failed to fetch issues");
+        let errorMessage = "Failed to fetch issues";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch {
+          // JSON parse failed, use status text
+          errorMessage = `${response.status} ${response.statusText}`;
+        }
+        throw new Error(errorMessage);
       }
 
+      const data = await response.json();
       setIssues(data.issues || []);
       setFilteredIssues(data.issues || []);
     } catch (err) {
@@ -251,7 +258,7 @@ export default function JiraIssuesPage() {
           size="sm"
           onClick={() => setShowCreateModal(true)}
           icon={Plus}
-          className="!h-10 !min-h-10 !py-2 !border-purple-600 !bg-purple-600 hover:!border-purple-700 hover:!bg-purple-700 dark:!border-purple-500 dark:!bg-purple-600 dark:hover:!border-purple-400 dark:hover:!bg-purple-500"
+          className="!h-10 !min-h-10 !py-2 !border-purple-600 !bg-purple-600 !text-white hover:!border-purple-700 hover:!bg-purple-700 dark:!border-purple-500 dark:!bg-purple-600 dark:!text-white dark:hover:!border-purple-400 dark:hover:!bg-purple-500"
         >
           Yeni Issue
         </Button>
@@ -266,7 +273,7 @@ export default function JiraIssuesPage() {
         >
           Filtrele
           {activeFiltersCount > 0 && (
-            <span className="ml-1.5 rounded-md border-2 border-purple-600 bg-purple-600 px-1.5 py-0.5 text-[10px] font-bold text-white dark:border-purple-500 dark:bg-purple-600">
+            <span className="ml-1.5 rounded-md border-2 border-purple-600 bg-purple-600 px-1.5 py-0.5 text-[10px] font-bold text-white dark:border-purple-500 dark:bg-purple-600 dark:text-white">
               {activeFiltersCount}
             </span>
           )}

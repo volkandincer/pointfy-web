@@ -60,11 +60,11 @@ const Features = memo(function Features({ features }: FeaturesProps) {
     <section id="features" className="container mx-auto px-4 py-12">
       <div className="mx-auto max-w-6xl">
         <div className="mb-8 text-center">
-          <h2 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white md:text-3xl">
+          <h2 className="mb-2 text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             Özellikler
           </h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400 md:text-base">
-            Pointfy ile takımınızı yönetmek hiç bu kadar kolay olmamıştı
+          <p className="text-sm text-muted-foreground md:text-base">
+            TeamHubX ile takımınızı yönetmek hiç bu kadar kolay olmamıştı
           </p>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -76,7 +76,7 @@ const Features = memo(function Features({ features }: FeaturesProps) {
             return (
               <div
                 key={feature.id}
-                className={`group relative flex min-h-[100px] flex-col items-center justify-center border-l-4 ${colors.border} border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 text-center shadow-sm transition-all active:border-gray-400 active:shadow-md sm:min-h-[120px] sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900`}
+                className={`group relative flex min-h-[100px] flex-col items-center justify-center border-l-4 ${colors.border} border-t-2 border-r-2 border-b-2 border-border bg-card p-3 text-center shadow-sm transition-all active:border-border active:shadow-md sm:min-h-[120px] sm:p-4 hover:border-border hover:shadow-md`}
               >
                 {/* Icon */}
                 <div className="mb-2 sm:mb-2.5">
@@ -84,12 +84,12 @@ const Features = memo(function Features({ features }: FeaturesProps) {
                 </div>
 
                 {/* Title */}
-                <h3 className="mb-1 text-xs font-semibold text-gray-900 dark:text-white sm:text-sm">
+                <h3 className="mb-1 text-xs font-semibold text-card-foreground sm:text-sm">
                   {feature.title}
                 </h3>
 
                 {/* Description */}
-                <p className="hidden text-[10px] leading-tight text-gray-600 dark:text-gray-400 sm:block sm:text-xs">
+                <p className="hidden text-[10px] leading-tight text-muted-foreground sm:block sm:text-xs">
                   {feature.description}
                 </p>
               </div>

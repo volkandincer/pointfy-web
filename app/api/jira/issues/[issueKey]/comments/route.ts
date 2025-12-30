@@ -36,11 +36,11 @@ export async function GET(
               );
               userId = payload.sub;
             }
-          } catch (error) {
+          } catch {
             // JWT decode başarısız
           }
         }
-      } catch (authError) {
+      } catch {
         // Auth error
       }
     }
@@ -183,7 +183,7 @@ export async function GET(
             apiUrl = `https://api.atlassian.com/ex/jira/${cloudId}`;
           }
         }
-      } catch (error) {
+      } catch {
         // Cloud ID fetch error
       }
     }
@@ -311,11 +311,11 @@ export async function POST(
               );
               userId = payload.sub;
             }
-          } catch (error) {
+          } catch {
             // JWT decode başarısız
           }
         }
-      } catch (authError) {
+      } catch {
         // Auth error
       }
     }
@@ -458,7 +458,7 @@ export async function POST(
             apiUrl = `https://api.atlassian.com/ex/jira/${cloudId}`;
           }
         }
-      } catch (error) {
+      } catch {
         // Cloud ID fetch error
       }
     }

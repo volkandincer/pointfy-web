@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import ScrollLockCleanup from "@/components/layout/ScrollLockCleanup";
+import ThemeScript from "@/components/layout/ThemeScript";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Pointfy - Takım İşbirliği Platformu",
+  title: "TeamHubX",
   description:
     "Poker planning, retrospektif toplantıları ve görev yönetimi ile takımınızı bir araya getirin.",
 };
@@ -25,10 +26,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="tr">
+    <html lang="tr" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <ThemeScript />
         <ScrollLockCleanup />
         {children}
       </body>

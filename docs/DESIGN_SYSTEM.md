@@ -1,4 +1,4 @@
-# Design System - Pointfy Web
+# Design System - TeamHubX Web
 
 Bu dokümantasyon, Jira modülünde uygulanan modern tasarım dilinin projenin geneline uygulanması için rehber niteliğindedir.
 

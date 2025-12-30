@@ -35,11 +35,11 @@ export async function POST(request: Request) {
               );
               userId = payload.sub;
             }
-          } catch (error) {
+          } catch {
             // JWT decode başarısız
           }
         }
-      } catch (authError) {
+      } catch {
         // Auth error
       }
     }
@@ -167,7 +167,7 @@ async function handleSetStoryPoints(
           jira_token_expires_at: expiresAt.toISOString(),
         })
         .eq("id", userId);
-    } catch (refreshError) {
+    } catch {
       // Jira token refresh error
       return NextResponse.json(
         { error: "Jira token expired and refresh failed. Please reconnect Jira." },
@@ -215,7 +215,7 @@ async function handleSetStoryPoints(
         cloudId = resources[0].id;
       }
     }
-  } catch (error) {
+  } catch {
     // CloudId alınamadı
   }
 

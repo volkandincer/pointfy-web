@@ -288,7 +288,7 @@ export default function BoardDetailPage() {
         .order("priority", { ascending: false })
         .order("created_at", { ascending: false });
       setAvailableTasks(rows || []);
-    } catch (err) {
+    } catch {
       // Error loading available tasks
       setAvailableTasks([]);
     } finally {

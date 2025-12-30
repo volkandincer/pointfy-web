@@ -36,7 +36,7 @@ export default function JiraProjectsPage() {
         if (mounted && userRow?.jira_base_url) {
           setJiraBaseUrl(userRow.jira_base_url);
         }
-      } catch (err) {
+      } catch {
         // Jira base URL fetch error
       }
     }
@@ -71,12 +71,19 @@ export default function JiraProjectsPage() {
         credentials: "include",
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.error || "Failed to fetch projects");
+        let errorMessage = "Failed to fetch projects";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch {
+          // JSON parse failed, use status text
+          errorMessage = `${response.status} ${response.statusText}`;
+        }
+        throw new Error(errorMessage);
       }
 
+      const data = await response.json();
       setProjects(data.boards || []);
       setFilteredProjects(data.boards || []);
     } catch (err) {

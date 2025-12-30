@@ -139,7 +139,7 @@ const RecentRooms = memo(function RecentRooms() {
       <div className="mx-auto max-w-6xl">
         {/* Header */}
         <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
+          <h2 className="text-xl font-bold text-foreground sm:text-2xl">
             Son Aktif Odalar
           </h2>
         </div>
@@ -149,7 +149,7 @@ const RecentRooms = memo(function RecentRooms() {
             {Array.from({ length: 4 }).map((_, idx) => (
               <div
                 key={idx}
-                className="h-24 animate-pulse border-l-4 border-l-blue-400 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm sm:h-28 sm:p-4 dark:border-l-blue-500 dark:border-gray-700 dark:bg-gray-900"
+                className="h-24 animate-pulse border-l-4 border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-card p-3 shadow-sm sm:h-28 sm:p-4"
               />
             ))}
           </div>
@@ -170,7 +170,7 @@ const RecentRooms = memo(function RecentRooms() {
                 <button
                   key={r.id}
                   onClick={() => handleRoomClick(r.id)}
-                  className={`group relative flex min-h-[100px] flex-col items-center justify-center border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 text-center shadow-sm transition-all active:border-gray-400 active:shadow-md sm:min-h-[120px] sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900`}
+                  className={`group relative flex min-h-[100px] flex-col items-center justify-center border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-border bg-card p-3 text-center shadow-sm transition-all active:border-border active:shadow-md sm:min-h-[120px] sm:p-4 hover:border-border hover:shadow-md`}
                 >
                   {/* Icon */}
                   <div className="mb-2 sm:mb-2.5">
@@ -178,17 +178,17 @@ const RecentRooms = memo(function RecentRooms() {
                   </div>
 
                   {/* Room Name */}
-                  <h3 className="mb-1 truncate w-full text-xs font-semibold text-gray-900 dark:text-white sm:text-sm">
+                  <h3 className="mb-1 truncate w-full text-xs font-semibold text-card-foreground sm:text-sm">
                     {r.name || "Oda"}
                   </h3>
 
                   {/* Room Code and Username */}
                   <div className="flex flex-col items-center gap-1">
-                    <span className="rounded-md border-2 border-gray-200 bg-white px-2 py-0.5 text-[10px] font-medium text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 sm:text-xs">
+                    <span className="rounded-md border-2 border-border bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground sm:text-xs">
                       {r.code}
                     </span>
                     {r.created_by_username && (
-                      <span className="hidden text-[10px] font-semibold text-green-600 dark:text-green-400 sm:block sm:text-xs">
+                      <span className="hidden text-[10px] font-semibold text-green-500 sm:block sm:text-xs">
                         {r.created_by_username}
                       </span>
                     )}
@@ -203,11 +203,11 @@ const RecentRooms = memo(function RecentRooms() {
               <div className="mt-4">
                 <button
                   onClick={() => setShowAllRoomsModal(true)}
-                  className="group flex w-full items-center justify-center gap-3 rounded-md border-2 border-blue-600 bg-white px-4 py-3 text-sm font-semibold text-blue-600 shadow-sm transition-all hover:border-blue-700 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md dark:border-blue-500 dark:bg-gray-900 dark:text-blue-400 dark:hover:bg-blue-900/20"
+                  className="group flex w-full items-center justify-center gap-3 rounded-md border-2 border-primary bg-card px-4 py-3 text-sm font-semibold text-primary shadow-sm transition-all hover:border-primary hover:bg-primary/10 hover:text-primary hover:shadow-md"
                 >
                   <ClipboardList className="h-5 w-5" />
                   <span>Tüm odaları gör</span>
-                  <span className="flex h-6 w-6 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-600 text-xs font-bold text-white dark:border-blue-500 dark:bg-blue-500">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-md border-2 border-primary bg-primary text-xs font-bold text-primary-foreground">
                     {(rooms?.length || 0) - 4}
                   </span>
                 </button>

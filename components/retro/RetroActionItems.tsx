@@ -357,7 +357,7 @@ const RetroActionItems = memo(function RetroActionItems({
                       </button>
                       <button
                         onClick={() => handleOpenEdit(item)}
-                        className="flex items-center gap-1.5 border-2 border-blue-600 bg-blue-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-blue-700 hover:border-blue-700"
+                        className="flex items-center gap-1.5 border-2 border-blue-600 bg-blue-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-blue-700 hover:border-blue-700 dark:border-blue-500 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700"
                         title="Düzenle"
                       >
                         <Edit className="h-4 w-4" />
@@ -365,7 +365,7 @@ const RetroActionItems = memo(function RetroActionItems({
                       </button>
                       <button
                         onClick={() => handleDeleteItem(item)}
-                        className="flex items-center gap-1.5 border-2 border-red-600 bg-red-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-red-700 hover:border-red-700"
+                        className="flex items-center gap-1.5 border-2 border-red-600 bg-red-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-red-700 hover:border-red-700 dark:border-red-500 dark:bg-red-600 dark:text-white dark:hover:bg-red-700"
                         title="Sil"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -486,7 +486,7 @@ const RetroActionItems = memo(function RetroActionItems({
                       </button>
                       <button
                         onClick={() => handleOpenEdit(item)}
-                        className="flex items-center gap-1.5 border-2 border-blue-600 bg-blue-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-blue-700 hover:border-blue-700"
+                        className="flex items-center gap-1.5 border-2 border-blue-600 bg-blue-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-blue-700 hover:border-blue-700 dark:border-blue-500 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700"
                         title="Düzenle"
                       >
                         <Edit className="h-4 w-4" />
@@ -494,7 +494,7 @@ const RetroActionItems = memo(function RetroActionItems({
                       </button>
                       <button
                         onClick={() => handleDeleteItem(item)}
-                        className="flex items-center gap-1.5 border-2 border-red-600 bg-red-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-red-700 hover:border-red-700"
+                        className="flex items-center gap-1.5 border-2 border-red-600 bg-red-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-red-700 hover:border-red-700 dark:border-red-500 dark:bg-red-600 dark:text-white dark:hover:bg-red-700"
                         title="Sil"
                       >
                         <Trash2 className="h-4 w-4" />

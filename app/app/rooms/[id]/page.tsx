@@ -211,7 +211,7 @@ export default function RoomDetailPage() {
           }
         }
         // Admin kontrolü useRoomAdmin hook'u tarafından yapılıyor
-      } catch (err) {
+      } catch {
         // Room detail fetch error
         if (mounted) {
           showToast("Oda yüklenirken bir hata oluştu.", "error");
@@ -291,7 +291,7 @@ export default function RoomDetailPage() {
           .eq("id", taskId);
         if (error) throw error;
         showToast("Task başarıyla aktif yapıldı!", "success");
-      } catch (err) {
+      } catch {
         showToast("Task aktif yapılamadı.", "error");
       }
     },

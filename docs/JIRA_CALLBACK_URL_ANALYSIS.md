@@ -4,7 +4,7 @@
 
 Jira OAuth callback URL'leri için:
 - **Local'de:** `http://localhost:3000/api/auth/jira/callback` çalışmalı
-- **Production'da:** `https://pointfy-web.vercel.app/api/auth/jira/callback` çalışmalı
+- **Production'da:** `https://teamhubx-web.vercel.app/api/auth/jira/callback` çalışmalı
 - **Atlassian Developer Console'da:** Her iki URL de tanımlı olmalı
 
 Mevcut sistem env variable'lara bağımlıydı ve her environment için ayrı değer set etmek gerekiyordu.
@@ -29,7 +29,7 @@ Request'ten otomatik olarak URL'i almak, env variable'ları fallback olarak kull
 1. **Request'ten URL Alma:**
    ```typescript
    const url = new URL(request.url);
-   const origin = url.origin; // http://localhost:3000 veya https://pointfy-web.vercel.app
+   const origin = url.origin; // http://localhost:3000 veya https://teamhubx-web.vercel.app
    ```
 
 2. **Öncelik Sırası:**
@@ -67,7 +67,7 @@ Atlassian Developer Console'da **her iki callback URL'i de** tanımlamanız gere
 2. **Callback URL** alanına şunları ekleyin:
    ```
    http://localhost:3000/api/auth/jira/callback
-   https://pointfy-web.vercel.app/api/auth/jira/callback
+   https://teamhubx-web.vercel.app/api/auth/jira/callback
    ```
    (veya custom domain kullanıyorsanız onu da ekleyin)
 
@@ -84,13 +84,13 @@ Artık **zorunlu değil** ama **fallback olarak kullanılabilir**:
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 
 # Production (Vercel)
-NEXT_PUBLIC_APP_URL=https://pointfy-web.vercel.app
+NEXT_PUBLIC_APP_URL=https://teamhubx-web.vercel.app
 ```
 
 ### Vercel Otomatik Değişkenler
 
 Vercel otomatik olarak şu değişkenleri sağlar:
-- `VERCEL_URL`: Deployment URL'i (örn: `pointfy-web-abc123.vercel.app`)
+- `VERCEL_URL`: Deployment URL'i (örn: `teamhubx-web-abc123.vercel.app`)
 - `VERCEL_ENV`: Environment (`production`, `preview`, `development`)
 
 Bu değişkenler otomatik kullanılır, manuel set etmenize gerek yok.
@@ -119,15 +119,15 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 ### Vercel Production
 ```bash
 # Vercel Environment Variables (opsiyonel)
-NEXT_PUBLIC_APP_URL=https://pointfy-web.vercel.app
+NEXT_PUBLIC_APP_URL=https://teamhubx-web.vercel.app
 
-# Çalışır: https://pointfy-web.vercel.app/api/auth/jira/callback
+# Çalışır: https://teamhubx-web.vercel.app/api/auth/jira/callback
 ```
 
 ### Vercel Preview
 ```bash
 # Otomatik: VERCEL_URL kullanılır
-# Çalışır: https://pointfy-web-abc123.vercel.app/api/auth/jira/callback
+# Çalışır: https://teamhubx-web-abc123.vercel.app/api/auth/jira/callback
 ```
 
 ### Custom Domain

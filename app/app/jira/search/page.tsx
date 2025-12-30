@@ -57,7 +57,7 @@ export default function JiraSearchPage() {
         if (mounted && userRow?.jira_base_url) {
           setJiraBaseUrl(userRow.jira_base_url);
         }
-      } catch (err) {
+      } catch {
         // Jira base URL fetch error
       }
     }
@@ -77,7 +77,7 @@ export default function JiraSearchPage() {
         const parsed = JSON.parse(stored) as SearchHistoryItem[];
         setSearchHistory(parsed.slice(0, 10)); // Max 10 items
       }
-    } catch (err) {
+    } catch {
       // Ignore localStorage errors
     }
   }, []);
@@ -93,7 +93,7 @@ export default function JiraSearchPage() {
       const updated = [newItem, ...searchHistory.filter((h) => h.jql !== jqlQuery)].slice(0, 10);
       setSearchHistory(updated);
       localStorage.setItem("jira-search-history", JSON.stringify(updated));
-    } catch (err) {
+    } catch {
       // Ignore localStorage errors
     }
   }, [searchHistory]);
@@ -141,9 +141,21 @@ export default function JiraSearchPage() {
         }),
       });
 
+      if (!response.ok) {
+        let errorMessage = "Arama başarısız oldu.";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch {
+          // JSON parse failed, use status text
+          errorMessage = `${response.status} ${response.statusText}`;
+        }
+        throw new Error(errorMessage);
+      }
+
       const data = await response.json();
 
-      if (response.ok && data.issues) {
+      if (data.issues) {
         setResults(data.issues);
         setTotalResults(data.total || data.issues.length);
         saveToHistory(queryToUse.trim(), data.total || data.issues.length);
@@ -159,7 +171,7 @@ export default function JiraSearchPage() {
       setError(errorMessage);
       setResults([]);
       setTotalResults(0);
-      showToast("Arama sırasında bir hata oluştu.", "error");
+      showToast(errorMessage, "error");
     } finally {
       setLoading(false);
     }

@@ -5,6 +5,7 @@ import { resolveEnvValue } from "@/lib/appEnvironment";
 import { jiraConfig } from "@/lib/jiraConfig";
 import type { JiraApiErrorResponse } from "@/interfaces/Jira.interface";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const isJiraApiErrorResponse = (
   value: unknown
 ): value is JiraApiErrorResponse => typeof value === "object" && value !== null;
@@ -35,11 +36,11 @@ export async function GET(request: Request) {
               );
               userId = payload.sub;
             }
-          } catch (error) {
+          } catch {
             // JWT decode başarısız
           }
         }
-      } catch (authError) {
+      } catch {
         // Auth error
       }
     }
@@ -88,10 +89,10 @@ export async function GET(request: Request) {
       jiraBaseUrl || userRow.jira_base_url || fallbackJiraBaseUrl,
       userId
     );
-  } catch (error) {
+  } catch {
     // Jira get story points API error
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Internal server error" },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
@@ -164,7 +165,7 @@ async function handleGetStoryPoints(
           jira_token_expires_at: expiresAt.toISOString(),
         })
         .eq("id", userId);
-    } catch (refreshError) {
+    } catch {
       // Jira token refresh error
       return NextResponse.json(
         { error: "Jira token expired and refresh failed. Please reconnect Jira." },
@@ -212,7 +213,7 @@ async function handleGetStoryPoints(
         cloudId = resources[0].id;
       }
     }
-  } catch (error) {
+  } catch {
     // CloudId alınamadı
   }
 

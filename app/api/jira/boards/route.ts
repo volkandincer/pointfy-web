@@ -40,7 +40,7 @@ export async function GET(request: Request) {
               );
               userId = payload.sub;
             }
-          } catch (error) {
+          } catch {
             // JWT decode başarısız
           }
         }
@@ -64,7 +64,7 @@ export async function GET(request: Request) {
               const userData = await userResponse.json();
               userId = userData.id;
             }
-          } catch (apiError) {
+          } catch {
             // Supabase API error
           }
         }
@@ -80,7 +80,7 @@ export async function GET(request: Request) {
             userId = user.id;
           }
         }
-      } catch (authError) {
+      } catch {
         // Auth error
       }
     }
@@ -127,11 +127,11 @@ export async function GET(request: Request) {
     }
 
     return await handleJiraRequestWithJiraToken(userRow, request, userId);
-  } catch (error) {
+  } catch {
     // Jira boards API error
     return NextResponse.json(
       {
-        error: error instanceof Error ? error.message : "Internal server error",
+        error: "Internal server error",
       },
       { status: 500 }
     );
@@ -234,7 +234,7 @@ async function handleJiraRequestWithJiraToken(
               jira_token_expires_at: null,
             })
             .eq("id", userId);
-        } catch (cleanupError) {
+        } catch {
           // Token cleanup error - ignore
         }
       }
@@ -282,17 +282,6 @@ async function handleJiraRequestWithJiraToken(
     );
 
     if (!accessibleResourcesResponse.ok) {
-      const errorText = await accessibleResourcesResponse.text();
-      let errorDetails = errorText;
-      try {
-        const parsed = JSON.parse(errorText);
-        if (isJiraApiErrorResponse(parsed)) {
-          errorDetails = parsed.errorMessage || parsed.message || errorText;
-        }
-      } catch {
-        // JSON parse failed
-      }
-
       // Accessible resources hatası
 
       if (accessibleResourcesResponse.status === 401) {
@@ -419,7 +408,7 @@ async function handleJiraRequestWithJiraToken(
         cloudId = resources[0].id;
       }
     }
-  } catch (error) {
+  } catch {
     // CloudId alınamadı
     // Hata durumunda fallback URL kullanılacak
   }
@@ -616,7 +605,7 @@ async function handleJiraRequestWithJiraToken(
         .from("users")
         .update({ jira_base_url: jiraBaseUrl })
         .eq("id", userId);
-    } catch (saveError) {
+    } catch {
       // Jira URL save error
     }
   }
