@@ -89,7 +89,7 @@ export default function JiraBoardsPage() {
       const data = await response.json();
       setBoards(data.boards || []);
       setFilteredBoards(data.boards || []);
-    } catch {
+    } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load boards");
     } finally {
       setLoading(false);

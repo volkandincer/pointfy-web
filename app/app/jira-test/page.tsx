@@ -105,7 +105,7 @@ export default function JiraTestPage() {
           }
           setLoading(false);
         }
-      } catch {
+      } catch (err) {
         logger.error("Jira connection check error:", err);
         if (mounted) {
           setLoading(false);
@@ -157,7 +157,7 @@ export default function JiraTestPage() {
       }
 
       setBoards(data.boards || []);
-    } catch {
+    } catch (err) {
       logger.error("Fetch boards error:", err);
       setBoardsError(err instanceof Error ? err.message : "Failed to load boards");
     } finally {
@@ -203,7 +203,7 @@ export default function JiraTestPage() {
       }
 
       setIssues(data.issues || []);
-    } catch {
+    } catch (err) {
       logger.error("Fetch issues error:", err);
       setIssuesError(err instanceof Error ? err.message : "Failed to load issues");
     } finally {
@@ -249,7 +249,7 @@ export default function JiraTestPage() {
       }
 
       setProjects(data.boards || []);
-    } catch {
+    } catch (err) {
       logger.error("Fetch projects error:", err);
       setProjectsError(err instanceof Error ? err.message : "Failed to load projects");
     } finally {
@@ -294,7 +294,7 @@ export default function JiraTestPage() {
       }
 
       setMyself(data);
-    } catch {
+    } catch (err) {
       logger.error("Fetch myself error:", err);
       setMyselfError(err instanceof Error ? err.message : "Failed to load user info");
     } finally {
@@ -393,7 +393,7 @@ export default function JiraTestPage() {
       }));
 
       setSearchResults(tasks);
-    } catch {
+    } catch (err) {
       logger.error("Search error:", err);
       setSearchError(err instanceof Error ? err.message : "Failed to search");
     } finally {
@@ -437,7 +437,7 @@ export default function JiraTestPage() {
       if (!response.ok) {
         throw new Error(data.error || "Failed to test connection");
       }
-    } catch {
+    } catch (err) {
       logger.error("Test connection error:", err);
       setTestError(err instanceof Error ? err.message : "Failed to test connection");
     } finally {
@@ -487,7 +487,7 @@ export default function JiraTestPage() {
       }
 
       setJiraBaseUrl(normalizedUrl);
-    } catch {
+    } catch (err) {
       logger.error("Save URL error:", err);
     } finally {
       setSavingUrl(false);
@@ -547,7 +547,7 @@ export default function JiraTestPage() {
                     const returnUrl = encodeURIComponent("/app/jira-test");
                     const encodedUserId = encodeURIComponent(userData.user.id);
                     window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
-                  } catch {
+                  } catch (err) {
                     logger.error("Jira OAuth error:", err);
                   }
                 }}
@@ -643,7 +643,7 @@ export default function JiraTestPage() {
                               const returnUrl = encodeURIComponent("/app/jira-test");
                               const encodedUserId = encodeURIComponent(userData.user.id);
                               window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
-                            } catch {
+                            } catch (err) {
                               logger.error("Jira OAuth error:", err);
                             }
                           }}
@@ -732,7 +732,7 @@ export default function JiraTestPage() {
                               const returnUrl = encodeURIComponent("/app/jira-test");
                               const encodedUserId = encodeURIComponent(userData.user.id);
                               window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
-                            } catch {
+                            } catch (err) {
                               logger.error("Jira OAuth error:", err);
                             }
                           }}

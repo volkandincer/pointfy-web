@@ -325,7 +325,7 @@ export async function GET(
     };
 
     return NextResponse.json({ issue: task });
-  } catch {
+  } catch (error) {
     return NextResponse.json(
       { error: formatErrorMessage(error) },
       { status: 500 }

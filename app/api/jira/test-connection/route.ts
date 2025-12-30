@@ -31,7 +31,7 @@ export async function GET(request: Request) {
               const payload = JSON.parse(Buffer.from(tokenParts[1], "base64").toString());
               userId = payload.sub;
             }
-          } catch {
+          } catch (error) {
             logger.warn("JWT decode başarısız:", error);
           }
         }
@@ -56,11 +56,11 @@ export async function GET(request: Request) {
               const userData = await userResponse.json();
               userId = userData.id;
             }
-          } catch {
+          } catch (apiError) {
             logger.error("Supabase API error:", apiError);
           }
         }
-      } catch {
+      } catch (authError) {
         logger.error("Auth error:", authError);
       }
     }
@@ -181,7 +181,7 @@ export async function GET(request: Request) {
                 : accessibleResourcesResponse.statusText
             }`,
       });
-    } catch {
+    } catch (error) {
       console.error("❌ Test 1 Error:", error);
       testResults.tests.push({
         endpoint: "Accessible Resources (OAuth 3LO)",
@@ -270,7 +270,7 @@ export async function GET(request: Request) {
           ? `Agile API erişim izni yok: ${responseJson?.errorMessage || "Forbidden"}`
           : `Beklenmeyen hata: ${responseJson?.errorMessage || boardResponse.statusText}`,
       });
-    } catch {
+    } catch (error) {
       console.error("❌ Test 2 Error:", error);
       testResults.tests.push({
         endpoint: "/rest/agile/1.0/board",
@@ -313,7 +313,7 @@ export async function GET(request: Request) {
     });
 
     return NextResponse.json(finalResult);
-  } catch {
+  } catch (error) {
     console.error("Jira connection test error:", error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Internal server error" },

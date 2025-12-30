@@ -263,7 +263,7 @@ export async function POST(request: Request) {
         url: issueUrl,
       },
     });
-  } catch {
+  } catch (error) {
     return NextResponse.json(
       { error: formatErrorMessage(error) },
       { status: 500 }

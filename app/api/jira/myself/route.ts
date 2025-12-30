@@ -149,7 +149,7 @@ export async function GET(request: Request) {
 
     const data = await response.json();
     return NextResponse.json(data);
-  } catch {
+  } catch (error) {
     // Jira myself API error
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Internal server error" },

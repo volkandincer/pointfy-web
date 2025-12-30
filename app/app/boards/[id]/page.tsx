@@ -262,7 +262,7 @@ export default function BoardDetailPage() {
 
         setShowTaskModal(false);
         showToast("Task başarıyla eklendi!", "success");
-      } catch {
+      } catch (err) {
         // Task oluşturma hatası
         showToast(formatErrorMessage(err), "error");
       } finally {
@@ -328,7 +328,7 @@ export default function BoardDetailPage() {
 
         setShowAddTaskModal(false);
         showToast("Task board'a eklendi!", "success");
-      } catch {
+      } catch (err) {
         showToast(formatErrorMessage(err), "error");
       } finally {
         setActionLoading(false);
@@ -447,7 +447,7 @@ export default function BoardDetailPage() {
           
           showToast("Jira task board'a eklendi!", "success");
         }
-      } catch {
+      } catch (err) {
         showToast(formatErrorMessage(err), "error");
       } finally {
         setActionLoading(false);
@@ -486,7 +486,7 @@ export default function BoardDetailPage() {
         setShowTaskModal(false);
         setEditingTask(null);
         showToast("Task başarıyla güncellendi!", "success");
-      } catch {
+      } catch (err) {
         // Task güncelleme hatası
         showToast(formatErrorMessage(err), "error");
       } finally {
@@ -510,7 +510,7 @@ export default function BoardDetailPage() {
         setTasks((prev) => prev.filter((t) => t.id !== taskId));
 
         showToast("Task başarıyla silindi!", "success");
-      } catch {
+      } catch (err) {
         // Task silme hatası
         showToast(formatErrorMessage(err), "error");
       }
@@ -561,7 +561,7 @@ export default function BoardDetailPage() {
         }
         setShowNoteModal(false);
         setEditingNote(null);
-      } catch {
+      } catch (err) {
         // Not ekleme/güncelleme hatası
         showToast(formatErrorMessage(err), "error");
       }
@@ -574,7 +574,7 @@ export default function BoardDetailPage() {
       try {
         await removeNote(noteId);
         showToast("Not başarıyla silindi!", "success");
-      } catch {
+      } catch (err) {
         showToast(formatErrorMessage(err), "error");
       }
     },
@@ -588,7 +588,7 @@ export default function BoardDetailPage() {
         await updateBoard(id, input);
         setShowEditBoardModal(false);
         showToast("Board başarıyla güncellendi!", "success");
-      } catch {
+      } catch (err) {
         // Board güncelleme hatası
         showToast(formatErrorMessage(err), "error");
       } finally {
@@ -1118,7 +1118,7 @@ export default function BoardDetailPage() {
                       url: task.url,
                     });
                     setShowJiraTaskSelector(false);
-                  } catch {
+                  } catch (error) {
                     console.error("JiraTaskSelector: Error adding task", error);
                   }
                 }}

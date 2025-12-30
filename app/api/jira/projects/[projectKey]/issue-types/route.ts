@@ -189,7 +189,7 @@ export async function GET(
       }));
 
     return NextResponse.json({ issueTypes });
-  } catch {
+  } catch (error) {
     return NextResponse.json(
       { error: formatErrorMessage(error) },
       { status: 500 }
