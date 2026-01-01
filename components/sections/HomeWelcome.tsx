@@ -240,17 +240,17 @@ const HomeWelcome = memo(function HomeWelcome() {
               <div className="absolute z-50 mt-2 w-full rounded-md border-2 border-gray-300 bg-white shadow-md dark:border-gray-700 dark:bg-gray-900">
                 {loading ? (
                   <div className="p-4 text-center">
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <p className="text-sm text-muted-foreground">
                       Aranıyor...
                     </p>
                   </div>
                 ) : rooms.length === 0 ? (
                   <div className="p-6 text-center">
                     <Search className="mx-auto mb-2 h-8 w-8 text-gray-400 dark:text-gray-500" />
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white">
                       Sonuç bulunamadı
                     </p>
-                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    <p className="mt-1 text-xs text-muted-foreground">
                       &quot;{searchQuery}&quot; için oda bulunamadı
                     </p>
                   </div>
@@ -287,7 +287,7 @@ const HomeWelcome = memo(function HomeWelcome() {
                               <Home className={`h-6 w-6 ${iconTextColor}`} />
                             </div>
                             <div className="min-w-0 flex-1">
-                              <h3 className="mb-1 truncate text-base font-semibold text-gray-900 dark:text-white">
+                              <h3 className="mb-1 truncate text-sm font-semibold text-gray-900 dark:text-white sm:text-base">
                                 {room.name || "Oda"}
                               </h3>
                               <div className="flex items-center gap-2">

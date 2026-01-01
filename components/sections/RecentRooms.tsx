@@ -138,10 +138,13 @@ const RecentRooms = memo(function RecentRooms() {
     <section className="container mx-auto px-4 py-8">
       <div className="mx-auto max-w-6xl">
         {/* Header */}
-        <div className="mb-6">
-          <h2 className="text-xl font-bold text-foreground sm:text-2xl">
+        <div className="mb-3 sm:mb-4">
+          <h2 className="mb-0.5 text-lg font-bold tracking-tight text-foreground sm:text-xl md:text-2xl">
             Son Aktif Odalar
           </h2>
+          <p className="text-xs text-muted-foreground sm:text-sm">
+            Aktif odalara hızlıca erişin
+          </p>
         </div>
 
         {loading ? (

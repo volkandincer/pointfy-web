@@ -60,10 +60,10 @@ const Features = memo(function Features({ features }: FeaturesProps) {
     <section id="features" className="container mx-auto px-4 py-12">
       <div className="mx-auto max-w-6xl">
         <div className="mb-8 text-center">
-          <h2 className="mb-2 text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+          <h2 className="mb-2 text-lg font-bold tracking-tight text-foreground sm:text-xl md:text-2xl">
             Özellikler
           </h2>
-          <p className="text-sm text-muted-foreground md:text-base">
+          <p className="text-xs text-muted-foreground sm:text-sm">
             TeamHubX ile takımınızı yönetmek hiç bu kadar kolay olmamıştı
           </p>
         </div>

@@ -145,24 +145,56 @@ const PersonalTaskList = memo(function PersonalTaskList({
     }
   }, [router, onEdit]);
 
-  // Kategori renklerini al (filtrelerdeki renklerle aynı)
-  const getCategoryColor = (category: string) => {
-    const colors: Record<string, { border: string; bg: string; borderDark: string; bgDark: string }> = {
-      general: { border: "#2563eb", bg: "#dbeafe", borderDark: "#3b82f6", bgDark: "rgba(30, 64, 175, 0.2)" }, // blue
-      work: { border: "#16a34a", bg: "#dcfce7", borderDark: "#22c55e", bgDark: "rgba(20, 83, 45, 0.2)" }, // green
-      personal: { border: "#db2777", bg: "#fce7f3", borderDark: "#ec4899", bgDark: "rgba(190, 24, 93, 0.2)" }, // pink
-      meeting: { border: "#4f46e5", bg: "#e0e7ff", borderDark: "#6366f1", bgDark: "rgba(55, 48, 163, 0.2)" }, // indigo
-      project: { border: "#0891b2", bg: "#cffafe", borderDark: "#06b6d4", bgDark: "rgba(8, 145, 178, 0.2)" }, // cyan
+  // Kategori renklerini al (theme-aware Tailwind classes)
+  const getCategoryColorClasses = (category: string) => {
+    const colors: Record<string, { border: string; bg: string; text: string }> = {
+      general: { 
+        border: "border-l-blue-600 dark:border-l-blue-500", 
+        bg: "bg-blue-50 dark:bg-blue-950/30", 
+        text: "text-blue-700 dark:text-blue-400" 
+      },
+      work: { 
+        border: "border-l-green-600 dark:border-l-green-500", 
+        bg: "bg-green-50 dark:bg-green-950/30", 
+        text: "text-green-700 dark:text-green-400" 
+      },
+      personal: { 
+        border: "border-l-pink-600 dark:border-l-pink-500", 
+        bg: "bg-pink-50 dark:bg-pink-950/30", 
+        text: "text-pink-700 dark:text-pink-400" 
+      },
+      meeting: { 
+        border: "border-l-indigo-600 dark:border-l-indigo-500", 
+        bg: "bg-indigo-50 dark:bg-indigo-950/30", 
+        text: "text-indigo-700 dark:text-indigo-400" 
+      },
+      project: { 
+        border: "border-l-cyan-600 dark:border-l-cyan-500", 
+        bg: "bg-cyan-50 dark:bg-cyan-950/30", 
+        text: "text-cyan-700 dark:text-cyan-400" 
+      },
     };
     return colors[category] || colors.general;
   };
 
-  // Priority renklerini al (filtrelerdeki renklerle aynı)
-  const getPriorityColor = (priority: number) => {
-    const colors: Record<number, { border: string; bg: string; borderDark: string; bgDark: string }> = {
-      3: { border: "#dc2626", bg: "#fee2e2", borderDark: "#ef4444", bgDark: "rgba(220, 38, 38, 0.2)" }, // red - Yüksek
-      2: { border: "#eab308", bg: "#fef9c3", borderDark: "#facc15", bgDark: "rgba(234, 179, 8, 0.2)" }, // yellow - Orta
-      1: { border: "#4b5563", bg: "#f3f4f6", borderDark: "#6b7280", bgDark: "rgba(75, 85, 99, 0.2)" }, // gray - Düşük
+  // Priority renklerini al (theme-aware Tailwind classes)
+  const getPriorityColorClasses = (priority: number) => {
+    const colors: Record<number, { border: string; bg: string; text: string }> = {
+      3: { 
+        border: "border-red-600 dark:border-red-500", 
+        bg: "bg-red-100 dark:bg-red-950/40", 
+        text: "text-red-700 dark:text-red-400" 
+      },
+      2: { 
+        border: "border-yellow-600 dark:border-yellow-500", 
+        bg: "bg-yellow-100 dark:bg-yellow-950/40", 
+        text: "text-yellow-700 dark:text-yellow-400" 
+      },
+      1: { 
+        border: "border-gray-500 dark:border-gray-500", 
+        bg: "bg-gray-100 dark:bg-gray-800", 
+        text: "text-gray-700 dark:text-gray-300" 
+      },
     };
     return colors[priority] || colors[1];
   };
@@ -174,30 +206,18 @@ const PersonalTaskList = memo(function PersonalTaskList({
         const hasJiraIssue = !!t.jira_issue_key && !!t.jira_issue_url;
         const jiraTask = t.jira_issue_key ? jiraTasks[t.jira_issue_key] : null;
         
-        // Renk belirleme: Önce Jira, sonra kategori, sonra priority
-        let cardColor;
-        if (hasJiraIssue) {
-          cardColor = { border: "#a855f7", bg: "#faf5ff", borderDark: "#9333ea", bgDark: "rgba(168, 85, 247, 0.2)" }; // purple
-        } else {
-          const categoryColor = getCategoryColor(t.category);
-          cardColor = categoryColor;
-        }
+        // Renk belirleme: Önce Jira, sonra kategori
+        const categoryColors = getCategoryColorClasses(t.category);
+        const cardClasses = hasJiraIssue
+          ? "border-l-purple-600 dark:border-l-purple-500 bg-purple-50 dark:bg-purple-950/30"
+          : `${categoryColors.border} ${categoryColors.bg}`;
         
         return (
           <div
             key={t.id}
             onClick={() => handleCardClick(t)}
-            className="group relative flex flex-col border-l-4 p-3 shadow-sm transition-all active:shadow-md sm:p-4 hover:shadow-md cursor-pointer"
-            style={{
-              borderLeftColor: cardColor.border,
-              backgroundColor: cardColor.bg,
-            }}
+            className={`group relative flex flex-col border-l-4 p-3 shadow-sm transition-all active:shadow-md sm:p-4 hover:shadow-md cursor-pointer ${cardClasses}`}
           >
-            {/* Dark mode background overlay */}
-            <div 
-              className="pointer-events-none absolute inset-0 opacity-0 dark:opacity-100 transition-opacity" 
-              style={{ backgroundColor: cardColor.bgDark }} 
-            />
             {/* Header */}
             <div className="relative mb-3 flex items-start justify-between gap-2">
               <h3 className="flex-1 text-base font-bold text-gray-900 dark:text-white sm:text-lg">
@@ -210,10 +230,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
                   </span>
                 )}
                 <span
-                  className={`rounded-md border-2 px-2 py-0.5 text-xs font-semibold ${priorityInfo.bg} ${priorityInfo.text}`}
-                  style={{
-                    borderColor: t.priority === 3 ? '#dc2626' : t.priority === 2 ? '#2563eb' : '#6b7280',
-                  }}
+                  className={`rounded-md border-2 px-2 py-0.5 text-xs font-semibold ${getPriorityColorClasses(t.priority ?? 1).border} ${getPriorityColorClasses(t.priority ?? 1).bg} ${getPriorityColorClasses(t.priority ?? 1).text}`}
                 >
                   {priorityInfo.label}
                 </span>
@@ -261,12 +278,11 @@ const PersonalTaskList = memo(function PersonalTaskList({
             {/* Info - Minimal */}
             <div className="relative mb-3 flex flex-wrap items-center gap-2">
               <span
-                className="rounded-md border-2 px-2 py-0.5 text-xs font-medium shadow-sm"
-                style={{
-                  borderColor: hasJiraIssue ? "#a855f7" : getCategoryColor(t.category).border,
-                  backgroundColor: hasJiraIssue ? "#faf5ff" : getCategoryColor(t.category).bg,
-                  color: hasJiraIssue ? "#9333ea" : getCategoryColor(t.category).border,
-                }}
+                className={`rounded-md border-2 px-2 py-0.5 text-xs font-medium shadow-sm ${
+                  hasJiraIssue
+                    ? "border-purple-600 bg-purple-100 text-purple-700 dark:border-purple-500 dark:bg-purple-950/40 dark:text-purple-400"
+                    : `${categoryColors.border.replace("border-l-", "border-")} ${categoryColors.bg} ${categoryColors.text}`
+                }`}
               >
                 {getCategoryLabel(t.category)}
               </span>
@@ -280,10 +296,21 @@ const PersonalTaskList = memo(function PersonalTaskList({
 
             {/* Actions */}
             <div
-              className="relative mt-auto flex items-center gap-2 border-t-2 pt-3"
-              style={{
-                borderTopColor: hasJiraIssue ? "rgba(168, 85, 247, 0.3)" : `${cardColor.border}40`,
-              }}
+              className={`relative mt-auto flex items-center gap-2 border-t-2 pt-3 ${
+                hasJiraIssue
+                  ? "border-purple-200 dark:border-purple-900/50"
+                  : t.category === "general"
+                  ? "border-blue-200 dark:border-blue-900/50"
+                  : t.category === "work"
+                  ? "border-green-200 dark:border-green-900/50"
+                  : t.category === "personal"
+                  ? "border-pink-200 dark:border-pink-900/50"
+                  : t.category === "meeting"
+                  ? "border-indigo-200 dark:border-indigo-900/50"
+                  : t.category === "project"
+                  ? "border-cyan-200 dark:border-cyan-900/50"
+                  : "border-gray-200 dark:border-gray-800"
+              }`}
             >
               {hasJiraIssue ? (
                 <a
