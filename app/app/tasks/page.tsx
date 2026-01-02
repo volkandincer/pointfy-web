@@ -5,6 +5,7 @@ import { Plus, ClipboardList, AlertCircle, CheckCircle2, Link2, Folder, RefreshC
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Button from "@/components/ui/Button";
+import SectionHeader from "@/components/ui/SectionHeader";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type {
@@ -243,16 +244,12 @@ export default function PersonalTasksPage() {
         <main className="container mx-auto px-4 py-16">
           <div className="mx-auto max-w-5xl">
             <div className="mb-6">
-              <div className="mb-6 flex items-center justify-between">
-                <div>
-                  <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
-                    Kişisel Task&apos;larım
-                  </h1>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Oda açarken kullanmak üzere task&apos;larını yönet
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
+              <div className="mb-6 flex items-start justify-between gap-4">
+                <SectionHeader
+                  title="Kişisel Task'larım"
+                  description="Oda açarken kullanmak üzere task'larını yönet"
+                />
+                <div className="flex shrink-0 items-center gap-2">
                   {jiraBaseUrl && (
                     <Button
                       onClick={handleSyncJira}
@@ -295,26 +292,26 @@ export default function PersonalTasksPage() {
                     <ClipboardList className="h-4 w-4 text-orange-600 dark:text-orange-400 sm:h-5 sm:w-5" />
                   </div>
                   <div className="text-center">
-                    <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.totalTasks}</div>
-                    <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Toplam</div>
+                    <div className="text-base font-bold text-card-foreground sm:text-lg">{stats.totalTasks}</div>
+                    <div className="text-[10px] font-medium text-muted-foreground sm:text-xs">Toplam</div>
                   </div>
                 </button>
 
                 {stats.highPriority > 0 && (
                   <button
                     onClick={() => setFilterType(filterType === 3 ? null : 3)}
-                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                    className={`group flex flex-col items-center gap-1.5 border-2 bg-card p-2.5 shadow-sm transition-all active:border-border active:shadow-md sm:p-3 hover:border-border hover:shadow-md ${
                       filterType === 3
                         ? "border-red-600 dark:border-red-500"
-                        : "border-gray-300 dark:border-gray-700"
+                        : "border-border"
                     }`}
                   >
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-red-600 bg-red-50 dark:bg-red-900/20 sm:h-10 sm:w-10">
                       <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400 sm:h-5 sm:w-5" />
                     </div>
                     <div className="text-center">
-                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.highPriority}</div>
-                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Yüksek</div>
+                      <div className="text-base font-bold text-card-foreground sm:text-lg">{stats.highPriority}</div>
+                      <div className="text-[10px] font-medium text-muted-foreground sm:text-xs">Yüksek</div>
                     </div>
                   </button>
                 )}
@@ -322,18 +319,18 @@ export default function PersonalTasksPage() {
                 {stats.mediumPriority > 0 && (
                   <button
                     onClick={() => setFilterType(filterType === 2 ? null : 2)}
-                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                    className={`group flex flex-col items-center gap-1.5 border-2 bg-card p-2.5 shadow-sm transition-all active:border-border active:shadow-md sm:p-3 hover:border-border hover:shadow-md ${
                       filterType === 2
                         ? "border-yellow-600 dark:border-yellow-500"
-                        : "border-gray-300 dark:border-gray-700"
+                        : "border-border"
                     }`}
                   >
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-yellow-600 bg-yellow-50 dark:bg-yellow-900/20 sm:h-10 sm:w-10">
                       <AlertCircle className="h-4 w-4 text-yellow-600 dark:text-yellow-400 sm:h-5 sm:w-5" />
                     </div>
                     <div className="text-center">
-                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.mediumPriority}</div>
-                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Orta</div>
+                      <div className="text-base font-bold text-card-foreground sm:text-lg">{stats.mediumPriority}</div>
+                      <div className="text-[10px] font-medium text-muted-foreground sm:text-xs">Orta</div>
                     </div>
                   </button>
                 )}
@@ -341,18 +338,18 @@ export default function PersonalTasksPage() {
                 {stats.lowPriority > 0 && (
                   <button
                     onClick={() => setFilterType(filterType === 1 ? null : 1)}
-                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                    className={`group flex flex-col items-center gap-1.5 border-2 bg-card p-2.5 shadow-sm transition-all active:border-border active:shadow-md sm:p-3 hover:border-border hover:shadow-md ${
                       filterType === 1
                         ? "border-gray-600 dark:border-gray-500"
-                        : "border-gray-300 dark:border-gray-700"
+                        : "border-border"
                     }`}
                   >
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-gray-600 bg-gray-50 dark:bg-gray-800 sm:h-10 sm:w-10">
-                      <CheckCircle2 className="h-4 w-4 text-gray-600 dark:text-gray-400 sm:h-5 sm:w-5" />
-                    </div>
-                    <div className="text-center">
-                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.lowPriority}</div>
-                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Düşük</div>
+                      <CheckCircle2 className="h-4 w-4 text-muted-foreground sm:h-5 sm:w-5" />
+                      </div>
+                      <div className="text-center">
+                      <div className="text-base font-bold text-card-foreground sm:text-lg">{stats.lowPriority}</div>
+                      <div className="text-[10px] font-medium text-muted-foreground sm:text-xs">Düşük</div>
                     </div>
                   </button>
                 )}
@@ -360,18 +357,18 @@ export default function PersonalTasksPage() {
                 {stats.jiraTasks > 0 && (
                   <button
                     onClick={() => setFilterType(filterType === "jira" ? null : "jira")}
-                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                    className={`group flex flex-col items-center gap-1.5 border-2 bg-card p-2.5 shadow-sm transition-all active:border-border active:shadow-md sm:p-3 hover:border-border hover:shadow-md ${
                       filterType === "jira"
                         ? "border-purple-600 dark:border-purple-500"
-                        : "border-gray-300 dark:border-gray-700"
+                        : "border-border"
                     }`}
                   >
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20 sm:h-10 sm:w-10">
                       <Link2 className="h-4 w-4 text-purple-600 dark:text-purple-400 sm:h-5 sm:w-5" />
                     </div>
                     <div className="text-center">
-                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.jiraTasks}</div>
-                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Jira&apos;da</div>
+                      <div className="text-base font-bold text-card-foreground sm:text-lg">{stats.jiraTasks}</div>
+                      <div className="text-[10px] font-medium text-muted-foreground sm:text-xs">Jira&apos;da</div>
                     </div>
                   </button>
                 )}
@@ -390,8 +387,8 @@ export default function PersonalTasksPage() {
                       <Folder className="h-4 w-4 text-blue-600 dark:text-blue-400 sm:h-5 sm:w-5" />
                     </div>
                     <div className="text-center">
-                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.generalCategory}</div>
-                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Genel</div>
+                      <div className="text-base font-bold text-card-foreground sm:text-lg">{stats.generalCategory}</div>
+                      <div className="text-[10px] font-medium text-muted-foreground sm:text-xs">Genel</div>
                     </div>
                   </button>
                 )}
@@ -399,18 +396,18 @@ export default function PersonalTasksPage() {
                 {stats.workCategory > 0 && (
                   <button
                     onClick={() => setFilterType(filterType === "work" ? null : "work")}
-                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                    className={`group flex flex-col items-center gap-1.5 border-2 bg-card p-2.5 shadow-sm transition-all active:border-border active:shadow-md sm:p-3 hover:border-border hover:shadow-md ${
                       filterType === "work"
                         ? "border-green-600 dark:border-green-500"
-                        : "border-gray-300 dark:border-gray-700"
+                        : "border-border"
                     }`}
                   >
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20 sm:h-10 sm:w-10">
                       <Folder className="h-4 w-4 text-green-600 dark:text-green-400 sm:h-5 sm:w-5" />
                     </div>
                     <div className="text-center">
-                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.workCategory}</div>
-                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">İş</div>
+                      <div className="text-base font-bold text-card-foreground sm:text-lg">{stats.workCategory}</div>
+                      <div className="text-[10px] font-medium text-muted-foreground sm:text-xs">İş</div>
                     </div>
                   </button>
                 )}
@@ -418,18 +415,18 @@ export default function PersonalTasksPage() {
                 {stats.personalCategory > 0 && (
                   <button
                     onClick={() => setFilterType(filterType === "personal" ? null : "personal")}
-                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                    className={`group flex flex-col items-center gap-1.5 border-2 bg-card p-2.5 shadow-sm transition-all active:border-border active:shadow-md sm:p-3 hover:border-border hover:shadow-md ${
                       filterType === "personal"
                         ? "border-pink-600 dark:border-pink-500"
-                        : "border-gray-300 dark:border-gray-700"
+                        : "border-border"
                     }`}
                   >
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-pink-600 bg-pink-50 dark:bg-pink-900/20 sm:h-10 sm:w-10">
                       <Folder className="h-4 w-4 text-pink-600 dark:text-pink-400 sm:h-5 sm:w-5" />
                     </div>
                     <div className="text-center">
-                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.personalCategory}</div>
-                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Kişisel</div>
+                      <div className="text-base font-bold text-card-foreground sm:text-lg">{stats.personalCategory}</div>
+                      <div className="text-[10px] font-medium text-muted-foreground sm:text-xs">Kişisel</div>
                     </div>
                   </button>
                 )}
@@ -447,8 +444,8 @@ export default function PersonalTasksPage() {
                       <Folder className="h-4 w-4 text-indigo-600 dark:text-indigo-400 sm:h-5 sm:w-5" />
                     </div>
                     <div className="text-center">
-                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.meetingCategory}</div>
-                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Toplantı</div>
+                      <div className="text-base font-bold text-card-foreground sm:text-lg">{stats.meetingCategory}</div>
+                      <div className="text-[10px] font-medium text-muted-foreground sm:text-xs">Toplantı</div>
                     </div>
                   </button>
                 )}
@@ -466,8 +463,8 @@ export default function PersonalTasksPage() {
                       <Folder className="h-4 w-4 text-cyan-600 dark:text-cyan-400 sm:h-5 sm:w-5" />
                     </div>
                     <div className="text-center">
-                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{stats.projectCategory}</div>
-                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Proje</div>
+                      <div className="text-base font-bold text-card-foreground sm:text-lg">{stats.projectCategory}</div>
+                      <div className="text-[10px] font-medium text-muted-foreground sm:text-xs">Proje</div>
                     </div>
                   </button>
                 )}

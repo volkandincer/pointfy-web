@@ -18,10 +18,10 @@ export default function AboutPage() {
       <Header navigationItems={navigationItems} />
       <main className="container mx-auto px-4 py-16">
         <div className="mx-auto max-w-3xl">
-          <h1 className="mb-4 text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="mb-4 text-3xl font-bold text-card-foreground">
             Hakkında
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-muted-foreground">
             TeamHubX, ekiplerin planlama, geri bildirim ve görev yönetimi
             süreçlerini tek bir yerde toplamasına yardımcı olan modern bir takım
             işbirliği platformudur.

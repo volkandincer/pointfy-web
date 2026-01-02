@@ -66,18 +66,18 @@ const FilterDropdown = memo(function FilterDropdown({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex min-h-[44px] w-full items-center justify-between gap-2 rounded-md border-2 border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition-all active:border-blue-500 active:bg-gray-50 hover:border-blue-400 hover:bg-gray-50 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:active:border-blue-500 dark:active:bg-gray-700 dark:hover:border-blue-500 dark:hover:bg-gray-700"
+        className="flex min-h-[44px] w-full items-center justify-between gap-2 rounded-md border-2 border-input bg-input px-4 py-3 text-sm font-medium text-card-foreground transition-all active:border-primary active:bg-accent hover:border-primary hover:bg-accent focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
       >
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">
+          <span className="text-xs font-semibold text-muted-foreground">
             {label}:
           </span>
-          <span className={value === "all" ? "text-gray-500 dark:text-gray-400" : "text-gray-900 dark:text-white"}>
+          <span className={value === "all" ? "text-muted-foreground" : "text-card-foreground"}>
             {displayLabel}
           </span>
         </div>
         <ChevronDown
-          className={`h-4 w-4 text-gray-400 transition-transform ${
+          className={`h-4 w-4 text-muted-foreground transition-transform ${
             isOpen ? "rotate-180" : ""
           }`}
         />
@@ -95,7 +95,7 @@ const FilterDropdown = memo(function FilterDropdown({
             }}
           />
           <div 
-            className="absolute z-[50] mt-1 w-full rounded-md border-2 border-gray-300 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800"
+            className="absolute z-[50] mt-1 w-full rounded-md border-2 border-border bg-card shadow-lg"
             onTouchStart={(e) => {
               // Dropdown içindeki touch event'lerini sayfa scroll'undan ayır
               e.stopPropagation();
@@ -120,22 +120,22 @@ const FilterDropdown = memo(function FilterDropdown({
                     onChange(option.value);
                     setIsOpen(false);
                   }}
-                  className={`flex min-h-[44px] w-full items-center justify-between px-4 py-3 text-left text-sm transition-colors active:bg-gray-100 dark:active:bg-gray-600 ${
+                  className={`flex min-h-[44px] w-full items-center justify-between px-4 py-3 text-left text-sm transition-colors active:bg-accent ${
                     value === option.value
-                      ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
-                      : "text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
+                      ? "bg-primary/10 text-primary"
+                      : "text-card-foreground hover:bg-accent"
                   }`}
                 >
                   <div className="flex items-center gap-2">
                     <span>{option.label}</span>
                     {option.count !== undefined && (
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                      <span className="text-xs text-muted-foreground">
                         ({option.count})
                       </span>
                     )}
                   </div>
                   {value === option.value && (
-                    <Check className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                    <Check className="h-4 w-4 text-primary" />
                   )}
                 </button>
               ))}

@@ -39,7 +39,7 @@ const RoomPinModal = memo(function RoomPinModal({
   return (
     <Modal open={open} title="PIN Gerekli" onClose={handleClose}>
       <div className="space-y-4">
-        <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+        <p className="text-center text-sm text-muted-foreground">
           Bu oda özel. Katılmak için 4 karakterli PIN girin.
         </p>
 
@@ -59,27 +59,27 @@ const RoomPinModal = memo(function RoomPinModal({
                 handleSubmit();
               }
             }}
-            className={`flex-1 rounded-md border-2 px-4 py-3 text-center text-lg font-semibold tracking-widest outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-800 dark:text-white ${
+            className={`flex-1 rounded-md border-2 px-4 py-3 text-center text-lg font-semibold tracking-widest outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 bg-input text-card-foreground ${
               pinInput.length > 0 && pinInput.length !== 4
-                ? "border-red-300 bg-red-50 dark:border-red-700 dark:bg-red-900/20"
-                : "border-gray-300 bg-white dark:border-gray-700"
+                ? "border-destructive/50 bg-destructive/10"
+                : "border-input"
             }`}
           />
           <button
             type="button"
             onClick={() => setShowPin((v) => !v)}
-            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md border-2 border-gray-300 bg-white transition hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md border-2 border-border bg-card transition hover:border-accent hover:bg-accent"
             disabled={loading}
           >
             {showPin ? (
-              <EyeOff className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+              <EyeOff className="h-5 w-5 text-muted-foreground" />
             ) : (
-              <Eye className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+              <Eye className="h-5 w-5 text-muted-foreground" />
             )}
           </button>
         </div>
 
-        <p className="text-center text-xs text-gray-500 dark:text-gray-400">
+        <p className="text-center text-xs text-muted-foreground">
           {pinInput.length}/4 karakter
         </p>
 

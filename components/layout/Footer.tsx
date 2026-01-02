@@ -49,7 +49,7 @@ const Footer = memo(function Footer({ navigationItems }: FooterProps) {
               <li>
                 <Link
                   href="/legal/privacy"
-                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+                  className="text-sm text-muted-foreground transition-colors hover:text-card-foreground"
                 >
                   Gizlilik Politikası
                 </Link>
@@ -57,7 +57,7 @@ const Footer = memo(function Footer({ navigationItems }: FooterProps) {
               <li>
                 <Link
                   href="/legal/terms"
-                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+                  className="text-sm text-muted-foreground transition-colors hover:text-card-foreground"
                 >
                   Kullanım Şartları
                 </Link>
@@ -65,7 +65,7 @@ const Footer = memo(function Footer({ navigationItems }: FooterProps) {
               <li>
                 <Link
                   href="/legal/cookies"
-                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+                  className="text-sm text-muted-foreground transition-colors hover:text-card-foreground"
                 >
                   Çerez Politikası
                 </Link>
@@ -73,7 +73,7 @@ const Footer = memo(function Footer({ navigationItems }: FooterProps) {
               <li>
                 <Link
                   href="/legal/third-party"
-                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+                  className="text-sm text-muted-foreground transition-colors hover:text-card-foreground"
                 >
                   Üçüncü Taraf Hizmetler
                 </Link>

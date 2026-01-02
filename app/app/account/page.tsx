@@ -7,6 +7,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
+import SectionHeader from "@/components/ui/SectionHeader";
 import { useToastContext } from "@/contexts/ToastContext";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
@@ -316,14 +317,10 @@ export default function AccountPage() {
         <Header navigationItems={navigationItems} />
         <main className="container mx-auto px-4 py-16">
           <div className="mx-auto max-w-3xl">
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                Hesabım
-              </h1>
-              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                Profil bilgilerinizi yönetin
-              </p>
-            </div>
+            <SectionHeader
+              title="Hesabım"
+              description="Profil bilgilerinizi yönetin"
+            />
 
             {/* Error mesajı (OAuth callback'ten döndükten sonra) */}
             {errorMessage && (
@@ -340,30 +337,31 @@ export default function AccountPage() {
             )}
 
             {/* Profil Bilgileri */}
-            <div className="mb-6 rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
-              <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+            <div className="group relative mb-6 overflow-hidden rounded-lg border-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md sm:p-5">
+              <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-2xl transition-all group-hover:scale-150" />
+              <h2 className="relative mb-4 text-lg font-semibold text-card-foreground">
                 Profil Bilgileri
               </h2>
               <div className="space-y-4">
                 {/* Email */}
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label className="mb-1 block text-sm font-medium text-card-foreground">
                     E-posta
                   </label>
                   <input
                     type="email"
                     value={email}
                     disabled
-                    className="w-full border-2 border-gray-300 bg-gray-50 px-3 py-2 text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
+                    className="w-full border-2 border-border bg-muted px-3 py-2 text-muted-foreground"
                   />
-                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                  <p className="mt-1 text-xs text-muted-foreground">
                     E-posta adresi değiştirilemez
                   </p>
                 </div>
 
                 {/* Username */}
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label className="mb-1 block text-sm font-medium text-card-foreground">
                     Kullanıcı Adı
                   </label>
                   {editingUsername ? (
@@ -374,7 +372,7 @@ export default function AccountPage() {
                         onChange={(e) => setNewUsername(e.target.value)}
                         placeholder="Kullanıcı adı"
                         maxLength={50}
-                        className="flex-1 rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-cyan-600 focus:ring-2 focus:ring-cyan-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-cyan-500"
+                        className="flex-1 rounded-md border-2 border-border bg-background px-3 py-2 text-foreground outline-none transition focus:border-cyan-600 focus:ring-2 focus:ring-cyan-600/20"
                         disabled={saving}
                       />
                       <Button
@@ -393,7 +391,7 @@ export default function AccountPage() {
                           setEditingUsername(false);
                         }}
                         disabled={saving}
-                        className="rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                        className="rounded-md border-2 border-border bg-card px-3 py-2 text-sm font-semibold text-card-foreground transition-colors hover:bg-accent hover:border-border"
                       >
                         İptal
                       </button>
@@ -404,11 +402,11 @@ export default function AccountPage() {
                         type="text"
                         value={username}
                         disabled
-                        className="flex-1 border-2 border-gray-300 bg-gray-50 px-3 py-2 text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
+                        className="flex-1 border-2 border-border bg-muted px-3 py-2 text-muted-foreground"
                       />
                       <button
                         onClick={() => setEditingUsername(true)}
-                        className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                        className="rounded-md border-2 border-border bg-card px-4 py-2 text-sm font-semibold text-card-foreground transition-colors hover:bg-accent hover:border-border"
                       >
                         Düzenle
                       </button>
@@ -419,25 +417,26 @@ export default function AccountPage() {
             </div>
 
             {/* Jira Bağlantısı */}
-            <div className="mb-6 rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
-              <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+            <div className="group relative mb-6 overflow-hidden rounded-lg border-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md sm:p-5">
+              <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-2xl transition-all group-hover:scale-150" />
+              <h2 className="relative mb-4 text-lg font-semibold text-card-foreground">
                 Jira Bağlantısı
               </h2>
-              <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+              <p className="relative mb-4 text-sm text-muted-foreground">
                 Jira hesabınızı bağlayın.
               </p>
               {jiraConnected ? (
-                <div className="space-y-3">
+                <div className="relative space-y-3">
                   <button
                     disabled
-                    className="flex w-full items-center justify-center gap-3 border-2 border-green-600 bg-green-50 px-4 py-2.5 text-sm font-semibold text-green-700 dark:bg-green-900/20 dark:text-green-400"
+                    className="flex w-full items-center justify-center gap-3 rounded-lg border-2 border-green-600 bg-green-50 px-4 py-2.5 text-sm font-semibold text-green-700 dark:bg-green-900/20 dark:text-green-400"
                   >
                     <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
                     Jira Bağlı
                   </button>
                   <button
                     onClick={handleDisconnectJira}
-                    className="w-full rounded-md border-2 border-red-600 bg-white px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50 hover:border-red-700 dark:bg-gray-800 dark:text-red-500 dark:hover:bg-red-900/20"
+                    className="w-full rounded-lg border-2 border-destructive bg-card px-4 py-2 text-sm font-semibold text-destructive transition-colors hover:bg-destructive/10 hover:border-destructive"
                   >
                     Bağlantıyı Kopar
                   </button>
@@ -445,7 +444,7 @@ export default function AccountPage() {
               ) : (
                 <button
                   onClick={handleConnectJira}
-                  className="flex w-full items-center justify-center gap-3 rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                  className="relative flex w-full items-center justify-center gap-3 rounded-lg border-2 border-primary bg-card px-4 py-2.5 text-sm font-semibold text-primary transition-all duration-200 hover:bg-primary/10 hover:border-primary"
                 >
                   <Link2 className="h-5 w-5" />
                   Jira Bağla
@@ -454,14 +453,15 @@ export default function AccountPage() {
             </div>
 
             {/* Çıkış Yap */}
-            <div className="border-2 border-red-300 bg-red-50 p-6 shadow-sm dark:border-red-700 dark:bg-red-900/10">
-              <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+            <div className="group relative overflow-hidden rounded-lg border-2 border-destructive/30 bg-destructive/5 p-6 shadow-md">
+              <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-destructive/10 to-destructive/5 blur-2xl transition-all group-hover:scale-150" />
+              <h2 className="relative mb-2 text-lg font-semibold text-card-foreground">
                 Hesap İşlemleri
               </h2>
 
               <button
                 onClick={handleSignOut}
-                className="border-2 border-red-600 bg-red-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-red-700 hover:border-red-700"
+                className="relative border-2 border-destructive bg-destructive px-4 py-2 text-sm font-semibold text-destructive-foreground transition-all duration-200 hover:bg-destructive/90 hover:border-destructive"
               >
                 Çıkış Yap
               </button>
@@ -491,14 +491,14 @@ export default function AccountPage() {
                   <span className="text-xs font-semibold">1</span>
                 </div>
                 <div className="flex-1">
-                  <h4 className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">
+                  <h4 className="mb-1 text-sm font-semibold text-card-foreground">
                     Jira Verilerini Okuma
                   </h4>
-                  <p className="mb-1 text-xs text-gray-600 dark:text-gray-400">
+                  <p className="mb-1 text-xs text-muted-foreground">
                     <strong>Ne için:</strong> Projelerinizi, issue&apos;larınızı ve board&apos;larınızı
                     görüntüleyebilmek için
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-500">
+                  <p className="text-xs text-muted-foreground">
                     Bu izin sayesinde Jira&apos;daki tüm projelerinizi ve size atanan görevleri
                     TeamHubX&apos;de görüntüleyebilirsiniz.
                   </p>
@@ -510,14 +510,14 @@ export default function AccountPage() {
                   <span className="text-xs font-semibold">2</span>
                 </div>
                 <div className="flex-1">
-                  <h4 className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">
+                  <h4 className="mb-1 text-sm font-semibold text-card-foreground">
                     Jira Verilerini Güncelleme
                   </h4>
-                  <p className="mb-1 text-xs text-gray-600 dark:text-gray-400">
+                  <p className="mb-1 text-xs text-muted-foreground">
                     <strong>Ne için:</strong> Poker planning sonuçlarını Jira&apos;daki issue&apos;lara
                     story point olarak kaydedebilmek için
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-500">
+                  <p className="text-xs text-muted-foreground">
                     Takımınızla yaptığınız oylamaların sonuçlarını otomatik olarak Jira&apos;daki
                     ilgili issue&apos;lara aktarabiliriz.
                   </p>
@@ -529,14 +529,14 @@ export default function AccountPage() {
                   <span className="text-xs font-semibold">3</span>
                 </div>
                 <div className="flex-1">
-                  <h4 className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">
+                  <h4 className="mb-1 text-sm font-semibold text-card-foreground">
                     Board ve Sprint Erişimi
                   </h4>
-                  <p className="mb-1 text-xs text-gray-600 dark:text-gray-400">
+                  <p className="mb-1 text-xs text-muted-foreground">
                     <strong>Ne için:</strong> Agile board&apos;larınızı ve sprint&apos;lerinizi
                     görüntüleyebilmek için
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-500">
+                  <p className="text-xs text-muted-foreground">
                     Scrum ve Kanban board&apos;larınızı, aktif sprint&apos;lerinizi ve sprint
                     içindeki görevleri TeamHubX&apos;de görebilirsiniz.
                   </p>
@@ -548,13 +548,13 @@ export default function AccountPage() {
                   <span className="text-xs font-semibold">✓</span>
                 </div>
                 <div className="flex-1">
-                  <h4 className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">
+                  <h4 className="mb-1 text-sm font-semibold text-card-foreground">
                     Otomatik Yenileme
                   </h4>
-                  <p className="mb-1 text-xs text-gray-600 dark:text-gray-400">
+                  <p className="mb-1 text-xs text-muted-foreground">
                     <strong>Ne için:</strong> Bağlantınızın sürekli aktif kalması için
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-500">
+                  <p className="text-xs text-muted-foreground">
                     Her seferinde yeniden bağlanmanıza gerek kalmadan, bağlantınız otomatik olarak
                     yenilenir ve kesintisiz çalışır.
                 </p>
@@ -573,7 +573,7 @@ export default function AccountPage() {
             <div className="flex gap-3">
               <button
                 onClick={() => setShowJiraPermissionModal(false)}
-                className="flex-1 rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                className="flex-1 rounded-md border-2 border-border bg-card px-4 py-2.5 text-sm font-semibold text-card-foreground transition-colors hover:bg-accent hover:border-border"
               >
                 İptal
               </button>

@@ -25,7 +25,6 @@ const jiraIconMap: Record<string, typeof BarChart3> = {
 const JiraSection = memo(function JiraSection({
   jiraConnected,
   userId,
-  jiraBaseUrl,
 }: JiraSectionProps) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [showPermissionModal, setShowPermissionModal] = useState<boolean>(false);
@@ -92,7 +91,7 @@ const JiraSection = memo(function JiraSection({
     }
 
     return actions;
-  }, [jiraConnected, userId]);
+  }, [jiraConnected]);
 
   return (
     <section className="container mx-auto px-4 py-8">
@@ -100,7 +99,7 @@ const JiraSection = memo(function JiraSection({
         {/* Ana Kategori Başlığı - Accordion Header */}
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="group mb-4 flex w-full items-center justify-between rounded-md border-2 border-blue-600 bg-white p-5 text-left transition-all hover:border-blue-700 hover:shadow-md dark:bg-gray-900"
+          className="group mb-4 flex w-full items-center justify-between rounded-md border-2 border-blue-600 bg-card p-5 text-left transition-all hover:border-blue-700 hover:shadow-md"
         >
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
@@ -110,7 +109,7 @@ const JiraSection = memo(function JiraSection({
               <h2 className="text-xl font-bold tracking-tight text-foreground md:text-2xl">
                 Jira
               </h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-muted-foreground">
                 {jiraConnected
                   ? "Jira projelerinizi ve issue'larınızı yönetin"
                   : "Jira hesabınızı bağlayarak başlayın"}
@@ -119,7 +118,7 @@ const JiraSection = memo(function JiraSection({
           </div>
           <div className="flex-shrink-0">
             <ChevronDown
-              className={`h-6 w-6 text-gray-500 transition-transform duration-200 dark:text-gray-400 ${
+              className={`h-6 w-6 text-muted-foreground transition-transform duration-200 ${
                 isExpanded ? "rotate-180" : ""
               }`}
             />
@@ -128,14 +127,14 @@ const JiraSection = memo(function JiraSection({
 
         {/* Alt Menü - Accordion Content */}
         {isExpanded && (
-          <div className="mb-4 rounded-md border-2 border-blue-600 bg-white p-4 dark:bg-gray-900">
+          <div className="mb-4 rounded-md border-2 border-blue-600 bg-card p-4">
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {jiraActions.map((action) =>
                 action.onClick ? (
                   <button
                     key={action.id}
                     onClick={action.onClick}
-                    className="group relative block w-full border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
+                    className="group relative block w-full border-l-4 border-t-2 border-r-2 border-b-2 border-border bg-card p-4 text-left shadow-sm transition-all hover:border-primary hover:shadow-md"
                     style={{
                       borderLeftColor: '#2563eb',
                     }}
@@ -153,7 +152,7 @@ const JiraSection = memo(function JiraSection({
                         {action.title}
                       </h3>
                     </div>
-                    <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                    <p className="text-sm leading-relaxed text-muted-foreground">
                       {action.description}
                     </p>
                   </button>
@@ -161,7 +160,7 @@ const JiraSection = memo(function JiraSection({
                   <Link
                     key={action.id}
                     href={action.href}
-                    className="group relative block w-full border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
+                    className="group relative block w-full border-l-4 border-t-2 border-r-2 border-b-2 border-border bg-card p-4 text-left shadow-sm transition-all hover:border-primary hover:shadow-md"
                     style={{
                       borderLeftColor: '#2563eb',
                     }}
@@ -179,7 +178,7 @@ const JiraSection = memo(function JiraSection({
                         {action.title}
                       </h3>
                     </div>
-                    <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                    <p className="text-sm leading-relaxed text-muted-foreground">
                       {action.description}
                     </p>
                   </Link>
@@ -205,7 +204,7 @@ const JiraSection = memo(function JiraSection({
             </p>
           </div>
 
-          <div className="space-y-3 border-2 border-gray-300 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
+          <div className="space-y-3 border-2 border-border bg-muted/50 p-4">
             <div className="flex items-start gap-3">
               <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center border-2 border-blue-600 bg-blue-50 text-blue-600 dark:border-blue-500 dark:bg-blue-900/30 dark:text-blue-400">
                 <span className="text-xs font-semibold">1</span>
@@ -214,11 +213,11 @@ const JiraSection = memo(function JiraSection({
                 <h4 className="mb-1 text-sm font-semibold text-foreground">
                   Jira Verilerini Okuma
                 </h4>
-                <p className="mb-1 text-xs text-gray-600 dark:text-gray-400">
+                <p className="mb-1 text-xs text-muted-foreground">
                   <strong>Ne için:</strong> Projelerinizi, issue&apos;larınızı ve board&apos;larınızı
                   görüntüleyebilmek için
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   Bu izin sayesinde Jira&apos;daki tüm projelerinizi ve size atanan görevleri
                   TeamHubX&apos;de görüntüleyebilirsiniz.
                 </p>
@@ -233,11 +232,11 @@ const JiraSection = memo(function JiraSection({
                 <h4 className="mb-1 text-sm font-semibold text-foreground">
                   Jira Verilerini Güncelleme
                 </h4>
-                <p className="mb-1 text-xs text-gray-600 dark:text-gray-400">
+                <p className="mb-1 text-xs text-muted-foreground">
                   <strong>Ne için:</strong> Poker planning sonuçlarını Jira&apos;daki issue&apos;lara
                   story point olarak kaydedebilmek için
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   Takımınızla yaptığınız oylamaların sonuçlarını otomatik olarak Jira&apos;daki
                   ilgili issue&apos;lara aktarabiliriz.
                 </p>
@@ -252,11 +251,11 @@ const JiraSection = memo(function JiraSection({
                 <h4 className="mb-1 text-sm font-semibold text-foreground">
                   Board ve Sprint Erişimi
                 </h4>
-                <p className="mb-1 text-xs text-gray-600 dark:text-gray-400">
+                <p className="mb-1 text-xs text-muted-foreground">
                   <strong>Ne için:</strong> Agile board&apos;larınızı ve sprint&apos;lerinizi
                   görüntüleyebilmek için
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   Scrum ve Kanban board&apos;larınızı, aktif sprint&apos;lerinizi ve sprint
                   içindeki görevleri TeamHubX&apos;de görebilirsiniz.
                 </p>
@@ -271,10 +270,10 @@ const JiraSection = memo(function JiraSection({
                 <h4 className="mb-1 text-sm font-semibold text-foreground">
                   Otomatik Yenileme
                 </h4>
-                <p className="mb-1 text-xs text-gray-600 dark:text-gray-400">
+                <p className="mb-1 text-xs text-muted-foreground">
                   <strong>Ne için:</strong> Bağlantınızın sürekli aktif kalması için
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   Her seferinde yeniden bağlanmanıza gerek kalmadan, bağlantınız otomatik olarak
                   yenilenir ve kesintisiz çalışır.
                 </p>
@@ -305,7 +304,7 @@ const JiraSection = memo(function JiraSection({
                   const returnUrl = encodeURIComponent("/");
                   const encodedUserId = encodeURIComponent(userId);
                   window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
-                } catch (err) {
+                } catch {
                   // Jira OAuth error
                 }
               }}

@@ -20,56 +20,56 @@ export default function CookiesPage() {
         <div className="mx-auto max-w-4xl">
           {/* Header Section */}
           <div className="mb-8 text-center">
-            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
-              <Cookie className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-md border-2 border-primary bg-primary/10">
+              <Cookie className="h-8 w-8 text-primary" />
             </div>
-            <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+            <h1 className="mb-2 text-3xl font-bold text-card-foreground sm:text-4xl">
               Çerez Politikası
             </h1>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-muted-foreground">
               Hangi çerezleri kullandığımızı ve bunları nasıl yönetebileceğinizi öğrenin.
             </p>
           </div>
 
           {/* Content Card */}
-          <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:p-8">
+          <div className="rounded-md border-2 border-border bg-card p-6 shadow-sm sm:p-8">
             <div className="prose prose-gray max-w-none dark:prose-invert">
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               <strong>Son Güncelleme:</strong> {new Date().toLocaleDateString("tr-TR", { year: "numeric", month: "long", day: "numeric" })}
             </p>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               TeamHubX web sitesi, hizmetlerimizi iyileştirmek ve size daha iyi
               bir deneyim sunmak için çerezler kullanmaktadır. Bu politika,
               hangi çerezleri kullandığımızı ve bunları nasıl yönetebileceğinizi
               açıklamaktadır.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-2xl font-semibold text-card-foreground">
               1. Çerez Nedir?
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               Çerezler, web sitelerinin tarayıcınıza kaydettiği küçük metin
               dosyalarıdır. Bu dosyalar, sitenin daha sonraki ziyaretlerinizde
               sizi tanımasını, tercihlerinizi hatırlamasını ve site deneyiminizi
               iyileştirmesini sağlar.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-2xl font-semibold text-card-foreground">
               2. Kullandığımız Çerez Türleri
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               TeamHubX, aşağıdaki türde çerezler kullanmaktadır:
             </p>
 
-            <h3 className="mt-6 text-xl font-semibold text-gray-900 dark:text-white">
+            <h3 className="mt-6 text-xl font-semibold text-card-foreground">
               2.1. Gerekli Çerezler
             </h3>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               Bu çerezler, sitenin temel işlevleri için zorunludur ve sitenin
               çalışması için gereklidir. Bu çerezler olmadan sitenin bazı
               özellikleri çalışmayabilir.
             </p>
-            <ul className="mb-4 ml-6 list-disc text-gray-600 dark:text-gray-400">
+            <ul className="mb-4 ml-6 list-disc text-muted-foreground">
               <li>
                 <strong>Kimlik Doğrulama Çerezleri:</strong> Giriş yapmış
                 kullanıcıları tanımak için
@@ -84,14 +84,14 @@ export default function CookiesPage() {
               </li>
             </ul>
 
-            <h3 className="mt-6 text-xl font-semibold text-gray-900 dark:text-white">
+            <h3 className="mt-6 text-xl font-semibold text-card-foreground">
               2.2. İşlevsellik Çerezleri
             </h3>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               Bu çerezler, tercihlerinizi hatırlamak ve size kişiselleştirilmiş
               bir deneyim sunmak için kullanılır.
             </p>
-            <ul className="mb-4 ml-6 list-disc text-gray-600 dark:text-gray-400">
+            <ul className="mb-4 ml-6 list-disc text-muted-foreground">
               <li>
                 <strong>Dil Tercihi:</strong> Seçtiğiniz dil tercihini hatırlamak
                 için
@@ -106,15 +106,15 @@ export default function CookiesPage() {
               </li>
             </ul>
 
-            <h3 className="mt-6 text-xl font-semibold text-gray-900 dark:text-white">
+            <h3 className="mt-6 text-xl font-semibold text-card-foreground">
               2.3. Analitik Çerezler
             </h3>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               Bu çerezler, site kullanımını anlamak ve hizmetlerimizi
               iyileştirmek için kullanılır. Bu çerezler anonim veri toplar ve
               kişisel bilgi içermez.
             </p>
-            <ul className="mb-4 ml-6 list-disc text-gray-600 dark:text-gray-400">
+            <ul className="mb-4 ml-6 list-disc text-muted-foreground">
               <li>
                 <strong>Kullanım İstatistikleri:</strong> Sayfa görüntüleme,
                 ziyaret süresi vb.
@@ -128,13 +128,13 @@ export default function CookiesPage() {
               </li>
             </ul>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-2xl font-semibold text-card-foreground">
               3. Çerez Saklama Süreleri
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               Çerezler, saklama sürelerine göre iki kategoriye ayrılır:
             </p>
-            <ul className="mb-4 ml-6 list-disc text-gray-600 dark:text-gray-400">
+            <ul className="mb-4 ml-6 list-disc text-muted-foreground">
               <li>
                 <strong>Oturum Çerezleri:</strong> Tarayıcınızı kapattığınızda
                 otomatik olarak silinir
@@ -145,34 +145,34 @@ export default function CookiesPage() {
               </li>
             </ul>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-2xl font-semibold text-card-foreground">
               4. Üçüncü Taraf Çerezler
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               Hizmetlerimiz, üçüncü taraf hizmet sağlayıcıların çerezlerini
               içerebilir. Bu çerezler, ilgili hizmet sağlayıcının gizlilik
               politikasına tabidir. Daha fazla bilgi için{" "}
               <a
                 href="/legal/third-party"
-                className="text-blue-600 underline dark:text-blue-400"
+                className="text-primary underline"
               >
                 Üçüncü Taraf Hizmetler
               </a>{" "}
               sayfasını ziyaret edebilirsiniz.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-2xl font-semibold text-card-foreground">
               5. Çerez Yönetimi
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               Tarayıcı ayarlarınızdan çerezleri yönetebilir veya
               engelleyebilirsiniz. Ancak bazı çerezleri devre dışı bırakmak,
               sitenin bazı özelliklerinin çalışmamasına neden olabilir.
             </p>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               Popüler tarayıcılarda çerez ayarlarına nasıl erişeceğiniz:
             </p>
-            <ul className="mb-4 ml-6 list-disc text-gray-600 dark:text-gray-400">
+            <ul className="mb-4 ml-6 list-disc text-muted-foreground">
               <li>
                 <strong>Chrome:</strong> Ayarlar → Gizlilik ve güvenlik →
                 Çerezler ve diğer site verileri
@@ -190,33 +190,33 @@ export default function CookiesPage() {
               </li>
             </ul>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-2xl font-semibold text-card-foreground">
               6. Çerez Onayı
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               Gerekli çerezler dışındaki çerezler için onayınızı alırız. İlk
               ziyaretinizde veya çerez tercihlerinizi değiştirdiğinizde çerez
               onay ekranı görüntülenir.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-2xl font-semibold text-card-foreground">
               7. Çerez Politikası Değişiklikleri
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               Bu çerez politikasını zaman zaman güncelleyebiliriz. Önemli
               değişiklikler kullanıcılara bildirilecektir. Güncel politika
               her zaman bu sayfada yayınlanmaktadır.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-2xl font-semibold text-card-foreground">
               8. İletişim
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               Çerez politikamız hakkında sorularınız için bizimle iletişime
               geçebilirsiniz. İletişim bilgileri için{" "}
               <a
                 href="/contact"
-                className="text-blue-600 underline dark:text-blue-400"
+                className="text-primary underline"
               >
                 İletişim
               </a>{" "}

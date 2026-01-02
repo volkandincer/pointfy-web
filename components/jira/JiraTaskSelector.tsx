@@ -7,7 +7,7 @@ import type { JiraBoard, JiraTask, JiraAdfDocument, JiraAdfNode } from "@/interf
 import type { JiraTaskSelectorProps } from "@/interfaces/JiraTaskSelection.interface";
 import { getStatusColorClasses, getPriorityColorClasses } from "@/lib/jira/colors";
 import FilterDropdown from "@/components/jira/FilterDropdown";
-import EmptyState from "@/components/jira/EmptyState";
+import EmptyState from "@/components/ui/EmptyState";
 
 const JiraTaskSelector = memo(function JiraTaskSelector({
   onTaskSelect,
@@ -108,7 +108,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
                 setSelectedProjectKey(lastBoard.location.projectKey);
               }
             }
-          } catch (storageError) {
+          } catch {
             // LocalStorage read error
           }
         }
@@ -327,7 +327,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
       if (selectedBoardId) {
         try {
           localStorage.setItem(STORAGE_KEY, selectedBoardId.toString());
-        } catch (storageError) {
+        } catch {
           // LocalStorage write error
         }
       }
@@ -347,13 +347,13 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
 
       {/* Board Selection */}
       <div>
-        <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label className="mb-2 block text-sm font-medium text-card-foreground">
           Board Seçin
         </label>
         {loadingBoards ? (
           <div className="py-4 text-center">
             <div className="inline-block h-5 w-5 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
-            <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+            <p className="mt-2 text-xs text-muted-foreground">
               Board&apos;lar yükleniyor...
             </p>
           </div>
@@ -385,13 +385,13 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
               if (boardId) {
                 try {
                   localStorage.setItem(STORAGE_KEY, boardId.toString());
-                } catch (storageError) {
+                } catch {
                   // LocalStorage write error
                 }
               } else {
                 try {
                   localStorage.removeItem(STORAGE_KEY);
-                } catch (storageError) {
+                } catch {
                   // LocalStorage remove error
                 }
               }
@@ -405,11 +405,11 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
       {selectedBoardId && (
         <div>
           <div className="mb-2 flex items-center justify-between">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="block text-sm font-medium text-card-foreground">
               Issue Seçin
             </label>
             {issues.length > 0 && (
-              <span className="text-xs text-gray-500 dark:text-gray-400">
+              <span className="text-xs text-muted-foreground">
                 {filteredIssues.length} / {issues.length} issue
               </span>
             )}
@@ -418,13 +418,13 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
           {/* Search */}
           {issues.length > 5 && (
             <div className="mb-3 relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Issue ara..."
-                className="w-full rounded-md border-2 border-gray-300 bg-white pl-10 pr-3 py-2 text-sm text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                className="w-full rounded-md border-2 border-border bg-background pl-10 pr-3 py-2 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
           )}
@@ -432,7 +432,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
           {loadingIssues ? (
             <div className="py-8 text-center">
               <div className="inline-block h-5 w-5 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
-              <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+              <p className="mt-2 text-xs text-muted-foreground">
                 Issue&apos;lar yükleniyor...
               </p>
             </div>
@@ -461,11 +461,11 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
                       {issue.status}
                     </span>
                   </div>
-                  <h4 className="mb-1 font-semibold text-gray-900 dark:text-white">
+                  <h4 className="mb-1 font-semibold text-card-foreground">
                     {issue.summary}
                   </h4>
                   {issue.description && (
-                    <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">
+                    <p className="text-xs text-muted-foreground line-clamp-2">
                       {issue.description}
                     </p>
                   )}
@@ -493,7 +493,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
         <button
           type="button"
           onClick={onCancel}
-          className="inline-flex h-10 items-center justify-center rounded-md border-2 border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+          className="inline-flex h-10 items-center justify-center rounded-md border-2 border-border bg-card px-4 text-sm font-semibold text-card-foreground hover:bg-accent"
         >
           İptal
         </button>

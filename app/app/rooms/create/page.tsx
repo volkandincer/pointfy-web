@@ -2,10 +2,11 @@
 
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Home } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CreateRoomForm from "@/components/rooms/CreateRoomForm";
+import Card from "@/components/ui/Card";
+import SectionHeader from "@/components/ui/SectionHeader";
 import { useToastContext } from "@/contexts/ToastContext";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
@@ -133,24 +134,21 @@ function CreateRoomPageContent() {
   return (
     <>
       <Header navigationItems={navigationItems} />
-      <main className="min-h-screen bg-white dark:bg-gray-900">
+      <main className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-12">
           <div className="mx-auto max-w-3xl">
-            <div className="mb-10">
-              <h1 className="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-                Yeni Oda Oluştur
-              </h1>
-              <p className="text-base text-gray-600 dark:text-gray-400">
-                Takımınızla birlikte çalışmak için bir oda oluşturun
-              </p>
-            </div>
-            <div className="rounded-md border-2 border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900 sm:p-8">
+            <SectionHeader
+              title="Yeni Oda Oluştur"
+              description="Takımınızla birlikte çalışmak için bir oda oluşturun"
+              className="mb-10"
+            />
+            <Card padding="lg" glowEffect={true}>
               <CreateRoomForm
                 onSubmit={handleCreate}
                 loading={loading}
                 initialRoomType={roomTypeFromQuery || undefined}
               />
-            </div>
+            </Card>
           </div>
         </div>
       </main>
@@ -165,7 +163,7 @@ export default function CreateRoomPage() {
       <>
         <Header navigationItems={getDefaultNavigationItems()} />
         <main className="container mx-auto px-4 py-16">
-          <div className="h-40 animate-pulse border-2 border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
+          <div className="h-40 animate-pulse rounded-lg border-2 border-border bg-muted" />
         </main>
         <Footer navigationItems={getDefaultNavigationItems()} />
       </>

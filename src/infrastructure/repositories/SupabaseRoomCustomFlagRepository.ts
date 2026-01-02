@@ -107,7 +107,7 @@ export class SupabaseRoomCustomFlagRepository implements IRoomCustomFlagReposito
               created_at: string;
             });
             onInsert(flag);
-          } catch (err) {
+          } catch {
             // Ignore invalid data
           }
         } else if (payload.eventType === "DELETE" && payload.old) {

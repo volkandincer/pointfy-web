@@ -101,29 +101,29 @@ const PersonalTaskModal = memo(function PersonalTaskModal({
     >
       <div className="space-y-3 sm:space-y-4">
         <div>
-          <label className="mb-1.5 block text-sm font-semibold text-gray-900 dark:text-white">
+          <label className="mb-1.5 block text-sm font-semibold text-card-foreground">
             Task Başlığı <span className="text-red-600 dark:text-red-400">*</span>
           </label>
           <input
             placeholder="Task başlığı..."
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 outline-none transition focus:border-orange-600 focus:ring-2 focus:ring-orange-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-orange-500"
+            className="w-full rounded-md border-2 border-border bg-card px-4 py-2.5 text-sm text-card-foreground placeholder-muted-foreground outline-none transition focus:border-orange-600 focus:ring-2 focus:ring-orange-600/20 dark:focus:border-orange-500"
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-sm font-semibold text-gray-900 dark:text-white">
-            Açıklama <span className="text-xs font-normal text-gray-500 dark:text-gray-400">(İsteğe Bağlı)</span>
+          <label className="mb-1.5 block text-sm font-semibold text-card-foreground">
+            Açıklama <span className="text-xs font-normal text-muted-foreground">(İsteğe Bağlı)</span>
           </label>
           <input
             placeholder="Açıklama..."
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 outline-none transition focus:border-orange-600 focus:ring-2 focus:ring-orange-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-orange-500"
+            className="w-full rounded-md border-2 border-border bg-card px-4 py-2.5 text-sm text-card-foreground placeholder-muted-foreground outline-none transition focus:border-orange-600 focus:ring-2 focus:ring-orange-600/20 dark:focus:border-orange-500"
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-sm font-semibold text-gray-900 dark:text-white">
+          <label className="mb-1.5 block text-sm font-semibold text-card-foreground">
             Kategori
           </label>
           <div className="flex flex-wrap gap-2">
@@ -135,7 +135,7 @@ const PersonalTaskModal = memo(function PersonalTaskModal({
                 className={`rounded-md border-2 px-3 py-1.5 text-xs font-semibold transition-all ${
                   category === c.value
                     ? "border-orange-600 bg-orange-600 text-white shadow-sm dark:border-orange-500 dark:bg-orange-600"
-                    : "border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:bg-gray-700"
+                    : "border-border bg-card text-muted-foreground hover:border-accent hover:bg-accent"
                 }`}
               >
                 {c.label}
@@ -144,7 +144,7 @@ const PersonalTaskModal = memo(function PersonalTaskModal({
           </div>
         </div>
         <div>
-          <label className="mb-1.5 block text-sm font-semibold text-gray-900 dark:text-white">
+          <label className="mb-1.5 block text-sm font-semibold text-card-foreground">
             Öncelik
           </label>
           <div className="flex flex-wrap gap-2">
@@ -156,7 +156,7 @@ const PersonalTaskModal = memo(function PersonalTaskModal({
                 className={`rounded-md border-2 px-3 py-1.5 text-xs font-semibold transition-all ${
                   priority === p.key
                     ? "border-orange-600 bg-orange-600 text-white shadow-sm dark:border-orange-500 dark:bg-orange-600"
-                    : "border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:bg-gray-700"
+                    : "border-border bg-card text-muted-foreground hover:border-accent hover:bg-accent"
                 }`}
               >
                 {p.label}

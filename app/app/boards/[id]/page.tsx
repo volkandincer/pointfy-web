@@ -2,8 +2,18 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Edit, Plus, ClipboardList, ListPlus, AlertCircle, CheckCircle2, Link2, Folder } from "lucide-react";
+import {
+  Edit,
+  Plus,
+  ClipboardList,
+  ListPlus,
+  AlertCircle,
+  CheckCircle2,
+  Link2,
+  Folder,
+} from "lucide-react";
 import Button from "@/components/ui/Button";
+import SectionHeader from "@/components/ui/SectionHeader";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import PersonalTaskList from "@/components/tasks/PersonalTaskList";
@@ -17,7 +27,10 @@ import Modal from "@/components/ui/Modal";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type { Board, BoardInput } from "@/interfaces/Board.interface";
-import type { PersonalTask, PersonalTaskInput } from "@/interfaces/PersonalTask.interface";
+import type {
+  PersonalTask,
+  PersonalTaskInput,
+} from "@/interfaces/PersonalTask.interface";
 import type { Note, NoteInput } from "@/interfaces/Note.interface";
 import { getSupabase } from "@/lib/supabase";
 import { useBoards } from "@/hooks/useBoards";
@@ -47,15 +60,19 @@ export default function BoardDetailPage() {
   const [showEditBoardModal, setShowEditBoardModal] = useState<boolean>(false);
   const [showAddTaskModal, setShowAddTaskModal] = useState<boolean>(false);
   const [availableTasks, setAvailableTasks] = useState<PersonalTask[]>([]);
-  const [loadingAvailableTasks, setLoadingAvailableTasks] = useState<boolean>(false);
+  const [loadingAvailableTasks, setLoadingAvailableTasks] =
+    useState<boolean>(false);
   const [editingTask, setEditingTask] = useState<PersonalTask | null>(null);
   const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [actionLoading, setActionLoading] = useState<boolean>(false);
-  const [filterType, setFilterType] = useState<number | "jira" | string | null>(null);
+  const [filterType, setFilterType] = useState<number | "jira" | string | null>(
+    null
+  );
   const [jiraBaseUrl, setJiraBaseUrl] = useState<string | null>(null);
   const [jiraConnected, setJiraConnected] = useState<boolean>(false);
   const [showJiraPrompt, setShowJiraPrompt] = useState<boolean>(false);
-  const [showJiraTaskSelector, setShowJiraTaskSelector] = useState<boolean>(false);
+  const [showJiraTaskSelector, setShowJiraTaskSelector] =
+    useState<boolean>(false);
 
   // Board'ı bul ve yeni oluşturulmuşsa Jira prompt'u göster
   useEffect(() => {
@@ -63,18 +80,23 @@ export default function BoardDetailPage() {
     if (foundBoard) {
       setBoard(foundBoard);
       setLoading(false);
-      
+
       // URL'den "new" parametresini kontrol et (board yeni oluşturulmuşsa)
       if (typeof window !== "undefined") {
         const urlParams = new URLSearchParams(window.location.search);
         const isNewBoard = urlParams.get("new") === "true";
-        
+
         // Jira bağlıysa ve yeni board ise prompt göster
-        if (isNewBoard && jiraConnected && !showJiraPrompt && !showJiraTaskSelector) {
+        if (
+          isNewBoard &&
+          jiraConnected &&
+          !showJiraPrompt &&
+          !showJiraTaskSelector
+        ) {
           // LocalStorage'da bu board için daha önce soruldu mu kontrol et
           const askedKey = `jira_prompt_asked_${boardId}`;
           const alreadyAsked = localStorage.getItem(askedKey);
-          
+
           if (!alreadyAsked) {
             setShowJiraPrompt(true);
           }
@@ -88,7 +110,14 @@ export default function BoardDetailPage() {
       setLoading(false);
       router.replace("/app/boards");
     }
-  }, [boards, boardId, router, jiraConnected, showJiraPrompt, showJiraTaskSelector]);
+  }, [
+    boards,
+    boardId,
+    router,
+    jiraConnected,
+    showJiraPrompt,
+    showJiraTaskSelector,
+  ]);
 
   // User key'i al ve Jira bağlantısını kontrol et
   useEffect(() => {
@@ -99,14 +128,14 @@ export default function BoardDetailPage() {
       if (!mounted) return;
       if (data.user) {
         setUserKey(data.user.id);
-        
+
         // Jira bağlantısını kontrol et
         const { data: userRow } = await supabase
           .from("users")
           .select("jira_access_token, jira_base_url")
           .eq("id", data.user.id)
           .maybeSingle();
-        
+
         if (mounted && userRow) {
           const connected = !!userRow.jira_access_token;
           setJiraConnected(connected);
@@ -166,9 +195,7 @@ export default function BoardDetailPage() {
           if (payload.eventType === "INSERT" && payload.new) {
             setTasks((prev) => [payload.new as PersonalTask, ...prev]);
           } else if (payload.eventType === "DELETE" && payload.old) {
-            setTasks((prev) =>
-              prev.filter((t) => t.id !== payload.old!.id)
-            );
+            setTasks((prev) => prev.filter((t) => t.id !== payload.old!.id));
           } else if (payload.eventType === "UPDATE" && payload.new) {
             setTasks((prev) =>
               prev.map((t) =>
@@ -199,12 +226,22 @@ export default function BoardDetailPage() {
     const highPriority = tasks.filter((t) => t.priority === 3).length;
     const mediumPriority = tasks.filter((t) => t.priority === 2).length;
     const lowPriority = tasks.filter((t) => t.priority === 1).length;
-    const jiraTasks = tasks.filter((t) => !!t.jira_issue_key && !!t.jira_issue_url).length;
-    const generalCategory = tasks.filter((t) => t.category === "general").length;
+    const jiraTasks = tasks.filter(
+      (t) => !!t.jira_issue_key && !!t.jira_issue_url
+    ).length;
+    const generalCategory = tasks.filter(
+      (t) => t.category === "general"
+    ).length;
     const workCategory = tasks.filter((t) => t.category === "work").length;
-    const personalCategory = tasks.filter((t) => t.category === "personal").length;
-    const meetingCategory = tasks.filter((t) => t.category === "meeting").length;
-    const projectCategory = tasks.filter((t) => t.category === "project").length;
+    const personalCategory = tasks.filter(
+      (t) => t.category === "personal"
+    ).length;
+    const meetingCategory = tasks.filter(
+      (t) => t.category === "meeting"
+    ).length;
+    const projectCategory = tasks.filter(
+      (t) => t.category === "project"
+    ).length;
     return {
       totalTasks,
       highPriority,
@@ -225,7 +262,10 @@ export default function BoardDetailPage() {
     if (filterType === "jira") {
       return tasks.filter((t) => !!t.jira_issue_key && !!t.jira_issue_url);
     }
-    if (typeof filterType === "string" && ["general", "work", "personal", "meeting", "project"].includes(filterType)) {
+    if (
+      typeof filterType === "string" &&
+      ["general", "work", "personal", "meeting", "project"].includes(filterType)
+    ) {
       return tasks.filter((t) => t.category === filterType);
     }
     return tasks.filter((t) => t.priority === filterType);
@@ -339,8 +379,17 @@ export default function BoardDetailPage() {
 
   // Jira task'ını board'a ekle
   const handleAddJiraTask = useCallback(
-    async (jiraTask: { key: string; summary: string; description?: string; url: string }) => {
-      console.log("handleAddJiraTask: Called with", { jiraTask, boardId, userKey });
+    async (jiraTask: {
+      key: string;
+      summary: string;
+      description?: string;
+      url: string;
+    }) => {
+      console.log("handleAddJiraTask: Called with", {
+        jiraTask,
+        boardId,
+        userKey,
+      });
       if (!boardId || !userKey) {
         console.error("handleAddJiraTask: Missing boardId or userKey");
         return;
@@ -352,7 +401,7 @@ export default function BoardDetailPage() {
       setActionLoading(true);
       try {
         const supabase = getSupabase();
-        
+
         // Önce bu Jira task'ı zaten personal task olarak var mı kontrol et
         const { data: existingTask } = await supabase
           .from("user_personal_tasks")
@@ -371,9 +420,12 @@ export default function BoardDetailPage() {
               .select()
               .single();
             if (updateError) throw updateError;
-            
-            console.log("handleAddJiraTask: Existing task updated", updatedTask);
-            
+
+            console.log(
+              "handleAddJiraTask: Existing task updated",
+              updatedTask
+            );
+
             // Güncellenmiş task'ı listeye ekle
             if (updatedTask) {
               setTasks((prev) => {
@@ -388,7 +440,7 @@ export default function BoardDetailPage() {
                 return [updatedTask as PersonalTask, ...prev];
               });
             }
-            
+
             showToast("Jira task board'a eklendi!", "success");
           } else {
             // Task zaten bu board'da, listeye ekle (eğer yoksa)
@@ -397,7 +449,7 @@ export default function BoardDetailPage() {
               .select("*")
               .eq("id", existingTask.id)
               .single();
-            
+
             if (currentTask) {
               setTasks((prev) => {
                 const exists = prev.some((t) => t.id === currentTask.id);
@@ -407,7 +459,7 @@ export default function BoardDetailPage() {
                 return prev;
               });
             }
-            
+
             showToast("Bu task zaten bu board'da!", "info");
           }
         } else {
@@ -426,16 +478,18 @@ export default function BoardDetailPage() {
             })
             .select()
             .single();
-          
+
           if (error) throw error;
-          
+
           // Realtime subscription çalışmıyorsa fallback olarak manuel ekle
           if (newTask) {
             console.log("handleAddJiraTask: New task created", newTask);
             setTasks((prev) => {
               const exists = prev.some((t) => t.id === newTask.id);
               if (exists) {
-                console.log("handleAddJiraTask: Task already exists in list, updating");
+                console.log(
+                  "handleAddJiraTask: Task already exists in list, updating"
+                );
                 return prev.map((t) =>
                   t.id === newTask.id ? (newTask as PersonalTask) : t
                 );
@@ -444,7 +498,7 @@ export default function BoardDetailPage() {
               return [newTask as PersonalTask, ...prev];
             });
           }
-          
+
           showToast("Jira task board'a eklendi!", "success");
         }
       } catch (err) {
@@ -602,8 +656,8 @@ export default function BoardDetailPage() {
     return (
       <>
         <Header navigationItems={navigationItems} />
-        <main className="container mx-auto px-4 py-16">
-          <div className="h-40 animate-pulse border-l-4 border-l-green-400 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm sm:p-4 dark:border-l-green-500 dark:border-gray-700 dark:bg-gray-900" />
+        <main className="container mx-auto px-4 py-16 bg-background">
+          <div className="h-40 animate-pulse rounded-lg border-l-4 border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-card p-3 shadow-sm sm:p-4" />
         </main>
         <Footer navigationItems={navigationItems} />
       </>
@@ -615,10 +669,8 @@ export default function BoardDetailPage() {
       <>
         <Header navigationItems={navigationItems} />
         <main className="container mx-auto px-4 py-16">
-          <div className="rounded-md border-2 border-gray-200 bg-white p-6 text-center sm:p-8 dark:border-gray-800 dark:bg-gray-900">
-            <p className="text-gray-600 dark:text-gray-400">
-              Board bulunamadı.
-            </p>
+          <div className="rounded-lg border-2 border-border bg-card p-6 text-center shadow-md sm:p-8">
+            <p className="text-muted-foreground">Board bulunamadı.</p>
           </div>
         </main>
         <Footer navigationItems={navigationItems} />
@@ -630,24 +682,25 @@ export default function BoardDetailPage() {
 
   return (
     <>
-        <Header navigationItems={navigationItems} />
-        <main className="min-h-screen bg-white dark:bg-gray-900">
-          <div className="container mx-auto px-4 py-8 sm:py-12">
-            <div className="mx-auto max-w-6xl">
-            {/* Board Header - Sharp Design */}
+      <Header navigationItems={navigationItems} />
+      <main className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-8 sm:py-12">
+          <div className="mx-auto max-w-6xl">
+            {/* Board Header - Modern Design */}
             <div className="mb-6">
               <div
-                className="rounded-md border-2 p-4 shadow-sm sm:p-6"
+                className="group relative overflow-hidden rounded-lg border-2 p-4 shadow-md transition-all duration-300 hover:shadow-xl sm:p-6"
                 style={{
                   borderColor: boardColor,
                   backgroundColor: boardColor,
                 }}
               >
-                <div className="flex items-start justify-between gap-4">
+                <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-white/10 blur-2xl transition-all group-hover:scale-150" />
+                <div className="relative flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3">
                       <div
-                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border-2 border-white/30 bg-white/20 sm:h-12 sm:w-12"
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border-2 border-white/30 bg-white/20 transition-transform group-hover:scale-110 sm:h-12 sm:w-12"
                         style={{
                           borderColor: "rgba(255, 255, 255, 0.3)",
                         }}
@@ -655,11 +708,11 @@ export default function BoardDetailPage() {
                         <ClipboardList className="h-5 w-5 text-white sm:h-6 sm:w-6" />
                       </div>
                       <div>
-                        <h1 className="mb-0.5 text-xl font-bold text-white sm:text-2xl">
+                        <h1 className="mb-0.5 text-xl font-bold text-card-foreground sm:text-2xl">
                           {board.name}
                         </h1>
                         {board.description && (
-                          <p className="text-xs text-white/90 sm:text-sm">
+                          <p className="text-xs text-muted-foreground sm:text-sm">
                             {board.description}
                           </p>
                         )}
@@ -671,7 +724,7 @@ export default function BoardDetailPage() {
                     size="md"
                     onClick={() => setShowEditBoardModal(true)}
                     icon={Edit}
-                    className="!border-white/30 !bg-white/20 !text-white hover:!bg-white/30 dark:!border-white/30 dark:!bg-white/20 dark:!text-white dark:hover:!bg-white/30"
+                    className="relative !border-white/30 !bg-white/20 !text-white transition-all duration-200 hover:!bg-white/30 dark:!border-white/30 dark:!bg-white/20 dark:!text-white dark:hover:!bg-white/30"
                   >
                     Düzenle
                   </Button>
@@ -681,75 +734,79 @@ export default function BoardDetailPage() {
 
             {/* Tasks Section */}
             <div className="mb-8">
-              <div className="mb-4 flex items-center justify-between">
-                <div>
-                  <h2 className="mb-0.5 text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
-                    Task&apos;lar
-                  </h2>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
-                    Bu board&apos;a ait görevleriniz
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button
-                    onClick={() => {
-                      setShowAddTaskModal(true);
-                    }}
-                    variant="secondary"
-                    size="md"
-                    icon={ListPlus}
-                    className="!border-gray-300 !bg-white !text-gray-700 hover:!border-gray-400 hover:!bg-gray-50 dark:!border-gray-700 dark:!bg-gray-800 dark:!text-gray-300 dark:hover:!border-gray-600 dark:hover:!bg-gray-700"
-                  >
-                    Task Ekle
-                  </Button>
-                  <Button
-                    variant="primary"
-                    size="md"
-                    onClick={() => {
-                      setEditingTask(null);
-                      setShowTaskModal(true);
-                    }}
-                    icon={Plus}
-                    className="!border-green-600 !bg-green-600 hover:!border-green-700 hover:!bg-green-700 dark:!border-green-500 dark:!bg-green-600 dark:hover:!border-green-400 dark:hover:!bg-green-500"
-                  >
-                    Yeni Task
-                  </Button>
-                </div>
-              </div>
+              <SectionHeader
+                title="Task'lar"
+                description="Bu board'a ait görevleriniz"
+                action={
+                  <div className="flex items-center gap-2">
+                    <Button
+                      onClick={() => {
+                        setShowAddTaskModal(true);
+                      }}
+                      variant="secondary"
+                      size="md"
+                      icon={ListPlus}
+                    >
+                      Task Ekle
+                    </Button>
+                    <Button
+                      variant="primary"
+                      size="md"
+                      onClick={() => {
+                        setEditingTask(null);
+                        setShowTaskModal(true);
+                      }}
+                      icon={Plus}
+                    >
+                      Yeni Task
+                    </Button>
+                  </div>
+                }
+              />
               {/* Stats Cards - Minimal & Clickable Filters */}
               <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-10 sm:gap-3">
                 <button
                   onClick={() => setFilterType(null)}
-                  className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                  className={`group relative flex flex-col items-center gap-1.5 overflow-hidden rounded-lg border-l-4 border-t-2 border-r-2 border-b-2 bg-gradient-to-br from-card via-card to-card/50 p-2.5 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-3 ${
                     filterType === null
-                      ? "border-green-600 dark:border-green-500"
-                      : "border-gray-300 dark:border-gray-700"
+                      ? "border-l-green-600 dark:border-l-green-500 border-border"
+                      : "border-l-primary border-border"
                   }`}
                 >
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20 sm:h-10 sm:w-10">
+                  <div className="absolute right-0 top-0 h-16 w-16 translate-x-4 -translate-y-4 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
+                  <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-green-500/20 to-transparent transition-transform group-hover:scale-110 sm:h-10 sm:w-10">
                     <ClipboardList className="h-4 w-4 text-green-600 dark:text-green-400 sm:h-5 sm:w-5" />
                   </div>
-                  <div className="text-center">
-                    <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{taskStats.totalTasks}</div>
-                    <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Toplam</div>
+                  <div className="relative text-center">
+                    <div className="text-base font-bold text-card-foreground sm:text-lg">
+                      {taskStats.totalTasks}
+                    </div>
+                    <div className="text-[10px] font-medium text-muted-foreground sm:text-xs">
+                      Toplam
+                    </div>
                   </div>
                 </button>
 
                 {taskStats.highPriority > 0 && (
                   <button
                     onClick={() => setFilterType(filterType === 3 ? null : 3)}
-                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                    className={`group relative flex flex-col items-center gap-1.5 overflow-hidden rounded-lg border-l-4 border-t-2 border-r-2 border-b-2 bg-gradient-to-br from-card via-card to-card/50 p-2.5 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-3 ${
                       filterType === 3
-                        ? "border-red-600 dark:border-red-500"
-                        : "border-gray-300 dark:border-gray-700"
+                        ? "border-l-red-600 dark:border-l-red-500 border-border"
+                        : "border-l-primary border-border"
                     }`}
                   >
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-red-600 bg-red-50 dark:bg-red-900/20 sm:h-10 sm:w-10">
+                    <div className="absolute right-0 top-0 h-16 w-16 translate-x-4 -translate-y-4 rounded-full bg-gradient-to-br from-red-500/10 to-red-500/5 blur-xl transition-all group-hover:scale-150" />
+                    <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-red-500/20 to-transparent transition-transform group-hover:scale-110 sm:h-10 sm:w-10">
                       <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400 sm:h-5 sm:w-5" />
                     </div>
-                    <div className="text-center">
-                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{taskStats.highPriority}</div>
-                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Yüksek</div>
+                    <div className="relative text-center">
+                      <div className="text-base font-bold text-card-foreground sm:text-lg">
+                        {taskStats.highPriority}
+                      </div>
+                      <div className="text-[10px] font-medium text-muted-foreground sm:text-xs">
+                        Yüksek
+                      </div>
                     </div>
                   </button>
                 )}
@@ -757,18 +814,23 @@ export default function BoardDetailPage() {
                 {taskStats.mediumPriority > 0 && (
                   <button
                     onClick={() => setFilterType(filterType === 2 ? null : 2)}
-                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                    className={`group relative flex flex-col items-center gap-1.5 overflow-hidden rounded-lg border-l-4 border-t-2 border-r-2 border-b-2 bg-gradient-to-br from-card via-card to-card/50 p-2.5 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-3 ${
                       filterType === 2
-                        ? "border-yellow-600 dark:border-yellow-500"
-                        : "border-gray-300 dark:border-gray-700"
+                        ? "border-l-yellow-600 dark:border-l-yellow-500 border-border"
+                        : "border-l-primary border-border"
                     }`}
                   >
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-yellow-600 bg-yellow-50 dark:bg-yellow-900/20 sm:h-10 sm:w-10">
+                    <div className="absolute right-0 top-0 h-16 w-16 translate-x-4 -translate-y-4 rounded-full bg-gradient-to-br from-yellow-500/10 to-yellow-500/5 blur-xl transition-all group-hover:scale-150" />
+                    <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-yellow-500/20 to-transparent transition-transform group-hover:scale-110 sm:h-10 sm:w-10">
                       <AlertCircle className="h-4 w-4 text-yellow-600 dark:text-yellow-400 sm:h-5 sm:w-5" />
                     </div>
-                    <div className="text-center">
-                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{taskStats.mediumPriority}</div>
-                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Orta</div>
+                    <div className="relative text-center">
+                      <div className="text-base font-bold text-card-foreground sm:text-lg">
+                        {taskStats.mediumPriority}
+                      </div>
+                      <div className="text-[10px] font-medium text-muted-foreground sm:text-xs">
+                        Orta
+                      </div>
                     </div>
                   </button>
                 )}
@@ -776,37 +838,49 @@ export default function BoardDetailPage() {
                 {taskStats.lowPriority > 0 && (
                   <button
                     onClick={() => setFilterType(filterType === 1 ? null : 1)}
-                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                    className={`group relative flex flex-col items-center gap-1.5 overflow-hidden rounded-lg border-l-4 border-t-2 border-r-2 border-b-2 bg-gradient-to-br from-card via-card to-card/50 p-2.5 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-3 ${
                       filterType === 1
-                        ? "border-gray-600 dark:border-gray-500"
-                        : "border-gray-300 dark:border-gray-700"
+                        ? "border-l-muted-foreground border-border"
+                        : "border-l-primary border-border"
                     }`}
                   >
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-gray-600 bg-gray-50 dark:bg-gray-800 sm:h-10 sm:w-10">
-                      <CheckCircle2 className="h-4 w-4 text-gray-600 dark:text-gray-400 sm:h-5 sm:w-5" />
+                    <div className="absolute right-0 top-0 h-16 w-16 translate-x-4 -translate-y-4 rounded-full bg-gradient-to-br from-muted-foreground/10 to-muted-foreground/5 blur-xl transition-all group-hover:scale-150" />
+                    <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-muted-foreground/20 to-transparent transition-transform group-hover:scale-110 sm:h-10 sm:w-10">
+                      <CheckCircle2 className="h-4 w-4 text-muted-foreground sm:h-5 sm:w-5" />
                     </div>
-                    <div className="text-center">
-                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{taskStats.lowPriority}</div>
-                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Düşük</div>
+                    <div className="relative text-center">
+                      <div className="text-base font-bold text-card-foreground sm:text-lg">
+                        {taskStats.lowPriority}
+                      </div>
+                      <div className="text-[10px] font-medium text-muted-foreground sm:text-xs">
+                        Düşük
+                      </div>
                     </div>
                   </button>
                 )}
 
                 {taskStats.jiraTasks > 0 && (
                   <button
-                    onClick={() => setFilterType(filterType === "jira" ? null : "jira")}
-                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                    onClick={() =>
+                      setFilterType(filterType === "jira" ? null : "jira")
+                    }
+                    className={`group relative flex flex-col items-center gap-1.5 overflow-hidden rounded-lg border-l-4 border-t-2 border-r-2 border-b-2 bg-gradient-to-br from-card via-card to-card/50 p-2.5 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-3 ${
                       filterType === "jira"
-                        ? "border-purple-600 dark:border-purple-500"
-                        : "border-gray-300 dark:border-gray-700"
+                        ? "border-l-purple-600 dark:border-l-purple-500 border-border"
+                        : "border-l-primary border-border"
                     }`}
                   >
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20 sm:h-10 sm:w-10">
+                    <div className="absolute right-0 top-0 h-16 w-16 translate-x-4 -translate-y-4 rounded-full bg-gradient-to-br from-purple-500/10 to-purple-500/5 blur-xl transition-all group-hover:scale-150" />
+                    <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500/20 to-transparent transition-transform group-hover:scale-110 sm:h-10 sm:w-10">
                       <Link2 className="h-4 w-4 text-purple-600 dark:text-purple-400 sm:h-5 sm:w-5" />
                     </div>
-                    <div className="text-center">
-                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{taskStats.jiraTasks}</div>
-                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Jira&apos;da</div>
+                    <div className="relative text-center">
+                      <div className="text-base font-bold text-card-foreground sm:text-lg">
+                        {taskStats.jiraTasks}
+                      </div>
+                      <div className="text-[10px] font-medium text-muted-foreground sm:text-xs">
+                        Jira&apos;da
+                      </div>
                     </div>
                   </button>
                 )}
@@ -814,102 +888,139 @@ export default function BoardDetailPage() {
                 {/* Category Filters */}
                 {taskStats.generalCategory > 0 && (
                   <button
-                    onClick={() => setFilterType(filterType === "general" ? null : "general")}
-                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                    onClick={() =>
+                      setFilterType(filterType === "general" ? null : "general")
+                    }
+                    className={`group relative flex flex-col items-center gap-1.5 overflow-hidden rounded-lg border-l-4 border-t-2 border-r-2 border-b-2 bg-gradient-to-br from-card via-card to-card/50 p-2.5 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-3 ${
                       filterType === "general"
-                        ? "border-blue-600 dark:border-blue-500"
-                        : "border-gray-300 dark:border-gray-700"
+                        ? "border-l-blue-600 dark:border-l-blue-500 border-border"
+                        : "border-l-primary border-border"
                     }`}
                   >
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20 sm:h-10 sm:w-10">
+                    <div className="absolute right-0 top-0 h-16 w-16 translate-x-4 -translate-y-4 rounded-full bg-gradient-to-br from-blue-500/10 to-blue-500/5 blur-xl transition-all group-hover:scale-150" />
+                    <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/20 to-transparent transition-transform group-hover:scale-110 sm:h-10 sm:w-10">
                       <Folder className="h-4 w-4 text-blue-600 dark:text-blue-400 sm:h-5 sm:w-5" />
                     </div>
-                    <div className="text-center">
-                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{taskStats.generalCategory}</div>
-                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Genel</div>
+                    <div className="relative text-center">
+                      <div className="text-base font-bold text-card-foreground sm:text-lg">
+                        {taskStats.generalCategory}
+                      </div>
+                      <div className="text-[10px] font-medium text-muted-foreground sm:text-xs">
+                        Genel
+                      </div>
                     </div>
                   </button>
                 )}
 
                 {taskStats.workCategory > 0 && (
                   <button
-                    onClick={() => setFilterType(filterType === "work" ? null : "work")}
-                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                    onClick={() =>
+                      setFilterType(filterType === "work" ? null : "work")
+                    }
+                    className={`group relative flex flex-col items-center gap-1.5 overflow-hidden rounded-lg border-l-4 border-t-2 border-r-2 border-b-2 bg-gradient-to-br from-card via-card to-card/50 p-2.5 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-3 ${
                       filterType === "work"
-                        ? "border-green-600 dark:border-green-500"
-                        : "border-gray-300 dark:border-gray-700"
+                        ? "border-l-green-600 dark:border-l-green-500 border-border"
+                        : "border-l-primary border-border"
                     }`}
                   >
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20 sm:h-10 sm:w-10">
+                    <div className="absolute right-0 top-0 h-16 w-16 translate-x-4 -translate-y-4 rounded-full bg-gradient-to-br from-green-500/10 to-green-500/5 blur-xl transition-all group-hover:scale-150" />
+                    <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-green-500/20 to-transparent transition-transform group-hover:scale-110 sm:h-10 sm:w-10">
                       <Folder className="h-4 w-4 text-green-600 dark:text-green-400 sm:h-5 sm:w-5" />
                     </div>
-                    <div className="text-center">
-                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{taskStats.workCategory}</div>
-                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">İş</div>
+                    <div className="relative text-center">
+                      <div className="text-base font-bold text-card-foreground sm:text-lg">
+                        {taskStats.workCategory}
+                      </div>
+                      <div className="text-[10px] font-medium text-muted-foreground sm:text-xs">
+                        İş
+                      </div>
                     </div>
                   </button>
                 )}
 
                 {taskStats.personalCategory > 0 && (
                   <button
-                    onClick={() => setFilterType(filterType === "personal" ? null : "personal")}
-                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                    onClick={() =>
+                      setFilterType(
+                        filterType === "personal" ? null : "personal"
+                      )
+                    }
+                    className={`group relative flex flex-col items-center gap-1.5 overflow-hidden rounded-lg border-l-4 border-t-2 border-r-2 border-b-2 bg-gradient-to-br from-card via-card to-card/50 p-2.5 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-3 ${
                       filterType === "personal"
-                        ? "border-pink-600 dark:border-pink-500"
-                        : "border-gray-300 dark:border-gray-700"
+                        ? "border-l-pink-600 dark:border-l-pink-500 border-border"
+                        : "border-l-primary border-border"
                     }`}
                   >
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-pink-600 bg-pink-50 dark:bg-pink-900/20 sm:h-10 sm:w-10">
+                    <div className="absolute right-0 top-0 h-16 w-16 translate-x-4 -translate-y-4 rounded-full bg-gradient-to-br from-pink-500/10 to-pink-500/5 blur-xl transition-all group-hover:scale-150" />
+                    <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-pink-500/20 to-transparent transition-transform group-hover:scale-110 sm:h-10 sm:w-10">
                       <Folder className="h-4 w-4 text-pink-600 dark:text-pink-400 sm:h-5 sm:w-5" />
                     </div>
-                    <div className="text-center">
-                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{taskStats.personalCategory}</div>
-                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Kişisel</div>
+                    <div className="relative text-center">
+                      <div className="text-base font-bold text-card-foreground sm:text-lg">
+                        {taskStats.personalCategory}
+                      </div>
+                      <div className="text-[10px] font-medium text-muted-foreground sm:text-xs">
+                        Kişisel
+                      </div>
                     </div>
                   </button>
                 )}
 
                 {taskStats.meetingCategory > 0 && (
                   <button
-                    onClick={() => setFilterType(filterType === "meeting" ? null : "meeting")}
-                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                    onClick={() =>
+                      setFilterType(filterType === "meeting" ? null : "meeting")
+                    }
+                    className={`group relative flex flex-col items-center gap-1.5 overflow-hidden rounded-lg border-l-4 border-t-2 border-r-2 border-b-2 bg-gradient-to-br from-card via-card to-card/50 p-2.5 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-3 ${
                       filterType === "meeting"
-                        ? "border-indigo-600 dark:border-indigo-500"
-                        : "border-gray-300 dark:border-gray-700"
+                        ? "border-l-indigo-600 dark:border-l-indigo-500 border-border"
+                        : "border-l-primary border-border"
                     }`}
                   >
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20 sm:h-10 sm:w-10">
+                    <div className="absolute right-0 top-0 h-16 w-16 translate-x-4 -translate-y-4 rounded-full bg-gradient-to-br from-indigo-500/10 to-indigo-500/5 blur-xl transition-all group-hover:scale-150" />
+                    <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500/20 to-transparent transition-transform group-hover:scale-110 sm:h-10 sm:w-10">
                       <Folder className="h-4 w-4 text-indigo-600 dark:text-indigo-400 sm:h-5 sm:w-5" />
                     </div>
-                    <div className="text-center">
-                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{taskStats.meetingCategory}</div>
-                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Toplantı</div>
+                    <div className="relative text-center">
+                      <div className="text-base font-bold text-card-foreground sm:text-lg">
+                        {taskStats.meetingCategory}
+                      </div>
+                      <div className="text-[10px] font-medium text-muted-foreground sm:text-xs">
+                        Toplantı
+                      </div>
                     </div>
                   </button>
                 )}
 
                 {taskStats.projectCategory > 0 && (
                   <button
-                    onClick={() => setFilterType(filterType === "project" ? null : "project")}
-                    className={`group flex flex-col items-center gap-1.5 border-2 bg-white p-2.5 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-3 hover:border-gray-400 hover:shadow-md dark:bg-gray-900 ${
+                    onClick={() =>
+                      setFilterType(filterType === "project" ? null : "project")
+                    }
+                    className={`group relative flex flex-col items-center gap-1.5 overflow-hidden rounded-lg border-l-4 border-t-2 border-r-2 border-b-2 bg-gradient-to-br from-card via-card to-card/50 p-2.5 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-3 ${
                       filterType === "project"
-                        ? "border-cyan-600 dark:border-cyan-500"
-                        : "border-gray-300 dark:border-gray-700"
+                        ? "border-l-cyan-600 dark:border-l-cyan-500 border-border"
+                        : "border-l-primary border-border"
                     }`}
                   >
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-cyan-600 bg-cyan-50 dark:bg-cyan-900/20 sm:h-10 sm:w-10">
+                    <div className="absolute right-0 top-0 h-16 w-16 translate-x-4 -translate-y-4 rounded-full bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 blur-xl transition-all group-hover:scale-150" />
+                    <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-500/20 to-transparent transition-transform group-hover:scale-110 sm:h-10 sm:w-10">
                       <Folder className="h-4 w-4 text-cyan-600 dark:text-cyan-400 sm:h-5 sm:w-5" />
                     </div>
-                    <div className="text-center">
-                      <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">{taskStats.projectCategory}</div>
-                      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-xs">Proje</div>
+                    <div className="relative text-center">
+                      <div className="text-base font-bold text-card-foreground sm:text-lg">
+                        {taskStats.projectCategory}
+                      </div>
+                      <div className="text-[10px] font-medium text-muted-foreground sm:text-xs">
+                        Proje
+                      </div>
                     </div>
                   </button>
                 )}
               </div>
 
               {tasksLoading ? (
-                <div className="h-40 animate-pulse border-l-4 border-l-green-400 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm sm:p-4 dark:border-l-green-500 dark:border-gray-700 dark:bg-gray-900" />
+                <div className="h-40 animate-pulse border-l-4 border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-card p-3 shadow-sm sm:p-4" />
               ) : (
                 <PersonalTaskList
                   tasks={filteredTasks}
@@ -926,10 +1037,10 @@ export default function BoardDetailPage() {
             <div>
               <div className="mb-4 flex items-center justify-between">
                 <div>
-                  <h2 className="mb-0.5 text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
+                  <h2 className="mb-0.5 text-xl font-bold text-card-foreground sm:text-2xl">
                     Notlar
                   </h2>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
+                  <p className="text-xs text-muted-foreground sm:text-sm">
                     Bu board&apos;a ait notlarınız
                   </p>
                 </div>
@@ -955,180 +1066,199 @@ export default function BoardDetailPage() {
                 }}
               />
             </div>
-            </div>
           </div>
-        </main>
+        </div>
+      </main>
 
-        {/* Modals */}
-        <PersonalTaskModal
-          open={showTaskModal}
-          onClose={() => {
-            setShowTaskModal(false);
-            setEditingTask(null);
-          }}
-          onSubmit={async (input, taskId) => {
-            if (taskId) {
-              await handleUpdateTask(taskId, input);
-            } else {
-              await handleCreateTask(input);
-            }
-          }}
-          initialTask={editingTask ?? undefined}
-        />
+      {/* Modals */}
+      <PersonalTaskModal
+        open={showTaskModal}
+        onClose={() => {
+          setShowTaskModal(false);
+          setEditingTask(null);
+        }}
+        onSubmit={async (input, taskId) => {
+          if (taskId) {
+            await handleUpdateTask(taskId, input);
+          } else {
+            await handleCreateTask(input);
+          }
+        }}
+        initialTask={editingTask ?? undefined}
+      />
 
-        <NoteModal
-          open={showNoteModal}
-          onClose={() => {
-            setShowNoteModal(false);
-            setEditingNote(null);
-          }}
-          onSubmit={handleCreateNote}
-          initialNote={editingNote ?? undefined}
-        />
+      <NoteModal
+        open={showNoteModal}
+        onClose={() => {
+          setShowNoteModal(false);
+          setEditingNote(null);
+        }}
+        onSubmit={handleCreateNote}
+        initialNote={editingNote ?? undefined}
+      />
 
-        <EditBoardModal
-          open={showEditBoardModal}
-          onClose={() => setShowEditBoardModal(false)}
-          onSubmit={handleUpdateBoard}
-          board={board}
-          loading={actionLoading}
-        />
+      <EditBoardModal
+        open={showEditBoardModal}
+        onClose={() => setShowEditBoardModal(false)}
+        onSubmit={handleUpdateBoard}
+        board={board}
+        loading={actionLoading}
+      />
 
-        {/* Add Existing Task Modal */}
-        {showAddTaskModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-            <div className="w-full max-w-2xl rounded-md border-2 border-gray-300 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
-              <div className="border-b-2 border-gray-200 p-4 dark:border-gray-800">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                    Mevcut Task&apos;lardan Seç
-                  </h3>
-                  <button
-                    onClick={() => setShowAddTaskModal(false)}
-                    className="rounded-md p-1 text-gray-500 transition hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-300"
+      {/* Add Existing Task Modal */}
+      {showAddTaskModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-2xl rounded-md border-2 border-border bg-card shadow-lg">
+            <div className="border-b-2 border-border p-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-card-foreground">
+                  Mevcut Task&apos;lardan Seç
+                </h3>
+                <button
+                  onClick={() => setShowAddTaskModal(false)}
+                  className="rounded-md p-1 text-muted-foreground transition hover:bg-accent hover:text-foreground"
+                >
+                  <svg
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                   >
-                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-              <div className="max-h-[60vh] overflow-y-auto p-4">
-                {loadingAvailableTasks ? (
-                  <div className="flex items-center justify-center py-12">
-                    <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-green-600"></div>
-                  </div>
-                ) : availableTasks.length === 0 ? (
-                  <div className="py-12 text-center">
-                    <ClipboardList className="mx-auto h-12 w-12 text-gray-400" />
-                    <p className="mt-4 text-sm font-medium text-gray-900 dark:text-white">
-                      Eklenebilecek task bulunamadı
-                    </p>
-                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                      Tüm task&apos;larınız zaten bu board&apos;a ekli
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    {availableTasks.map((task) => (
-                      <button
-                        key={task.id}
-                        onClick={() => handleAddExistingTask(task.id)}
-                        disabled={actionLoading}
-                        className="group w-full rounded-md border-2 border-gray-300 bg-white p-3 text-left transition-all hover:border-green-600 hover:bg-green-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-green-500 dark:hover:bg-green-900/20"
-                      >
-                        <div className="flex items-start justify-between gap-2">
-                          <div className="flex-1">
-                            <h4 className="font-semibold text-gray-900 dark:text-white">
-                              {task.title}
-                            </h4>
-                            {task.description && (
-                              <p className="mt-1 line-clamp-2 text-sm text-gray-600 dark:text-gray-400">
-                                {task.description}
-                              </p>
-                            )}
-                            <div className="mt-2 flex flex-wrap items-center gap-2">
-                              {task.jira_issue_key && (
-                                <span className="rounded-md border-2 border-purple-600 bg-purple-600 px-2 py-0.5 font-mono text-xs font-bold text-white">
-                                  {task.jira_issue_key}
-                                </span>
-                              )}
-                              <span className="rounded-md border-2 border-gray-300 bg-gray-50 px-2 py-0.5 text-xs font-medium text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
-                                {task.category === "general" ? "Genel" : task.category === "work" ? "İş" : task.category === "personal" ? "Kişisel" : task.category === "meeting" ? "Toplantı" : task.category === "project" ? "Proje" : task.category}
-                              </span>
-                            </div>
-                          </div>
-                          <Plus className="h-5 w-5 shrink-0 text-gray-400 transition-colors group-hover:text-green-600 dark:text-gray-500 dark:group-hover:text-green-400" />
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                )}
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
               </div>
             </div>
-          </div>
-        )}
-
-        {/* Jira Task Prompt Modal */}
-        <JiraTaskPromptModal
-          open={showJiraPrompt}
-          onClose={() => {
-            setShowJiraPrompt(false);
-            // LocalStorage'a kaydet ki bir daha sormasın
-            const askedKey = `jira_prompt_asked_${boardId}`;
-            localStorage.setItem(askedKey, "true");
-          }}
-          onConfirm={() => {
-            setShowJiraPrompt(false);
-            setShowJiraTaskSelector(true);
-            // LocalStorage'a kaydet ki bir daha sormasın
-            const askedKey = `jira_prompt_asked_${boardId}`;
-            localStorage.setItem(askedKey, "true");
-          }}
-        />
-
-        {/* Jira Task Selector Modal */}
-        {jiraBaseUrl && (
-          <Modal
-            open={showJiraTaskSelector}
-            onClose={() => setShowJiraTaskSelector(false)}
-            title={
-              <div className="flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-md border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20">
-                  <Link2 className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+            <div className="max-h-[60vh] overflow-y-auto p-4">
+              {loadingAvailableTasks ? (
+                <div className="flex items-center justify-center py-12">
+                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-border border-t-primary"></div>
                 </div>
-                <span className="font-bold">Jira Task&apos;larından Seç</span>
-              </div>
-            }
-            className="sm:border-purple-600/30 dark:sm:border-purple-500/30"
-          >
-              <JiraTaskSelector
-                jiraBaseUrl={jiraBaseUrl}
-                onTaskSelect={async (task) => {
-                  if (!task || !task.key || !task.summary || !task.url) {
-                    showToast("Geçersiz task seçildi", "error");
-                    return;
-                  }
-                  console.log("JiraTaskSelector: Task selected", task);
-                  try {
-                    await handleAddJiraTask({
-                      key: task.key,
-                      summary: task.summary,
-                      description: task.description,
-                      url: task.url,
-                    });
-                    setShowJiraTaskSelector(false);
-                  } catch (error) {
-                    console.error("JiraTaskSelector: Error adding task", error);
-                  }
-                }}
-                onCancel={() => setShowJiraTaskSelector(false)}
-              />
-          </Modal>
-        )}
+              ) : availableTasks.length === 0 ? (
+                <div className="py-12 text-center">
+                  <ClipboardList className="mx-auto h-12 w-12 text-muted-foreground" />
+                  <p className="mt-4 text-sm font-medium text-card-foreground">
+                    Eklenebilecek task bulunamadı
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Tüm task&apos;larınız zaten bu board&apos;a ekli
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {availableTasks.map((task) => (
+                    <button
+                      key={task.id}
+                      onClick={() => handleAddExistingTask(task.id)}
+                      disabled={actionLoading}
+                      className="group w-full rounded-md border-2 border-border bg-card p-3 text-left transition-all hover:border-primary hover:bg-primary/10 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-card-foreground">
+                            {task.title}
+                          </h4>
+                          {task.description && (
+                            <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
+                              {task.description}
+                            </p>
+                          )}
+                          <div className="mt-2 flex flex-wrap items-center gap-2">
+                            {task.jira_issue_key && (
+                              <span className="rounded-md border-2 border-purple-600 bg-purple-600 px-2 py-0.5 font-mono text-xs font-bold text-white">
+                                {task.jira_issue_key}
+                              </span>
+                            )}
+                            <span className="rounded-md border-2 border-border bg-muted/50 px-2 py-0.5 text-xs font-medium text-card-foreground">
+                              {task.category === "general"
+                                ? "Genel"
+                                : task.category === "work"
+                                ? "İş"
+                                : task.category === "personal"
+                                ? "Kişisel"
+                                : task.category === "meeting"
+                                ? "Toplantı"
+                                : task.category === "project"
+                                ? "Proje"
+                                : task.category}
+                            </span>
+                          </div>
+                        </div>
+                        <Plus className="h-5 w-5 shrink-0 text-muted-foreground transition-colors group-hover:text-green-600" />
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
-        <Footer navigationItems={navigationItems} />
+      {/* Jira Task Prompt Modal */}
+      <JiraTaskPromptModal
+        open={showJiraPrompt}
+        onClose={() => {
+          setShowJiraPrompt(false);
+          // LocalStorage'a kaydet ki bir daha sormasın
+          const askedKey = `jira_prompt_asked_${boardId}`;
+          localStorage.setItem(askedKey, "true");
+        }}
+        onConfirm={() => {
+          setShowJiraPrompt(false);
+          setShowJiraTaskSelector(true);
+          // LocalStorage'a kaydet ki bir daha sormasın
+          const askedKey = `jira_prompt_asked_${boardId}`;
+          localStorage.setItem(askedKey, "true");
+        }}
+      />
+
+      {/* Jira Task Selector Modal */}
+      {jiraBaseUrl && (
+        <Modal
+          open={showJiraTaskSelector}
+          onClose={() => setShowJiraTaskSelector(false)}
+          title={
+            <div className="flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-md border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20">
+                <Link2 className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+              </div>
+              <span className="font-bold">Jira Task&apos;larından Seç</span>
+            </div>
+          }
+          className="sm:border-purple-600/30 dark:sm:border-purple-500/30"
+        >
+          <JiraTaskSelector
+            jiraBaseUrl={jiraBaseUrl}
+            onTaskSelect={async (task) => {
+              if (!task || !task.key || !task.summary || !task.url) {
+                showToast("Geçersiz task seçildi", "error");
+                return;
+              }
+              console.log("JiraTaskSelector: Task selected", task);
+              try {
+                await handleAddJiraTask({
+                  key: task.key,
+                  summary: task.summary,
+                  description: task.description,
+                  url: task.url,
+                });
+                setShowJiraTaskSelector(false);
+              } catch (error) {
+                console.error("JiraTaskSelector: Error adding task", error);
+              }
+            }}
+            onCancel={() => setShowJiraTaskSelector(false)}
+          />
+        </Modal>
+      )}
+
+      <Footer navigationItems={navigationItems} />
     </>
   );
 }
-

@@ -2,8 +2,13 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { CheckCircle2, XCircle, Link2, Settings as SettingsIcon } from "lucide-react";
 import { getSupabase } from "@/lib/supabase";
 import { useToastContext } from "@/contexts/ToastContext";
+import SectionHeader from "@/components/ui/SectionHeader";
+import Card from "@/components/ui/Card";
+import IconBadge from "@/components/ui/IconBadge";
+import Button from "@/components/ui/Button";
 
 interface ConnectionStatus {
   connected: boolean;
@@ -253,12 +258,12 @@ export default function JiraSettingsPage() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <div className="h-8 w-64 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
+        <div className="h-8 w-64 animate-pulse rounded bg-muted" />
         <div className="space-y-4">
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="h-32 animate-pulse border-2 border-gray-300 bg-gray-200 dark:border-gray-700 dark:bg-gray-800"
+              className="h-32 animate-pulse border-2 border-border bg-card"
             />
           ))}
         </div>
@@ -269,21 +274,24 @@ export default function JiraSettingsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
-          Jira Ayarları
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          Jira bağlantınızı yönetin ve yapılandırın
-        </p>
-      </div>
+      <SectionHeader
+        title="Jira Ayarları"
+        description="Jira bağlantınızı yönetin ve yapılandırın"
+      />
 
       {/* Connection Status Card */}
-      <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+      <Card className="p-6">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-            Bağlantı Durumu
-          </h2>
+          <div className="flex items-center gap-3">
+            <IconBadge
+              icon={connectionStatus.connected ? CheckCircle2 : XCircle}
+              color={connectionStatus.connected ? "green" : "red"}
+              size="sm"
+            />
+            <h2 className="text-lg font-semibold text-card-foreground">
+              Bağlantı Durumu
+            </h2>
+          </div>
           <div
             className={`flex items-center gap-2 rounded-md border-2 px-3 py-1 text-sm font-semibold shadow-sm ${
               connectionStatus.connected
@@ -304,27 +312,27 @@ export default function JiraSettingsPage() {
           <div className="space-y-4">
             {connectionStatus.baseUrl && (
               <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label className="mb-1 block text-sm font-medium text-card-foreground">
                   Jira Base URL
                 </label>
-                <p className="text-sm text-gray-900 dark:text-white">
+                <p className="text-sm text-card-foreground">
                   {connectionStatus.baseUrl}
                 </p>
               </div>
             )}
             {connectionStatus.tokenExpiresAt && (
               <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label className="mb-1 block text-sm font-medium text-card-foreground">
                   Token Süresi
                 </label>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-sm text-muted-foreground">
                   {new Date(connectionStatus.tokenExpiresAt).toLocaleString("tr-TR")}
                 </p>
               </div>
             )}
             {connectionStatus.lastTest && (
               <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label className="mb-1 block text-sm font-medium text-card-foreground">
                   Son Test
                 </label>
                 <div className="flex items-center gap-2">
@@ -345,7 +353,7 @@ export default function JiraSettingsPage() {
                     {connectionStatus.lastTest.message}
                   </p>
                 </div>
-                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                <p className="mt-1 text-xs text-muted-foreground">
                   {new Date(connectionStatus.lastTest.timestamp).toLocaleString(
                     "tr-TR"
                   )}
@@ -353,46 +361,58 @@ export default function JiraSettingsPage() {
               </div>
             )}
             <div className="flex flex-wrap gap-3 pt-2">
-              <button
+              <Button
+                variant="secondary"
+                size="md"
                 onClick={testConnection}
                 disabled={testing || !baseUrl}
-                className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
+                loading={testing}
               >
                 {testing ? "Test Ediliyor..." : "Bağlantıyı Test Et"}
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="danger"
+                size="md"
                 onClick={disconnectJira}
-                className="rounded-md border-2 border-red-600 bg-white px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50 hover:border-red-700 dark:bg-gray-800 dark:text-red-500 dark:hover:bg-red-900/20"
               >
                 Bağlantıyı Kes
-              </button>
+              </Button>
             </div>
           </div>
         ) : (
           <div className="space-y-4">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-muted-foreground">
               Jira hesabınıza bağlanmak için OAuth ile giriş yapın.
             </p>
-            <button
+            <Button
+              variant="primary"
+              size="lg"
               onClick={connectJira}
-              className="border-2 border-purple-600 bg-purple-600 px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-purple-700 hover:border-purple-700 dark:border-purple-500 dark:bg-purple-600 dark:hover:bg-purple-500"
+              icon={Link2}
             >
               Jira&apos;yı Bağla
-            </button>
+            </Button>
           </div>
         )}
-      </div>
+      </Card>
 
       {/* Base URL Configuration */}
-      <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
-        <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-          Jira Base URL Yapılandırması
-        </h2>
+      <Card className="p-6">
+        <div className="mb-4 flex items-center gap-3">
+          <IconBadge
+            icon={SettingsIcon}
+            color="primary"
+            size="sm"
+          />
+          <h2 className="text-lg font-semibold text-card-foreground">
+            Jira Base URL Yapılandırması
+          </h2>
+        </div>
         <div className="space-y-4">
           <div>
             <label
               htmlFor="baseUrl"
-              className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+              className="mb-2 block text-sm font-medium text-card-foreground"
             >
               Jira Base URL
             </label>
@@ -402,27 +422,36 @@ export default function JiraSettingsPage() {
               value={baseUrlInput}
               onChange={(e) => setBaseUrlInput(e.target.value)}
               placeholder="örn: pointf.atlassian.net"
-              className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 focus:border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 sm:text-base"
+              className="w-full rounded-lg border-2 border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 sm:text-base"
             />
-            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+            <p className="mt-1 text-xs text-muted-foreground">
               Jira instance&apos;ınızın base URL&apos;i (örn: pointf.atlassian.net)
             </p>
           </div>
-          <button
+          <Button
+            variant="primary"
+            size="md"
             onClick={saveBaseUrl}
             disabled={saving || baseUrlInput === baseUrl}
-            className="border-2 border-purple-600 bg-purple-600 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-purple-700 hover:border-purple-700 disabled:opacity-50 dark:border-purple-500 dark:bg-purple-600 dark:hover:bg-purple-500"
+            loading={saving}
           >
             {saving ? "Kaydediliyor..." : "Kaydet"}
-          </button>
+          </Button>
         </div>
-      </div>
+      </Card>
 
       {/* Help Card */}
-      <div className="border-2 border-blue-300 bg-blue-50 p-6 dark:border-blue-700 dark:bg-blue-900/20">
-        <h3 className="mb-2 text-base font-semibold text-blue-900 dark:text-blue-100">
-          Yardım
-        </h3>
+      <Card className="border-blue-300 bg-blue-50 p-6 dark:border-blue-700 dark:bg-blue-900/20">
+        <div className="mb-2 flex items-center gap-3">
+          <IconBadge
+            icon={SettingsIcon}
+            color="blue"
+            size="sm"
+          />
+          <h3 className="text-base font-semibold text-blue-900 dark:text-blue-100">
+            Yardım
+          </h3>
+        </div>
         <ul className="space-y-2 text-sm text-blue-800 dark:text-blue-200">
           <li>
             • Jira Base URL, Jira instance&apos;ınızın domain adresidir (örn:
@@ -441,7 +470,7 @@ export default function JiraSettingsPage() {
             tıklayın
           </li>
         </ul>
-      </div>
+      </Card>
     </div>
   );
 }

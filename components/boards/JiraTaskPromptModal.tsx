@@ -31,10 +31,10 @@ const JiraTaskPromptModal = memo(function JiraTaskPromptModal({
       className="sm:border-purple-600/30 dark:sm:border-purple-500/30"
     >
       <div className="space-y-4">
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+        <p className="text-sm text-muted-foreground">
           Bu board&apos;a Jira&apos;daki task&apos;larınızdan eklemek ister misiniz?
         </p>
-        <div className="flex items-center justify-end gap-2 border-t-2 border-gray-200 pt-3 dark:border-gray-800">
+        <div className="flex items-center justify-end gap-2 border-t-2 border-border pt-3">
           <Button variant="secondary" size="md" onClick={onClose}>
             Hayır
           </Button>

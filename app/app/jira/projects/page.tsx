@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Folder, Search, ChevronRight } from "lucide-react";
-import EmptyState from "@/components/jira/EmptyState";
+import EmptyState from "@/components/ui/EmptyState";
+import SectionHeader from "@/components/ui/SectionHeader";
 import type { JiraBoard } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
 
@@ -120,23 +121,19 @@ export default function JiraProjectsPage() {
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
-            Projeler
-          </h1>
-          <p className="text-sm text-gray-600 dark:text-gray-400 sm:text-base">
-            Tüm Jira projelerinizi görüntüleyin ve yönetin
-          </p>
-        </div>
-        <button
-          onClick={fetchProjects}
-          disabled={loading}
-          className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
-        >
-          {loading ? "Yükleniyor..." : "Yenile"}
-        </button>
-      </div>
+      <SectionHeader
+        title="Projeler"
+        description="Tüm Jira projelerinizi görüntüleyin ve yönetin"
+        action={
+          <button
+            onClick={fetchProjects}
+            disabled={loading}
+            className="rounded-lg border-2 border-border bg-card px-4 py-2 text-sm font-semibold text-card-foreground transition-all duration-200 hover:bg-accent hover:text-accent-foreground disabled:opacity-50"
+          >
+            {loading ? "Yükleniyor..." : "Yenile"}
+          </button>
+        }
+      />
 
       {/* Search and View Toggle */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
@@ -146,27 +143,27 @@ export default function JiraProjectsPage() {
             placeholder="Proje ara..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 pl-10 text-sm text-gray-900 placeholder-gray-500 focus:border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 sm:text-base"
+            className="w-full rounded-lg border-2 border-border bg-background px-4 py-2.5 pl-10 text-sm text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 sm:text-base"
           />
-          <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
         </div>
-        <div className="flex items-center gap-2 rounded-md border-2 border-gray-300 bg-white p-1 dark:border-gray-700 dark:bg-gray-800">
+        <div className="flex items-center gap-2 rounded-lg border-2 border-border bg-card p-1">
           <button
             onClick={() => setViewMode("grid")}
-            className={`rounded-md px-3 py-1.5 text-sm transition ${
+            className={`rounded-md px-3 py-1.5 text-sm transition-all duration-200 ${
               viewMode === "grid"
-                ? "bg-purple-600 text-white"
-                : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
             }`}
           >
             Grid
           </button>
           <button
             onClick={() => setViewMode("list")}
-            className={`rounded-md px-3 py-1.5 text-sm transition ${
+            className={`rounded-md px-3 py-1.5 text-sm transition-all duration-200 ${
               viewMode === "list"
-                ? "bg-purple-600 text-white"
-                : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
             }`}
           >
             List
@@ -176,7 +173,7 @@ export default function JiraProjectsPage() {
 
       {/* Error Message */}
       {error && (
-        <div className="rounded-md border-2 border-red-200 bg-red-50 p-4 text-sm text-red-600 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+        <div className="rounded-lg border-2 border-destructive bg-destructive/10 p-4 text-sm text-destructive">
           {error}
         </div>
       )}
@@ -187,7 +184,7 @@ export default function JiraProjectsPage() {
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div
               key={i}
-              className={`h-32 animate-pulse border-l-4 border-l-purple-400 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm sm:p-4 dark:border-l-purple-500 dark:border-gray-700 dark:bg-gray-900 ${
+              className={`h-32 animate-pulse border-l-4 border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-card p-3 shadow-sm sm:p-4 ${
                 viewMode === "list" ? "w-full" : ""
               }`}
             />
@@ -200,25 +197,26 @@ export default function JiraProjectsPage() {
               <Link
                 key={project.id}
                 href={`/app/jira/${project.location?.projectKey || project.id}`}
-                className="group block border-l-4 border-l-purple-600 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-l-purple-500 dark:border-gray-700 dark:bg-gray-900"
+                className="group relative block overflow-hidden rounded-lg border-l-4 border-l-purple-600 dark:border-l-purple-500 border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-3 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-4"
               >
-                <div className="mb-4 flex items-start justify-between">
-                  <div className="flex h-14 w-14 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20">
+                <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-purple-500/10 to-purple-500/5 blur-xl transition-all group-hover:scale-150" />
+                <div className="relative mb-4 flex items-start justify-between">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500/20 to-transparent transition-transform group-hover:scale-110">
                     <Folder className="h-8 w-8 text-purple-600 dark:text-purple-400" />
                   </div>
-                  <ChevronRight className="h-5 w-5 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100" />
+                  <ChevronRight className="h-5 w-5 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
                 </div>
-                <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+                <h3 className="relative mb-2 text-lg font-semibold text-card-foreground">
                   {project.name}
                 </h3>
-                <div className="space-y-1">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="relative space-y-1">
+                  <p className="text-sm text-muted-foreground">
                     <span className="font-medium">Key:</span>{" "}
                     <span className="font-mono text-purple-600 dark:text-purple-400">
                       {project.location?.projectKey || "N/A"}
                     </span>
                   </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-muted-foreground">
                     <span className="font-medium">Tip:</span>{" "}
                     <span className="capitalize">{project.type || "scrum"}</span>
                   </p>
@@ -232,18 +230,19 @@ export default function JiraProjectsPage() {
               <Link
                 key={project.id}
                 href={`/app/jira/${project.location?.projectKey || project.id}`}
-                className="group block border-l-4 border-l-purple-600 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-l-purple-500 dark:border-gray-700 dark:bg-gray-900"
+                className="group relative block overflow-hidden rounded-lg border-l-4 border-l-purple-600 dark:border-l-purple-500 border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-3 shadow-md transition-all duration-300 hover:scale-[1.01] hover:border-border hover:shadow-xl sm:p-4"
               >
-                <div className="flex items-center justify-between">
+                <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-purple-500/10 to-purple-500/5 blur-xl transition-all group-hover:scale-150" />
+                <div className="relative flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500/20 to-transparent transition-transform group-hover:scale-110">
                       <Folder className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                     </div>
                     <div>
-                      <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
+                      <h3 className="relative mb-1 text-lg font-semibold text-card-foreground">
                         {project.name}
                       </h3>
-                      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                      <div className="relative flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                         <span>
                           <span className="font-medium">Key:</span>{" "}
                           <span className="font-mono text-purple-600 dark:text-purple-400">
@@ -257,7 +256,7 @@ export default function JiraProjectsPage() {
                       </div>
                     </div>
                   </div>
-                  <ChevronRight className="h-5 w-5 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100" />
+                  <ChevronRight className="h-5 w-5 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
                 </div>
               </Link>
             ))}
@@ -277,7 +276,7 @@ export default function JiraProjectsPage() {
 
       {/* Results Count */}
       {filteredProjects.length > 0 && (
-        <div className="text-center text-sm text-gray-600 dark:text-gray-400">
+        <div className="text-center text-sm text-muted-foreground">
           {filteredProjects.length} proje gösteriliyor
           {searchQuery && projects.length !== filteredProjects.length && (
             <span> (toplam {projects.length})</span>

@@ -5,7 +5,8 @@ import Link from "next/link";
 import { Pin, BarChart3, LayoutGrid, X, Search, ChevronRight } from "lucide-react";
 import FilterDropdown from "@/components/jira/FilterDropdown";
 import FilterChip from "@/components/jira/FilterChip";
-import EmptyState from "@/components/jira/EmptyState";
+import EmptyState from "@/components/ui/EmptyState";
+import SectionHeader from "@/components/ui/SectionHeader";
 import type { JiraBoard } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
 
@@ -158,37 +159,23 @@ export default function JiraBoardsPage() {
     }
   };
 
-  const getBoardTypeColor = (type: string) => {
-    switch (type.toLowerCase()) {
-      case "scrum":
-        return "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400";
-      case "kanban":
-        return "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400";
-      default:
-        return "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300";
-    }
-  };
 
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
-            Board&apos;lar
-          </h1>
-          <p className="text-sm text-gray-600 dark:text-gray-400 sm:text-base">
-            Tüm Jira board&apos;larınızı görüntüleyin ve yönetin
-          </p>
-        </div>
-        <button
-          onClick={fetchBoards}
-          disabled={loading}
-          className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
-        >
-          {loading ? "Yükleniyor..." : "Yenile"}
-        </button>
-      </div>
+      <SectionHeader
+        title="Board'lar"
+        description="Tüm Jira board'larınızı görüntüleyin ve yönetin"
+        action={
+          <button
+            onClick={fetchBoards}
+            disabled={loading}
+            className="rounded-lg border-2 border-border bg-card px-4 py-2 text-sm font-semibold text-card-foreground transition-all duration-200 hover:bg-accent hover:text-accent-foreground disabled:opacity-50"
+          >
+            {loading ? "Yükleniyor..." : "Yenile"}
+          </button>
+        }
+      />
 
       {/* Search and Filters */}
       <div className="space-y-4">
@@ -199,9 +186,9 @@ export default function JiraBoardsPage() {
             placeholder="Board ara (isim, proje)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 pl-10 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 sm:text-base"
+            className="w-full rounded-lg border-2 border-border bg-background px-4 py-2.5 pl-10 text-sm text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 sm:text-base"
           />
-          <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
         </div>
 
         {/* Filters */}
@@ -219,23 +206,23 @@ export default function JiraBoardsPage() {
             />
 
             {/* View Mode Toggle */}
-            <div className="ml-auto flex items-center gap-2 rounded-md border-2 border-gray-300 bg-white p-1 dark:border-gray-700 dark:bg-gray-800">
+            <div className="ml-auto flex items-center gap-2 rounded-lg border-2 border-border bg-card p-1">
               <button
                 onClick={() => setViewMode("list")}
-                className={`rounded-md px-3 py-1.5 text-sm transition ${
+                className={`rounded-md px-3 py-1.5 text-sm transition-all duration-200 ${
                   viewMode === "list"
-                    ? "bg-purple-600 text-white"
-                    : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                 }`}
               >
                 List
               </button>
               <button
                 onClick={() => setViewMode("grid")}
-                className={`rounded-md px-3 py-1.5 text-sm transition ${
+                className={`rounded-md px-3 py-1.5 text-sm transition-all duration-200 ${
                   viewMode === "grid"
-                    ? "bg-purple-600 text-white"
-                    : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                 }`}
               >
                 Grid
@@ -245,8 +232,8 @@ export default function JiraBoardsPage() {
 
           {/* Active Filter Chips */}
           {(typeFilter !== "all" || searchQuery.trim()) && (
-            <div className="flex flex-wrap items-center gap-2 rounded-md border-2 border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800/50">
-              <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+            <div className="flex flex-wrap items-center gap-2 rounded-lg border-2 border-border bg-muted/50 p-3">
+              <span className="text-xs font-semibold text-muted-foreground">
                 Aktif Filtreler:
               </span>
               {typeFilter !== "all" && (
@@ -267,7 +254,7 @@ export default function JiraBoardsPage() {
               )}
               <button
                 onClick={clearAllFilters}
-                className="ml-auto flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200"
+                className="ml-auto flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
               >
                 <X className="h-3 w-3" />
                 Tümünü Temizle
@@ -279,7 +266,7 @@ export default function JiraBoardsPage() {
 
       {/* Error Message */}
       {error && (
-        <div className="rounded-md border-2 border-red-200 bg-red-50 p-4 text-sm text-red-600 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+        <div className="rounded-lg border-2 border-destructive bg-destructive/10 p-4 text-sm text-destructive">
           {error}
         </div>
       )}
@@ -296,7 +283,7 @@ export default function JiraBoardsPage() {
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div
               key={i}
-              className={`h-32 animate-pulse border-l-4 border-l-blue-400 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm sm:p-4 dark:border-l-blue-500 dark:border-gray-700 dark:bg-gray-900 ${
+              className={`h-32 animate-pulse border-l-4 border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-card p-3 shadow-sm sm:p-4 ${
                 viewMode === "list" ? "w-full" : ""
               }`}
             />
@@ -309,23 +296,24 @@ export default function JiraBoardsPage() {
               <Link
                 key={board.id}
                 href={`/app/jira/${board.location?.projectKey || board.id}`}
-                className="group relative block border-l-4 border-l-purple-600 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-l-purple-500 dark:border-gray-700 dark:bg-gray-900"
+                className="group relative block overflow-hidden rounded-lg border-l-4 border-l-purple-600 dark:border-l-purple-500 border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-3 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-4"
               >
-                <div className="mb-4 flex items-start justify-between">
+                <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-purple-500/10 to-purple-500/5 blur-xl transition-all group-hover:scale-150" />
+                <div className="relative mb-4 flex items-start justify-between">
                   {(() => {
                     const IconComponent = getBoardTypeIcon(board.type);
                     return (
-                      <div className="flex h-12 w-12 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20 sm:h-14 sm:w-14">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500/20 to-transparent transition-transform group-hover:scale-110 sm:h-14 sm:w-14">
                         <IconComponent className="h-6 w-6 text-purple-600 dark:text-purple-400 sm:h-8 sm:w-8" />
                       </div>
                     );
                   })()}
-                  <ChevronRight className="h-5 w-5 shrink-0 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100" />
+                  <ChevronRight className="h-5 w-5 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
                 </div>
-                <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+                <h3 className="relative mb-2 text-lg font-semibold text-card-foreground">
                   {board.name}
                 </h3>
-                <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
+                <div className="relative space-y-1 text-sm text-muted-foreground">
                   <p>
                     <span className="font-medium">Proje:</span>{" "}
                     <span className="font-mono font-semibold text-purple-600 dark:text-purple-400">
@@ -348,23 +336,24 @@ export default function JiraBoardsPage() {
               <Link
                 key={board.id}
                 href={`/app/jira/${board.location?.projectKey || board.id}`}
-                className="group relative block border-l-4 border-l-purple-600 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-l-purple-500 dark:border-gray-700 dark:bg-gray-900"
+                className="group relative block overflow-hidden rounded-lg border-l-4 border-l-purple-600 dark:border-l-purple-500 border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-3 shadow-md transition-all duration-300 hover:scale-[1.01] hover:border-border hover:shadow-xl sm:p-4"
               >
-                <div className="flex items-center justify-between">
+                <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-purple-500/10 to-purple-500/5 blur-xl transition-all group-hover:scale-150" />
+                <div className="relative flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     {(() => {
                       const IconComponent = getBoardTypeIcon(board.type);
                       return (
-                        <div className="flex h-12 w-12 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500/20 to-transparent transition-transform group-hover:scale-110">
                           <IconComponent className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                         </div>
                       );
                     })()}
                     <div>
-                      <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
+                      <h3 className="relative mb-1 text-lg font-semibold text-card-foreground">
                         {board.name}
                       </h3>
-                      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                      <div className="relative flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                         <span>
                           <span className="font-semibold">Proje:</span>{" "}
                           <span className="font-mono font-semibold text-purple-600 dark:text-purple-400">
@@ -380,7 +369,7 @@ export default function JiraBoardsPage() {
                       </div>
                     </div>
                   </div>
-                  <ChevronRight className="h-5 w-5 shrink-0 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100" />
+                  <ChevronRight className="h-5 w-5 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
                 </div>
               </Link>
             ))}
@@ -414,7 +403,7 @@ export default function JiraBoardsPage() {
 
       {/* Results Count */}
       {filteredBoards.length > 0 && (
-        <div className="text-center text-sm text-gray-600 dark:text-gray-400">
+        <div className="text-center text-sm text-muted-foreground">
           {filteredBoards.length} board gösteriliyor
           {searchQuery && boards.length !== filteredBoards.length && (
             <span> (toplam {boards.length})</span>

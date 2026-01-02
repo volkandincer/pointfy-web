@@ -3,10 +3,9 @@
 import { memo, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Home, ClipboardList } from "lucide-react";
-import Button from "@/components/ui/Button";
 import AllRoomsModal from "@/components/rooms/AllRoomsModal";
 import RoomPinModal from "@/components/rooms/RoomPinModal";
-import EmptyState from "@/components/jira/EmptyState";
+import EmptyState from "@/components/ui/EmptyState";
 import { useToastContext } from "@/contexts/ToastContext";
 import type { RoomInfo } from "@/interfaces/Room.interface";
 import { getSupabase } from "@/lib/supabase";
@@ -100,7 +99,7 @@ const RecentRooms = memo(function RecentRooms() {
         await addUserToRoom(result.room.code, userKey, username);
       }
       router.push(`/app/rooms/${roomId}`);
-    } catch (err) {
+    } catch {
       showToast("Odaya giriş yapılırken bir hata oluştu.", "error");
     }
   };
@@ -158,48 +157,102 @@ const RecentRooms = memo(function RecentRooms() {
           </div>
         ) : displayedRooms.length > 0 ? (
           <>
-            {/* Room Cards Grid - Same design language as QuickActions */}
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4">
-              {displayedRooms.map((r) => {
-                const isRetro = r.room_type === "retro";
-                const borderColor = isRetro 
-                  ? "border-l-purple-600 dark:border-l-purple-500" 
-                  : "border-l-blue-600 dark:border-l-blue-500";
-                const iconColor = isRetro
-                  ? "text-purple-600 dark:text-purple-400"
-                  : "text-blue-600 dark:text-blue-400";
-                
-                return (
-                <button
-                  key={r.id}
-                  onClick={() => handleRoomClick(r.id)}
-                  className={`group relative flex min-h-[100px] flex-col items-center justify-center border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-border bg-card p-3 text-center shadow-sm transition-all active:border-border active:shadow-md sm:min-h-[120px] sm:p-4 hover:border-border hover:shadow-md`}
-                >
-                  {/* Icon */}
-                  <div className="mb-2 sm:mb-2.5">
-                    <Home className={`h-6 w-6 ${iconColor} sm:h-7 sm:w-7`} />
-                  </div>
+            {/* Room Cards - Grid for desktop, slider for mobile when 4+ rooms */}
+            {displayedRooms.length >= 4 ? (
+              <div className="grid hidden grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 md:grid md:grid-cols-4">
+                {displayedRooms.map((r) => {
+                  const isRetro = r.room_type === "retro";
+                  const borderColor = isRetro 
+                    ? "border-l-purple-600 dark:border-l-purple-500" 
+                    : "border-l-blue-600 dark:border-l-blue-500";
+                  const iconColor = isRetro
+                    ? "text-purple-600 dark:text-purple-400"
+                    : "text-blue-600 dark:text-blue-400";
+                  
+                  return (
+                    <button
+                      key={r.id}
+                      onClick={() => handleRoomClick(r.id)}
+                      className={`group relative flex min-h-[120px] flex-col items-center justify-center overflow-hidden rounded-lg border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 text-center shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl`}
+                    >
+                      {/* Glow Effect */}
+                      <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
+                      
+                      {/* Icon */}
+                      <div className="relative mb-2.5">
+                        <div className={`flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br ${iconColor.replace('text-', 'from-').replace('-600', '-500/20').replace('-400', '-400/20')} to-transparent transition-transform group-hover:scale-110 sm:h-12 sm:w-12`}>
+                          <Home className={`h-5 w-5 ${iconColor} sm:h-6 sm:w-6`} />
+                        </div>
+                      </div>
 
-                  {/* Room Name */}
-                  <h3 className="mb-1 truncate w-full text-xs font-semibold text-card-foreground sm:text-sm">
-                    {r.name || "Oda"}
-                  </h3>
+                      {/* Room Name */}
+                      <h3 className="mb-1 w-full truncate text-xs font-semibold text-card-foreground sm:text-sm">
+                        {r.name || "Oda"}
+                      </h3>
 
-                  {/* Room Code and Username */}
-                  <div className="flex flex-col items-center gap-1">
-                    <span className="rounded-md border-2 border-border bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground sm:text-xs">
-                      {r.code}
-                    </span>
-                    {r.created_by_username && (
-                      <span className="hidden text-[10px] font-semibold text-green-500 sm:block sm:text-xs">
-                        {r.created_by_username}
-                      </span>
-                    )}
-                  </div>
-                </button>
-                );
-              })}
-            </div>
+                      {/* Room Code and Username */}
+                      <div className="flex flex-col items-center gap-1">
+                        <span className="rounded-md border-2 border-border bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground sm:text-xs">
+                          {r.code}
+                        </span>
+                        {r.created_by_username && (
+                          <span className="hidden text-[10px] font-semibold text-green-500 sm:block sm:text-xs">
+                            {r.created_by_username}
+                          </span>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4">
+                {displayedRooms.map((r) => {
+                  const isRetro = r.room_type === "retro";
+                  const borderColor = isRetro 
+                    ? "border-l-purple-600 dark:border-l-purple-500" 
+                    : "border-l-blue-600 dark:border-l-blue-500";
+                  const iconColor = isRetro
+                    ? "text-purple-600 dark:text-purple-400"
+                    : "text-blue-600 dark:text-blue-400";
+                  
+                  return (
+                    <button
+                      key={r.id}
+                      onClick={() => handleRoomClick(r.id)}
+                      className={`group relative flex min-h-[120px] flex-col items-center justify-center overflow-hidden rounded-lg border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 text-center shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl`}
+                    >
+                      {/* Glow Effect */}
+                      <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
+                      
+                      {/* Icon */}
+                      <div className="relative mb-2.5">
+                        <div className={`flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br ${iconColor.replace('text-', 'from-').replace('-600', '-500/20').replace('-400', '-400/20')} to-transparent transition-transform group-hover:scale-110 sm:h-12 sm:w-12`}>
+                          <Home className={`h-5 w-5 ${iconColor} sm:h-6 sm:w-6`} />
+                        </div>
+                      </div>
+
+                      {/* Room Name */}
+                      <h3 className="mb-1 w-full truncate text-xs font-semibold text-card-foreground sm:text-sm">
+                        {r.name || "Oda"}
+                      </h3>
+
+                      {/* Room Code and Username */}
+                      <div className="flex flex-col items-center gap-1">
+                        <span className="rounded-md border-2 border-border bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground sm:text-xs">
+                          {r.code}
+                        </span>
+                        {r.created_by_username && (
+                          <span className="hidden text-[10px] font-semibold text-green-500 sm:block sm:text-xs">
+                            {r.created_by_username}
+                          </span>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
 
             {/* View All Button */}
             {hasMoreRooms && (

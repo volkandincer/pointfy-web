@@ -2,10 +2,11 @@
 
 import { memo, useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Edit, Trash2, Calendar, ClipboardList, Link2, ExternalLink, User, Award } from "lucide-react";
-import EmptyState from "@/components/jira/EmptyState";
+import { Edit, Trash2, Calendar, ClipboardList, Link2, ExternalLink } from "lucide-react";
+import EmptyState from "@/components/ui/EmptyState";
 import Button from "@/components/ui/Button";
-import { getStatusColorClasses, getPriorityColorClasses } from "@/lib/jira/colors";
+import { getStatusColorClasses } from "@/lib/jira/colors";
+import Image from "next/image";
 import { getSupabase } from "@/lib/supabase";
 import type { PersonalTask } from "@/interfaces/PersonalTask.interface";
 import type { JiraTask } from "@/interfaces/Jira.interface";
@@ -26,7 +27,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 const PRIORITY_COLORS = {
-  1: { bg: "bg-gray-100 dark:bg-gray-800", text: "text-gray-700 dark:text-gray-300", label: "Düşük" },
+  1: { bg: "bg-muted", text: "text-card-foreground", label: "Düşük" },
   2: { bg: "bg-blue-100 dark:bg-blue-900/30", text: "text-blue-700 dark:text-blue-400", label: "Orta" },
   3: { bg: "bg-red-100 dark:bg-red-900/30", text: "text-red-700 dark:text-red-400", label: "Yüksek" },
 };
@@ -60,7 +61,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
         if (mounted && userRow?.jira_base_url) {
           setJiraBaseUrl(userRow.jira_base_url);
         }
-      } catch (err) {
+      } catch {
         // Jira base URL fetch error
       }
     }
@@ -99,7 +100,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
       if (response.ok && data.issue) {
         setJiraTasks((prev) => ({ ...prev, [issueKey]: data.issue }));
       }
-    } catch (err) {
+    } catch {
       // Jira fetch error
     } finally {
       setLoadingJira((prev) => ({ ...prev, [issueKey]: false }));
@@ -193,7 +194,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
       1: { 
         border: "border-gray-500 dark:border-gray-500", 
         bg: "bg-gray-100 dark:bg-gray-800", 
-        text: "text-gray-700 dark:text-gray-300" 
+        text: "text-card-foreground" 
       },
     };
     return colors[priority] || colors[1];
@@ -220,7 +221,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
           >
             {/* Header */}
             <div className="relative mb-3 flex items-start justify-between gap-2">
-              <h3 className="flex-1 text-base font-bold text-gray-900 dark:text-white sm:text-lg">
+              <h3 className="flex-1 text-base font-bold text-card-foreground sm:text-lg">
                 {t.title}
               </h3>
               <div className="flex shrink-0 items-center gap-1.5">
@@ -240,7 +241,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
             {/* Description */}
             {t.description && (
               <div className="relative mb-3">
-                <p className="line-clamp-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
                   {t.description}
                 </p>
               </div>
@@ -261,13 +262,15 @@ const PersonalTaskList = memo(function PersonalTaskList({
                 {jiraTask.assignee && (
                   <div className="flex items-center gap-1.5 rounded-md border-2 border-gray-300 bg-gray-50 px-2 py-0.5 shadow-sm dark:border-gray-700 dark:bg-gray-800">
                     {jiraTask.assignee.avatar && (
-                      <img
+                      <Image
                         src={jiraTask.assignee.avatar}
                         alt={jiraTask.assignee.name}
+                        width={16}
+                        height={16}
                         className="h-4 w-4 rounded-full border border-gray-300 dark:border-gray-600"
                       />
                     )}
-                    <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                    <span className="text-xs font-medium text-card-foreground">
                       {jiraTask.assignee.name}
                     </span>
                   </div>
@@ -287,7 +290,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
                 {getCategoryLabel(t.category)}
               </span>
               {t.created_at && (
-                <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                <div className="flex items-center gap-1 text-xs text-muted-foreground">
                   <Calendar className="h-3 w-3" />
                   <span>{formatDate(t.created_at)}</span>
                 </div>
@@ -346,7 +349,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
                 variant="secondary"
                 size="sm"
                 icon={Edit}
-                className="!border-gray-300 !bg-white !text-gray-700 hover:!border-gray-400 hover:!bg-gray-50 dark:!border-gray-700 dark:!bg-gray-800 dark:!text-gray-300 dark:hover:!border-gray-600 dark:hover:!bg-gray-700"
+                className="!border-border !bg-card !text-card-foreground hover:!border-border hover:!bg-accent"
               />
               <Button
                 onClick={(e) => {

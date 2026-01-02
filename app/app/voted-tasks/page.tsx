@@ -204,7 +204,7 @@ export default function VotedTasksPage() {
       case "pending":
       default:
         return (
-          <span className="inline-flex items-center gap-1 rounded-md border-2 border-gray-300 bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+          <span className="inline-flex items-center gap-1 rounded-md border-2 border-border bg-muted/50 px-2.5 py-1 text-xs font-semibold text-card-foreground shadow-sm">
             <Clock className="h-3 w-3" />
             Beklemede
           </span>
@@ -219,10 +219,10 @@ export default function VotedTasksPage() {
           <div className="mx-auto max-w-5xl">
             <div className="mb-6 flex items-center justify-between">
               <div>
-                <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+                <h1 className="mb-2 text-3xl font-bold text-card-foreground sm:text-4xl">
                   Puanladığım Task&apos;lar
                 </h1>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-sm text-muted-foreground">
                   Oy verdiğiniz tüm task&apos;ları görüntüleyin
                 </p>
               </div>
@@ -238,12 +238,12 @@ export default function VotedTasksPage() {
                 ))}
               </div>
             ) : votedTasks.length === 0 ? (
-              <div className="rounded-md border-2 border-gray-300 bg-white p-8 text-center shadow-sm sm:p-12 dark:border-gray-700 dark:bg-gray-900">
-                <BarChart3 className="mx-auto mb-3 h-12 w-12 text-gray-400 dark:text-gray-500" />
-                <p className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
+              <div className="rounded-md border-2 border-border bg-card p-8 text-center shadow-sm sm:p-12">
+                <BarChart3 className="mx-auto mb-3 h-12 w-12 text-muted-foreground" />
+                <p className="mb-1 text-lg font-semibold text-card-foreground">
                   Henüz puanladığınız task yok
                 </p>
-                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                <p className="mt-1 text-sm text-muted-foreground">
                   Odalarda task&apos;lara oy vererek buraya ekleyebilirsiniz
                 </p>
               </div>
@@ -259,11 +259,11 @@ export default function VotedTasksPage() {
                   >
                     <div className="mb-3 flex items-start justify-between">
                       <div className="flex-1">
-                        <h3 className="mb-1.5 text-lg font-bold text-gray-900 dark:text-white">
+                        <h3 className="mb-1.5 text-lg font-bold text-card-foreground">
                           {task.task_title}
                         </h3>
                         {task.task_description && (
-                          <p className="mb-2 line-clamp-2 text-sm text-gray-600 dark:text-gray-400">
+                          <p className="mb-2 line-clamp-2 text-sm text-muted-foreground">
                             {task.task_description}
                           </p>
                         )}
@@ -283,34 +283,34 @@ export default function VotedTasksPage() {
 
                     <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                       <div>
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                        <span className="text-xs text-muted-foreground">
                           Verdiğiniz Puan
                         </span>
-                        <p className="mt-1 text-lg font-bold text-gray-900 dark:text-white">
+                        <p className="mt-1 text-lg font-bold text-card-foreground">
                           {task.user_point ?? "—"}
                         </p>
                       </div>
                       <div>
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                        <span className="text-xs text-muted-foreground">
                           Ortalama Puan
                         </span>
-                        <p className="mt-1 text-lg font-bold text-gray-900 dark:text-white">
+                        <p className="mt-1 text-lg font-bold text-card-foreground">
                           {task.average_point > 0 ? task.average_point : "—"}
                         </p>
                       </div>
                       <div>
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                        <span className="text-xs text-muted-foreground">
                           Toplam Oy
                         </span>
-                        <p className="mt-1 text-lg font-bold text-gray-900 dark:text-white">
+                        <p className="mt-1 text-lg font-bold text-card-foreground">
                           {task.total_votes}
                         </p>
                       </div>
                       <div>
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                        <span className="text-xs text-muted-foreground">
                           Oy Tarihi
                         </span>
-                        <p className="mt-1 text-sm font-medium text-gray-900 dark:text-white">
+                        <p className="mt-1 text-sm font-medium text-card-foreground">
                           {formatDate(task.created_at)}
                         </p>
                       </div>

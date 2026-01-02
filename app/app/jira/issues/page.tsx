@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ClipboardList, X, Search, ExternalLink, ChevronRight, Filter, Plus } from "lucide-react";
-import EmptyState from "@/components/jira/EmptyState";
+import EmptyState from "@/components/ui/EmptyState";
+import SectionHeader from "@/components/ui/SectionHeader";
 import CreateJiraIssueModal from "@/components/tasks/CreateJiraIssueModal";
 import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
@@ -224,11 +225,10 @@ export default function JiraIssuesPage() {
   return (
     <div className="space-y-3">
       {/* Header */}
-      <div>
-        <h1 className="text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
-          Issue&apos;larım
-        </h1>
-      </div>
+      <SectionHeader
+        title="Issue'larım"
+        description="Tüm Jira issue'larınızı görüntüleyin ve yönetin"
+      />
 
       {/* Search - En Üstte */}
       <div className="relative">
@@ -237,9 +237,9 @@ export default function JiraIssuesPage() {
           placeholder="Issue ara (key, summary, project)..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2.5 pl-9 text-sm text-gray-900 placeholder-gray-500 focus:border-purple-600 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500"
+          className="w-full rounded-lg border-2 border-border bg-background px-3 py-2.5 pl-9 text-sm text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
         />
-        <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+        <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
       </div>
 
       {/* Action Buttons - Tek Satırda, Aynı Yükseklikte */}
@@ -249,7 +249,7 @@ export default function JiraIssuesPage() {
           size="sm"
           onClick={fetchIssues}
           disabled={loading}
-          className="!h-10 !min-h-10 !py-2 !border-gray-300 !bg-white !text-gray-700 hover:!border-gray-400 hover:!bg-gray-50 dark:!border-gray-700 dark:!bg-gray-800 dark:!text-gray-300 dark:hover:!border-gray-600 dark:hover:!bg-gray-700"
+          className="!h-10 !min-h-10 !py-2"
         >
           {loading ? "Yükleniyor..." : "Yenile"}
         </Button>
@@ -258,7 +258,7 @@ export default function JiraIssuesPage() {
           size="sm"
           onClick={() => setShowCreateModal(true)}
           icon={Plus}
-          className="!h-10 !min-h-10 !py-2 !border-purple-600 !bg-purple-600 !text-white hover:!border-purple-700 hover:!bg-purple-700 dark:!border-purple-500 dark:!bg-purple-600 dark:!text-white dark:hover:!border-purple-400 dark:hover:!bg-purple-500"
+          className="!h-10 !min-h-10 !py-2"
         >
           Yeni Issue
         </Button>
@@ -267,34 +267,34 @@ export default function JiraIssuesPage() {
           size="sm"
           onClick={() => setShowFilterModal(true)}
           icon={Filter}
-          className={`!h-10 !min-h-10 !py-2 !border-gray-300 !bg-white !text-gray-700 hover:!border-gray-400 hover:!bg-gray-50 dark:!border-gray-700 dark:!bg-gray-800 dark:!text-gray-300 dark:hover:!border-gray-600 dark:hover:!bg-gray-700 ${
-            activeFiltersCount > 0 ? "!border-purple-600 !bg-purple-50 !text-purple-700 dark:!border-purple-500 dark:!bg-purple-900/20 dark:!text-purple-400" : ""
+          className={`!h-10 !min-h-10 !py-2 ${
+            activeFiltersCount > 0 ? "!border-primary !bg-primary/10 !text-primary" : ""
           }`}
         >
           Filtrele
           {activeFiltersCount > 0 && (
-            <span className="ml-1.5 rounded-md border-2 border-purple-600 bg-purple-600 px-1.5 py-0.5 text-[10px] font-bold text-white dark:border-purple-500 dark:bg-purple-600 dark:text-white">
+            <span className="ml-1.5 rounded-md border-2 border-primary bg-primary px-1.5 py-0.5 text-[10px] font-bold text-primary-foreground">
               {activeFiltersCount}
             </span>
           )}
         </Button>
-        <div className="flex h-10 items-center gap-0.5 rounded-md border-2 border-gray-300 bg-white p-0 dark:border-gray-700 dark:bg-gray-800">
+        <div className="flex h-10 items-center gap-0.5 rounded-lg border-2 border-border bg-card p-0">
           <button
             onClick={() => setViewMode("list")}
-            className={`flex h-full flex-1 items-center justify-center rounded-md px-3 text-xs font-semibold transition ${
+            className={`flex h-full flex-1 items-center justify-center rounded-md px-3 text-xs font-semibold transition-all duration-200 ${
               viewMode === "list"
-                ? "bg-purple-600 text-white"
-                : "text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-700"
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
             }`}
           >
             List
           </button>
           <button
             onClick={() => setViewMode("grid")}
-            className={`flex h-full flex-1 items-center justify-center rounded-md px-3 text-xs font-semibold transition ${
+            className={`flex h-full flex-1 items-center justify-center rounded-md px-3 text-xs font-semibold transition-all duration-200 ${
               viewMode === "grid"
-                ? "bg-purple-600 text-white"
-                : "text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-700"
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
             }`}
           >
             Grid
@@ -343,7 +343,7 @@ export default function JiraIssuesPage() {
           )}
           <button
             onClick={clearAllFilters}
-            className="ml-auto rounded-md border-2 border-gray-300 bg-white px-3 py-1 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
+            className="ml-auto rounded-md border-2 border-border bg-card px-3 py-1 text-xs font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
           >
             Tümünü Temizle
           </button>
@@ -357,15 +357,15 @@ export default function JiraIssuesPage() {
         title={
           <div className="flex w-full items-center justify-between">
             <div className="flex items-center gap-2">
-              <Filter className="h-5 w-5 text-gray-600 dark:text-gray-400" />
-              <span className="text-lg font-bold text-gray-900 dark:text-white">
+              <Filter className="h-5 w-5 text-muted-foreground" />
+              <span className="text-lg font-bold text-card-foreground">
                 Filtreler
               </span>
             </div>
             {activeFiltersCount > 0 && (
               <button
                 onClick={clearAllFilters}
-                className="rounded-md border-2 border-gray-300 bg-white px-3 py-1 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
+                className="rounded-md border-2 border-border bg-card px-3 py-1 text-xs font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
               >
                 Tümünü Temizle
               </button>
@@ -376,16 +376,16 @@ export default function JiraIssuesPage() {
         <div className="space-y-6">
           {/* Status Filter */}
           <div>
-            <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">
+            <h3 className="mb-3 text-sm font-semibold text-card-foreground">
               Durum
             </h3>
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => setStatusFilter("all")}
-                className={`rounded-md border-2 px-3 py-2 text-sm font-semibold transition-all ${
+                className={`rounded-lg border-2 px-3 py-2 text-sm font-semibold transition-all duration-200 ${
                   statusFilter === "all"
-                    ? "border-blue-600 bg-blue-600 text-white dark:border-blue-500 dark:bg-blue-600"
-                    : "border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:bg-gray-700"
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                 }`}
               >
                 Tümü
@@ -394,10 +394,10 @@ export default function JiraIssuesPage() {
                 <button
                   key={option.value}
                   onClick={() => setStatusFilter(option.value)}
-                  className={`rounded-md border-2 px-3 py-2 text-sm font-semibold transition-all ${
+                  className={`rounded-lg border-2 px-3 py-2 text-sm font-semibold transition-all duration-200 ${
                     statusFilter === option.value
-                      ? "border-blue-600 bg-blue-600 text-white dark:border-blue-500 dark:bg-blue-600"
-                      : "border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:bg-gray-700"
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                   }`}
                 >
                   {option.label}
@@ -409,16 +409,16 @@ export default function JiraIssuesPage() {
           {/* Priority Filter */}
           {priorityOptions.length > 0 && (
             <div>
-              <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">
+              <h3 className="mb-3 text-sm font-semibold text-card-foreground">
                 Öncelik
               </h3>
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => setPriorityFilter("all")}
-                  className={`rounded-md border-2 px-3 py-2 text-sm font-semibold transition-all ${
+                  className={`rounded-lg border-2 px-3 py-2 text-sm font-semibold transition-all duration-200 ${
                     priorityFilter === "all"
-                      ? "border-green-600 bg-green-600 text-white dark:border-green-500 dark:bg-green-600"
-                      : "border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:bg-gray-700"
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                   }`}
                 >
                   Tümü
@@ -427,10 +427,10 @@ export default function JiraIssuesPage() {
                   <button
                     key={option.value}
                     onClick={() => setPriorityFilter(option.value)}
-                    className={`rounded-md border-2 px-3 py-2 text-sm font-semibold transition-all ${
+                    className={`rounded-lg border-2 px-3 py-2 text-sm font-semibold transition-all duration-200 ${
                       priorityFilter === option.value
-                        ? "border-green-600 bg-green-600 text-white dark:border-green-500 dark:bg-green-600"
-                        : "border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:bg-gray-700"
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                     }`}
                   >
                     {option.label}
@@ -443,16 +443,16 @@ export default function JiraIssuesPage() {
           {/* Project Filter */}
           {projectOptions.length > 0 && (
             <div>
-              <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">
+              <h3 className="mb-3 text-sm font-semibold text-card-foreground">
                 Proje
               </h3>
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => setProjectFilter("all")}
-                  className={`rounded-md border-2 px-3 py-2 text-sm font-semibold transition-all ${
+                  className={`rounded-lg border-2 px-3 py-2 text-sm font-semibold transition-all duration-200 ${
                     projectFilter === "all"
-                      ? "border-purple-600 bg-purple-600 text-white dark:border-purple-500 dark:bg-purple-600"
-                      : "border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:bg-gray-700"
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                   }`}
                 >
                   Tümü
@@ -461,10 +461,10 @@ export default function JiraIssuesPage() {
                   <button
                     key={option.value}
                     onClick={() => setProjectFilter(option.value)}
-                    className={`rounded-md border-2 px-3 py-2 text-sm font-semibold transition-all ${
+                    className={`rounded-lg border-2 px-3 py-2 text-sm font-semibold transition-all duration-200 ${
                       projectFilter === option.value
-                        ? "border-purple-600 bg-purple-600 text-white dark:border-purple-500 dark:bg-purple-600"
-                        : "border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:bg-gray-700"
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                     }`}
                   >
                     {option.label}
@@ -477,16 +477,16 @@ export default function JiraIssuesPage() {
           {/* Type Filter */}
           {typeOptions.length > 0 && (
             <div>
-              <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">
+              <h3 className="mb-3 text-sm font-semibold text-card-foreground">
                 Tip
               </h3>
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => setTypeFilter("all")}
-                  className={`rounded-md border-2 px-3 py-2 text-sm font-semibold transition-all ${
+                  className={`rounded-lg border-2 px-3 py-2 text-sm font-semibold transition-all duration-200 ${
                     typeFilter === "all"
-                      ? "border-orange-600 bg-orange-600 text-white dark:border-orange-500 dark:bg-orange-600"
-                      : "border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:bg-gray-700"
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                   }`}
                 >
                   Tümü
@@ -495,10 +495,10 @@ export default function JiraIssuesPage() {
                   <button
                     key={option.value}
                     onClick={() => setTypeFilter(option.value)}
-                    className={`rounded-md border-2 px-3 py-2 text-sm font-semibold transition-all ${
+                    className={`rounded-lg border-2 px-3 py-2 text-sm font-semibold transition-all duration-200 ${
                       typeFilter === option.value
-                        ? "border-orange-600 bg-orange-600 text-white dark:border-orange-500 dark:bg-orange-600"
-                        : "border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:bg-gray-700"
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                     }`}
                   >
                     {option.label}
@@ -523,7 +523,7 @@ export default function JiraIssuesPage() {
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div
               key={i}
-              className={`h-28 animate-pulse border-l-4 border-l-gray-400 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm dark:border-l-gray-500 dark:border-gray-700 dark:bg-gray-900 ${
+              className={`h-28 animate-pulse border-l-4 border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-card p-3 shadow-sm ${
                 viewMode === "list" ? "w-full" : ""
               }`}
             />
@@ -541,12 +541,13 @@ export default function JiraIssuesPage() {
                   }
                 }}
                 disabled={!issue.key}
-                className="group relative block w-full border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900"
+                className="group relative block w-full overflow-hidden rounded-lg border-l-4 border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-3 text-left shadow-md transition-all duration-300 hover:scale-[1.01] hover:border-border hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
                 style={{
-                  borderLeftColor: issue.statusColor === 'green' ? '#16a34a' : issue.statusColor === 'yellow' ? '#eab308' : issue.statusColor === 'blue' ? '#2563eb' : '#6b7280',
+                  borderLeftColor: issue.statusColor === 'green' ? '#16a34a' : issue.statusColor === 'yellow' ? '#eab308' : issue.statusColor === 'blue' ? '#2563eb' : undefined,
                 }}
               >
-                <div className="mb-2 flex items-start justify-between gap-2">
+                <div className="absolute right-0 top-0 h-20 w-20 translate-x-4 -translate-y-4 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
+                <div className="relative mb-2 flex items-start justify-between gap-2">
                   <div className="flex flex-wrap items-center gap-1.5">
                     <span className="rounded-md border-2 border-purple-300 bg-purple-100 px-2 py-0.5 font-mono text-[10px] font-bold text-purple-700 dark:border-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
                       {issue.key}
@@ -561,10 +562,10 @@ export default function JiraIssuesPage() {
                   </div>
                   <ExternalLink className="h-3.5 w-3.5 shrink-0 text-purple-600 opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-100 dark:text-purple-400" />
                 </div>
-                <h3 className="mb-2 line-clamp-2 text-xs font-bold text-gray-900 dark:text-white">
+                <h3 className="relative mb-2 line-clamp-2 text-xs font-bold text-card-foreground">
                   {issue.summary}
                 </h3>
-                <div className="flex flex-wrap items-center gap-1.5">
+                <div className="relative flex flex-wrap items-center gap-1.5">
                   <span className="rounded-md border-2 border-purple-300 bg-purple-100 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-purple-700 dark:border-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
                     {issue.project.key}
                   </span>
@@ -573,7 +574,7 @@ export default function JiraIssuesPage() {
                       {issue.priority}
                     </span>
                   )}
-                  <span className="rounded-md border-2 border-gray-300 bg-gray-100 px-1.5 py-0.5 text-[10px] font-medium text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                  <span className="rounded-md border-2 border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
                     {issue.type}
                   </span>
                 </div>
@@ -591,12 +592,13 @@ export default function JiraIssuesPage() {
                   }
                 }}
                 disabled={!issue.key}
-                className="group relative block w-full border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 text-left shadow-sm transition-all hover:border-gray-400 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900"
+                className="group relative block w-full overflow-hidden rounded-lg border-l-4 border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-3 text-left shadow-md transition-all duration-300 hover:scale-[1.01] hover:border-border hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
                 style={{
-                  borderLeftColor: issue.statusColor === 'green' ? '#16a34a' : issue.statusColor === 'yellow' ? '#eab308' : issue.statusColor === 'blue' ? '#2563eb' : '#6b7280',
+                  borderLeftColor: issue.statusColor === 'green' ? '#16a34a' : issue.statusColor === 'yellow' ? '#eab308' : issue.statusColor === 'blue' ? '#2563eb' : undefined,
                 }}
               >
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <div className="absolute right-0 top-0 h-20 w-20 translate-x-4 -translate-y-4 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
+                <div className="relative flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex-1 space-y-1.5">
                     <div className="flex flex-wrap items-center gap-1.5">
                       <span className="rounded-md border-2 border-purple-300 bg-purple-100 px-2 py-0.5 font-mono text-[10px] font-bold text-purple-700 dark:border-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
@@ -618,14 +620,14 @@ export default function JiraIssuesPage() {
                           {issue.priority}
                         </span>
                       )}
-                      <span className="rounded-md border-2 border-gray-300 bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                      <span className="rounded-md border-2 border-border bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
                         {issue.type}
                       </span>
                     </div>
-                    <h3 className="text-sm font-bold text-gray-900 dark:text-white sm:text-base">
+                    <h3 className="relative text-sm font-bold text-card-foreground sm:text-base">
                       {issue.summary}
                     </h3>
-                    <div className="flex flex-wrap items-center gap-2 text-[10px] text-gray-600 dark:text-gray-400 sm:text-xs">
+                    <div className="relative flex flex-wrap items-center gap-2 text-[10px] text-muted-foreground sm:text-xs">
                       <span>
                         <span className="font-semibold">Proje:</span>{" "}
                         <span className="font-mono font-semibold text-purple-600 dark:text-purple-400">
@@ -674,7 +676,7 @@ export default function JiraIssuesPage() {
 
       {/* Results Count */}
       {filteredIssues.length > 0 && (
-        <div className="text-center text-xs text-gray-600 dark:text-gray-400">
+        <div className="text-center text-xs text-muted-foreground">
           {filteredIssues.length} issue gösteriliyor
           {searchQuery && issues.length !== filteredIssues.length && (
             <span> (toplam {issues.length})</span>
@@ -686,7 +688,7 @@ export default function JiraIssuesPage() {
       <CreateJiraIssueModal
         open={showCreateModal}
         onClose={() => setShowCreateModal(false)}
-        onSuccess={async (issueKey, issueUrl) => {
+        onSuccess={async (issueKey) => {
           showToast(`Issue başarıyla oluşturuldu: ${issueKey}`, "success");
           setShowCreateModal(false);
           // Issues listesini yenile

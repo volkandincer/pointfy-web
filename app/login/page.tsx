@@ -125,11 +125,11 @@ function LoginPageContent() {
       <>
         <Header navigationItems={navigationItems} />
         <main className="relative min-h-[calc(100vh-4rem)] overflow-hidden">
-          <div className="pointer-events-none absolute inset-0 -z-10 bg-white dark:bg-gray-950" />
+          <div className="pointer-events-none absolute inset-0 -z-10 bg-background" />
           <div className="container mx-auto flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-16">
             <div className="text-center">
-              <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-blue-600 border-t-transparent dark:border-blue-400" />
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+              <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+              <p className="text-sm font-medium text-muted-foreground">
                 Kontrol ediliyor...
               </p>
             </div>
@@ -225,26 +225,26 @@ function LoginPageContent() {
       <Header navigationItems={navigationItems} />
       <main className="relative min-h-[calc(100vh-4rem)] overflow-hidden">
         {/* Background */}
-        <div className="pointer-events-none absolute inset-0 -z-10 bg-gray-50 dark:bg-gray-950" />
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-background" />
 
         <div className="container mx-auto flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-16">
           <div className="w-full max-w-md">
             {/* Card */}
-             <div className="rounded-md border-2 border-gray-300 bg-white p-8 shadow-md dark:border-gray-700 dark:bg-gray-900">
+             <div className="rounded-md border-2 border-border bg-card p-8 shadow-md">
               {/* Logo */}
               <div className="mb-8 flex justify-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
-                  <Layers className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                <div className="flex h-16 w-16 items-center justify-center rounded-md border-2 border-primary bg-primary/10">
+                  <Layers className="h-8 w-8 text-primary" />
                 </div>
               </div>
 
               {/* Tab buttons */}
-              <div className="mb-8 flex gap-2 rounded-md border-2 border-gray-300 bg-gray-100 p-1 dark:border-gray-700 dark:bg-gray-800">
+              <div className="mb-8 flex gap-2 rounded-md border-2 border-border bg-muted p-1">
                 <button
                   className={`flex-1 border-2 px-4 py-2.5 text-sm font-semibold transition-colors ${
                     isLogin
-                      ? "border-blue-600 bg-blue-600 text-white"
-                      : "border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-transparent text-muted-foreground hover:text-card-foreground"
                   }`}
                   onClick={() => {
                     setIsLogin(true);
@@ -256,8 +256,8 @@ function LoginPageContent() {
                 <button
                   className={`flex-1 border-2 px-4 py-2.5 text-sm font-semibold transition-colors ${
                     !isLogin
-                      ? "border-blue-600 bg-blue-600 text-white"
-                      : "border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-transparent text-muted-foreground hover:text-card-foreground"
                   }`}
                   onClick={() => {
                     setIsLogin(false);
@@ -269,7 +269,7 @@ function LoginPageContent() {
               </div>
 
               {/* Title */}
-              <h1 className="mb-8 text-center text-2xl font-bold text-gray-900 dark:text-white">
+              <h1 className="mb-8 text-center text-2xl font-bold text-card-foreground">
                 {isLogin ? "Hesabınıza Giriş Yapın" : "Yeni Hesap Oluşturun"}
               </h1>
 
@@ -281,7 +281,7 @@ function LoginPageContent() {
                 <div>
                   <label
                     htmlFor="email"
-                    className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+                    className="mb-2 block text-sm font-medium text-card-foreground"
                   >
                     E-posta
                   </label>
@@ -291,14 +291,14 @@ function LoginPageContent() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
+                    className="w-full rounded-md border-2 border-input bg-input px-4 py-2.5 text-card-foreground outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
                     placeholder="ornek@email.com"
                   />
                 </div>
                 <div>
                   <label
                     htmlFor="password"
-                    className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+                    className="mb-2 block text-sm font-medium text-card-foreground"
                   >
                     Şifre
                   </label>
@@ -308,7 +308,7 @@ function LoginPageContent() {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
+                    className="w-full rounded-md border-2 border-input bg-input px-4 py-2.5 text-card-foreground outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
                     placeholder="••••••••"
                   />
                 </div>
@@ -316,7 +316,7 @@ function LoginPageContent() {
                   <div>
                     <label
                       htmlFor="username"
-                      className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+                      className="mb-2 block text-sm font-medium text-card-foreground"
                     >
                       Kullanıcı Adı
                     </label>
@@ -326,7 +326,7 @@ function LoginPageContent() {
                       required
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
-                      className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
+                      className="w-full rounded-md border-2 border-input bg-input px-4 py-2.5 text-card-foreground outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
                       placeholder="kullaniciadi"
                     />
                   </div>
@@ -347,7 +347,7 @@ function LoginPageContent() {
                     : "Kayıt Ol"}
                 </Button>
                 {message && (
-                  <div className="rounded-md border-2 border-red-300 bg-red-50 p-3 text-sm text-red-600 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400">
+                  <div className="rounded-md border-2 border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
                     {message}
                   </div>
                 )}
@@ -368,7 +368,7 @@ export default function LoginPage() {
       <>
         <Header navigationItems={getDefaultNavigationItems()} />
         <main className="container mx-auto px-4 py-16">
-          <div className="h-40 animate-pulse border border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
+          <div className="h-40 animate-pulse border border-border bg-muted" />
         </main>
         <Footer navigationItems={getDefaultNavigationItems()} />
       </>

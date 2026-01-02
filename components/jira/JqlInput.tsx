@@ -1,7 +1,6 @@
 "use client";
 
 import { memo, useState, useRef, useEffect } from "react";
-import { ChevronDown } from "lucide-react";
 
 interface JqlInputProps {
   value: string;
@@ -168,12 +167,12 @@ const JqlInput = memo(function JqlInput({
         placeholder={placeholder}
         rows={4}
         disabled={disabled}
-        className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 font-mono leading-relaxed"
+        className="w-full rounded-md border-2 border-input bg-input px-4 py-3 text-sm text-card-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 font-mono leading-relaxed"
       />
       {showSuggestions && suggestions.length > 0 && (
         <div
           ref={suggestionsRef}
-          className="absolute z-20 mt-1 max-h-60 w-full overflow-y-auto rounded-md border-2 border-gray-300 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800"
+          className="absolute z-20 mt-1 max-h-60 w-full overflow-y-auto rounded-md border-2 border-border bg-card shadow-md"
         >
           {suggestions.map((suggestion, index) => (
             <button
@@ -182,8 +181,8 @@ const JqlInput = memo(function JqlInput({
               onClick={() => insertSuggestion(suggestion.value)}
               className={`flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm transition-colors ${
                 index === selectedIndex
-                  ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
-                  : "text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
+                  ? "bg-primary/10 text-primary"
+                  : "text-card-foreground hover:bg-accent"
               }`}
             >
               <span
@@ -206,7 +205,7 @@ const JqlInput = memo(function JqlInput({
           ))}
         </div>
       )}
-      <div className="mt-2 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+      <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
         <span>JQL sorgunuzu girin. Auto-complete için yazmaya başlayın.</span>
         <span className="font-medium">Cmd/Ctrl + Enter ile ara</span>
       </div>

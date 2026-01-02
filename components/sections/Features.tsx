@@ -10,6 +10,7 @@ import {
   Sparkles,
   type LucideIcon 
 } from "lucide-react";
+import Slider from "@/components/ui/Slider";
 import type { Feature } from "@/interfaces/Feature.interface";
 
 interface FeaturesProps {
@@ -67,7 +68,9 @@ const Features = memo(function Features({ features }: FeaturesProps) {
             TeamHubX ile takımınızı yönetmek hiç bu kadar kolay olmamıştı
           </p>
         </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        
+        {/* Desktop Grid View */}
+        <div className="hidden grid-cols-1 gap-4 md:grid md:grid-cols-2 lg:grid-cols-3">
           {memoizedFeatures.map((feature) => {
             const config = featureConfig[feature.id] || { icon: CheckSquare, color: "blue" };
             const colors = colorClasses[config.color] || colorClasses.blue;
@@ -76,25 +79,74 @@ const Features = memo(function Features({ features }: FeaturesProps) {
             return (
               <div
                 key={feature.id}
-                className={`group relative flex min-h-[100px] flex-col items-center justify-center border-l-4 ${colors.border} border-t-2 border-r-2 border-b-2 border-border bg-card p-3 text-center shadow-sm transition-all active:border-border active:shadow-md sm:min-h-[120px] sm:p-4 hover:border-border hover:shadow-md`}
+                className={`group relative flex min-h-[120px] flex-col items-center justify-center overflow-hidden rounded-lg border-l-4 ${colors.border} border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 text-center shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl`}
               >
+                {/* Glow Effect */}
+                <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
+                
                 {/* Icon */}
-                <div className="mb-2 sm:mb-2.5">
-                  <IconComponent className={`h-6 w-6 sm:h-7 sm:w-7 ${colors.icon}`} />
+                <div className="relative mb-2.5">
+                  <div className={`flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br ${colors.icon.replace('text-', 'from-').replace('-600', '-500/20').replace('-400', '-400/20')} to-transparent transition-transform group-hover:scale-110`}>
+                    <IconComponent className={`h-6 w-6 sm:h-7 sm:w-7 ${colors.icon}`} />
+                  </div>
                 </div>
 
                 {/* Title */}
-                <h3 className="mb-1 text-xs font-semibold text-card-foreground sm:text-sm">
+                <h3 className="mb-1 text-sm font-semibold text-card-foreground">
                   {feature.title}
                 </h3>
 
                 {/* Description */}
-                <p className="hidden text-[10px] leading-tight text-muted-foreground sm:block sm:text-xs">
+                <p className="text-xs leading-tight text-muted-foreground">
                   {feature.description}
                 </p>
               </div>
             );
           })}
+        </div>
+
+        {/* Mobile/Tablet Slider View */}
+        <div className="md:hidden">
+          <Slider
+            autoPlay={true}
+            interval={4000}
+            showDots={true}
+            showArrows={true}
+            transition="slide"
+          >
+            {memoizedFeatures.map((feature) => {
+              const config = featureConfig[feature.id] || { icon: CheckSquare, color: "blue" };
+              const colors = colorClasses[config.color] || colorClasses.blue;
+              const IconComponent = config.icon;
+
+              return (
+                <div
+                  key={feature.id}
+                  className={`group relative flex min-h-[140px] flex-col items-center justify-center overflow-hidden rounded-lg border-l-4 ${colors.border} border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-6 text-center shadow-md transition-all duration-300`}
+                >
+                  {/* Glow Effect */}
+                  <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl" />
+                  
+                  {/* Icon */}
+                  <div className="relative mb-3">
+                    <div className={`flex h-14 w-14 items-center justify-center rounded-lg bg-gradient-to-br ${colors.icon.replace('text-', 'from-').replace('-600', '-500/20').replace('-400', '-400/20')} to-transparent`}>
+                      <IconComponent className={`h-7 w-7 ${colors.icon}`} />
+                    </div>
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="mb-2 text-base font-semibold text-card-foreground">
+                    {feature.title}
+                  </h3>
+
+                  {/* Description */}
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    {feature.description}
+                  </p>
+                </div>
+              );
+            })}
+          </Slider>
         </div>
       </div>
     </section>

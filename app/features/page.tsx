@@ -18,10 +18,10 @@ export default function FeaturesPage() {
       <Header navigationItems={navigationItems} />
       <main className="container mx-auto px-4 py-16">
         <div className="mx-auto max-w-4xl">
-          <h1 className="mb-4 text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="mb-4 text-3xl font-bold text-card-foreground">
             Özellikler
           </h1>
-          <ul className="list-disc space-y-2 pl-6 text-gray-600 dark:text-gray-400">
+          <ul className="list-disc space-y-2 pl-6 text-muted-foreground">
             <li>Takım Odaları</li>
             <li>Poker Planning</li>
             <li>Retrospektif</li>

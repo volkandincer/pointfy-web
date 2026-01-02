@@ -64,7 +64,7 @@ export function useVotes(
         unsubscribe = voteRepository.subscribe(
           roomId,
           taskId,
-          (newVote) => {
+          () => {
             if (!mounted) return;
             // Re-fetch votes when a new vote is added (to respect visibility rules)
             getVotesUseCase
@@ -79,7 +79,7 @@ export function useVotes(
                 setVotes(VoteAdapter.toPresentationArray(updatedVotes));
               });
           },
-          (updatedVote) => {
+          () => {
             if (!mounted) return;
             // Re-fetch votes when a vote is updated
             getVotesUseCase

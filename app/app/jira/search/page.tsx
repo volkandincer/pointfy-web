@@ -3,7 +3,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, ExternalLink, History } from "lucide-react";
-import EmptyState from "@/components/jira/EmptyState";
+import EmptyState from "@/components/ui/EmptyState";
+import SectionHeader from "@/components/ui/SectionHeader";
+import Card from "@/components/ui/Card";
 import JqlInput from "@/components/jira/JqlInput";
 import Button from "@/components/ui/Button";
 import { getStatusColorClasses, getPriorityColorClasses } from "@/lib/jira/colors";
@@ -181,23 +183,19 @@ export default function JiraSearchPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
-          Jira Arama
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          JQL (Jira Query Language) ile gelişmiş arama yapın
-        </p>
-      </div>
+      <SectionHeader
+        title="Jira Arama"
+        description="JQL (Jira Query Language) ile gelişmiş arama yapın"
+      />
 
       {/* Search Form */}
-      <div className="border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
+      <Card className="p-4 sm:p-5">
         <div className="space-y-4">
           {/* JQL Input */}
           <div>
             <label
               htmlFor="jql"
-              className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+              className="mb-2 block text-sm font-medium text-card-foreground"
             >
               JQL Sorgusu
             </label>
@@ -215,7 +213,7 @@ export default function JiraSearchPage() {
             <div className="flex-1">
               <label
                 htmlFor="maxResults"
-                className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+                className="mb-2 block text-sm font-medium text-card-foreground"
               >
                 Maksimum Sonuç Sayısı
               </label>
@@ -226,7 +224,7 @@ export default function JiraSearchPage() {
                 max="100"
                 value={maxResults}
                 onChange={(e) => setMaxResults(Math.min(100, Math.max(1, parseInt(e.target.value) || 50)))}
-                className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 focus:border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white sm:w-32"
+                className="w-full rounded-lg border-2 border-border bg-background px-4 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 sm:w-32"
               />
             </div>
             <div className="flex gap-3">
@@ -251,11 +249,11 @@ export default function JiraSearchPage() {
             </div>
           </div>
         </div>
-      </div>
+      </Card>
 
       {/* Quick Search Templates */}
-      <div className="border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
-        <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+      <Card className="p-4 sm:p-5">
+        <h2 className="mb-4 text-lg font-semibold text-card-foreground">
           Hızlı Arama Şablonları
         </h2>
         <div className="flex flex-wrap gap-3">
@@ -266,18 +264,18 @@ export default function JiraSearchPage() {
                 setJql(template.jql);
                 performSearch(template.jql);
               }}
-              className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:border-purple-600 hover:bg-purple-50 hover:text-purple-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-purple-500 dark:hover:bg-purple-900/20 dark:hover:text-purple-400"
+              className="rounded-lg border-2 border-border bg-card px-4 py-2 text-sm font-medium text-muted-foreground transition-all duration-200 hover:border-primary hover:bg-primary/10 hover:text-primary"
             >
               {template.label}
             </button>
           ))}
         </div>
-      </div>
+      </Card>
 
       {/* Search History */}
       {showHistory && searchHistory.length > 0 && (
-        <div className="border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
-          <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+        <Card className="p-4 sm:p-5">
+          <h2 className="mb-4 text-lg font-semibold text-card-foreground">
             Arama Geçmişi
           </h2>
           <div className="space-y-2">
@@ -288,28 +286,28 @@ export default function JiraSearchPage() {
                   setJql(item.jql);
                   performSearch(item.jql);
                 }}
-                className="w-full border-2 border-gray-300 bg-gray-50 p-3 text-left transition-colors hover:border-purple-600 hover:bg-purple-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-purple-500 dark:hover:bg-purple-900/20"
+                className="w-full rounded-lg border-2 border-border bg-muted/50 p-3 text-left transition-all duration-200 hover:border-primary hover:bg-primary/10"
               >
                 <div className="mb-1 flex items-center justify-between">
-                  <code className="text-xs font-mono text-gray-700 dark:text-gray-300">
+                  <code className="text-xs font-mono text-card-foreground">
                     {item.jql}
                   </code>
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                  <span className="text-xs text-muted-foreground">
                     {item.resultCount} sonuç
                   </span>
                 </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p className="text-xs text-muted-foreground">
                   {new Date(item.timestamp).toLocaleString("tr-TR")}
                 </p>
               </button>
             ))}
           </div>
-        </div>
+        </Card>
       )}
 
       {/* Error Message */}
       {error && (
-        <div className="border-2 border-red-300 bg-red-50 p-4 text-sm text-red-600 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400">
+        <div className="rounded-lg border-2 border-destructive bg-destructive/10 p-4 text-sm text-destructive">
           {error}
         </div>
       )}
@@ -320,17 +318,17 @@ export default function JiraSearchPage() {
           {[1, 2, 3, 4, 5].map((i) => (
             <div
               key={i}
-              className="h-20 animate-pulse border-l-4 border-l-purple-400 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm sm:p-4 dark:border-l-purple-500 dark:border-gray-700 dark:bg-gray-900"
+              className="h-20 animate-pulse border-l-4 border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-card p-3 shadow-sm sm:p-4"
             />
           ))}
         </div>
       ) : results.length > 0 ? (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h2 className="text-lg font-semibold text-card-foreground">
               Sonuçlar
             </h2>
-            <span className="text-sm text-gray-600 dark:text-gray-400">
+            <span className="text-sm text-muted-foreground">
               {results.length} / {totalResults} gösteriliyor
             </span>
           </div>
@@ -344,7 +342,7 @@ export default function JiraSearchPage() {
                   }
                 }}
                 disabled={!issue.key}
-                className="group block w-full border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 text-left shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900"
+                className="group relative block w-full overflow-hidden rounded-lg border-l-4 border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-3 text-left shadow-md transition-all duration-300 hover:scale-[1.01] hover:border-border hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex-1">
@@ -368,10 +366,10 @@ export default function JiraSearchPage() {
                         {issue.type}
                       </span>
                     </div>
-                    <h3 className="mb-2 text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
+                    <h3 className="relative mb-2 text-base font-semibold text-card-foreground sm:text-lg">
                       {issue.summary}
                     </h3>
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                    <div className="relative flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                       <span>
                         <span className="font-medium">Proje:</span>{" "}
                         <span className="font-mono text-purple-600 dark:text-purple-400">

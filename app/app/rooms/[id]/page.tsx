@@ -1,10 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Clock } from "lucide-react";
+import { Clock, ArrowLeft, Plus } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import Card from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
 import UserVotingView from "@/components/voting/UserVotingView";
 import AdminVotingView from "@/components/voting/AdminVotingView";
 import UserCompletedTasksView from "@/components/voting/UserCompletedTasksView";
@@ -63,7 +65,7 @@ export default function RoomDetailPage() {
     let mounted = true;
     const supabase = getSupabase();
     const { data: listener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      (event) => {
         if (!mounted) return;
         // Sadece explicit logout durumunda anasayfaya yönlendir
         // RequireAuth zaten login olmamış kullanıcıları login'e yönlendirecek
@@ -232,7 +234,7 @@ export default function RoomDetailPage() {
     return () => {
       mounted = false;
     };
-  }, [roomId, router]);
+  }, [roomId, router, showToast]);
 
   const handlePinSubmit = useCallback(
     async (pin: string) => {
@@ -345,8 +347,8 @@ export default function RoomDetailPage() {
     return (
       <>
         <Header navigationItems={navigationItems} />
-        <main className="container mx-auto px-4 py-16">
-          <div className="h-40 animate-pulse border-2 border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
+        <main className="container mx-auto px-4 py-16 bg-background">
+          <div className="h-40 animate-pulse rounded-lg border-2 border-border bg-muted" />
         </main>
         <Footer navigationItems={navigationItems} />
       </>
@@ -356,14 +358,14 @@ export default function RoomDetailPage() {
   return (
     <>
       <Header navigationItems={navigationItems} />
-        <main className="container mx-auto px-4 py-16">
+        <main className="container mx-auto px-4 py-16 bg-background">
           <div className="mx-auto max-w-5xl">
             <div className="mb-6 flex items-center justify-between">
               <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                <h1 className="text-2xl font-bold text-card-foreground">
                   {room?.name || "Oda"}
                 </h1>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-sm text-muted-foreground">
                   Kod: {room?.code}
                 </p>
               </div>
@@ -375,12 +377,15 @@ export default function RoomDetailPage() {
                     roomName={room.name || "Oda"}
                   />
                 )}
-                <button
+                <Button
+                  variant="secondary"
+                  size="md"
                   onClick={() => router.back()}
-                  className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                  icon={ArrowLeft}
+                  iconPosition="left"
                 >
-                  ← Geri
-                </button>
+                  Geri
+                </Button>
               </div>
             </div>
 
@@ -423,20 +428,20 @@ export default function RoomDetailPage() {
               </>
             ) : (
               <div className="space-y-6">
-                <div className="rounded-md border-2 border-gray-300 bg-white p-6 text-center shadow-sm sm:p-8 dark:border-gray-700 dark:bg-gray-900">
+                <Card padding="lg" className="text-center">
                   <div className="mb-4 flex justify-center">
-                    <div className="flex h-16 w-16 items-center justify-center border-2 border-amber-600 bg-amber-50 dark:bg-amber-900/20">
-                      <Clock className="h-8 w-8 text-amber-600 dark:text-amber-400" />
+                    <div className="flex h-16 w-16 items-center justify-center rounded-lg border-2 border-primary/50 bg-primary/10">
+                      <Clock className="h-8 w-8 text-primary" />
                     </div>
                   </div>
-                  <p className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
+                  <p className="mb-1 text-lg font-semibold text-card-foreground">
                     Aktif Task Yok
                   </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-muted-foreground">
                     Şu anda aktif bir task yok. Admin yeni bir task başlatana
                     kadar bekleyin.
                   </p>
-                </div>
+                </Card>
 
                 {/* User için tamamlanan task'lar */}
                 {!isAdmin && (
@@ -456,25 +461,27 @@ export default function RoomDetailPage() {
                       );
                       if (pendingTasks.length === 0) return null;
                       return (
-                        <div className="mb-6 border-2 border-amber-300 bg-amber-50 p-6 shadow-sm dark:border-amber-700 dark:bg-amber-900/10">
+                        <Card padding="lg" borderColor="primary" className="mb-6">
                           <div className="mb-4 flex items-center justify-between">
                             <div>
                               <div className="flex items-center gap-2">
-                                <Clock className="h-5 w-5 text-amber-600 dark:text-amber-400" />
-                                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                                <Clock className="h-5 w-5 text-primary" />
+                                <h2 className="text-lg font-semibold text-card-foreground">
                                   Puanlanmayı Bekleyen Task&apos;lar
                                 </h2>
                               </div>
-                              <p className="text-xs text-gray-600 dark:text-gray-400">
+                              <p className="text-xs text-muted-foreground">
                                 {pendingTasks.length} task puanlamaya hazır
                               </p>
                             </div>
-                            <button
+                            <Button
+                              variant="primary"
+                              size="sm"
                               onClick={() => setShowTaskModal(true)}
-                              className="border-2 border-blue-600 bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700"
+                              icon={Plus}
                             >
-                              + Task Ekle
-                            </button>
+                              Task Ekle
+                            </Button>
                           </div>
                           <div className="space-y-4">
                             {pendingTasks.map((task) => (
@@ -487,35 +494,37 @@ export default function RoomDetailPage() {
                               />
                             ))}
                           </div>
-                        </div>
+                        </Card>
                       );
                     })()}
 
                     {/* Diğer Task'lar (Active ve Completed) */}
-                    <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                    <Card padding="lg">
                       <div className="mb-4 flex items-center justify-between">
                         <div>
-                          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                          <h2 className="text-lg font-semibold text-card-foreground">
                             Task Yönetimi (Admin)
                           </h2>
-                          <p className="text-xs text-gray-600 dark:text-gray-400">
+                          <p className="text-xs text-muted-foreground">
                             Aktif ve tamamlanan task&apos;lar
                           </p>
                         </div>
-                        <button
+                        <Button
+                          variant="primary"
+                          size="sm"
                           onClick={() => setShowTaskModal(true)}
-                          className="border-2 border-blue-600 bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700"
+                          icon={Plus}
                         >
-                          + Task Ekle
-                        </button>
+                          Task Ekle
+                        </Button>
                       </div>
                       {tasksLoading ? (
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                        <p className="text-sm text-muted-foreground">
                           Yükleniyor...
                         </p>
                       ) : tasks.filter((t) => t.status !== "pending").length ===
                         0 ? (
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                        <p className="text-sm text-muted-foreground">
                           Henüz aktif veya tamamlanan task yok.
                         </p>
                       ) : (
@@ -533,7 +542,7 @@ export default function RoomDetailPage() {
                             ))}
                         </div>
                       )}
-                    </div>
+                    </Card>
                   </>
                 )}
               </div>

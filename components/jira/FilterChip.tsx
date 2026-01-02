@@ -12,16 +12,15 @@ interface FilterChipProps {
 
 const FilterChip = memo(function FilterChip({
   label,
-  value,
   onRemove,
   color = "blue",
 }: FilterChipProps) {
   const colorClasses = {
-    blue: "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800",
-    green: "bg-green-100 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800",
+    blue: "bg-primary/10 text-primary border-primary/30",
+    green: "bg-success/10 text-success border-success/30",
     purple: "bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-900/30 dark:text-purple-400 dark:border-purple-800",
     orange: "bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-900/30 dark:text-orange-400 dark:border-orange-800",
-    gray: "bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700",
+    gray: "bg-muted text-muted-foreground border-border",
   };
 
   return (
@@ -31,7 +30,7 @@ const FilterChip = memo(function FilterChip({
       <span>{label}</span>
       <button
         onClick={onRemove}
-        className="ml-0.5 rounded-md p-0.5 transition-colors hover:bg-black/10 dark:hover:bg-white/10"
+        className="ml-0.5 rounded-md p-0.5 transition-colors hover:bg-foreground/10"
         aria-label={`Remove ${label} filter`}
       >
         <X className="h-3 w-3" />

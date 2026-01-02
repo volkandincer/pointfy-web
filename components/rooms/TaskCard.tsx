@@ -400,26 +400,26 @@ const TaskCard = memo(function TaskCard({
     await onSetActive(task.id);
   };
 
+  // Get border color class based on status
+  const getBorderColorClass = () => {
+    if (task.status === "completed") return "border-l-green-600 dark:border-l-green-500";
+    if (task.status === "active") return "border-l-blue-600 dark:border-l-blue-500";
+    return "border-l-muted-foreground";
+  };
+
+  const borderColorClass = getBorderColorClass();
+
   return (
     <div
-      className={`group relative overflow-hidden border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all duration-200 sm:p-5 ${
-        task.status === "completed"
-          ? "bg-green-50 dark:bg-green-900/20"
-          : task.status === "active"
-          ? "bg-blue-50 dark:bg-blue-900/20"
-          : "bg-white dark:bg-gray-900"
-      } ${
+      className={`group relative overflow-hidden rounded-lg border-l-4 ${borderColorClass} border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md transition-all duration-300 sm:p-5 ${
         (task.status === "pending" && isAdmin) ||
         (task.status === "completed" &&
           isAdmin &&
           task.jira_key &&
           task.jira_id)
-          ? "cursor-pointer hover:border-gray-400 hover:shadow-md active:border-gray-400 active:shadow-md"
+          ? "cursor-pointer hover:scale-[1.01] hover:border-border hover:shadow-xl"
           : ""
-      } dark:border-gray-700`}
-      style={{
-        borderLeftColor: task.status === "completed" ? '#16a34a' : task.status === "active" ? '#2563eb' : '#6b7280',
-      }}
+      }`}
       onClick={handleCardClick}
       role={
         task.status === "completed" && isAdmin && task.jira_key && task.jira_id
@@ -444,84 +444,93 @@ const TaskCard = memo(function TaskCard({
         }
       }}
     >
-      {/* Header */}
-      <div className="mb-5 flex items-start justify-between gap-4">
-        <div className="flex-1 min-w-0">
-          <div className="mb-3 flex flex-wrap items-center gap-2">
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-              {task.title}
-            </h3>
-            {task.jira_key && (
-              <a
-                href={task.jira_url || "#"}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 rounded-md border-2 border-blue-300 bg-blue-100 px-2.5 py-1 text-xs font-mono font-semibold text-blue-700 transition-all hover:bg-blue-200 hover:shadow-sm dark:border-blue-700 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
-                onClick={(e) => {
-                  if (!task.jira_url) {
-                    e.preventDefault();
-                  }
-                }}
-              >
-                <Link2 className="h-3 w-3" />
-                <span>{task.jira_key}</span>
-              </a>
-            )}
-            {task.status === "completed" && (
-              <span className="inline-flex items-center gap-1 rounded-md bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-700 dark:bg-green-900/40 dark:text-green-300">
-                <CheckCircle2 className="h-3.5 w-3.5" />
-                <span>Tamamlandı</span>
-              </span>
-            )}
-            {task.status === "active" && (
-              <span className="inline-flex items-center gap-1 rounded-md bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
-                <RefreshCw className="h-3.5 w-3.5" />
-                <span>Aktif</span>
-              </span>
-            )}
-            {task.status === "pending" && (
-              <span className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-700 dark:bg-gray-800 dark:text-gray-300">
-                <Clock className="h-3.5 w-3.5" />
-                <span>Beklemede</span>
-              </span>
+      {/* Glow Effect */}
+      <div className={`absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br blur-xl transition-all group-hover:scale-150 ${
+        task.status === "completed" ? "from-green-500/10 to-green-500/5" :
+        task.status === "active" ? "from-blue-500/10 to-blue-500/5" :
+        "from-primary/10 to-primary/5"
+      }`} />
+
+      {/* Content */}
+      <div className="relative z-10">
+        {/* Header */}
+        <div className="mb-5 flex items-start justify-between gap-4">
+          <div className="flex-1 min-w-0">
+            <div className="mb-3 flex flex-wrap items-center gap-2">
+              <h3 className="text-xl font-bold text-card-foreground">
+                {task.title}
+              </h3>
+              {task.jira_key && (
+                <a
+                  href={task.jira_url || "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 rounded-md border-2 border-purple-600 bg-purple-100 px-2.5 py-1 text-xs font-mono font-semibold text-purple-700 transition-all hover:bg-purple-200 hover:shadow-sm dark:border-purple-500 dark:bg-purple-900/40 dark:text-purple-300 dark:hover:bg-purple-900/60"
+                  onClick={(e) => {
+                    if (!task.jira_url) {
+                      e.preventDefault();
+                    }
+                  }}
+                >
+                  <Link2 className="h-3 w-3" />
+                  <span>{task.jira_key}</span>
+                </a>
+              )}
+              {task.status === "completed" && (
+                <span className="inline-flex items-center gap-1 rounded-md border-2 border-green-600 bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-700 dark:border-green-500 dark:bg-green-900/40 dark:text-green-300">
+                  <CheckCircle2 className="h-3.5 w-3.5" />
+                  <span>Tamamlandı</span>
+                </span>
+              )}
+              {task.status === "active" && (
+                <span className="inline-flex items-center gap-1 rounded-md border-2 border-blue-600 bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700 dark:border-blue-500 dark:bg-blue-900/40 dark:text-blue-300">
+                  <RefreshCw className="h-3.5 w-3.5" />
+                  <span>Aktif</span>
+                </span>
+              )}
+              {task.status === "pending" && (
+                <span className="inline-flex items-center gap-1 rounded-md border-2 border-muted-foreground bg-muted px-2.5 py-1 text-xs font-semibold text-muted-foreground">
+                  <Clock className="h-3.5 w-3.5" />
+                  <span>Beklemede</span>
+                </span>
+              )}
+            </div>
+            {task.description && (
+              <p className="mb-0 text-sm leading-relaxed text-muted-foreground">
+                {task.description}
+              </p>
             )}
           </div>
-          {task.description && (
-            <p className="mb-0 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
-              {task.description}
-            </p>
-          )}
         </div>
-      </div>
 
       {/* Details Grid */}
       <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {/* Oluşturan */}
         <div className="rounded-md border-2 border-gray-200/50 bg-white/60 p-3 shadow-sm dark:border-gray-700/50 dark:bg-gray-800/60">
-          <p className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
+          <p className="mb-1 text-xs font-medium text-muted-foreground">
             Oluşturan
           </p>
-          <p className="text-sm font-bold text-gray-900 dark:text-white">
+          <p className="text-sm font-bold text-card-foreground">
             {task.created_by_username || "Bilinmiyor"}
           </p>
         </div>
 
         {/* Tarih */}
         <div className="rounded-md border-2 border-gray-200/50 bg-white/60 p-3 shadow-sm dark:border-gray-700/50 dark:bg-gray-800/60">
-          <p className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
+          <p className="mb-1 text-xs font-medium text-muted-foreground">
             Oluşturulma
           </p>
-          <p className="text-sm font-bold text-gray-900 dark:text-white">
+          <p className="text-sm font-bold text-card-foreground">
             {formatDate(task.created_at) || "-"}
           </p>
         </div>
 
         {/* Katılımcı Sayısı */}
         <div className="rounded-md border-2 border-gray-200/50 bg-white/60 p-3 shadow-sm dark:border-gray-700/50 dark:bg-gray-800/60">
-          <p className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
+          <p className="mb-1 text-xs font-medium text-muted-foreground">
             Katılımcı
           </p>
-          <p className="text-sm font-bold text-gray-900 dark:text-white">
+          <p className="text-sm font-bold text-card-foreground">
             {loadingVotes ? (
               <span className="inline-block h-4 w-4 animate-pulse rounded bg-gray-300 dark:bg-gray-600" />
             ) : (
@@ -533,7 +542,7 @@ const TaskCard = memo(function TaskCard({
         {/* Ortalama Puan (sadece completed veya active task'larda) */}
         {(task.status === "completed" || task.status === "active") && (
           <div className="rounded-md border-2 border-gray-200/50 bg-white/60 p-3 shadow-sm dark:border-gray-700/50 dark:bg-gray-800/60">
-            <p className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
+            <p className="mb-1 text-xs font-medium text-muted-foreground">
               Ortalama
             </p>
             {isAdmin &&
@@ -571,10 +580,10 @@ const TaskCard = memo(function TaskCard({
                       setInputFocused(false);
                     }}
                     onClick={(e) => e.stopPropagation()}
-                    className="w-20 rounded-md border-2 border-blue-300 bg-white px-2 py-1 text-sm font-bold text-gray-900 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:border-blue-600 dark:bg-gray-800 dark:text-white dark:focus:ring-blue-800"
+                    className="w-20 rounded-md border-2 border-primary bg-background px-2 py-1 text-sm font-bold text-foreground outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
                     placeholder="0"
                   />
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                  <span className="text-xs text-muted-foreground">
                     Story Point
                   </span>
                 </div>
@@ -589,7 +598,7 @@ const TaskCard = memo(function TaskCard({
                       className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all ${
                         selectedSource === "jira"
                           ? "bg-blue-100 text-blue-700 ring-2 ring-blue-300 dark:bg-blue-900/40 dark:text-blue-300 dark:ring-blue-600"
-                          : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                          : "bg-muted text-muted-foreground hover:bg-muted/80"
                       }`}
                     >
                       Jira&apos;da: {jiraStoryPoints}
@@ -605,7 +614,7 @@ const TaskCard = memo(function TaskCard({
                       className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all ${
                         selectedSource === "average"
                           ? "bg-blue-100 text-blue-700 ring-2 ring-blue-300 dark:bg-blue-900/40 dark:text-blue-300 dark:ring-blue-600"
-                          : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                          : "bg-muted text-muted-foreground hover:bg-muted/80"
                       }`}
                     >
                       Ortalama: {avgPoint}
@@ -614,7 +623,7 @@ const TaskCard = memo(function TaskCard({
                 </div>
               </div>
             ) : (
-              <p className="text-sm font-bold text-gray-900 dark:text-white">
+              <p className="text-sm font-bold text-card-foreground">
                 {loadingVotes ? (
                   <span className="inline-block h-4 w-4 animate-pulse rounded bg-gray-300 dark:bg-gray-600" />
                 ) : avgPoint > 0 ? (
@@ -633,16 +642,16 @@ const TaskCard = memo(function TaskCard({
         (task.status === "completed" || task.status === "active") &&
         votes.length > 0 && (
           <div className="mb-5 rounded-md border-2 border-gray-200/60 bg-white/80 p-4 shadow-sm dark:border-gray-700/60 dark:bg-gray-800/80">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               Katılımcı Puanları
             </p>
             <div className="space-y-2">
               {votes.map((vote) => (
                 <div
                   key={vote.user_key || vote.user_name}
-                  className="flex items-center justify-between rounded-md bg-gray-50 px-3 py-2 dark:bg-gray-900/50"
+                  className="flex items-center justify-between rounded-md bg-muted/50 px-3 py-2"
                 >
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <span className="text-sm font-medium text-card-foreground">
                     {vote.user_name}
                   </span>
                   <span className="rounded-md border-2 border-blue-300 bg-blue-100 px-2.5 py-0.5 text-xs font-bold text-blue-700 shadow-sm dark:border-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
@@ -658,7 +667,7 @@ const TaskCard = memo(function TaskCard({
       <div className="flex items-center justify-between gap-3 border-t-2 border-gray-200/50 pt-4 dark:border-gray-700/50">
         {task.status === "completed" ? (
           <>
-            <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
+            <span className="text-xs font-medium text-muted-foreground">
               Bu task tamamlandı
             </span>
             <div className="flex items-center gap-2">
@@ -710,7 +719,7 @@ const TaskCard = memo(function TaskCard({
               e.stopPropagation(); // Card click event'ini durdur
               setShowConfirmModal(true);
             }}
-            className="ml-auto rounded-md border-2 border-gray-900 bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:border-gray-800 hover:bg-gray-800 hover:shadow-md dark:border-white dark:bg-white dark:text-gray-900 dark:hover:border-gray-100 dark:hover:bg-gray-100"
+            className="ml-auto rounded-md border-2 border-foreground bg-foreground px-5 py-2.5 text-sm font-semibold text-background shadow-sm transition-all hover:border-foreground/80 hover:bg-foreground/80 hover:shadow-md"
           >
             Puanlamaya Gönder
           </button>
@@ -725,18 +734,18 @@ const TaskCard = memo(function TaskCard({
           title="Task'ı Puanlamaya Gönder"
         >
           <div className="space-y-4">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              <strong className="font-semibold text-gray-900 dark:text-white">
+            <p className="text-sm text-muted-foreground">
+              <strong className="font-semibold text-card-foreground">
                 {task.title}
               </strong>{" "}
               task&apos;ını puanlamaya göndermek istediğinizden emin misiniz?
             </p>
             {task.description && (
-              <div className="rounded-md bg-gray-50 p-3 dark:bg-gray-800">
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+              <div className="rounded-md bg-muted/50 p-3">
+                <p className="text-xs text-muted-foreground">
                   Açıklama:
                 </p>
-                <p className="text-sm text-gray-700 dark:text-gray-300">
+                <p className="text-sm text-card-foreground">
                   {task.description}
                 </p>
               </div>
@@ -745,7 +754,7 @@ const TaskCard = memo(function TaskCard({
               <button
                 type="button"
                 onClick={() => setShowConfirmModal(false)}
-                className="inline-flex h-10 items-center justify-center rounded-md border-2 border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                className="inline-flex h-10 items-center justify-center rounded-md border-2 border-border bg-card px-4 text-sm font-semibold text-card-foreground hover:bg-accent"
               >
                 İptal
               </button>
@@ -760,6 +769,7 @@ const TaskCard = memo(function TaskCard({
           </div>
         </Modal>
       )}
+      </div>
     </div>
   );
 });

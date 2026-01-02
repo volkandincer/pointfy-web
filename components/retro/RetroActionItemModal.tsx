@@ -8,6 +8,7 @@ import type {
   RetroActionItemFlag,
   RetroActionItemInput,
 } from "@/interfaces/RetroActionItem.interface";
+import Button from "@/components/ui/Button";
 
 interface RetroActionItemModalProps {
   open: boolean;
@@ -80,7 +81,7 @@ const RetroActionItemModal = memo(function RetroActionItemModal({
       setNewCustomFlagName("");
       setShowCustomFlagInput(false);
       showToast("Custom flag başarıyla eklendi!", "success");
-    } catch (err) {
+    } catch {
       showToast("Custom flag eklenirken bir hata oluştu.", "error");
     }
   }, [newCustomFlagName, onAddCustomFlag, showToast]);
@@ -109,7 +110,7 @@ const RetroActionItemModal = memo(function RetroActionItemModal({
             : "Aksiyon maddesi başarıyla eklendi!",
           "success"
         );
-      } catch (err) {
+      } catch {
         showToast("Aksiyon maddesi kaydedilirken bir hata oluştu.", "error");
       } finally {
         setLoading(false);
@@ -155,7 +156,7 @@ const RetroActionItemModal = memo(function RetroActionItemModal({
         <div>
           <label
             htmlFor="action-item-content"
-            className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
+            className="mb-1 block text-sm font-medium text-muted-foreground"
           >
             Aksiyon Maddesi
           </label>
@@ -166,13 +167,13 @@ const RetroActionItemModal = memo(function RetroActionItemModal({
             onChange={(e) => setContent(e.target.value)}
             placeholder="Aksiyon maddesini yazın..."
             required
-            className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            className="w-full rounded-md border-2 border-input bg-input px-3 py-2 text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
         </div>
 
         {/* Flag Selection */}
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="mb-2 block text-sm font-medium text-muted-foreground">
             Flag / Etiket
           </label>
           
@@ -185,8 +186,8 @@ const RetroActionItemModal = memo(function RetroActionItemModal({
                 onClick={() => handleFlagSelect(flag.value)}
                 className={`inline-flex items-center gap-1.5 rounded-md border-2 px-3 py-1.5 text-xs font-semibold transition ${
                   selectedFlag === flag.value
-                    ? "border-gray-900 bg-gray-900 text-white dark:border-gray-100 dark:bg-gray-100 dark:text-gray-900"
-                    : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                    ? "border-foreground bg-foreground text-background"
+                    : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                 }`}
               >
                 <flag.icon className="h-3.5 w-3.5" />
@@ -205,8 +206,8 @@ const RetroActionItemModal = memo(function RetroActionItemModal({
                   onClick={() => handleCustomFlagSelect(customFlag.id)}
                   className={`rounded-md border-2 px-3 py-1.5 text-xs font-semibold transition ${
                     selectedCustomFlag === customFlag.id
-                      ? "border-gray-900 bg-gray-900 text-white dark:border-gray-100 dark:bg-gray-100 dark:text-gray-900"
-                      : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                      ? "border-foreground bg-foreground text-background"
+                      : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                   }`}
                   style={{
                     borderColor:
@@ -228,7 +229,7 @@ const RetroActionItemModal = memo(function RetroActionItemModal({
                 <button
                   type="button"
                   onClick={() => setShowCustomFlagInput(true)}
-                  className="rounded-md border-2 border-dashed border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
+                  className="rounded-md border-2 border-dashed border-border bg-card px-3 py-1.5 text-xs font-semibold text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                 >
                   + Custom Flag Ekle
                 </button>
@@ -239,7 +240,7 @@ const RetroActionItemModal = memo(function RetroActionItemModal({
                     value={newCustomFlagName}
                     onChange={(e) => setNewCustomFlagName(e.target.value)}
                     placeholder="Flag adı..."
-                    className="flex-1 rounded-md border-2 border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                    className="flex-1 rounded-md border-2 border-input bg-input px-3 py-1.5 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         e.preventDefault();
@@ -247,23 +248,25 @@ const RetroActionItemModal = memo(function RetroActionItemModal({
                       }
                     }}
                   />
-                  <button
+                  <Button
                     type="button"
                     onClick={handleAddCustomFlag}
-                    className="rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-700"
+                    variant="primary"
+                    size="sm"
                   >
                     Ekle
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     type="button"
                     onClick={() => {
                       setShowCustomFlagInput(false);
                       setNewCustomFlagName("");
                     }}
-                    className="rounded-md border-2 border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                    variant="secondary"
+                    size="sm"
                   >
                     İptal
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>
@@ -272,26 +275,23 @@ const RetroActionItemModal = memo(function RetroActionItemModal({
 
         {/* Actions */}
         <div className="flex items-center justify-end gap-3 pt-4">
-          <button
+          <Button
             type="button"
             onClick={onClose}
-            className="inline-flex h-10 items-center justify-center rounded-md border-2 border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+            variant="secondary"
+            size="md"
           >
             İptal
-          </button>
-          <button
+          </Button>
+          <Button
             type="submit"
             disabled={loading || !content.trim()}
-            className="inline-flex h-10 items-center justify-center rounded-md border-2 border-indigo-600 bg-indigo-600 px-5 text-sm font-semibold text-white transition hover:bg-indigo-700 hover:border-indigo-700 disabled:opacity-60"
+            variant="primary"
+            size="md"
+            loading={loading}
           >
-            {loading
-              ? isEdit
-                ? "Kaydediliyor..."
-                : "Ekleniyor..."
-              : isEdit
-              ? "Kaydet"
-              : "Ekle"}
-          </button>
+            {isEdit ? "Kaydet" : "Ekle"}
+          </Button>
         </div>
       </form>
     </Modal>

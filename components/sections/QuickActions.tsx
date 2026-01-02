@@ -58,7 +58,7 @@ const iconColorMap: Record<string, string> = {
 const QuickActions = memo(function QuickActions({ actions }: QuickActionsProps) {
   const getIcon = (actionId: string) => {
     const IconComponent = iconMap[actionId];
-    const iconColor = iconColorMap[actionId] || "text-gray-700 dark:text-gray-300";
+    const iconColor = iconColorMap[actionId] || "text-card-foreground";
     return IconComponent ? <IconComponent className={`h-6 w-6 sm:h-7 sm:w-7 ${iconColor}`} /> : null;
   };
 
@@ -84,7 +84,7 @@ const QuickActions = memo(function QuickActions({ actions }: QuickActionsProps) 
             const IconComponent = getIcon(action.id);
             const borderColor = getBorderColor(action.id);
             
-            const baseClasses = `group relative flex min-h-[100px] flex-col items-center justify-center border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-border bg-card p-3 text-center shadow-sm transition-all active:border-border active:shadow-md sm:min-h-[120px] sm:p-4 hover:border-border hover:shadow-md`;
+            const baseClasses = `group relative flex min-h-[100px] flex-col items-center justify-center overflow-hidden rounded-lg border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-3 text-center shadow-md transition-all duration-300 active:border-border active:shadow-lg sm:min-h-[120px] sm:p-4 hover:scale-[1.02] hover:border-border hover:shadow-xl`;
             
             return action.onClick ? (
               <button
@@ -108,8 +108,13 @@ const QuickActions = memo(function QuickActions({ actions }: QuickActionsProps) 
                 href={action.href}
                 className={baseClasses}
               >
-                <div className="mb-2 sm:mb-2.5">
-                  {IconComponent}
+                {/* Glow Effect */}
+                <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
+                
+                <div className="relative mb-2 sm:mb-2.5">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 transition-transform group-hover:scale-110 sm:h-12 sm:w-12">
+                    {IconComponent}
+                  </div>
                 </div>
                 <h3 className="mb-1 text-xs font-semibold text-card-foreground sm:text-sm">
                   {action.title}

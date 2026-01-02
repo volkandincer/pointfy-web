@@ -57,7 +57,7 @@ const JiraIssueModal = memo(function JiraIssueModal({
       }}
     >
       <div
-        className="relative w-full max-w-3xl my-8 rounded-md border-2 border-gray-300 bg-white shadow-md dark:border-gray-700 dark:bg-gray-900"
+        className="relative w-full max-w-3xl my-8 rounded-md border-2 border-border bg-card shadow-md"
         onClick={(e) => e.stopPropagation()}
         onTouchStart={(e) => {
           // Modal içindeki touch event'lerini sayfa scroll'undan ayır
@@ -73,11 +73,11 @@ const JiraIssueModal = memo(function JiraIssueModal({
         }}
       >
         {/* Header */}
-        <div className="border-b-2 border-gray-200 p-6 dark:border-gray-800">
+        <div className="border-b-2 border-border p-6">
           <div className="mb-4 flex items-start justify-between">
             <div className="flex-1">
               <div className="mb-3 flex flex-wrap items-center gap-2">
-                <span className="font-mono text-lg font-bold text-blue-600 dark:text-blue-400">
+                <span className="font-mono text-lg font-bold text-primary">
                   {issue.key}
                 </span>
                 <span
@@ -96,13 +96,13 @@ const JiraIssueModal = memo(function JiraIssueModal({
                   </span>
                 )}
               </div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+              <h2 className="text-xl font-bold text-card-foreground">
                 {issue.summary}
               </h2>
             </div>
             <button
               onClick={onClose}
-              className="ml-4 rounded-md border-2 border-gray-300 bg-white p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:border-gray-400 hover:text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-gray-200"
+              className="ml-4 rounded-md border-2 border-border bg-card p-2 text-muted-foreground transition-colors hover:bg-accent hover:border-accent hover:text-foreground"
             >
               <X className="h-6 w-6" />
             </button>
@@ -122,10 +122,10 @@ const JiraIssueModal = memo(function JiraIssueModal({
           {/* Description */}
           {issue.description && (
             <div className="mb-6">
-              <h3 className="mb-2 text-sm font-semibold text-gray-900 dark:text-white">
+              <h3 className="mb-2 text-sm font-semibold text-card-foreground">
                 Açıklama
               </h3>
-              <div className="border-2 border-gray-300 bg-gray-50 p-4 text-sm leading-relaxed text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+              <div className="border-2 border-border bg-muted p-4 text-sm leading-relaxed text-card-foreground shadow-sm">
                 {issue.description}
               </div>
             </div>
@@ -135,13 +135,13 @@ const JiraIssueModal = memo(function JiraIssueModal({
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
             {issue.project && (
               <div>
-                <div className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
+                <div className="mb-1 text-xs font-medium text-muted-foreground">
                   Proje
                 </div>
-                <div className="text-sm font-semibold text-gray-900 dark:text-white">
+                <div className="text-sm font-semibold text-card-foreground">
                   {issue.project.name}
                 </div>
-                <div className="text-xs text-gray-600 dark:text-gray-400">
+                <div className="text-xs text-muted-foreground">
                   {issue.project.key}
                 </div>
               </div>
@@ -149,7 +149,7 @@ const JiraIssueModal = memo(function JiraIssueModal({
 
             {issue.assignee && (
               <div>
-                <div className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
+                <div className="mb-1 text-xs font-medium text-muted-foreground">
                   Atanan
                 </div>
                 <div className="flex items-center gap-2">
@@ -162,7 +162,7 @@ const JiraIssueModal = memo(function JiraIssueModal({
                       className="h-6 w-6 rounded-full"
                     />
                   )}
-                  <div className="text-sm font-semibold text-gray-900 dark:text-white">
+                  <div className="text-sm font-semibold text-card-foreground">
                     {issue.assignee.name}
                   </div>
                 </div>
@@ -171,17 +171,17 @@ const JiraIssueModal = memo(function JiraIssueModal({
 
             {issue.created && (
               <div>
-                <div className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
+                <div className="mb-1 text-xs font-medium text-muted-foreground">
                   Oluşturulma
                 </div>
-                <div className="text-sm font-semibold text-gray-900 dark:text-white">
+                <div className="text-sm font-semibold text-card-foreground">
                   {new Date(issue.created).toLocaleDateString("tr-TR", {
                     day: "numeric",
                     month: "long",
                     year: "numeric",
                   })}
                 </div>
-                <div className="text-xs text-gray-600 dark:text-gray-400">
+                <div className="text-xs text-muted-foreground">
                   {new Date(issue.created).toLocaleTimeString("tr-TR", {
                     hour: "2-digit",
                     minute: "2-digit",
@@ -192,17 +192,17 @@ const JiraIssueModal = memo(function JiraIssueModal({
 
             {issue.updated && (
               <div>
-                <div className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
+                <div className="mb-1 text-xs font-medium text-muted-foreground">
                   Son Güncelleme
                 </div>
-                <div className="text-sm font-semibold text-gray-900 dark:text-white">
+                <div className="text-sm font-semibold text-card-foreground">
                   {new Date(issue.updated).toLocaleDateString("tr-TR", {
                     day: "numeric",
                     month: "long",
                     year: "numeric",
                   })}
                 </div>
-                <div className="text-xs text-gray-600 dark:text-gray-400">
+                <div className="text-xs text-muted-foreground">
                   {new Date(issue.updated).toLocaleTimeString("tr-TR", {
                     hour: "2-digit",
                     minute: "2-digit",
@@ -213,10 +213,10 @@ const JiraIssueModal = memo(function JiraIssueModal({
 
             {issue.resolved && (
               <div>
-                <div className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
+                <div className="mb-1 text-xs font-medium text-muted-foreground">
                   Çözüldü
                 </div>
-                <div className="text-sm font-semibold text-gray-900 dark:text-white">
+                <div className="text-sm font-semibold text-card-foreground">
                   {new Date(issue.resolved).toLocaleDateString("tr-TR", {
                     day: "numeric",
                     month: "long",
@@ -229,7 +229,7 @@ const JiraIssueModal = memo(function JiraIssueModal({
         </div>
 
         {/* Footer */}
-        <div className="border-t-2 border-gray-200 p-4 dark:border-gray-800">
+        <div className="border-t-2 border-border p-4">
           <div className="flex items-center justify-between">
             <Button
               variant="primary"

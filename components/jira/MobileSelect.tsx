@@ -52,18 +52,18 @@ const MobileSelect = memo(function MobileSelect({
 
   return (
     <div ref={selectRef} className={`relative ${className}`}>
-      <label className="mb-2 block text-xs font-semibold text-gray-700 dark:text-gray-300">
+      <label className="mb-2 block text-xs font-semibold text-card-foreground">
         {label}
       </label>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-3 text-base text-gray-900 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white sm:py-2.5 sm:text-sm"
+        className="w-full rounded-md border-2 border-input bg-input px-3 py-3 text-base text-card-foreground outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 sm:py-2.5 sm:text-sm"
       >
         <div className="flex items-center justify-between">
           <span>{selectedOption.label}</span>
           <ChevronDown
-            className={`h-5 w-5 text-gray-400 transition-transform ${
+            className={`h-5 w-5 text-muted-foreground transition-transform ${
               isOpen ? "rotate-180" : ""
             }`}
           />
@@ -82,7 +82,7 @@ const MobileSelect = memo(function MobileSelect({
             }}
           />
           {/* Dropdown Menu */}
-          <div className="absolute z-[9999] mt-1 w-full rounded-md border-2 border-gray-300 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800">
+          <div className="absolute z-[9999] mt-1 w-full rounded-md border-2 border-border bg-card shadow-md">
             <div 
               className="max-h-[60vh] overflow-y-auto overscroll-contain"
               style={{ 
@@ -113,14 +113,14 @@ const MobileSelect = memo(function MobileSelect({
                   }}
                   className={`w-full px-4 py-3 text-left text-base transition-colors touch-manipulation ${
                     value === option.value
-                      ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
-                      : "text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
+                      ? "bg-primary/10 text-primary"
+                      : "text-card-foreground hover:bg-accent"
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <span>{option.label}</span>
                     {value === option.value && (
-                      <Check className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                      <Check className="h-5 w-5 text-primary" />
                     )}
                   </div>
                 </button>

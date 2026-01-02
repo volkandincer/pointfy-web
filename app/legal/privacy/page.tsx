@@ -21,45 +21,45 @@ export default function PrivacyPage() {
         <div className="mx-auto max-w-4xl">
           {/* Header Section */}
           <div className="mb-8 text-center">
-            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
-              <Shield className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-md border-2 border-primary bg-primary/10">
+              <Shield className="h-8 w-8 text-primary" />
             </div>
-            <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+            <h1 className="mb-2 text-3xl font-bold text-card-foreground sm:text-4xl">
               Gizlilik Politikası
             </h1>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-muted-foreground">
               Kişisel verilerinizin nasıl toplandığını, kullanıldığını ve korunduğunu öğrenin.
             </p>
           </div>
 
           {/* Content Card */}
-          <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:p-8">
+          <div className="rounded-md border-2 border-border bg-card p-6 shadow-sm sm:p-8">
             <div className="prose prose-gray max-w-none dark:prose-invert">
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               <strong>Son Güncelleme:</strong> {new Date().toLocaleDateString("tr-TR", { year: "numeric", month: "long", day: "numeric" })}
             </p>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               Bu gizlilik politikası, TeamHubX uygulamasını kullandığınızda
               kişisel verilerinizin nasıl toplandığını, kullanıldığını ve
               korunduğunu açıklamaktadır. Bu politikayı dikkatlice okuyun.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-2xl font-semibold text-card-foreground">
               1. Veri Sorumlusu
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               TeamHubX, kişisel verilerinizin veri sorumlusudur. Bu politika
               kapsamındaki tüm veri işleme faaliyetlerinden sorumluyuz.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-2xl font-semibold text-card-foreground">
               2. Toplanan Veriler
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               TeamHubX, hizmetlerimizi sağlamak için gerekli olan minimum düzeyde
               veri toplamaktadır. Topladığımız veriler arasında:
             </p>
-            <ul className="mb-4 ml-6 list-disc text-gray-600 dark:text-gray-400">
+            <ul className="mb-4 ml-6 list-disc text-muted-foreground">
               <li>
                 <strong>Hesap Bilgileri:</strong> Email adresi, kullanıcı adı
                 (hesap oluşturma ve kimlik doğrulama için)
@@ -79,13 +79,13 @@ export default function PrivacyPage() {
               </li>
             </ul>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-2xl font-semibold text-card-foreground">
               3. Veri İşleme Amaçları
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               Kişisel verileriniz aşağıdaki amaçlarla işlenmektedir:
             </p>
-            <ul className="mb-4 ml-6 list-disc text-gray-600 dark:text-gray-400">
+            <ul className="mb-4 ml-6 list-disc text-muted-foreground">
               <li>Hizmetlerimizi sağlamak ve yönetmek</li>
               <li>Hesap oluşturma ve kimlik doğrulama</li>
               <li>Kullanıcı deneyimini iyileştirmek</li>
@@ -94,13 +94,13 @@ export default function PrivacyPage() {
               <li>Kullanıcı desteği sağlamak</li>
             </ul>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-2xl font-semibold text-card-foreground">
               4. Veri İşleme Hukuki Dayanakları
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               Kişisel verileriniz aşağıdaki hukuki dayanaklara göre işlenmektedir:
             </p>
-            <ul className="mb-4 ml-6 list-disc text-gray-600 dark:text-gray-400">
+            <ul className="mb-4 ml-6 list-disc text-muted-foreground">
               <li>
                 <strong>Sözleşmenin İfası:</strong> Hizmetlerimizi sağlamak için
                 gerekli veriler
@@ -118,14 +118,14 @@ export default function PrivacyPage() {
               </li>
             </ul>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-2xl font-semibold text-card-foreground">
               5. Veri Saklama Süreleri
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               Kişisel verileriniz, işleme amacının gerektirdiği süre boyunca
               saklanır:
             </p>
-            <ul className="mb-4 ml-6 list-disc text-gray-600 dark:text-gray-400">
+            <ul className="mb-4 ml-6 list-disc text-muted-foreground">
               <li>
                 <strong>Hesap Verileri:</strong> Hesabınız aktif olduğu sürece
                 veya silinene kadar
@@ -143,23 +143,23 @@ export default function PrivacyPage() {
               </li>
             </ul>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-2xl font-semibold text-card-foreground">
               6. Veri Güvenliği
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               Verilerinizin güvenliği bizim için önceliklidir. Endüstri standardı
               şifreleme, güvenlik duvarları ve erişim kontrolleri kullanıyoruz.
               Verileriniz güvenli bulut altyapısı üzerinde saklanmaktadır.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-2xl font-semibold text-card-foreground">
               7. Veri Paylaşımı
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               Verileriniz aşağıdaki durumlar dışında üçüncü taraflarla
               paylaşılmaz:
             </p>
-            <ul className="mb-4 ml-6 list-disc text-gray-600 dark:text-gray-400">
+            <ul className="mb-4 ml-6 list-disc text-muted-foreground">
               <li>
                 <strong>Hizmet Sağlayıcılar:</strong> Hizmetlerimizi sağlamak
                 için gerekli teknik altyapı sağlayıcıları (veri depolama, hosting
@@ -174,22 +174,22 @@ export default function PrivacyPage() {
               </li>
             </ul>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-2xl font-semibold text-card-foreground">
               8. Veri Aktarımı
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               Verileriniz, hizmet sağlayıcılarımız aracılığıyla AB dışına
               aktarılabilir. Bu durumda, yeterli koruma önlemleri alınır ve
               standart sözleşme maddeleri uygulanır.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-2xl font-semibold text-card-foreground">
               9. Kullanıcı Hakları (GDPR)
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               GDPR kapsamında aşağıdaki haklara sahipsiniz:
             </p>
-            <ul className="mb-4 ml-6 list-disc text-gray-600 dark:text-gray-400">
+            <ul className="mb-4 ml-6 list-disc text-muted-foreground">
               <li>
                 <strong>Erişim Hakkı:</strong> Kişisel verilerinize erişim
                 talep edebilirsiniz
@@ -218,48 +218,48 @@ export default function PrivacyPage() {
                 çekebilirsiniz
               </li>
             </ul>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               Bu haklarınızı kullanmak için bizimle iletişime geçebilirsiniz.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-2xl font-semibold text-card-foreground">
               10. Çocukların Gizliliği
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               TeamHubX, 13 yaşın altındaki çocuklardan bilerek veri toplamaz. 13
               yaşın altındaki bir çocuğun verilerini topladığımızı fark edersek,
               bu verileri derhal sileriz.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-2xl font-semibold text-card-foreground">
               11. Politika Değişiklikleri
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               Bu gizlilik politikasını zaman zaman güncelleyebiliriz. Önemli
               değişiklikler kullanıcılara bildirilecektir. Güncel politika
               her zaman bu sayfada yayınlanmaktadır.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-2xl font-semibold text-card-foreground">
               12. İletişim
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               Gizlilik politikamız, veri haklarınız veya veri işleme
               faaliyetlerimiz hakkında sorularınız için bizimle iletişime
               geçebilirsiniz. İletişim bilgileri için{" "}
               <a
                 href="/contact"
-                className="text-blue-600 underline dark:text-blue-400"
+                className="text-primary underline"
               >
                 İletişim
               </a>{" "}
               sayfasını ziyaret edebilirsiniz.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-2xl font-semibold text-card-foreground">
               13. Şikayet Hakkı
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-muted-foreground">
               Veri işleme faaliyetlerimiz hakkında şikayetiniz varsa, önce
               bizimle iletişime geçmenizi öneririz. Ayrıca, ilgili veri koruma
               otoritesine de şikayet başvurusu yapabilirsiniz.

@@ -1,9 +1,9 @@
 "use client";
  
 /* eslint-disable react/no-unescaped-entities */
-/* eslint-disable @next/next/no-img-element */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getDefaultNavigationItems } from "@/lib/utils";
@@ -15,12 +15,10 @@ import type {
   JiraIssue,
   JiraBoardsApiResponse,
   JiraIssuesApiResponse,
-  JiraProjectsApiResponse,
   JiraMyselfApiResponse,
   JiraSearchResponse,
   JiraTestConnectionResponse,
   JiraAdfNode,
-  JiraProjectSummary,
   ApiResponseWithStatus,
 } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
@@ -531,10 +529,10 @@ export default function JiraTestPage() {
         <main className="container mx-auto px-4 py-16">
           <div className="mx-auto max-w-3xl">
             <div className="rounded-md border-2 border-yellow-200/70 bg-yellow-50/50 p-6 shadow-sm dark:border-yellow-800/70 dark:bg-yellow-900/10">
-              <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+              <h2 className="mb-2 text-lg font-semibold text-card-foreground">
                 Jira Bağlantısı Gerekli
               </h2>
-              <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+              <p className="mb-4 text-sm text-muted-foreground">
                 Jira servislerini test etmek için Jira hesabınızı bağlamanız gerekiyor.
               </p>
               <button
@@ -579,10 +577,10 @@ export default function JiraTestPage() {
       <main className="container mx-auto px-4 py-16">
         <div className="mx-auto max-w-7xl">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-3xl font-bold text-card-foreground">
               Jira Test Dashboard
             </h1>
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            <p className="mt-2 text-sm text-muted-foreground">
               Jira servislerini test edin ve dataları görüntüleyin
             </p>
           </div>
@@ -597,7 +595,7 @@ export default function JiraTestPage() {
                   className={`whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium transition ${
                     activeTab === tab.id
                       ? "border-blue-500 text-blue-600 dark:text-blue-400"
-                      : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                      : "border-transparent text-muted-foreground hover:border-border hover:text-card-foreground"
                   }`}
                 >
                   {tab.label}
@@ -612,13 +610,13 @@ export default function JiraTestPage() {
             {activeTab === "boards" && (
               <div>
                 <div className="mb-4 flex items-center justify-between">
-                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  <h2 className="text-xl font-semibold text-card-foreground">
                     Boards
                   </h2>
                   <button
                     onClick={fetchBoards}
                     disabled={boardsLoading}
-                    className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                    className="rounded-md border-2 border-border bg-card px-4 py-2 text-sm font-semibold text-card-foreground transition hover:bg-accent"
                   >
                     {boardsLoading ? "Yükleniyor..." : "Yenile"}
                   </button>
@@ -680,17 +678,17 @@ export default function JiraTestPage() {
                         key={board.id}
                         className="rounded-md border-2 border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800"
                       >
-                        <h3 className="font-semibold text-gray-900 dark:text-white">
+                        <h3 className="font-semibold text-card-foreground">
                           {board.name}
                         </h3>
-                        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                        <p className="mt-1 text-sm text-muted-foreground">
                           {board.type} - {board.location.projectName}
                         </p>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <div className="py-8 text-center text-gray-500 dark:text-gray-400">
+                  <div className="py-8 text-center text-muted-foreground">
                     Board bulunamadı
                   </div>
                 )}
@@ -701,7 +699,7 @@ export default function JiraTestPage() {
             {activeTab === "issues" && (
               <div>
                 <div className="mb-4 flex items-center justify-between">
-                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  <h2 className="text-xl font-semibold text-card-foreground">
                     Issues
                   </h2>
                   <button
@@ -949,9 +947,11 @@ export default function JiraTestPage() {
                     {myself.avatarUrls && (
                       <div className="rounded-md border-2 border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
                         <h3 className="mb-2 font-semibold text-gray-900 dark:text-white">Avatar</h3>
-                        <img
+                        <Image
                           src={myself.avatarUrls["48x48"]}
                           alt={myself.displayName}
+                          width={48}
+                          height={48}
                           className="h-12 w-12 rounded-full"
                         />
                       </div>

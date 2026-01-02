@@ -64,7 +64,7 @@ const Modal = memo(function Modal({
         }}
       />
       <div 
-        className={`relative z-10 w-full max-h-[90vh] overflow-y-auto border-t-2 border-gray-300 bg-white p-4 shadow-md sm:max-w-lg sm:rounded-md sm:border-2 sm:border-gray-300 sm:p-6 dark:border-gray-700 dark:bg-gray-900 ${className}`}
+        className={`relative z-10 w-full max-h-[90vh] overflow-y-auto border-t-2 border-border bg-card p-4 shadow-md sm:max-w-lg sm:rounded-md sm:border-2 sm:border-border sm:p-6 ${className}`}
         onClick={(e) => e.stopPropagation()}
         onTouchStart={(e) => {
           // Modal içindeki touch event'lerini sayfa scroll'undan ayır
@@ -80,9 +80,9 @@ const Modal = memo(function Modal({
         }}
       >
         {title && (
-          <div className="mb-4 flex items-center justify-center gap-2 border-b-2 border-gray-200 pb-3 dark:border-gray-800 sm:mb-6 sm:gap-3 sm:pb-4">
+          <div className="mb-4 flex items-center justify-center gap-2 border-b-2 border-border pb-3 sm:mb-6 sm:gap-3 sm:pb-4">
             {typeof title === "string" ? (
-              <h3 className="text-base font-bold text-gray-900 dark:text-white sm:text-lg sm:text-xl">
+              <h3 className="text-base font-bold text-card-foreground sm:text-lg sm:text-xl">
                 {title}
               </h3>
             ) : (

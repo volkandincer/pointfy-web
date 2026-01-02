@@ -194,7 +194,7 @@ function HomePageContent() {
   return (
     <>
       <Header navigationItems={navigationItems} />
-      <main>
+      <main className="scroll-smooth">
         {userId ? <HomeWelcome /> : <Hero />}
         <QuickActions actions={actions} />
         <RecentRooms />

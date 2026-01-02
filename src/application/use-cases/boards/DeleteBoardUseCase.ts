@@ -4,7 +4,6 @@
  */
 
 import type { IBoardRepository } from "../../../domain/repositories/IBoardRepository";
-import type { Board } from "../../../domain/entities/Board";
 
 export class DeleteBoardUseCase {
   constructor(private boardRepository: IBoardRepository) {}

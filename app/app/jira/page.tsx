@@ -4,6 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Folder, ClipboardList, Pin, Search, ChevronRight } from "lucide-react";
 import Button from "@/components/ui/Button";
+import SectionHeader from "@/components/ui/SectionHeader";
+import Card from "@/components/ui/Card";
 import { getStatusColorClasses } from "@/lib/jira/colors";
 import type { JiraBoard, JiraTask } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
@@ -126,85 +128,85 @@ export default function JiraDashboardPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
-          Dashboard
-        </h1>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          Jira projelerinizin ve issue&apos;larınızın özeti
-        </p>
-      </div>
+      <SectionHeader
+        title="Dashboard"
+        description="Jira projelerinizin ve issue'larınızın özeti"
+      />
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-4 gap-2 sm:gap-4">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
         <Link
           href="/app/jira/projects"
-          className="flex flex-col items-center justify-center border-2 border-gray-300 bg-white p-2 text-center shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+          className="group relative flex flex-col items-center justify-center overflow-hidden rounded-lg border-l-4 border-l-purple-600 dark:border-l-purple-500 border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-3 text-center shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-5"
         >
-          <div className="mb-2 flex h-8 w-8 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20 sm:mb-3 sm:h-12 sm:w-12">
-            <Folder className="h-4 w-4 text-purple-600 dark:text-purple-400 sm:h-6 sm:w-6" />
+          <div className="absolute right-0 top-0 h-20 w-20 translate-x-4 -translate-y-4 rounded-full bg-gradient-to-br from-purple-500/10 to-purple-500/5 blur-xl transition-all group-hover:scale-150" />
+          <div className="relative mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500/20 to-transparent transition-transform group-hover:scale-110 sm:mb-3 sm:h-12 sm:w-12">
+            <Folder className="h-5 w-5 text-purple-600 dark:text-purple-400 sm:h-6 sm:w-6" />
           </div>
-          <div className="text-lg font-bold text-gray-900 dark:text-white sm:text-2xl">
+          <div className="relative text-lg font-bold text-card-foreground sm:text-2xl">
             {loading ? (
-              <span className="inline-block h-5 w-8 animate-pulse bg-gray-200 dark:bg-gray-800 sm:h-8 sm:w-12" />
+              <span className="inline-block h-5 w-8 animate-pulse bg-muted sm:h-8 sm:w-12" />
             ) : (
               projectsCount
             )}
           </div>
-          <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-sm">
+          <div className="relative text-[10px] font-medium text-muted-foreground sm:text-sm">
             Proje
           </div>
         </Link>
 
         <Link
           href="/app/jira/issues"
-          className="flex flex-col items-center justify-center border-2 border-gray-300 bg-white p-2 text-center shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+          className="group relative flex flex-col items-center justify-center overflow-hidden rounded-lg border-l-4 border-l-green-600 dark:border-l-green-500 border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-3 text-center shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-5"
         >
-          <div className="mb-2 flex h-8 w-8 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20 sm:mb-3 sm:h-12 sm:w-12">
-            <ClipboardList className="h-4 w-4 text-green-600 dark:text-green-400 sm:h-6 sm:w-6" />
+          <div className="absolute right-0 top-0 h-20 w-20 translate-x-4 -translate-y-4 rounded-full bg-gradient-to-br from-green-500/10 to-green-500/5 blur-xl transition-all group-hover:scale-150" />
+          <div className="relative mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-green-500/20 to-transparent transition-transform group-hover:scale-110 sm:mb-3 sm:h-12 sm:w-12">
+            <ClipboardList className="h-5 w-5 text-green-600 dark:text-green-400 sm:h-6 sm:w-6" />
           </div>
-          <div className="text-lg font-bold text-gray-900 dark:text-white sm:text-2xl">
+          <div className="relative text-lg font-bold text-card-foreground sm:text-2xl">
             {loading ? (
-              <span className="inline-block h-5 w-8 animate-pulse bg-gray-200 dark:bg-gray-800 sm:h-8 sm:w-12" />
+              <span className="inline-block h-5 w-8 animate-pulse bg-muted sm:h-8 sm:w-12" />
             ) : (
               issuesCount
             )}
           </div>
-          <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-sm">
+          <div className="relative text-[10px] font-medium text-muted-foreground sm:text-sm">
             Issue
           </div>
         </Link>
 
         <Link
           href="/app/jira/boards"
-          className="flex flex-col items-center justify-center border-2 border-gray-300 bg-white p-2 text-center shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+          className="group relative flex flex-col items-center justify-center overflow-hidden rounded-lg border-l-4 border-l-purple-600 dark:border-l-purple-500 border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-3 text-center shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-5"
         >
-          <div className="mb-2 flex h-8 w-8 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20 sm:mb-3 sm:h-12 sm:w-12">
-            <Pin className="h-4 w-4 text-purple-600 dark:text-purple-400 sm:h-6 sm:w-6" />
+          <div className="absolute right-0 top-0 h-20 w-20 translate-x-4 -translate-y-4 rounded-full bg-gradient-to-br from-purple-500/10 to-purple-500/5 blur-xl transition-all group-hover:scale-150" />
+          <div className="relative mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500/20 to-transparent transition-transform group-hover:scale-110 sm:mb-3 sm:h-12 sm:w-12">
+            <Pin className="h-5 w-5 text-purple-600 dark:text-purple-400 sm:h-6 sm:w-6" />
           </div>
-          <div className="text-lg font-bold text-gray-900 dark:text-white sm:text-2xl">
+          <div className="relative text-lg font-bold text-card-foreground sm:text-2xl">
             {loading ? (
-              <span className="inline-block h-5 w-8 animate-pulse bg-gray-200 dark:bg-gray-800 sm:h-8 sm:w-12" />
+              <span className="inline-block h-5 w-8 animate-pulse bg-muted sm:h-8 sm:w-12" />
             ) : (
               boardsCount
             )}
           </div>
-          <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-sm">
+          <div className="relative text-[10px] font-medium text-muted-foreground sm:text-sm">
             Board
           </div>
         </Link>
 
         <Link
           href="/app/jira/search"
-          className="flex flex-col items-center justify-center border-2 border-gray-300 bg-white p-2 text-center shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+          className="group relative flex flex-col items-center justify-center overflow-hidden rounded-lg border-l-4 border-l-orange-600 dark:border-l-orange-500 border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-3 text-center shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-5"
         >
-          <div className="mb-2 flex h-8 w-8 items-center justify-center border-2 border-orange-600 bg-orange-50 dark:bg-orange-900/20 sm:mb-3 sm:h-12 sm:w-12">
-            <Search className="h-4 w-4 text-orange-600 dark:text-orange-400 sm:h-6 sm:w-6" />
+          <div className="absolute right-0 top-0 h-20 w-20 translate-x-4 -translate-y-4 rounded-full bg-gradient-to-br from-orange-500/10 to-orange-500/5 blur-xl transition-all group-hover:scale-150" />
+          <div className="relative mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-orange-500/20 to-transparent transition-transform group-hover:scale-110 sm:mb-3 sm:h-12 sm:w-12">
+            <Search className="h-5 w-5 text-orange-600 dark:text-orange-400 sm:h-6 sm:w-6" />
           </div>
-          <div className="text-lg font-bold text-gray-900 dark:text-white sm:text-2xl">
+          <div className="relative text-lg font-bold text-card-foreground sm:text-2xl">
             —
           </div>
-          <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-sm">
+          <div className="relative text-[10px] font-medium text-muted-foreground sm:text-sm">
             Arama
           </div>
         </Link>
@@ -213,13 +215,13 @@ export default function JiraDashboardPage() {
       {/* Recent Projects & Issues */}
       <div className="grid gap-4 lg:grid-cols-2 sm:gap-4">
         {/* Recent Projects */}
-        <div className="border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
+        <Card className="p-4 sm:p-5">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20">
                 <Folder className="h-5 w-5 text-purple-600 dark:text-purple-400" />
               </div>
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+              <h2 className="text-lg font-bold text-card-foreground">
                 Son Projeler
               </h2>
             </div>
@@ -240,7 +242,7 @@ export default function JiraDashboardPage() {
               {[1, 2, 3, 4, 5].map((i) => (
                 <div
                   key={i}
-                  className="h-16 animate-pulse border-l-4 border-l-purple-400 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm sm:p-4 dark:border-l-purple-500 dark:border-gray-700 dark:bg-gray-900"
+                  className="h-16 animate-pulse border-l-4 border-l-purple-400 border-t-2 border-r-2 border-b-2 border-border bg-card p-3 shadow-sm sm:p-4 dark:border-l-purple-500"
                 />
               ))}
             </div>
@@ -252,22 +254,22 @@ export default function JiraDashboardPage() {
                   href={`/app/jira/${
                     project.location?.projectKey || project.id
                   }`}
-                  className="group block border-l-4 border-l-purple-600 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-l-purple-500 dark:border-gray-700 dark:bg-gray-900"
+                  className="group block border-l-4 border-l-purple-600 border-t-2 border-r-2 border-b-2 border-border bg-card p-3 shadow-sm transition-all active:border-primary active:shadow-md sm:p-4 hover:border-primary hover:shadow-md dark:border-l-purple-500"
                 >
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20">
                       <Folder className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <h3 className="truncate font-semibold text-gray-900 dark:text-white">
+                      <h3 className="truncate font-semibold text-card-foreground">
                         {project.name}
                       </h3>
-                      <p className="truncate text-sm text-gray-600 dark:text-gray-400">
+                      <p className="truncate text-sm text-muted-foreground">
                         {project.location?.projectKey ||
                           project.location?.projectName}
                       </p>
                     </div>
-                    <ChevronRight className="h-5 w-5 shrink-0 text-gray-400 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
+                    <ChevronRight className="h-5 w-5 shrink-0 text-muted-foreground opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
                   </div>
                 </Link>
               ))}
@@ -279,21 +281,21 @@ export default function JiraDashboardPage() {
                   <Folder className="h-8 w-8 text-purple-600 dark:text-purple-400" />
                 </div>
               </div>
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              <p className="text-sm font-medium text-muted-foreground">
                 Proje bulunamadı
               </p>
             </div>
           )}
-        </div>
+        </Card>
 
         {/* Recent Issues */}
-        <div className="border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
+        <Card className="p-4 sm:p-5">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20">
                 <ClipboardList className="h-5 w-5 text-green-600 dark:text-green-400" />
               </div>
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+              <h2 className="text-lg font-bold text-card-foreground">
                 Son Issue&apos;lar
               </h2>
             </div>
@@ -314,7 +316,7 @@ export default function JiraDashboardPage() {
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
                 <div
                   key={i}
-                  className="h-20 animate-pulse border-l-4 border-l-green-400 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm sm:p-4 dark:border-l-green-500 dark:border-gray-700 dark:bg-gray-900"
+                  className="h-20 animate-pulse border-l-4 border-l-green-400 border-t-2 border-r-2 border-b-2 border-border bg-card p-3 shadow-sm sm:p-4 dark:border-l-green-500"
                 />
               ))}
             </div>
@@ -324,7 +326,7 @@ export default function JiraDashboardPage() {
                 <a
                   key={issue.id}
                   href={issue.key ? `/app/jira/issues/${issue.key}` : issue.url}
-                  className="group block border-l-4 border-l-green-600 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-l-green-500 dark:border-gray-700 dark:bg-gray-900"
+                  className="group relative block overflow-hidden rounded-lg border-l-4 border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-3 shadow-md transition-all duration-300 hover:scale-[1.01] hover:border-border hover:shadow-xl sm:p-4"
                 >
                   <div className="mb-2 flex flex-wrap items-center gap-2">
                     <span className="rounded-md border-2 border-blue-300 bg-blue-100 px-2 py-0.5 font-mono text-xs font-bold text-blue-700 shadow-sm dark:border-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
@@ -338,7 +340,7 @@ export default function JiraDashboardPage() {
                       {issue.status}
                     </span>
                   </div>
-                  <h3 className="line-clamp-2 text-sm font-semibold text-gray-900 dark:text-white">
+                  <h3 className="line-clamp-2 text-sm font-semibold text-card-foreground">
                     {issue.summary}
                   </h3>
                 </a>
@@ -351,12 +353,12 @@ export default function JiraDashboardPage() {
                   <ClipboardList className="h-8 w-8 text-green-400" />
                 </div>
               </div>
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              <p className="text-sm font-medium text-muted-foreground">
                 Issue bulunamadı
               </p>
             </div>
           )}
-        </div>
+        </Card>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import { Angry, Frown, Smile } from "lucide-react";
 import Modal from "@/components/ui/Modal";
 import { useToastContext } from "@/contexts/ToastContext";
 import type { RetroCategory } from "@/interfaces/Retro.interface";
+import Button from "@/components/ui/Button";
 
 interface RetroCardModalProps {
   open: boolean;
@@ -62,7 +63,7 @@ const RetroCardModal = memo(function RetroCardModal({
           isEdit ? "Kart başarıyla güncellendi!" : "Kart başarıyla eklendi!",
           "success"
         );
-      } catch (err) {
+      } catch {
         showToast("Kart kaydedilirken bir hata oluştu.", "error");
       } finally {
         setLoading(false);
@@ -85,10 +86,10 @@ const RetroCardModal = memo(function RetroCardModal({
             const isSelected = category === cat;
             const bgColorClass =
               info.color === "red"
-                ? "bg-red-600"
+                ? "bg-destructive border-destructive text-destructive-foreground"
                 : info.color === "blue"
-                ? "bg-blue-600"
-                : "bg-green-600";
+                ? "bg-primary border-primary text-primary-foreground"
+                : "bg-success border-success text-success-foreground";
             return (
               <button
                 key={cat}
@@ -96,8 +97,8 @@ const RetroCardModal = memo(function RetroCardModal({
                 onClick={() => setCategory(cat)}
                 className={`flex items-center justify-center gap-2 flex-1 border-2 px-3 py-2 font-semibold transition-colors ${
                   isSelected
-                    ? `${bgColorClass} border-transparent text-white`
-                    : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                    ? `${bgColorClass}`
+                    : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                 }`}
               >
                 <info.icon className="h-5 w-5" />
@@ -111,7 +112,7 @@ const RetroCardModal = memo(function RetroCardModal({
         <div>
           <label
             htmlFor="retro-content"
-            className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
+            className="mb-1 block text-sm font-medium text-muted-foreground"
           >
             Kart İçeriği
           </label>
@@ -122,32 +123,29 @@ const RetroCardModal = memo(function RetroCardModal({
             onChange={(e) => setContent(e.target.value)}
             placeholder="Kartınızı yazın..."
             required
-            className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            className="w-full rounded-md border-2 border-input bg-input px-3 py-2 text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
         </div>
 
         {/* Actions */}
         <div className="flex items-center justify-end gap-3 pt-4">
-          <button
+          <Button
             type="button"
             onClick={onClose}
-            className="inline-flex h-10 items-center justify-center rounded-md border-2 border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+            variant="secondary"
+            size="md"
           >
             İptal
-          </button>
-          <button
+          </Button>
+          <Button
             type="submit"
             disabled={loading || !content.trim()}
-            className="inline-flex h-10 items-center justify-center border-2 border-indigo-600 bg-indigo-600 px-5 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 hover:border-indigo-700 disabled:opacity-60"
+            variant="primary"
+            size="md"
+            loading={loading}
           >
-            {loading
-              ? isEdit
-                ? "Kaydediliyor..."
-                : "Ekleniyor..."
-              : isEdit
-              ? "Kaydet"
-              : "Ekle"}
-          </button>
+            {isEdit ? "Kaydet" : "Ekle"}
+          </Button>
         </div>
       </form>
     </Modal>

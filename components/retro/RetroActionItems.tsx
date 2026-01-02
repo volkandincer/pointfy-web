@@ -11,6 +11,8 @@ import type {
   RetroActionItemInput,
 } from "@/interfaces/RetroActionItem.interface";
 import RetroActionItemModal from "./RetroActionItemModal";
+import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
 
 interface RetroActionItemsProps {
   roomId: string;
@@ -79,7 +81,7 @@ const RetroActionItems = memo(function RetroActionItems({
         if (error) throw error;
         setShowAddModal(false);
         showToast("Aksiyon maddesi başarıyla eklendi!", "success");
-      } catch (err) {
+      } catch {
         showToast("Aksiyon maddesi eklenirken bir hata oluştu.", "error");
       }
     },
@@ -108,7 +110,7 @@ const RetroActionItems = memo(function RetroActionItems({
         if (error) throw error;
         setEditingItem(null);
         showToast("Aksiyon maddesi başarıyla güncellendi!", "success");
-      } catch (err) {
+      } catch {
         showToast("Aksiyon maddesi güncellenirken bir hata oluştu.", "error");
       }
     },
@@ -134,7 +136,7 @@ const RetroActionItems = memo(function RetroActionItems({
 
         if (error) throw error;
         showToast("Aksiyon maddesi başarıyla silindi!", "success");
-      } catch (err) {
+      } catch {
         showToast("Aksiyon maddesi silinirken bir hata oluştu.", "error");
       }
     },
@@ -166,7 +168,7 @@ const RetroActionItems = memo(function RetroActionItems({
             : "Aksiyon maddesi tamamlandı!",
           "success"
         );
-      } catch (err) {
+      } catch {
         showToast("Aksiyon maddesi güncellenirken bir hata oluştu.", "error");
       }
     },
@@ -187,7 +189,7 @@ const RetroActionItems = memo(function RetroActionItems({
   if (loading) {
     return (
       <div className="flex h-32 items-center justify-center">
-        <p className="text-gray-500 dark:text-gray-400">Yükleniyor...</p>
+        <p className="text-muted-foreground">Yükleniyor...</p>
       </div>
     );
   }
@@ -195,15 +197,15 @@ const RetroActionItems = memo(function RetroActionItems({
   // Kartlar açılmadıysa aksiyon maddelerini gösterme
   if (!cardsRevealed) {
     return (
-      <div className="rounded-md border-2 border-gray-300 bg-white p-8 text-center shadow-sm dark:border-gray-700 dark:bg-gray-900">
-        <ClipboardList className="mx-auto mb-3 h-12 w-12 text-gray-400 dark:text-gray-500" />
-        <p className="font-medium text-gray-900 dark:text-white">
+      <Card className="p-8 text-center">
+        <ClipboardList className="mx-auto mb-3 h-12 w-12 text-muted-foreground" />
+        <p className="font-medium text-card-foreground">
           Aksiyon Maddeleri
         </p>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        <p className="mt-1 text-sm text-muted-foreground">
           Kartlar açıldıktan sonra aksiyon maddeleri eklenebilir.
         </p>
-      </div>
+      </Card>
     );
   }
 
@@ -211,8 +213,8 @@ const RetroActionItems = memo(function RetroActionItems({
     <div className="space-y-4 print-section">
       {/* Print Header - Only visible when printing */}
       <div className="print-header mb-6 hidden">
-        <h1 className="text-2xl font-bold text-gray-900">Aksiyon Maddeleri</h1>
-        <p className="mt-2 text-sm text-gray-600">
+        <h1 className="text-2xl font-bold text-card-foreground">Aksiyon Maddeleri</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
           Tarih: {new Date().toLocaleDateString("tr-TR", {
             day: "numeric",
             month: "long",
@@ -226,35 +228,37 @@ const RetroActionItems = memo(function RetroActionItems({
       {/* Header */}
       <div className="flex flex-col gap-4 no-print sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center border-2 border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20">
-            <ClipboardList className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+          <div className="flex h-10 w-10 items-center justify-center border-2 border-primary bg-primary/10">
+            <ClipboardList className="h-6 w-6 text-primary" />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+            <h3 className="text-xl font-bold text-card-foreground">
               Aksiyon Maddeleri
             </h3>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+            <p className="text-xs text-muted-foreground">
               {pendingItems.length} bekleyen, {completedItems.length} tamamlanan
             </p>
           </div>
         </div>
         {isAdmin && (
           <div className="flex flex-col gap-3 sm:flex-row">
-            <button
+            <Button
               onClick={() => window.print()}
-              className="flex items-center justify-center gap-2 rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+              variant="secondary"
+              size="md"
+              icon={Printer}
               title="Yazdır/PDF"
             >
-              <Printer className="h-4 w-4" />
               Yazdır
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => setShowAddModal(true)}
-              className="flex items-center justify-center gap-2 border-2 border-indigo-600 bg-indigo-600 px-6 py-3 text-base font-bold text-white transition-colors hover:bg-indigo-700 hover:border-indigo-700"
+              variant="primary"
+              size="lg"
+              icon={Plus}
             >
-              <Plus className="h-5 w-5" />
               Yeni Aksiyon Maddesi Ekle
-            </button>
+            </Button>
           </div>
         )}
       </div>
@@ -263,8 +267,8 @@ const RetroActionItems = memo(function RetroActionItems({
       {pendingItems.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <div className="h-1.5 w-1.5 border-2 border-orange-600 bg-orange-500"></div>
-            <h4 className="text-sm font-bold uppercase tracking-wide text-gray-700 dark:text-gray-300">
+            <div className="h-1.5 w-1.5 border-2 border-warning bg-warning"></div>
+            <h4 className="text-sm font-bold uppercase tracking-wide text-card-foreground">
               Bekleyen Aksiyonlar ({pendingItems.length})
             </h4>
           </div>
@@ -290,12 +294,9 @@ const RetroActionItems = memo(function RetroActionItems({
             const FlagIcon = flagInfo && "icon" in flagInfo ? flagInfo.icon : null;
 
             return (
-              <div
+              <Card
                 key={item.id}
-                className="group relative border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
-                style={{
-                  borderLeftColor: '#f97316',
-                }}
+                className="group relative border-l-4 border-t-2 border-r-2 border-b-2 border-warning p-3 shadow-sm transition-all active:border-accent active:shadow-md sm:p-4 hover:border-accent hover:shadow-md"
               >
                 {/* Flag Badge */}
                 {flagInfo && (
@@ -316,24 +317,24 @@ const RetroActionItems = memo(function RetroActionItems({
 
                 {/* Content */}
                 <div className="mb-4">
-                  <p className="text-[15px] leading-7 font-medium text-gray-900 dark:text-white">
+                  <p className="text-[15px] leading-7 font-medium text-card-foreground">
                     {item.content}
                   </p>
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-between border-t-2 border-gray-200 pt-4 dark:border-gray-700">
-                  <div className="flex items-center gap-4 text-xs font-medium text-gray-600 dark:text-gray-400">
+                <div className="flex items-center justify-between border-t-2 border-border pt-4">
+                  <div className="flex items-center gap-4 text-xs font-medium text-muted-foreground">
                     <div className="flex items-center gap-2">
                       <User className="h-4 w-4" />
-                      <span className="font-semibold text-gray-700 dark:text-gray-300">
+                      <span className="font-semibold text-card-foreground">
                         {item.created_by_username}
                       </span>
                     </div>
-                    <span className="text-gray-400">•</span>
+                    <span className="text-muted-foreground">•</span>
                     <div className="flex items-center gap-2">
                       <Clock className="h-4 w-4" />
-                      <span className="text-gray-600 dark:text-gray-400">
+                      <span className="text-muted-foreground">
                         {new Date(item.created_at).toLocaleDateString("tr-TR", {
                           day: "numeric",
                           month: "short",
@@ -347,34 +348,38 @@ const RetroActionItems = memo(function RetroActionItems({
                   {/* Action Buttons */}
                   {isAdmin && (
                     <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
-                      <button
+                      <Button
                         onClick={() => handleToggleComplete(item)}
-                        className="flex items-center gap-1.5 border-2 border-green-600 bg-green-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-green-700 hover:border-green-700"
+                        variant="primary"
+                        size="sm"
+                        icon={CheckCircle2}
                         title="Tamamla"
+                        className="border-green-600 bg-green-600 text-white hover:border-green-700 hover:bg-green-700"
                       >
-                        <CheckCircle2 className="h-4 w-4" />
                         Tamamla
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         onClick={() => handleOpenEdit(item)}
-                        className="flex items-center gap-1.5 border-2 border-blue-600 bg-blue-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-blue-700 hover:border-blue-700 dark:border-blue-500 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700"
+                        variant="primary"
+                        size="sm"
+                        icon={Edit}
                         title="Düzenle"
                       >
-                        <Edit className="h-4 w-4" />
                         Düzenle
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         onClick={() => handleDeleteItem(item)}
-                        className="flex items-center gap-1.5 border-2 border-red-600 bg-red-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-red-700 hover:border-red-700 dark:border-red-500 dark:bg-red-600 dark:text-white dark:hover:bg-red-700"
+                        variant="danger"
+                        size="sm"
+                        icon={Trash2}
                         title="Sil"
                       >
-                        <Trash2 className="h-4 w-4" />
                         Sil
-                      </button>
+                      </Button>
                     </div>
                   )}
                 </div>
-              </div>
+              </Card>
             );
           })}
         </div>
@@ -384,8 +389,8 @@ const RetroActionItems = memo(function RetroActionItems({
       {completedItems.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <div className="h-1.5 w-1.5 border-2 border-green-600 bg-green-500"></div>
-            <h4 className="text-sm font-bold uppercase tracking-wide text-gray-700 dark:text-gray-300">
+            <div className="h-1.5 w-1.5 border-2 border-success bg-success"></div>
+            <h4 className="text-sm font-bold uppercase tracking-wide text-card-foreground">
               Tamamlanan Aksiyonlar ({completedItems.length})
             </h4>
           </div>
@@ -411,16 +416,13 @@ const RetroActionItems = memo(function RetroActionItems({
             const FlagIcon = flagInfo && "icon" in flagInfo ? flagInfo.icon : null;
 
             return (
-              <div
+              <Card
                 key={item.id}
-                className="group relative border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
-                style={{
-                  borderLeftColor: '#16a34a',
-                }}
+                className="group relative border-l-4 border-t-2 border-r-2 border-b-2 border-success p-3 shadow-sm transition-all active:border-accent active:shadow-md sm:p-4 hover:border-accent hover:shadow-md"
               >
                 {/* Completed Badge */}
                 <div className="absolute right-4 top-4">
-                  <div className="flex h-8 w-8 items-center justify-center border-2 border-green-600 bg-green-600 text-white">
+                  <div className="flex h-8 w-8 items-center justify-center border-2 border-success bg-success text-success-foreground">
                     <CheckCircle2 className="h-5 w-5" />
                   </div>
                 </div>
@@ -444,24 +446,24 @@ const RetroActionItems = memo(function RetroActionItems({
 
                 {/* Content */}
                 <div className="mb-4 pr-12">
-                  <p className="text-[15px] leading-7 font-medium text-gray-600 line-through dark:text-gray-400">
+                  <p className="text-[15px] leading-7 font-medium text-muted-foreground line-through">
                     {item.content}
                   </p>
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-between border-t-2 border-green-200 pt-4 dark:border-green-800/50">
-                  <div className="flex items-center gap-4 text-xs font-medium text-gray-600 dark:text-gray-400">
+                <div className="flex items-center justify-between border-t-2 border-success/50 pt-4">
+                  <div className="flex items-center gap-4 text-xs font-medium text-muted-foreground">
                     <div className="flex items-center gap-2">
                       <User className="h-4 w-4" />
-                      <span className="font-semibold text-gray-700 dark:text-gray-300">
+                      <span className="font-semibold text-card-foreground">
                         {item.created_by_username}
                       </span>
                     </div>
-                    <span className="text-gray-400">•</span>
+                    <span className="text-muted-foreground">•</span>
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="h-4 w-4" />
-                      <span className="text-gray-600 dark:text-gray-400">
+                      <span className="text-muted-foreground">
                         {item.completed_at &&
                           new Date(item.completed_at).toLocaleDateString("tr-TR", {
                             day: "numeric",
@@ -476,34 +478,37 @@ const RetroActionItems = memo(function RetroActionItems({
                   {/* Action Buttons */}
                   {isAdmin && (
                     <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
-                      <button
+                      <Button
                         onClick={() => handleToggleComplete(item)}
-                        className="flex items-center gap-1.5 border-2 border-gray-600 bg-gray-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-gray-700 hover:border-gray-700"
+                        variant="secondary"
+                        size="sm"
+                        icon={RotateCcw}
                         title="Geri Al"
                       >
-                        <RotateCcw className="h-4 w-4" />
                         Geri Al
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         onClick={() => handleOpenEdit(item)}
-                        className="flex items-center gap-1.5 border-2 border-blue-600 bg-blue-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-blue-700 hover:border-blue-700 dark:border-blue-500 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700"
+                        variant="primary"
+                        size="sm"
+                        icon={Edit}
                         title="Düzenle"
                       >
-                        <Edit className="h-4 w-4" />
                         Düzenle
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         onClick={() => handleDeleteItem(item)}
-                        className="flex items-center gap-1.5 border-2 border-red-600 bg-red-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-red-700 hover:border-red-700 dark:border-red-500 dark:bg-red-600 dark:text-white dark:hover:bg-red-700"
+                        variant="danger"
+                        size="sm"
+                        icon={Trash2}
                         title="Sil"
                       >
-                        <Trash2 className="h-4 w-4" />
                         Sil
-                      </button>
+                      </Button>
                     </div>
                   )}
                 </div>
-              </div>
+              </Card>
             );
           })}
         </div>
@@ -511,30 +516,31 @@ const RetroActionItems = memo(function RetroActionItems({
 
       {/* Empty State */}
       {actionItems.length === 0 && (
-        <div className="rounded-md border-2 border-dashed border-gray-300 bg-white p-12 text-center dark:border-gray-700 dark:bg-gray-900">
+        <Card className="border-dashed p-12 text-center">
           <div className="mb-4 flex justify-center">
-            <div className="flex h-16 w-16 items-center justify-center border-2 border-indigo-600 bg-indigo-50 dark:bg-indigo-900/30">
-              <ClipboardList className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
+            <div className="flex h-16 w-16 items-center justify-center border-2 border-primary bg-primary/10">
+              <ClipboardList className="h-8 w-8 text-primary" />
             </div>
           </div>
-          <h3 className="mb-2 text-lg font-bold text-gray-900 dark:text-white">
+          <h3 className="mb-2 text-lg font-bold text-card-foreground">
             Henüz aksiyon maddesi yok
           </h3>
-          <p className="mb-6 text-sm text-gray-500 dark:text-gray-400">
+          <p className="mb-6 text-sm text-muted-foreground">
             {isAdmin
               ? "İlk aksiyon maddesini ekleyerek başlayın."
               : "Admin aksiyon maddesi eklediğinde burada görünecek."}
           </p>
           {isAdmin && (
-            <button
+            <Button
               onClick={() => setShowAddModal(true)}
-              className="mx-auto flex items-center gap-3 border-2 border-indigo-600 bg-indigo-600 px-8 py-4 text-base font-bold text-white transition-colors hover:bg-indigo-700 hover:border-indigo-700"
+              variant="primary"
+              size="lg"
+              icon={Plus}
             >
-              <Plus className="h-6 w-6" />
               İlk Aksiyon Maddesini Ekle
-            </button>
+            </Button>
           )}
-        </div>
+        </Card>
       )}
 
       {/* Add Modal */}

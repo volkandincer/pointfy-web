@@ -219,16 +219,16 @@ const HomeWelcome = memo(function HomeWelcome() {
                   if (rooms.length > 0) setShowResults(true);
                 }}
                 placeholder="Oda ara (ad, kod veya oluşturan)..."
-                className="w-full rounded-md border-2 border-gray-300 bg-white px-5 py-4 pl-12 pr-12 text-base outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
+                className="w-full rounded-md border-2 border-border bg-background px-5 py-4 pl-12 pr-12 text-base text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
-              <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+              <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
               {searchQuery && (
                 <button
                   onClick={() => {
                     setSearchQuery("");
                     setShowResults(false);
                   }}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -237,7 +237,7 @@ const HomeWelcome = memo(function HomeWelcome() {
 
             {/* Arama Sonuçları */}
             {showResults && searchQuery && (
-              <div className="absolute z-50 mt-2 w-full rounded-md border-2 border-gray-300 bg-white shadow-md dark:border-gray-700 dark:bg-gray-900">
+              <div className="absolute z-50 mt-2 w-full rounded-md border-2 border-border bg-card shadow-md">
                 {loading ? (
                   <div className="p-4 text-center">
                     <p className="text-sm text-muted-foreground">
@@ -246,8 +246,8 @@ const HomeWelcome = memo(function HomeWelcome() {
                   </div>
                 ) : rooms.length === 0 ? (
                   <div className="p-6 text-center">
-                    <Search className="mx-auto mb-2 h-8 w-8 text-gray-400 dark:text-gray-500" />
-                    <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                    <Search className="mx-auto mb-2 h-8 w-8 text-muted-foreground" />
+                    <p className="text-sm font-semibold text-card-foreground">
                       Sonuç bulunamadı
                     </p>
                     <p className="mt-1 text-xs text-muted-foreground">
@@ -278,7 +278,7 @@ const HomeWelcome = memo(function HomeWelcome() {
                         <button
                           key={room.id}
                           onClick={() => handleRoomClick(room.id)}
-                          className={`group w-full border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 text-left shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900`}
+                          className={`group w-full border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-border bg-card p-3 text-left shadow-sm transition-all active:border-primary active:shadow-md sm:p-4 hover:border-primary hover:shadow-md`}
                         >
                           <div className="flex items-center gap-4">
                             <div
@@ -287,11 +287,11 @@ const HomeWelcome = memo(function HomeWelcome() {
                               <Home className={`h-6 w-6 ${iconTextColor}`} />
                             </div>
                             <div className="min-w-0 flex-1">
-                              <h3 className="mb-1 truncate text-sm font-semibold text-gray-900 dark:text-white sm:text-base">
+                              <h3 className="mb-1 truncate text-sm font-semibold text-card-foreground sm:text-base">
                                 {room.name || "Oda"}
                               </h3>
                               <div className="flex items-center gap-2">
-                                <span className="rounded-md border-2 border-gray-300 bg-white px-2 py-0.5 text-xs font-semibold text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                                <span className="rounded-md border-2 border-border bg-card px-2 py-0.5 text-xs font-semibold text-card-foreground shadow-sm">
                                   {room.code}
                                 </span>
                                 {room.created_by_username && (

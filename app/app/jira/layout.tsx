@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import Button from "@/components/ui/Button";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import { getSupabase } from "@/lib/supabase";
@@ -88,19 +89,19 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
     return (
       <>
         <Header navigationItems={navigationItems} />
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+        <div className="min-h-screen bg-background">
           <div className="container mx-auto px-4 py-6">
             <div className="flex gap-6">
               {/* Sidebar Skeleton */}
               <aside className="hidden w-64 shrink-0 lg:block">
                 <div className="sticky top-6">
-                  <div className="rounded-md border-2 border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-                    <div className="mb-4 h-6 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
+                  <div className="rounded-md border-2 border-border bg-card p-4 shadow-sm">
+                    <div className="mb-4 h-6 w-32 animate-pulse rounded bg-muted" />
                     <div className="space-y-2">
                       {[1, 2, 3, 4, 5, 6].map((i) => (
                         <div
                           key={i}
-                          className="h-10 w-full animate-pulse rounded-md bg-gray-200 dark:bg-gray-800"
+                          className="h-10 w-full animate-pulse rounded-md bg-muted"
                         />
                       ))}
                     </div>
@@ -110,12 +111,12 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
               {/* Content Skeleton */}
               <main className="flex-1">
                 <div className="space-y-6">
-                  <div className="h-8 w-48 animate-pulse rounded-md bg-gray-200 dark:bg-gray-800" />
+                  <div className="h-8 w-48 animate-pulse rounded-md bg-muted" />
                   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     {[1, 2, 3, 4].map((i) => (
                       <div
                         key={i}
-                        className="h-24 animate-pulse border-2 border-gray-300 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900"
+                        className="h-24 animate-pulse border-2 border-border bg-card shadow-sm"
                       />
                     ))}
                   </div>
@@ -135,24 +136,24 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
     return (
       <>
         <Header navigationItems={navigationItems} />
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+        <div className="min-h-screen bg-background">
           <div className="container mx-auto px-4 py-16">
             <div className="mx-auto max-w-2xl">
-              <div className="rounded-md border-2 border-purple-600 bg-white p-6 shadow-sm sm:p-8 dark:border-purple-500 dark:bg-gray-900">
+              <div className="rounded-md border-2 border-purple-600 bg-card p-6 shadow-sm sm:p-8 dark:border-purple-500">
                 <div className="mb-6 text-center">
                   <div className="mb-4 flex justify-center">
                     <div className="flex h-24 w-24 items-center justify-center rounded-md border-2 border-purple-600 bg-purple-600 text-white shadow-sm">
                       <Link2 className="h-12 w-12" />
                     </div>
                   </div>
-                  <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
+                  <h2 className="mb-2 text-2xl font-bold text-card-foreground">
                     Jira Bağlantısı Gerekli
                   </h2>
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <p className="text-muted-foreground">
                     Jira projelerinizi ve issue&apos;larınızı görüntülemek için Jira hesabınızı bağlamanız gerekiyor.
                   </p>
                 </div>
-                <button
+                <Button
                   onClick={async () => {
                     try {
                       const supabase = getSupabase();
@@ -166,10 +167,13 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
                       // Jira OAuth error
                     }
                   }}
-                  className="w-full rounded-md border-2 border-purple-600 bg-purple-600 px-6 py-3 text-base font-semibold text-white shadow-sm transition-all hover:border-purple-700 hover:bg-purple-700 hover:shadow-md"
+                  variant="primary"
+                  size="lg"
+                  fullWidth
+                  icon={Link2}
                 >
                   Jira&apos;yı Bağla
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -190,7 +194,7 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
   return (
     <>
       <Header navigationItems={navigationItems} />
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+        <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col gap-6 lg:flex-row">
             {/* Sidebar Navigation */}
@@ -198,10 +202,10 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
               <div className="sticky top-6">
                 <div className="rounded-md border-2 border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                   <div className="mb-4">
-                    <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+                    <h2 className="text-lg font-bold text-card-foreground">
                       Jira Modülü
                     </h2>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                    <p className="text-xs text-muted-foreground">
                       Tüm Jira işlemleriniz
                     </p>
                   </div>
@@ -216,7 +220,7 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
                           className={`flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-all ${
                             active
                               ? "bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400"
-                              : "text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
+                              : "text-card-foreground hover:bg-accent"
                           }`}
                         >
                           <IconComponent className="h-5 w-5 shrink-0" />
@@ -230,7 +234,7 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
             </aside>
 
             {/* Mobile Bottom Navigation - Hidden on desktop */}
-            <div className="fixed bottom-0 left-0 right-0 z-50 border-t-2 border-gray-200 bg-white/95 backdrop-blur-sm dark:border-gray-800 dark:bg-gray-900/95 lg:hidden">
+            <div className="fixed bottom-0 left-0 right-0 z-50 border-t-2 border-border bg-card/95 backdrop-blur-sm lg:hidden">
               <div className="container mx-auto">
                 <nav className="flex items-center justify-around">
                   {jiraNavItems.slice(0, 5).map((item) => {
@@ -243,7 +247,7 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
                         className={`relative flex flex-col items-center gap-1 px-2 py-3 transition-all ${
                           active
                             ? "text-purple-600 dark:text-purple-400"
-                            : "text-gray-600 dark:text-gray-400"
+                            : "text-muted-foreground"
                         }`}
                       >
                         <div className="relative">

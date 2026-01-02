@@ -2,22 +2,17 @@
 
 import { useCallback, useEffect, useState, useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
+import Image from "next/image";
 import {
   ArrowLeft,
   ExternalLink,
-  Calendar,
   User,
-  Tag,
-  Flag,
-  Folder,
   Clock,
   CheckCircle,
   Edit,
   X,
-  Save,
   Loader2,
   Search,
-  FileText,
   MessageSquare,
   Send,
 } from "lucide-react";
@@ -25,6 +20,8 @@ import { getStatusColorClasses, getPriorityColorClasses } from "@/lib/jira/color
 import type { JiraTask, JiraComment } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
 import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
+import IconBadge from "@/components/ui/IconBadge";
 import { useToastContext } from "@/contexts/ToastContext";
 import Modal from "@/components/ui/Modal";
 import { formatErrorMessage } from "@/lib/utils/errorHandler";
@@ -513,8 +510,8 @@ export default function JiraIssueDetailPage() {
   if (loading) {
     return (
       <div className="space-y-4 sm:space-y-6">
-        <div className="h-8 w-48 animate-pulse rounded-md bg-gray-200 dark:bg-gray-800" />
-        <div className="h-96 animate-pulse rounded-md border-2 border-gray-300 bg-white dark:border-gray-700 dark:bg-gray-900" />
+        <div className="h-8 w-48 animate-pulse rounded-md bg-muted" />
+        <div className="h-96 animate-pulse rounded-lg border-2 border-border bg-card" />
       </div>
     );
   }
@@ -530,7 +527,7 @@ export default function JiraIssueDetailPage() {
         >
           Geri
         </Button>
-        <div className="rounded-md border-2 border-red-200 bg-red-50 p-4 text-sm text-red-600 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+        <div className="rounded-lg border-2 border-destructive bg-destructive/10 p-4 text-sm text-destructive">
           {error || "Issue bulunamadı"}
         </div>
       </div>
@@ -563,7 +560,7 @@ export default function JiraIssueDetailPage() {
               </span>
             )}
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
+          <h1 className="text-2xl font-bold text-card-foreground sm:text-3xl">
             {issue.summary}
           </h1>
         </div>
@@ -576,15 +573,18 @@ export default function JiraIssueDetailPage() {
           >
             Geri
           </Button>
-          <a
-            href={issue.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex min-h-[44px] shrink-0 items-center justify-center gap-2 rounded-md border-2 border-purple-600 bg-purple-600 px-4 py-2 text-sm font-semibold text-white transition hover:border-purple-700 hover:bg-purple-700 dark:border-purple-500 dark:bg-purple-600 dark:hover:border-purple-400 dark:hover:bg-purple-500"
+          <Button
+            variant="primary"
+            size="md"
+            onClick={() => {
+              if (issue.url) {
+                window.open(issue.url, "_blank", "noopener,noreferrer");
+              }
+            }}
+            icon={ExternalLink}
           >
-            <ExternalLink className="h-4 w-4" />
             <span className="hidden sm:inline">Jira&apos;da Aç</span>
-          </a>
+          </Button>
         </div>
       </div>
 
@@ -593,31 +593,35 @@ export default function JiraIssueDetailPage() {
         {/* Left Column - Main Content */}
         <div className="space-y-4 lg:col-span-2">
           {/* Description */}
-          <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:p-6">
-            <h2 className="mb-4 text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
+          <Card className="p-4 sm:p-6">
+            <h2 className="mb-4 text-base font-semibold text-card-foreground sm:text-lg">
               Açıklama
             </h2>
             {issue.description ? (
               <div className="prose prose-sm max-w-none">
-                <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+                <p className="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground">
                   {issue.description}
                 </p>
               </div>
             ) : (
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-sm text-muted-foreground">
                 Bu issue için açıklama bulunmuyor.
               </p>
             )}
-          </div>
+          </Card>
 
           {/* Comments Section */}
-          <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:p-6">
+          <Card className="p-4 sm:p-6">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="flex items-center gap-2 text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
-                <MessageSquare className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+              <h2 className="flex items-center gap-2 text-base font-semibold text-card-foreground sm:text-lg">
+                <IconBadge
+                  icon={MessageSquare}
+                  color="primary"
+                  size="sm"
+                />
                 Yorumlar
                 {comments.length > 0 && (
-                  <span className="rounded-md border-2 border-gray-300 bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                  <span className="rounded-md border-2 border-border bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground shadow-sm">
                     {comments.length}
                   </span>
                 )}
@@ -632,11 +636,11 @@ export default function JiraIssueDetailPage() {
                 placeholder="Yorumunuzu yazın..."
                 rows={3}
                 maxLength={1000}
-                className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-500 outline-none transition focus:border-purple-600 focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500"
+                className="w-full rounded-lg border-2 border-border bg-background px-3 py-2 text-sm text-foreground placeholder-muted-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                 disabled={addingComment}
               />
               <div className="flex items-center justify-between">
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p className="text-xs text-muted-foreground">
                   {newComment.length}/1000
                 </p>
                 <Button
@@ -658,10 +662,10 @@ export default function JiraIssueDetailPage() {
               <div className="space-y-3">
                 {[1, 2, 3].map((i) => (
                   <div key={i} className="flex items-start gap-3">
-                    <div className="h-8 w-8 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
+                    <div className="h-8 w-8 animate-pulse rounded-full bg-muted" />
                     <div className="flex-1 space-y-2">
-                      <div className="h-4 w-3/4 animate-pulse rounded-md bg-gray-200 dark:bg-gray-700" />
-                      <div className="h-4 w-full animate-pulse rounded-md bg-gray-200 dark:bg-gray-700" />
+                      <div className="h-4 w-3/4 animate-pulse rounded-md bg-muted" />
+                      <div className="h-4 w-full animate-pulse rounded-md bg-muted" />
                     </div>
                   </div>
                 ))}
@@ -671,50 +675,52 @@ export default function JiraIssueDetailPage() {
                 {comments.map((comment) => (
                   <div
                     key={comment.id}
-                    className="rounded-md border-2 border-gray-200 bg-gray-50 p-3 dark:border-gray-800 dark:bg-gray-800/50"
+                    className="rounded-lg border-2 border-border bg-muted/50 p-3"
                   >
                     <div className="mb-2 flex items-center gap-2">
                       {comment.author.avatarUrls && (
-                        <img
+                        <Image
                           src={comment.author.avatarUrls["48x48"]}
                           alt={comment.author.displayName}
-                          className="h-8 w-8 rounded-full border-2 border-gray-300 dark:border-gray-700"
+                          width={32}
+                          height={32}
+                          className="h-8 w-8 rounded-full border-2 border-border"
                         />
                       )}
                       <div className="flex-1">
-                        <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                        <p className="text-sm font-semibold text-card-foreground">
                           {comment.author.displayName}
                         </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                        <p className="text-xs text-muted-foreground">
                           {formatCommentDate(comment.created)}
                         </p>
                       </div>
                     </div>
-                    <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+                    <p className="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground">
                       {comment.body}
                     </p>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="py-4 text-center text-sm text-gray-500 dark:text-gray-400">
+              <p className="py-4 text-center text-sm text-muted-foreground">
                 Henüz yorum yok. İlk yorumu siz ekleyin!
               </p>
             )}
-          </div>
+          </Card>
         </div>
 
         {/* Right Column - Sidebar */}
         <div className="space-y-3">
           {/* Assignee */}
-          <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+          <Card className="p-4">
             <div className="mb-3 flex items-center justify-between gap-2">
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+              <h3 className="text-sm font-semibold text-card-foreground">
                 Atanan
               </h3>
               <button
                 onClick={() => setAssigneeModalOpen(true)}
-                className="rounded-md border-2 border-transparent p-1 text-gray-400 transition-colors hover:border-purple-300 hover:bg-purple-50 hover:text-purple-600 dark:text-gray-500 dark:hover:border-purple-600 dark:hover:bg-purple-900/20 dark:hover:text-purple-400"
+                className="rounded-md border-2 border-transparent p-1 text-muted-foreground transition-colors hover:border-purple-300 hover:bg-purple-50 hover:text-purple-600"
                 title="Atama değiştir"
               >
                 <Edit className="h-4 w-4" />
@@ -723,14 +729,16 @@ export default function JiraIssueDetailPage() {
             {issue.assignee ? (
               <div className="flex items-center gap-3">
                 {issue.assignee.avatar && (
-                  <img
+                  <Image
                     src={issue.assignee.avatar}
                     alt={issue.assignee.name}
-                    className="h-10 w-10 rounded-full border-2 border-gray-300 dark:border-gray-700"
+                    width={40}
+                    height={40}
+                    className="h-10 w-10 rounded-full border-2 border-border"
                   />
                 )}
                 <div className="flex-1">
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                  <p className="text-sm font-semibold text-card-foreground">
                     {issue.assignee.name}
                   </p>
                 </div>
@@ -738,16 +746,16 @@ export default function JiraIssueDetailPage() {
             ) : (
               <button
                 onClick={() => setAssigneeModalOpen(true)}
-                className="w-full rounded-md border-2 border-dashed border-gray-300 bg-gray-50 px-3 py-2 text-sm text-gray-500 transition hover:border-purple-300 hover:bg-purple-50 hover:text-purple-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:border-purple-600 dark:hover:bg-purple-900/20 dark:hover:text-purple-400"
+                className="w-full rounded-md border-2 border-dashed border-border bg-muted/50 px-3 py-2 text-sm text-muted-foreground transition hover:border-primary hover:bg-primary/10 hover:text-primary"
               >
                 Atama yap
               </button>
             )}
-          </div>
+          </Card>
 
           {/* Status */}
-          <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
-            <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">
+          <Card className="p-4">
+            <h3 className="mb-3 text-sm font-semibold text-card-foreground">
               Durum
             </h3>
             <span
@@ -757,12 +765,12 @@ export default function JiraIssueDetailPage() {
             >
               {issue.status}
             </span>
-          </div>
+          </Card>
 
           {/* Priority */}
           {issue.priority && (
-            <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
-              <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">
+            <Card className="p-4">
+              <h3 className="mb-3 text-sm font-semibold text-card-foreground">
                 Öncelik
               </h3>
               <span
@@ -772,22 +780,22 @@ export default function JiraIssueDetailPage() {
               >
                 {issue.priority}
               </span>
-            </div>
+            </Card>
           )}
 
           {/* Type */}
-          <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
-            <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">
+          <Card className="p-4">
+            <h3 className="mb-3 text-sm font-semibold text-card-foreground">
               Tip
             </h3>
-            <span className="inline-block rounded-md border-2 border-gray-300 bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+            <span className="inline-block rounded-md border-2 border-border bg-muted px-3 py-1.5 text-xs font-medium text-muted-foreground shadow-sm">
               {issue.type}
             </span>
-          </div>
+          </Card>
 
           {/* Project */}
-          <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
-            <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">
+          <Card className="p-4">
+            <h3 className="mb-3 text-sm font-semibold text-card-foreground">
               Proje
             </h3>
             <a
@@ -796,15 +804,15 @@ export default function JiraIssueDetailPage() {
             >
               {issue.project.key}
             </a>
-            <p className="mt-2 text-xs text-gray-600 dark:text-gray-400">
+            <p className="mt-2 text-xs text-muted-foreground">
               {issue.project.name}
             </p>
-          </div>
+          </Card>
 
           {/* Story Points */}
-          <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+          <Card className="p-4">
             <div className="mb-3 flex items-center justify-between gap-2">
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+              <h3 className="text-sm font-semibold text-card-foreground">
                 Story Points
               </h3>
               {!storyPointsEditing && (
@@ -813,7 +821,7 @@ export default function JiraIssueDetailPage() {
                     setStoryPointsEditing(true);
                     setStoryPointsInput(storyPoints !== null ? String(storyPoints) : "");
                   }}
-                  className="rounded-md border-2 border-transparent p-1 text-gray-400 transition-colors hover:border-purple-300 hover:bg-purple-50 hover:text-purple-600 dark:text-gray-500 dark:hover:border-purple-600 dark:hover:bg-purple-900/20 dark:hover:text-purple-400"
+                  className="rounded-md border-2 border-transparent p-1 text-muted-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary"
                   title="Puan düzenle"
                 >
                   <Edit className="h-4 w-4" />
@@ -829,7 +837,7 @@ export default function JiraIssueDetailPage() {
                   value={storyPointsInput}
                   onChange={(e) => setStoryPointsInput(e.target.value)}
                   placeholder="Puan girin"
-                  className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:border-purple-600 focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-purple-500"
+                  className="w-full rounded-lg border-2 border-border bg-background px-3 py-2 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                   disabled={storyPointsLoading}
                   autoFocus
                 />
@@ -840,7 +848,6 @@ export default function JiraIssueDetailPage() {
                     onClick={updateStoryPoints}
                     disabled={storyPointsLoading}
                     loading={storyPointsLoading}
-                    className="!border-purple-600 !bg-purple-600 hover:!border-purple-700 hover:!bg-purple-700 dark:!border-purple-500 dark:!bg-purple-600 dark:hover:!border-purple-400 dark:hover:!bg-purple-500"
                   >
                     Kaydet
                   </Button>
@@ -860,7 +867,7 @@ export default function JiraIssueDetailPage() {
             ) : (
               <div className="flex items-center gap-2">
                 {storyPointsLoading ? (
-                  <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+                  <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
                 ) : storyPoints !== null ? (
                   <span className="text-base font-bold text-purple-600 dark:text-purple-400">
                     {storyPoints}
@@ -871,21 +878,21 @@ export default function JiraIssueDetailPage() {
                       setStoryPointsEditing(true);
                       setStoryPointsInput("");
                     }}
-                    className="text-sm text-gray-500 hover:text-purple-600 dark:text-gray-400 dark:hover:text-purple-400"
+                    className="text-sm text-muted-foreground hover:text-primary"
                   >
                     Puan ekle
                   </button>
                 )}
               </div>
             )}
-          </div>
+          </Card>
 
           {/* Dates */}
-          <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
-            <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">
+          <Card className="p-4">
+            <h3 className="mb-3 text-sm font-semibold text-card-foreground">
               Tarihler
             </h3>
-            <div className="space-y-2 text-xs text-gray-600 dark:text-gray-400">
+            <div className="space-y-2 text-xs text-muted-foreground">
               <div className="flex items-center gap-1.5">
                 <Clock className="h-3 w-3" />
                 <span>
@@ -910,7 +917,7 @@ export default function JiraIssueDetailPage() {
                 </div>
               )}
             </div>
-          </div>
+          </Card>
         </div>
       </div>
 
@@ -939,10 +946,10 @@ export default function JiraIssueDetailPage() {
               placeholder="Kullanıcı ara..."
               value={assigneeSearchQuery}
               onChange={(e) => setAssigneeSearchQuery(e.target.value)}
-              className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 pl-10 text-sm text-gray-900 placeholder-gray-500 focus:border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500"
+              className="w-full rounded-lg border-2 border-border bg-background px-4 py-2.5 pl-10 text-sm text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               autoFocus
             />
-            <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
           </div>
 
           {/* Users List */}
@@ -951,10 +958,10 @@ export default function JiraIssueDetailPage() {
               <div className="space-y-3 py-4">
                 {[1, 2, 3].map((i) => (
                   <div key={i} className="flex items-center gap-3">
-                    <div className="h-10 w-10 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
+                    <div className="h-10 w-10 animate-pulse rounded-full bg-muted" />
                     <div className="flex-1 space-y-2">
-                      <div className="h-4 w-3/4 animate-pulse rounded-md bg-gray-200 dark:bg-gray-700" />
-                      <div className="h-3 w-1/2 animate-pulse rounded-md bg-gray-200 dark:bg-gray-700" />
+                      <div className="h-4 w-3/4 animate-pulse rounded-md bg-muted" />
+                      <div className="h-3 w-1/2 animate-pulse rounded-md bg-muted" />
                     </div>
                   </div>
                 ))}
@@ -966,16 +973,16 @@ export default function JiraIssueDetailPage() {
                   <button
                     onClick={() => updateAssignee(null)}
                     disabled={assigneeLoading}
-                    className="flex w-full items-center gap-3 rounded-md border-2 border-gray-300 bg-white p-3 text-left transition hover:border-red-300 hover:bg-red-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-red-700 dark:hover:bg-red-900/20"
+                    className="flex w-full items-center gap-3 rounded-lg border-2 border-border bg-card p-3 text-left transition-all duration-200 hover:border-destructive hover:bg-destructive/10"
                   >
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-700">
-                      <X className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-border bg-muted">
+                      <X className="h-5 w-5 text-muted-foreground" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                      <p className="text-sm font-semibold text-card-foreground">
                         Atamayı Kaldır
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                      <p className="text-xs text-muted-foreground">
                         Issue&apos;u atanmamış olarak işaretle
                       </p>
                     </div>
@@ -989,25 +996,27 @@ export default function JiraIssueDetailPage() {
                       key={user.accountId}
                       onClick={() => updateAssignee(user.accountId)}
                       disabled={assigneeLoading}
-                      className="flex w-full items-center gap-3 rounded-md border-2 border-gray-300 bg-white p-3 text-left transition hover:border-purple-400 hover:bg-purple-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-purple-600 dark:hover:bg-purple-900/20"
+                      className="flex w-full items-center gap-3 rounded-lg border-2 border-border bg-card p-3 text-left transition-all duration-200 hover:border-primary hover:bg-primary/10"
                     >
                       {user.avatar ? (
-                        <img
+                        <Image
                           src={user.avatar}
                           alt={user.displayName}
-                          className="h-10 w-10 shrink-0 rounded-full border-2 border-gray-300 dark:border-gray-700"
+                          width={40}
+                          height={40}
+                          className="h-10 w-10 shrink-0 rounded-full border-2 border-border"
                         />
                       ) : (
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-gray-300 bg-gray-100 text-sm font-bold text-gray-700 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-border bg-muted text-sm font-bold text-muted-foreground">
                           {user.displayName.charAt(0).toUpperCase()}
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
-                        <p className="truncate text-sm font-semibold text-gray-900 dark:text-white">
+                        <p className="truncate text-sm font-semibold text-card-foreground">
                           {user.displayName}
                         </p>
                         {user.emailAddress && (
-                          <p className="truncate text-xs text-gray-500 dark:text-gray-400">
+                          <p className="truncate text-xs text-muted-foreground">
                             {user.emailAddress}
                           </p>
                         )}
@@ -1015,7 +1024,7 @@ export default function JiraIssueDetailPage() {
                     </button>
                   ))
                 ) : (
-                  <p className="py-4 text-center text-sm text-gray-500 dark:text-gray-400">
+                  <p className="py-4 text-center text-sm text-muted-foreground">
                     {assigneeSearchQuery.trim() ? "Kullanıcı bulunamadı" : "Kullanıcı bulunamadı"}
                   </p>
                 )}

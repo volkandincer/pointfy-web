@@ -30,7 +30,9 @@ import {
 import JiraIssueModal from "@/components/jira/JiraIssueModal";
 import FilterDropdown from "@/components/jira/FilterDropdown";
 import FilterChip from "@/components/jira/FilterChip";
-import EmptyState from "@/components/jira/EmptyState";
+import EmptyState from "@/components/ui/EmptyState";
+import Card from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
 
 export default function JiraProjectDetailPage() {
   const params = useParams<{ projectKey: string }>();
@@ -436,16 +438,18 @@ export default function JiraProjectDetailPage() {
     <div>
       {/* Header Section */}
       <div className="mb-8">
-        <button
+        <Button
           onClick={() => router.push("/app/jira")}
-          className="mb-4 flex items-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+          variant="ghost"
+          size="sm"
+          icon={ArrowLeft}
+          className="mb-4 text-muted-foreground hover:text-foreground"
         >
-          <ArrowLeft className="h-4 w-4" />
           Jira&apos;ya Dön
-        </button>
+        </Button>
         <div className="mb-6">
           <div className="flex items-center gap-3">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+            <h1 className="text-4xl font-bold tracking-tight text-card-foreground sm:text-5xl">
               {projectName || projectKey}
             </h1>
             {projectKey && (
@@ -459,43 +463,46 @@ export default function JiraProjectDetailPage() {
 
       {/* Dashboard Stats */}
       {issuesLoading && allIssues.length === 0 ? (
-        <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
           {[1, 2, 3, 4].map((i) => (
             <div
               key={i}
-              className="group relative border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900"
+              className="group relative overflow-hidden rounded-lg border-l-4 border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md sm:p-5"
             >
-              <div className="mb-2 h-10 w-10 animate-pulse border-2 border-gray-300 bg-gray-200 dark:border-gray-700 dark:bg-gray-800" />
-              <div className="mb-2 h-4 w-20 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
-              <div className="h-8 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
+              <div className="absolute right-0 top-0 h-20 w-20 translate-x-4 -translate-y-4 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl" />
+              <div className="relative mb-2 h-10 w-10 animate-pulse rounded-lg bg-muted" />
+              <div className="relative mb-2 h-4 w-20 animate-pulse rounded bg-muted" />
+              <div className="relative h-8 w-16 animate-pulse rounded bg-muted" />
             </div>
           ))}
         </div>
       ) : (
-        <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
-          <div className="border-2 border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-gray-400 hover:shadow-md sm:p-5 dark:border-gray-700 dark:bg-gray-900">
-            <div className="mb-2 flex items-center justify-between">
-              <div className="border-2 border-purple-600 bg-purple-50 p-2 dark:bg-purple-900/20">
+        <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+          <div className="group relative overflow-hidden rounded-lg border-l-4 border-l-purple-600 dark:border-l-purple-500 border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-5">
+            <div className="absolute right-0 top-0 h-20 w-20 translate-x-4 -translate-y-4 rounded-full bg-gradient-to-br from-purple-500/10 to-purple-500/5 blur-xl transition-all group-hover:scale-150" />
+            <div className="relative mb-2 flex items-center justify-between">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500/20 to-transparent transition-transform group-hover:scale-110">
                 <ClipboardList className="h-5 w-5 text-purple-600 dark:text-purple-400" />
               </div>
             </div>
-            <div className="text-xs font-medium text-gray-600 dark:text-gray-400">
+            <div className="relative text-xs font-medium text-muted-foreground">
               Toplam Issue
             </div>
-            <div className="mt-1 text-3xl font-bold text-blue-700 dark:text-blue-300">
+            <div className="relative mt-1 text-3xl font-bold text-card-foreground">
               {allIssues.length}
             </div>
           </div>
-          <div className="border-2 border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-gray-400 hover:shadow-md sm:p-5 dark:border-gray-700 dark:bg-gray-900">
-            <div className="mb-2 flex items-center justify-between">
-              <div className="border-2 border-orange-600 bg-orange-50 p-2 dark:bg-orange-900/20">
+          <div className="group relative overflow-hidden rounded-lg border-l-4 border-l-orange-600 dark:border-l-orange-500 border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-5">
+            <div className="absolute right-0 top-0 h-20 w-20 translate-x-4 -translate-y-4 rounded-full bg-gradient-to-br from-orange-500/10 to-orange-500/5 blur-xl transition-all group-hover:scale-150" />
+            <div className="relative mb-2 flex items-center justify-between">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-orange-500/20 to-transparent transition-transform group-hover:scale-110">
                 <Clock className="h-5 w-5 text-orange-600 dark:text-orange-400" />
               </div>
             </div>
-            <div className="text-xs font-medium text-gray-600 dark:text-gray-400">
+            <div className="relative text-xs font-medium text-muted-foreground">
               Açık
             </div>
-            <div className="mt-1 text-3xl font-bold text-orange-700 dark:text-orange-300">
+            <div className="relative mt-1 text-3xl font-bold text-card-foreground">
               {
                 allIssues.filter(
                   (i) => i.statusColor !== "green" && !i.resolved
@@ -503,32 +510,34 @@ export default function JiraProjectDetailPage() {
               }
             </div>
           </div>
-          <div className="border-2 border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-gray-400 hover:shadow-md sm:p-5 dark:border-gray-700 dark:bg-gray-900">
-            <div className="mb-2 flex items-center justify-between">
-              <div className="border-2 border-green-600 bg-green-50 p-2 dark:bg-green-900/20">
+          <div className="group relative overflow-hidden rounded-lg border-l-4 border-l-green-600 dark:border-l-green-500 border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-5">
+            <div className="absolute right-0 top-0 h-20 w-20 translate-x-4 -translate-y-4 rounded-full bg-gradient-to-br from-green-500/10 to-green-500/5 blur-xl transition-all group-hover:scale-150" />
+            <div className="relative mb-2 flex items-center justify-between">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-green-500/20 to-transparent transition-transform group-hover:scale-110">
                 <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
               </div>
             </div>
-            <div className="text-xs font-medium text-gray-600 dark:text-gray-400">
+            <div className="relative text-xs font-medium text-muted-foreground">
               Tamamlanan
             </div>
-            <div className="mt-1 text-3xl font-bold text-green-700 dark:text-green-300">
+            <div className="relative mt-1 text-3xl font-bold text-card-foreground">
               {
                 allIssues.filter((i) => i.statusColor === "green" || i.resolved)
                   .length
               }
             </div>
           </div>
-          <div className="border-2 border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-gray-400 hover:shadow-md sm:p-5 dark:border-gray-700 dark:bg-gray-900">
-            <div className="mb-2 flex items-center justify-between">
-              <div className="border-2 border-purple-600 bg-purple-50 p-2 dark:bg-purple-900/20">
+          <div className="group relative overflow-hidden rounded-lg border-l-4 border-l-purple-600 dark:border-l-purple-500 border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-5">
+            <div className="absolute right-0 top-0 h-20 w-20 translate-x-4 -translate-y-4 rounded-full bg-gradient-to-br from-purple-500/10 to-purple-500/5 blur-xl transition-all group-hover:scale-150" />
+            <div className="relative mb-2 flex items-center justify-between">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500/20 to-transparent transition-transform group-hover:scale-110">
                 <Filter className="h-5 w-5 text-purple-600 dark:text-purple-400" />
               </div>
             </div>
-            <div className="text-xs font-medium text-gray-600 dark:text-gray-400">
+            <div className="relative text-xs font-medium text-muted-foreground">
               Filtrelenmiş
             </div>
-            <div className="mt-1 text-3xl font-bold text-purple-700 dark:text-purple-300">
+            <div className="relative mt-1 text-3xl font-bold text-card-foreground">
               {filteredIssues.length}
             </div>
           </div>
@@ -537,32 +546,34 @@ export default function JiraProjectDetailPage() {
 
       {/* Status Distribution Chart */}
       {issuesLoading && allIssues.length === 0 ? (
-        <div className="mb-6 border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
-          <div className="mb-5 flex items-center gap-2">
-            <div className="h-9 w-9 animate-pulse border-2 border-gray-300 bg-gray-200 dark:border-gray-700 dark:bg-gray-800" />
-            <div className="h-5 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
+        <div className="group relative mb-6 overflow-hidden rounded-lg border-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md sm:p-5">
+          <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-2xl" />
+          <div className="relative mb-5 flex items-center gap-2">
+            <div className="h-9 w-9 animate-pulse rounded-lg bg-muted" />
+            <div className="h-5 w-32 animate-pulse rounded bg-muted" />
           </div>
-          <div className="space-y-3">
+          <div className="relative space-y-3">
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="flex items-center gap-4">
-                <div className="w-28 h-4 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
-                <div className="flex-1 h-3 animate-pulse rounded-full bg-gray-200 dark:bg-gray-800" />
-                <div className="w-16 h-4 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
+                <div className="w-28 h-4 animate-pulse rounded bg-muted" />
+                <div className="flex-1 h-3 animate-pulse rounded-full bg-muted" />
+                <div className="w-16 h-4 animate-pulse rounded bg-muted" />
               </div>
             ))}
           </div>
         </div>
       ) : (
-        <div className="mb-6 border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
-          <div className="mb-5 flex items-center gap-2">
-            <div className="border-2 border-indigo-600 bg-indigo-50 p-2 dark:bg-indigo-900/20">
+        <div className="group relative mb-6 overflow-hidden rounded-lg border-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md sm:p-5">
+          <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-indigo-500/10 to-indigo-500/5 blur-2xl transition-all group-hover:scale-150" />
+          <div className="relative mb-5 flex items-center gap-2">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500/20 to-transparent">
               <BarChart3 className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
             </div>
-            <h3 className="text-base font-bold text-gray-900 dark:text-white">
+            <h3 className="text-base font-bold text-card-foreground">
               Status Dağılımı
             </h3>
           </div>
-          <div className="space-y-3">
+          <div className="relative space-y-3">
             {statuses.map((status) => {
               const count = allIssues.filter((i) => i.status === status).length;
               const percentage =
@@ -570,18 +581,18 @@ export default function JiraProjectDetailPage() {
               const statusColors: Record<string, string> = {
                 Done: "bg-green-600",
                 "In Progress": "bg-blue-600",
-                "To Do": "bg-gray-500",
+                "To Do": "bg-muted-foreground",
                 Open: "bg-orange-600",
                 Closed: "bg-purple-600",
               };
               const colorClass = statusColors[status] || "bg-blue-600";
               return (
                 <div key={status} className="flex items-center gap-4">
-                  <div className="w-28 text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <div className="w-28 text-sm font-medium text-card-foreground">
                     {status}
                   </div>
                   <div className="flex-1">
-                    <div className="relative h-3 overflow-hidden rounded-md bg-gray-200 dark:bg-gray-800">
+                    <div className="relative h-3 overflow-hidden rounded-md bg-muted">
                       <div
                         className={`h-full ${colorClass} transition-all duration-500 ease-out`}
                         style={{ width: `${percentage}%` }}
@@ -589,10 +600,10 @@ export default function JiraProjectDetailPage() {
                     </div>
                   </div>
                   <div className="flex w-16 items-center justify-between">
-                    <div className="text-sm font-bold text-gray-900 dark:text-white">
+                    <div className="text-sm font-bold text-card-foreground">
                       {count}
                     </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                    <div className="text-xs text-muted-foreground">
                       {percentage.toFixed(0)}%
                     </div>
                   </div>
@@ -604,26 +615,28 @@ export default function JiraProjectDetailPage() {
       )}
 
       {/* Filters and Search */}
-      <div className="relative mb-6 border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
+      <div className="group relative mb-6 overflow-hidden rounded-lg border-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md sm:p-5">
+        <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-2xl transition-all group-hover:scale-150" />
         <div className="mb-5">
           <div className="relative flex items-center gap-3">
             <div className="absolute left-3 z-10">
-              <Search className="h-5 w-5 text-gray-400" />
+              <Search className="h-5 w-5 text-muted-foreground" />
             </div>
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Issue'da ara (başlık, açıklama, key)..."
-              className="w-full rounded-md border-2 border-gray-300 bg-gray-50 pl-10 pr-10 py-3 text-base text-gray-900 outline-none transition-all focus:border-purple-600 focus:bg-white focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-purple-500 dark:focus:bg-gray-800 sm:text-sm"
+              className="w-full rounded-lg border-2 border-border bg-background pl-10 pr-10 py-3 text-base text-foreground outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 sm:text-sm"
             />
             {searchQuery && (
-              <button
+              <Button
                 onClick={() => setSearchQuery("")}
-                className="absolute right-3 z-10 rounded-md p-1.5 text-gray-400 transition hover:bg-gray-200 hover:text-gray-600 dark:hover:bg-gray-700 dark:hover:text-gray-200"
-              >
-                <X className="h-4 w-4" />
-              </button>
+                variant="ghost"
+                size="sm"
+                icon={X}
+                className="absolute right-3 z-10 text-muted-foreground hover:text-foreground hover:bg-accent"
+              />
             )}
           </div>
         </div>
@@ -679,8 +692,8 @@ export default function JiraProjectDetailPage() {
 
           {/* Active Filter Chips */}
           {activeFiltersCount > 0 && (
-            <div className="flex flex-wrap items-center gap-2 border-2 border-gray-300 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800">
-              <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+            <div className="flex flex-wrap items-center gap-2 border-2 border-border bg-muted/50 p-3">
+              <span className="text-xs font-semibold text-muted-foreground">
                 Aktif Filtreler:
               </span>
               {searchQuery.trim() && (
@@ -737,13 +750,15 @@ export default function JiraProjectDetailPage() {
                   color="gray"
                 />
               )}
-              <button
+              <Button
                 onClick={clearAllFilters}
-                className="ml-auto flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200"
+                variant="ghost"
+                size="sm"
+                icon={X}
+                className="ml-auto text-muted-foreground hover:text-foreground hover:bg-accent"
               >
-                <X className="h-3 w-3" />
                 Tümünü Temizle
-              </button>
+              </Button>
             </div>
           )}
         </div>
@@ -766,21 +781,23 @@ export default function JiraProjectDetailPage() {
       </div>
 
       {/* Issues List */}
-      <div className="rounded-md border-2 border-gray-300 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+      <Card className="shadow-sm">
         <div className="p-6">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="text-xl font-semibold text-card-foreground">
               Issue&apos;lar{" "}
               {filteredIssues.length !== allIssues.length &&
                 `(${filteredIssues.length})`}
             </h2>
-            <button
+            <Button
               onClick={fetchProjectIssues}
+              variant="secondary"
+              size="sm"
               disabled={issuesLoading}
-              className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 disabled:opacity-50"
+              loading={issuesLoading}
             >
               {issuesLoading ? "Yükleniyor..." : "Yenile"}
-            </button>
+            </Button>
           </div>
 
           {issuesError && (
@@ -794,24 +811,24 @@ export default function JiraProjectDetailPage() {
               {[1, 2, 3, 4, 5].map((i) => (
                 <div
                   key={i}
-                  className="group relative block border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                  className="group relative block overflow-hidden rounded-lg border-l-4 border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-3 shadow-md transition-all duration-300 hover:scale-[1.01] hover:border-border hover:shadow-xl sm:p-4"
                 >
                   <div className="flex items-start gap-4">
                     <div className="flex-1">
                       <div className="mb-3 flex flex-wrap items-center gap-2">
-                        <div className="h-6 w-16 animate-pulse rounded-md bg-gray-200 dark:bg-gray-800" />
-                        <div className="h-6 w-20 animate-pulse rounded-full bg-gray-200 dark:bg-gray-800" />
-                        <div className="h-6 w-16 animate-pulse rounded-full bg-gray-200 dark:bg-gray-800" />
+                        <div className="h-6 w-16 animate-pulse rounded-md bg-muted" />
+                        <div className="h-6 w-20 animate-pulse rounded-full bg-muted" />
+                        <div className="h-6 w-16 animate-pulse rounded-full bg-muted" />
                       </div>
-                      <div className="mb-2 h-6 w-3/4 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
-                      <div className="mb-3 h-4 w-full animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
-                      <div className="mb-2 h-4 w-2/3 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
-                      <div className="mt-3 flex flex-wrap items-center gap-4 rounded-md bg-gray-50/50 px-3 py-2.5 dark:bg-gray-800/50">
-                        <div className="h-5 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
-                        <div className="h-5 w-20 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
+                      <div className="mb-2 h-6 w-3/4 animate-pulse rounded bg-muted" />
+                      <div className="mb-3 h-4 w-full animate-pulse rounded bg-muted" />
+                      <div className="mb-2 h-4 w-2/3 animate-pulse rounded bg-muted" />
+                      <div className="mt-3 flex flex-wrap items-center gap-4 rounded-md bg-muted/50 px-3 py-2.5">
+                        <div className="h-5 w-24 animate-pulse rounded bg-muted" />
+                        <div className="h-5 w-20 animate-pulse rounded bg-muted" />
                       </div>
                     </div>
-                    <div className="h-10 w-10 animate-pulse rounded-md bg-gray-200 dark:bg-gray-800" />
+                    <div className="h-10 w-10 animate-pulse rounded-md bg-muted" />
                   </div>
                 </div>
               ))}
@@ -829,10 +846,10 @@ export default function JiraProjectDetailPage() {
                     return (
                       <div key={status} className="flex flex-col">
                         <div className="mb-3 flex items-center justify-between">
-                          <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                          <h3 className="text-sm font-semibold text-card-foreground">
                             {status}
                           </h3>
-                          <span className="rounded-md border-2 border-gray-300 bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                          <span className="rounded-md border-2 border-border bg-muted/50 px-2 py-0.5 text-xs font-medium text-card-foreground shadow-sm">
                             {statusIssues.length}
                           </span>
                         </div>
@@ -846,23 +863,23 @@ export default function JiraProjectDetailPage() {
                                 }
                               }}
                               disabled={!issue.key}
-                              className="group block w-full cursor-pointer rounded-md border-2 border-gray-200 bg-white p-3 text-left shadow-sm transition-all hover:border-purple-300 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800"
+                              className="group block w-full cursor-pointer rounded-md border-2 border-border bg-card p-3 text-left shadow-sm transition-all hover:border-primary hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50"
                             >
                               <div className="mb-1 flex items-center gap-1.5">
                                 <span className="font-mono text-xs font-bold text-purple-600 dark:text-purple-400">
                                   {issue.key}
                                 </span>
                                 {issue.priority && (
-                                  <span className="rounded-md border-2 border-gray-300 bg-gray-100 px-1.5 py-0.5 text-xs text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                                  <span className="rounded-md border-2 border-border bg-muted/50 px-1.5 py-0.5 text-xs text-card-foreground shadow-sm">
                                     {issue.priority}
                                   </span>
                                 )}
                               </div>
-                              <h4 className="mb-1 line-clamp-2 text-sm font-semibold text-gray-900 dark:text-white">
+                              <h4 className="mb-1 line-clamp-2 text-sm font-semibold text-card-foreground">
                                 {issue.summary}
                               </h4>
                               {issue.assignee && (
-                                <div className="mt-2 flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                                <div className="mt-2 flex items-center gap-1 text-xs text-muted-foreground">
                                   <User className="h-3 w-3" />
                                   <span className="truncate">
                                     {issue.assignee.name}
@@ -890,12 +907,12 @@ export default function JiraProjectDetailPage() {
                         }
                       }}
                       disabled={!issue.key}
-                      className="group flex w-full cursor-pointer items-center gap-3 rounded-md border-2 border-gray-200 bg-white p-3 text-left transition hover:border-purple-300 hover:bg-purple-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-purple-900/20"
+                      className="group flex w-full cursor-pointer items-center gap-3 rounded-md border-2 border-border bg-card p-3 text-left shadow-sm transition-all hover:border-primary hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       <span className="font-mono text-xs font-bold text-purple-600 dark:text-purple-400">
                         {issue.key}
                       </span>
-                      <span className="flex-1 truncate text-sm font-medium text-gray-900 dark:text-white">
+                      <span className="flex-1 truncate text-sm font-medium text-card-foreground">
                         {issue.summary}
                       </span>
                       <span
@@ -922,7 +939,7 @@ export default function JiraProjectDetailPage() {
                         }
                       }}
                       disabled={!issue.key}
-                      className="group relative block w-full border-l-4 border-l-purple-600 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 text-left shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 dark:border-l-purple-500 dark:border-gray-700 dark:bg-gray-900"
+                      className="group relative block w-full overflow-hidden rounded-lg border-l-4 border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-3 text-left shadow-md transition-all duration-300 hover:scale-[1.01] hover:border-border hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50 sm:p-4"
                     >
                       <div className="flex items-start gap-4">
                         <div className="flex-1">
@@ -955,21 +972,21 @@ export default function JiraProjectDetailPage() {
                           </div>
 
                           {/* Title */}
-                          <h3 className="mb-2 text-lg font-bold leading-snug text-gray-900 dark:text-white">
+                          <h3 className="mb-2 text-lg font-bold leading-snug text-card-foreground">
                             {issue.summary}
                           </h3>
 
                           {/* Description */}
                           {issue.description && (
-                            <p className="mb-3 line-clamp-3 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                            <p className="mb-3 line-clamp-3 text-sm leading-relaxed text-muted-foreground">
                               {issue.description}
                             </p>
                           )}
 
                           {/* Footer: Metadata */}
-                          <div className="flex flex-wrap items-center gap-4 rounded-md bg-gray-50/50 px-3 py-2.5 dark:bg-gray-800/50">
+                          <div className="flex flex-wrap items-center gap-4 rounded-md bg-muted/50 px-3 py-2.5">
                             {issue.assignee && (
-                              <span className="flex items-center gap-2 text-xs font-medium text-gray-700 dark:text-gray-300">
+                              <span className="flex items-center gap-2 text-xs font-medium text-card-foreground">
                                 {issue.assignee.avatar && (
                                   <Image
                                     src={issue.assignee.avatar}
@@ -983,7 +1000,7 @@ export default function JiraProjectDetailPage() {
                               </span>
                             )}
                             {issue.created && (
-                              <span className="flex items-center gap-1.5 text-xs font-medium text-gray-600 dark:text-gray-400">
+                              <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
                                 <Calendar className="h-4 w-4" />
                                 {new Date(issue.created).toLocaleDateString(
                                   "tr-TR",
@@ -1029,7 +1046,7 @@ export default function JiraProjectDetailPage() {
             />
           )}
         </div>
-      </div>
+      </Card>
       <JiraIssueModal
         issue={selectedIssue}
         isOpen={isModalOpen}

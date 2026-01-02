@@ -3,6 +3,7 @@
 import { memo, useState, useCallback, useEffect } from "react";
 import { Link2, Star, Edit, ClipboardList } from "lucide-react";
 import Modal from "@/components/ui/Modal";
+import Button from "@/components/ui/Button";
 import { getSupabase } from "@/lib/supabase";
 import JiraTaskSelector from "@/components/jira/JiraTaskSelector";
 import type { PersonalTask } from "@/interfaces/PersonalTask.interface";
@@ -62,7 +63,7 @@ const TaskFormModal = memo(function TaskFormModal({
             setJiraBaseUrl(userRow.jira_base_url);
           }
         }
-      } catch (err) {
+      } catch {
         // Jira connection check error
       }
     }
@@ -107,7 +108,7 @@ const TaskFormModal = memo(function TaskFormModal({
         } else {
           if (mounted) setPersonalTasks((data || []) as PersonalTask[]);
         }
-      } catch (err) {
+      } catch {
         // Personal tasks fetch exception
         if (mounted) setPersonalTasks([]);
       } finally {
@@ -187,10 +188,10 @@ const TaskFormModal = memo(function TaskFormModal({
             <button
               type="button"
               onClick={() => setMode("create")}
-              className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
+                className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
                 isCreateMode
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground hover:bg-accent"
               }`}
             >
               <Edit className="mr-1.5 inline h-4 w-4" />
@@ -199,10 +200,10 @@ const TaskFormModal = memo(function TaskFormModal({
             <button
               type="button"
               onClick={() => setMode("select")}
-              className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
+                className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
                 isSelectMode
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground hover:bg-accent"
               }`}
             >
               <ClipboardList className="mr-1.5 inline h-4 w-4" />
@@ -214,8 +215,8 @@ const TaskFormModal = memo(function TaskFormModal({
                 onClick={() => setMode("jira")}
                 className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
                   isJiraMode
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted text-muted-foreground hover:bg-accent"
                 }`}
               >
                 <Link2 className="mr-1.5 inline h-4 w-4" />
@@ -228,11 +229,11 @@ const TaskFormModal = memo(function TaskFormModal({
             <div>
               <label
                 htmlFor="task-title"
-                className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
+                className="mb-1 block text-sm font-medium text-muted-foreground"
               >
                 Başlık
                 {jiraKey && (
-                  <span className="ml-2 font-mono text-xs text-blue-600 dark:text-blue-400">
+                  <span className="ml-2 font-mono text-xs text-primary">
                     ({jiraKey})
                   </span>
                 )}
@@ -245,13 +246,13 @@ const TaskFormModal = memo(function TaskFormModal({
                 placeholder="Task başlığı"
                 maxLength={200}
                 required
-                className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                className="w-full rounded-md border-2 border-border bg-card px-3 py-2 text-card-foreground outline-none transition focus:border-accent"
               />
             </div>
             <div>
               <label
                 htmlFor="task-desc"
-                className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
+                className="mb-1 block text-sm font-medium text-muted-foreground"
               >
                 Açıklama (opsiyonel)
               </label>
@@ -262,24 +263,22 @@ const TaskFormModal = memo(function TaskFormModal({
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Task açıklaması"
                 maxLength={500}
-                className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                className="w-full rounded-md border-2 border-border bg-card px-3 py-2 text-card-foreground outline-none transition focus:border-accent"
               />
             </div>
             <div className="flex items-center justify-end gap-3 pt-4">
-              <button
-                type="button"
-                onClick={onClose}
-                className="inline-flex h-10 items-center justify-center rounded-md border-2 border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
-              >
+              <Button variant="secondary" size="md" onClick={onClose}>
                 İptal
-              </button>
-              <button
+              </Button>
+              <Button
                 type="submit"
+                variant="primary"
+                size="md"
                 disabled={loading || !title.trim()}
-                className="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-5 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:opacity-60"
+                loading={loading}
               >
                 {loading ? "Ekleniyor..." : "Ekle"}
-              </button>
+              </Button>
             </div>
           </form>
         </>
@@ -290,10 +289,10 @@ const TaskFormModal = memo(function TaskFormModal({
             <button
               type="button"
               onClick={() => setMode("create")}
-              className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
+                className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
                 isCreateMode
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground hover:bg-accent"
               }`}
             >
               <Edit className="mr-1.5 inline h-4 w-4" />
@@ -302,10 +301,10 @@ const TaskFormModal = memo(function TaskFormModal({
             <button
               type="button"
               onClick={() => setMode("select")}
-              className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
+                className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
                 isSelectMode
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground hover:bg-accent"
               }`}
             >
               <ClipboardList className="mr-1.5 inline h-4 w-4" />
@@ -317,8 +316,8 @@ const TaskFormModal = memo(function TaskFormModal({
                 onClick={() => setMode("jira")}
                 className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
                   isJiraMode
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted text-muted-foreground hover:bg-accent"
                 }`}
               >
                 <Link2 className="mr-1.5 inline h-4 w-4" />
@@ -331,21 +330,21 @@ const TaskFormModal = memo(function TaskFormModal({
           <div className="max-h-[400px] overflow-y-auto">
             {loadingTasks ? (
               <div className="py-8 text-center">
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-muted-foreground">
                   Task&apos;lar yükleniyor...
                 </p>
               </div>
             ) : personalTasks.length === 0 ? (
               <div className="py-8 text-center">
                 <div className="mb-4 flex justify-center">
-                  <div className="flex h-16 w-16 items-center justify-center border-2 border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-800">
-                    <ClipboardList className="h-8 w-8 text-gray-400 dark:text-gray-500" />
+                  <div className="flex h-16 w-16 items-center justify-center border-2 border-border bg-muted">
+                    <ClipboardList className="h-8 w-8 text-muted-foreground" />
                   </div>
                 </div>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                <p className="text-sm font-medium text-card-foreground">
                   Henüz task yok
                 </p>
-                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                <p className="mt-1 text-xs text-muted-foreground">
                   Önce kişisel task&apos;larınızı oluşturun
                 </p>
               </div>
@@ -358,24 +357,24 @@ const TaskFormModal = memo(function TaskFormModal({
                     onClick={() => handleTaskSelect(task)}
                     className={`w-full rounded-md border-2 p-3 text-left transition-all hover:shadow-md ${
                       selectedTaskId === task.id
-                        ? "border-blue-500 bg-blue-50 dark:border-blue-400 dark:bg-blue-900/20"
-                        : "border-gray-200 bg-white hover:border-blue-300 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-500"
+                        ? "border-primary bg-primary/10"
+                        : "border-border bg-card hover:border-primary"
                     }`}
                   >
-                    <h4 className="mb-1 font-semibold text-gray-900 dark:text-white">
+                    <h4 className="mb-1 font-semibold text-card-foreground">
                       {task.title}
                     </h4>
                     {task.description && (
-                      <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">
+                      <p className="text-xs text-muted-foreground line-clamp-2">
                         {task.description}
                       </p>
                     )}
                     <div className="mt-2 flex items-center gap-2">
-                      <span className="rounded-md border-2 border-gray-300 bg-gray-100 px-2 py-0.5 text-[10px] font-semibold text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                      <span className="rounded-md border-2 border-border bg-muted px-2 py-0.5 text-[10px] font-semibold text-muted-foreground shadow-sm">
                         {task.category}
                       </span>
                       {task.priority > 1 && (
-                        <span className="flex items-center gap-0.5 text-[10px] text-gray-500 dark:text-gray-400">
+                        <span className="flex items-center gap-0.5 text-[10px] text-muted-foreground">
                           <Star className="h-2.5 w-2.5 fill-current" />
                           {task.priority}
                         </span>
@@ -387,14 +386,10 @@ const TaskFormModal = memo(function TaskFormModal({
             )}
           </div>
 
-          <div className="mt-4 flex items-center justify-end gap-3 pt-4 border-t-2 border-gray-200 dark:border-gray-700">
-            <button
-              type="button"
-              onClick={onClose}
-              className="inline-flex h-10 items-center justify-center rounded-md border-2 border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
-            >
+          <div className="mt-4 flex items-center justify-end gap-3 pt-4 border-t-2 border-border">
+            <Button variant="secondary" size="md" onClick={onClose}>
               İptal
-            </button>
+            </Button>
           </div>
         </>
       ) : (
@@ -404,10 +399,10 @@ const TaskFormModal = memo(function TaskFormModal({
             <button
               type="button"
               onClick={() => setMode("create")}
-              className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
+                className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
                 isCreateMode
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground hover:bg-accent"
               }`}
             >
               <Edit className="mr-1.5 inline h-4 w-4" />
@@ -416,10 +411,10 @@ const TaskFormModal = memo(function TaskFormModal({
             <button
               type="button"
               onClick={() => setMode("select")}
-              className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
+                className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
                 isSelectMode
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground hover:bg-accent"
               }`}
             >
               <ClipboardList className="mr-1.5 inline h-4 w-4" />
@@ -431,8 +426,8 @@ const TaskFormModal = memo(function TaskFormModal({
                 onClick={() => setMode("jira")}
                 className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
                   isJiraMode
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted text-muted-foreground hover:bg-accent"
                 }`}
               >
                 <Link2 className="mr-1.5 inline h-4 w-4" />
@@ -449,12 +444,12 @@ const TaskFormModal = memo(function TaskFormModal({
               jiraBaseUrl={jiraBaseUrl}
             />
           ) : (
-            <div className="rounded-md border-2 border-gray-200 bg-gray-50 p-8 text-center dark:border-gray-700 dark:bg-gray-800">
+            <div className="rounded-md border-2 border-border bg-muted p-8 text-center">
               <p className="mb-2 text-4xl">⚠️</p>
-              <p className="text-sm font-medium text-gray-900 dark:text-white">
+              <p className="text-sm font-medium text-card-foreground">
                 Jira URL&apos;i bulunamadı
               </p>
-              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+              <p className="mt-1 text-xs text-muted-foreground">
                 Lütfen hesap ayarlarından Jira URL&apos;inizi girin
               </p>
             </div>

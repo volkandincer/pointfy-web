@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useState, useCallback, useMemo, useRef, useEffect } from "react";
-import { Timer, Layers, Angry, Frown, Smile, PartyPopper, Lightbulb, Lock, Clock, XCircle, CheckCircle2, Send } from "lucide-react";
+import { Timer, Layers, Angry, Frown, Smile, PartyPopper, Lock, Send } from "lucide-react";
 import { getSupabase } from "@/lib/supabase";
 import { useRetroCards } from "@/hooks/useRetroCards";
 import { useRetroTimer } from "@/hooks/useRetroTimer";
@@ -9,6 +9,8 @@ import { useToastContext } from "@/contexts/ToastContext";
 import type { RetroCategory, RetroCard } from "@/interfaces/Retro.interface";
 import RetroCardModal from "./RetroCardModal";
 import RetroActionItems from "./RetroActionItems";
+import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
 
 interface RetroRoomViewProps {
   roomId: string;
@@ -53,13 +55,13 @@ const RetroRoomView = memo(function RetroRoomView({
   const [warningShown, setWarningShown] = useState<boolean>(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const timerOptions = [
+  const timerOptions = useMemo(() => [
     { label: "15 Saniye", seconds: 15, minutes: 0.25 },
     { label: "1 Dakika", seconds: 60, minutes: 1 },
     { label: "3 Dakika", seconds: 180, minutes: 3 },
     { label: "5 Dakika", seconds: 300, minutes: 5 },
     { label: "10 Dakika", seconds: 600, minutes: 10 },
-  ];
+  ], []);
 
   const cardsRevealed = useMemo(
     () => cards.length > 0 && cards.every((card) => card.is_revealed),
@@ -132,7 +134,7 @@ const RetroRoomView = memo(function RetroRoomView({
         setCardContent("");
         textareaRef.current?.focus();
         showToast("Kart başarıyla eklendi!", "success");
-      } catch (err) {
+      } catch {
         showToast("Kart eklenirken bir hata oluştu.", "error");
       } finally {
         setIsSubmitting(false);
@@ -188,7 +190,7 @@ const RetroRoomView = memo(function RetroRoomView({
         if (error) throw error;
         setEditingCard(null);
         showToast("Kart başarıyla güncellendi!", "success");
-      } catch (err) {
+      } catch {
         showToast("Kart güncellenirken bir hata oluştu.", "error");
       }
     },
@@ -213,7 +215,7 @@ const RetroRoomView = memo(function RetroRoomView({
 
         if (error) throw error;
         showToast("Kart başarıyla silindi!", "success");
-      } catch (err) {
+      } catch {
         showToast("Kart silinirken bir hata oluştu.", "error");
       }
     },
@@ -230,7 +232,7 @@ const RetroRoomView = memo(function RetroRoomView({
       });
       if (error) throw error;
       showToast("Tüm kartlar açıldı!", "success");
-    } catch (err) {
+    } catch {
       showToast("Kartlar açılırken bir hata oluştu.", "error");
     } finally {
       setIsRevealing(false);
@@ -251,7 +253,7 @@ const RetroRoomView = memo(function RetroRoomView({
   if (loading) {
     return (
       <div className="flex h-64 items-center justify-center">
-        <p className="text-gray-500 dark:text-gray-400">Yükleniyor...</p>
+        <p className="text-muted-foreground">Yükleniyor...</p>
       </div>
     );
   }
@@ -259,7 +261,7 @@ const RetroRoomView = memo(function RetroRoomView({
   return (
     <div className="space-y-6">
       {/* Category Tabs */}
-      <div className="border-b-2 border-gray-200 dark:border-gray-700">
+      <div className="border-b-2 border-border">
         <div className="flex gap-1">
           {(["mad", "sad", "glad"] as RetroCategory[]).map((category) => {
             const info = getCategoryInfo(category);
@@ -269,13 +271,13 @@ const RetroRoomView = memo(function RetroRoomView({
             // Aktif tab için stil
             const activeStyles =
               info.color === "red"
-                ? "border-b-2 border-red-600 text-red-600 dark:text-red-400"
+                ? "border-b-2 border-destructive text-destructive"
                 : info.color === "blue"
-                ? "border-b-2 border-blue-600 text-blue-600 dark:text-blue-400"
-                : "border-b-2 border-green-600 text-green-600 dark:text-green-400";
+                ? "border-b-2 border-primary text-primary"
+                : "border-b-2 border-success text-success";
 
             // Pasif tab için stil
-            const inactiveStyles = "text-gray-600 hover:text-gray-900 hover:border-b-2 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:border-gray-600";
+            const inactiveStyles = "text-muted-foreground hover:text-card-foreground hover:border-b-2 hover:border-border";
 
             return (
               <button
@@ -291,11 +293,11 @@ const RetroRoomView = memo(function RetroRoomView({
                   <span className={`ml-1 rounded-md border-2 px-2 py-0.5 text-xs font-bold shadow-sm ${
                     isActive 
                       ? info.color === "red"
-                        ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                        ? "bg-destructive/10 text-destructive border-destructive/50"
                         : info.color === "blue"
-                        ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
-                        : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                      : "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400"
+                        ? "bg-primary/10 text-primary border-primary/50"
+                        : "bg-success/10 text-success border-success/50"
+                      : "bg-muted text-muted-foreground border-border"
                   }`}>
                     {categoryCount}
                   </span>
@@ -308,10 +310,10 @@ const RetroRoomView = memo(function RetroRoomView({
 
       {/* Timer Display */}
       {timerActive && (
-        <div className={`rounded-md border-2 p-5 shadow-sm ${
+        <Card className={`${
           timerWarning
-            ? "border-red-300 bg-red-50 dark:border-red-800 dark:bg-red-950/30"
-            : "border-blue-300 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30"
+            ? "border-destructive/50 bg-destructive/10"
+            : "border-primary/50 bg-primary/10"
         }`}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -319,61 +321,62 @@ const RetroRoomView = memo(function RetroRoomView({
               <div>
                 <p className={`text-lg font-bold ${
                   timerWarning
-                    ? "text-red-700 dark:text-red-300"
-                    : "text-blue-700 dark:text-blue-300"
+                    ? "text-destructive"
+                    : "text-primary"
                 }`}>
                   {Math.floor(remainingSeconds / 60)}:{(remainingSeconds % 60).toString().padStart(2, "0")}
                 </p>
                 <p className={`text-xs font-medium ${
                   timerWarning
-                    ? "text-red-600 dark:text-red-400"
-                    : "text-blue-600 dark:text-blue-400"
+                    ? "text-destructive"
+                    : "text-primary"
                 }`}>
                   {timerWarning ? "Son 10 saniye!" : "Kart gönderme süresi"}
                 </p>
               </div>
             </div>
             {isAdmin && (
-              <button
+              <Button
                 onClick={stopTimer}
-                className="rounded-md border-2 border-red-600 bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:border-red-700 hover:bg-red-700 hover:shadow-md"
+                variant="danger"
+                size="sm"
               >
                 Durdur
-              </button>
+              </Button>
             )}
           </div>
-        </div>
+        </Card>
       )}
 
       {/* Status and Reveal Button */}
       {cardsRevealed ? (
-        <div className="rounded-md border-2 border-green-300 bg-green-50 p-5 shadow-sm dark:border-green-800 dark:bg-green-950/30">
+        <Card className="border-success/50 bg-success/10">
           <div className="flex items-center justify-center gap-3">
-            <PartyPopper className="h-6 w-6 text-green-600 dark:text-green-400" />
-            <p className="font-semibold text-green-700 dark:text-green-300">
+            <PartyPopper className="h-6 w-6 text-success" />
+            <p className="font-semibold text-success">
               Tüm kartlar açıldı! Yeni kart eklenemez.
             </p>
           </div>
-        </div>
+        </Card>
       ) : (
-        <div className="rounded-md border-2 border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <Card>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
-                <Layers className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                <Layers className="h-5 w-5 text-muted-foreground" />
                 <div className="text-sm">
-                  <span className="font-semibold text-gray-900 dark:text-white">
+                  <span className="font-semibold text-card-foreground">
                     {revealedCards.length}
                   </span>
-                  <span className="text-gray-600 dark:text-gray-400">
+                  <span className="text-muted-foreground">
                     {" "}
                     açık
                   </span>
-                  <span className="mx-2 text-gray-300 dark:text-gray-600">•</span>
-                  <span className="font-semibold text-gray-900 dark:text-white">
+                  <span className="mx-2 text-muted-foreground opacity-50">•</span>
+                  <span className="font-semibold text-card-foreground">
                     {hiddenCards.length}
                   </span>
-                  <span className="text-gray-600 dark:text-gray-400">
+                  <span className="text-muted-foreground">
                     {" "}
                     gizli
                   </span>
@@ -382,36 +385,31 @@ const RetroRoomView = memo(function RetroRoomView({
             </div>
             <div className="flex items-center gap-2">
               {isAdmin && !timerActive && (
-                <button
+                <Button
                   onClick={() => setShowTimerModal(true)}
-                  className="rounded-md border-2 border-purple-600 bg-purple-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:border-purple-700 hover:bg-purple-700 hover:shadow-md dark:border-purple-500 dark:bg-purple-600 dark:text-white dark:hover:bg-purple-700"
+                  variant="primary"
+                  size="sm"
+                  icon={Timer}
                 >
-                  <Timer className="mr-1.5 h-4 w-4" />
                   Timer Başlat
-                </button>
+                </Button>
               )}
               {isAdmin && hiddenCards.length > 0 && (
-                <button
+                <Button
                   onClick={handleRevealAll}
                   disabled={isRevealing}
-                  className="rounded-md border-2 border-green-600 bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:border-green-700 hover:bg-green-700 hover:shadow-md disabled:opacity-50 disabled:hover:shadow-sm dark:border-green-500 dark:bg-green-600 dark:text-white dark:hover:bg-green-700"
+                  variant="primary"
+                  size="sm"
+                  icon={Layers}
+                  loading={isRevealing}
+                  className="border-green-600 bg-green-600 text-white hover:border-green-700 hover:bg-green-700"
                 >
-                  {isRevealing ? (
-                    <span className="flex items-center gap-2">
-                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                      Açılıyor...
-                    </span>
-                  ) : (
-                    <>
-                      <Layers className="mr-1.5 h-4 w-4" />
-                      Tümünü Aç
-                    </>
-                  )}
-                </button>
+                  Tümünü Aç
+                </Button>
               )}
             </div>
           </div>
-        </div>
+        </Card>
       )}
 
       {/* Add Card Form */}
@@ -420,12 +418,12 @@ const RetroRoomView = memo(function RetroRoomView({
           onSubmit={handleSubmitCard}
           className={`rounded-md border-2 p-4 shadow-sm ${
             isAdmin && !timerActive
-              ? "border-yellow-300 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950/30"
+              ? "border-warning/50 bg-warning/10"
               : timerActive && remainingSeconds === 0
-              ? "border-red-300 bg-red-50 dark:border-red-800 dark:bg-red-950/30"
+              ? "border-destructive/50 bg-destructive/10"
               : timerWarning
-              ? "border-orange-300 bg-orange-50 dark:border-orange-800 dark:bg-orange-950/30"
-              : "border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900"
+              ? "border-warning/50 bg-warning/10"
+              : "border-border bg-card"
           }`}
         >
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
@@ -436,10 +434,10 @@ const RetroRoomView = memo(function RetroRoomView({
                 const isActive = activeTab === category;
                 const activeColor =
                   info.color === "red"
-                    ? "bg-red-100 border-red-500 text-red-700 dark:bg-red-900/30 dark:border-red-600 dark:text-red-400"
+                    ? "bg-destructive/10 border-destructive text-destructive"
                     : info.color === "blue"
-                    ? "bg-blue-100 border-blue-500 text-blue-700 dark:bg-blue-900/30 dark:border-blue-600 dark:text-blue-400"
-                    : "bg-green-100 border-green-500 text-green-700 dark:bg-green-900/30 dark:border-green-600 dark:text-green-400";
+                    ? "bg-primary/10 border-primary text-primary"
+                    : "bg-success/10 border-success text-success";
 
                 return (
                   <button
@@ -449,7 +447,7 @@ const RetroRoomView = memo(function RetroRoomView({
                     className={`flex items-center gap-1.5 rounded-md border-2 px-3 py-2 text-sm font-semibold transition-all ${
                       isActive
                         ? activeColor
-                        : "border-gray-300 bg-gray-50 text-gray-600 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
+                        : "border-border bg-muted text-muted-foreground hover:bg-accent"
                     }`}
                   >
                     <info.icon className="h-4 w-4" />
@@ -467,14 +465,14 @@ const RetroRoomView = memo(function RetroRoomView({
                 onChange={(e) => setCardContent(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={`${getCategoryInfo(activeTab).title} kategorisine kart ekle...`}
-                className={`w-full resize-none rounded-md border-2 px-4 py-3 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 ${
+                className={`w-full resize-none rounded-md border-2 px-4 py-3 text-sm placeholder-muted-foreground focus:outline-none focus:ring-2 ${
                   isAdmin && !timerActive
-                    ? "border-yellow-300 bg-yellow-50 text-gray-500 cursor-not-allowed dark:border-yellow-800 dark:bg-yellow-950/30"
+                    ? "border-warning/50 bg-warning/10 text-muted-foreground cursor-not-allowed"
                     : timerActive && remainingSeconds === 0
-                    ? "border-red-300 bg-red-50 text-gray-500 cursor-not-allowed dark:border-red-800 dark:bg-red-950/30"
+                    ? "border-destructive/50 bg-destructive/10 text-muted-foreground cursor-not-allowed"
                     : timerWarning
-                    ? "border-orange-300 bg-orange-50 text-gray-900 focus:border-orange-500 focus:ring-orange-500/20 dark:border-orange-700 dark:bg-orange-950/30 dark:text-white"
-                    : "border-gray-300 bg-gray-50 text-gray-900 focus:border-indigo-500 focus:ring-indigo-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-indigo-400"
+                    ? "border-warning/50 bg-warning/10 text-foreground focus:border-warning focus:ring-warning/20"
+                    : "border-input bg-input text-foreground focus:border-primary focus:ring-primary/20"
                 }`}
                 rows={2}
                 disabled={isSubmitting || (isAdmin && !timerActive) || (timerActive && remainingSeconds === 0)}
@@ -482,40 +480,26 @@ const RetroRoomView = memo(function RetroRoomView({
             </div>
 
             {/* Submit Button */}
-            <button
+            <Button
               type="submit"
               disabled={isSubmitting || !cardContent.trim() || (isAdmin && !timerActive) || (timerActive && remainingSeconds === 0)}
-              className={`flex items-center justify-center gap-2 rounded-md px-6 py-3 text-sm font-bold text-white shadow-md transition-all ${
-                isAdmin && !timerActive
-                  ? "bg-yellow-500 cursor-not-allowed"
-                  : timerActive && remainingSeconds === 0
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : timerWarning
-                  ? "border-2 border-orange-600 bg-orange-600 hover:border-orange-700 hover:bg-orange-700 hover:shadow-md"
-                  : "border-2 border-indigo-600 bg-indigo-600 hover:border-indigo-700 hover:bg-indigo-700 hover:shadow-md"
-              } disabled:opacity-50 disabled:cursor-not-allowed`}
+              variant={timerWarning ? "primary" : "primary"}
+              size="md"
+              icon={Send}
+              loading={isSubmitting}
+              className={timerWarning ? "border-orange-600 bg-orange-600 text-white hover:border-orange-700 hover:bg-orange-700" : ""}
             >
-              {isSubmitting ? (
-                <>
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                  <span>Gönderiliyor...</span>
-                </>
-              ) : (
-                <>
-                  <Send className="h-5 w-5" />
-                  <span>Gönder</span>
-                </>
-              )}
-            </button>
+              Gönder
+            </Button>
           </div>
           <p className={`mt-2 text-xs ${
             isAdmin && !timerActive
-              ? "text-yellow-600 dark:text-yellow-400 font-semibold"
+              ? "text-warning font-semibold"
               : timerActive && remainingSeconds === 0
-              ? "text-red-600 dark:text-red-400 font-semibold"
+              ? "text-destructive font-semibold"
               : timerWarning
-              ? "text-orange-600 dark:text-orange-400 font-semibold"
-              : "text-gray-500 dark:text-gray-400"
+              ? "text-warning font-semibold"
+              : "text-muted-foreground"
           }`}>
             {isAdmin && !timerActive
               ? "Admin: Lütfen önce timer'ı başlatın!"
@@ -531,11 +515,11 @@ const RetroRoomView = memo(function RetroRoomView({
       {/* Timer Start Modal */}
       {showTimerModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-2xl rounded-md border-2 border-gray-200 bg-white p-6 shadow-md dark:border-gray-800 dark:bg-gray-900">
-            <h3 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
+          <Card className="w-full max-w-2xl">
+            <h3 className="mb-4 text-xl font-bold text-card-foreground">
               Timer Başlat
             </h3>
-            <p className="mb-6 text-sm text-gray-600 dark:text-gray-400">
+            <p className="mb-6 text-sm text-muted-foreground">
               Kart gönderme süresini seçin
             </p>
             
@@ -550,21 +534,21 @@ const RetroRoomView = memo(function RetroRoomView({
                     onClick={() => setSelectedDuration(option.minutes)}
                     className={`rounded-md border-2 p-4 text-center transition-all ${
                       isSelected
-                        ? "border-purple-500 bg-purple-50 shadow-sm dark:bg-purple-950/30 dark:border-purple-400"
-                        : "border-gray-200 bg-white hover:border-purple-300 hover:bg-purple-50/50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-purple-600 dark:hover:bg-purple-950/20"
+                        ? "border-primary bg-primary/10 shadow-sm"
+                        : "border-border bg-card hover:border-primary hover:bg-primary/5"
                     }`}
                   >
                     <div className={`text-2xl font-bold ${
                       isSelected
-                        ? "text-purple-600 dark:text-purple-400"
-                        : "text-gray-700 dark:text-gray-300"
+                        ? "text-primary"
+                        : "text-card-foreground"
                     }`}>
                       {option.label}
                     </div>
                     <div className={`mt-1 text-xs ${
                       isSelected
-                        ? "text-purple-500 dark:text-purple-400"
-                        : "text-gray-500 dark:text-gray-400"
+                        ? "text-primary"
+                        : "text-muted-foreground"
                     }`}>
                       {option.seconds} saniye
                     </div>
@@ -574,44 +558,48 @@ const RetroRoomView = memo(function RetroRoomView({
             </div>
 
             <div className="flex gap-3">
-              <button
+              <Button
                 onClick={() => {
                   setShowTimerModal(false);
                   setSelectedDuration(null);
                 }}
-                className="flex-1 rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                variant="secondary"
+                size="md"
+                fullWidth
               >
                 İptal
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={handleStartTimer}
                 disabled={selectedDuration === null}
-                className="flex-1 rounded-md border-2 border-purple-600 bg-purple-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:border-purple-700 hover:bg-purple-700 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed dark:border-purple-500 dark:bg-purple-600 dark:text-white dark:hover:bg-purple-700"
+                variant="primary"
+                size="md"
+                fullWidth
               >
                 Başlat
-              </button>
+              </Button>
             </div>
-          </div>
+          </Card>
         </div>
       )}
 
       {/* Cards List */}
       <div className="space-y-3">
         {categoryCards.length === 0 ? (
-          <div className="rounded-md border-2 border-gray-200 bg-white p-8 text-center dark:border-gray-800 dark:bg-gray-900">
+          <Card className="p-8 text-center">
             {(() => {
               const CategoryIcon = getCategoryInfo(activeTab).icon;
-              return <CategoryIcon className="mx-auto mb-2 h-12 w-12 text-gray-400 dark:text-gray-500" />;
+              return <CategoryIcon className="mx-auto mb-2 h-12 w-12 text-muted-foreground" />;
             })()}
-            <p className="font-medium text-gray-900 dark:text-white">
+            <p className="font-medium text-card-foreground">
               Henüz kart yok
             </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm text-muted-foreground">
               {cardsRevealed
                 ? "Kartlar açıldı, yeni kart eklenemez."
                 : "Yukarıdaki formu kullanarak ilk kartı ekleyebilirsiniz."}
             </p>
-          </div>
+          </Card>
         ) : (
           categoryCards.map((card) => {
             const isOwnCard = card.user_key === userKey;
@@ -622,26 +610,26 @@ const RetroRoomView = memo(function RetroRoomView({
             const cardStyles =
               categoryInfo.color === "red"
                 ? {
-                    borderLeft: "border-l-red-600 dark:border-l-red-500",
-                    accent: "text-red-600 dark:text-red-400",
-                    badge: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
+                    borderLeft: "border-l-destructive",
+                    accent: "text-destructive",
+                    badge: "bg-destructive/10 text-destructive border-destructive/50",
                   }
                 : categoryInfo.color === "blue"
                 ? {
-                    borderLeft: "border-l-blue-600 dark:border-l-blue-500",
-                    accent: "text-blue-600 dark:text-blue-400",
-                    badge: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
+                    borderLeft: "border-l-primary",
+                    accent: "text-primary",
+                    badge: "bg-primary/10 text-primary border-primary/50",
                   }
                 : {
-                    borderLeft: "border-l-green-600 dark:border-l-green-500",
-                    accent: "text-green-600 dark:text-green-400",
-                    badge: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
+                    borderLeft: "border-l-success",
+                    accent: "text-success",
+                    badge: "bg-success/10 text-success border-success/50",
                   };
 
             return (
               <div
                 key={card.id}
-                className={`group relative border-l-4 ${cardStyles.borderLeft} border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900`}
+                className={`group relative border-l-4 ${cardStyles.borderLeft} border-t-2 border-r-2 border-b-2 border-border bg-card p-3 shadow-sm transition-all active:border-accent active:shadow-md sm:p-4 hover:border-accent hover:shadow-md`}
               >
                 {/* Kategori Badge */}
                 <div className="mb-2 flex items-center justify-between">
@@ -651,7 +639,7 @@ const RetroRoomView = memo(function RetroRoomView({
                     <categoryInfo.icon className="h-3.5 w-3.5" />
                     <span>{categoryInfo.title}</span>
                   </span>
-                  <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                  <span className="text-xs font-medium text-muted-foreground">
                     {new Date(card.created_at).toLocaleTimeString("tr-TR", {
                       hour: "2-digit",
                       minute: "2-digit",
@@ -661,10 +649,10 @@ const RetroRoomView = memo(function RetroRoomView({
 
                 {/* Kullanıcı Adı */}
                 <div className="mb-2 flex items-center gap-2">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-gray-300 bg-gray-200 text-xs font-bold text-gray-700 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-border bg-muted text-xs font-bold text-muted-foreground">
                     {card.user_name.charAt(0).toUpperCase()}
                   </div>
-                  <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                  <span className="text-sm font-semibold text-card-foreground">
                     {card.user_name}
                   </span>
                 </div>
@@ -672,17 +660,17 @@ const RetroRoomView = memo(function RetroRoomView({
                 {/* Kart İçeriği */}
                 {canViewContent ? (
                   <div className="mb-3">
-                    <p className="text-sm leading-relaxed text-gray-800 dark:text-gray-200">
+                    <p className="text-sm leading-relaxed text-foreground">
                       {card.content}
                     </p>
                   </div>
                 ) : (
-                  <div className="mb-3 border-2 border-dashed border-gray-300 bg-gray-50 p-4 text-center dark:border-gray-700 dark:bg-gray-800/50">
-                    <Lock className="mx-auto mb-2 h-8 w-8 text-gray-400 opacity-50 dark:text-gray-500" />
-                    <p className="text-xs font-medium text-gray-600 dark:text-gray-400">
+                  <div className="mb-3 border-2 border-dashed border-border bg-muted/50 p-4 text-center">
+                    <Lock className="mx-auto mb-2 h-8 w-8 text-muted-foreground opacity-50" />
+                    <p className="text-xs font-medium text-muted-foreground">
                       Kart Gizli
                     </p>
-                    <p className="mt-1 text-[10px] text-gray-500 dark:text-gray-500">
+                    <p className="mt-1 text-[10px] text-muted-foreground">
                       Admin açana kadar bekleyin
                     </p>
                   </div>
@@ -691,18 +679,22 @@ const RetroRoomView = memo(function RetroRoomView({
                 {/* Action Buttons */}
                 {isOwnCard && !cardsRevealed && (
                   <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
-                    <button
+                    <Button
                       onClick={() => handleOpenEdit(card)}
-                      className="flex-1 rounded-md border-2 border-blue-600 bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:border-blue-700 hover:bg-blue-700 hover:shadow-md active:border-blue-800 active:bg-blue-800 dark:border-blue-500 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700"
+                      variant="primary"
+                      size="sm"
+                      fullWidth
                     >
                       ✎ Düzenle
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onClick={() => handleDeleteCard(card)}
-                      className="flex-1 rounded-md border-2 border-red-600 bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:border-red-700 hover:bg-red-700 hover:shadow-md active:border-red-800 active:bg-red-800 dark:border-red-500 dark:bg-red-600 dark:text-white dark:hover:bg-red-700"
+                      variant="danger"
+                      size="sm"
+                      fullWidth
                     >
                       🗑️ Sil
-                    </button>
+                    </Button>
                   </div>
                 )}
               </div>
@@ -727,7 +719,7 @@ const RetroRoomView = memo(function RetroRoomView({
       )}
 
       {/* Action Items Section */}
-      <div className="mt-8 border-t-2 border-gray-200 pt-6 dark:border-gray-800">
+      <div className="mt-8 border-t-2 border-border pt-6">
         <RetroActionItems
           roomId={roomId}
           userKey={userKey}

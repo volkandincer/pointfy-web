@@ -38,7 +38,7 @@ const PersonalTaskForm = memo(function PersonalTaskForm({
       <div>
         <label
           htmlFor="pt-title"
-          className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
+          className="mb-1 block text-sm font-medium text-muted-foreground"
         >
           Başlık
         </label>
@@ -47,13 +47,13 @@ const PersonalTaskForm = memo(function PersonalTaskForm({
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
-          className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+          className="w-full rounded-md border-2 border-border bg-card px-3 py-2 text-card-foreground outline-none transition focus:border-accent"
         />
       </div>
       <div>
         <label
           htmlFor="pt-desc"
-          className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
+          className="mb-1 block text-sm font-medium text-muted-foreground"
         >
           Açıklama (opsiyonel)
         </label>
@@ -62,7 +62,7 @@ const PersonalTaskForm = memo(function PersonalTaskForm({
           rows={3}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+          className="w-full rounded-md border-2 border-border bg-card px-3 py-2 text-card-foreground outline-none transition focus:border-accent"
         />
       </div>
       <button

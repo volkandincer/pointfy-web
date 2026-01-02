@@ -36,27 +36,27 @@ const OnboardingModal = memo(function OnboardingModal({
       />
 
       {/* Modal */}
-      <div className="relative z-[101] w-full max-w-lg rounded-md border-2 border-gray-300 bg-white p-3 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:p-4">
+      <div className="relative z-[101] w-full max-w-lg rounded-md border-2 border-border bg-card p-3 shadow-sm sm:p-4">
         {/* Header */}
         <div className="mb-3 flex items-center justify-between">
           <div className="flex items-center gap-1.5">
             <div className="flex h-6 w-6 items-center justify-center rounded-md border-2 border-purple-300 bg-purple-50 dark:border-purple-700 dark:bg-purple-900/20">
               <Sparkles className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
             </div>
-            <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+            <span className="text-xs font-semibold text-muted-foreground">
               Adım {currentStep + 1} / {steps.length}
             </span>
           </div>
           <button
             onClick={onClose}
-            className="rounded-md p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300"
+            className="rounded-md p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
         {/* Progress Bar */}
-        <div className="mb-3 h-1 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+        <div className="mb-3 h-1 w-full overflow-hidden rounded-full bg-muted">
           <div
             className="h-full bg-purple-600 transition-all duration-300 dark:bg-purple-500"
             style={{ width: `${progress}%` }}
@@ -66,7 +66,7 @@ const OnboardingModal = memo(function OnboardingModal({
         {/* Content */}
         <div className="mb-3">
           {!isSelectionStep ? (
-            <div className="rounded-md border-l-4 border-purple-600 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all dark:border-gray-700 dark:bg-gray-900">
+            <div className="rounded-md border-l-4 border-purple-600 border-t-2 border-r-2 border-b-2 border-border bg-card p-3 shadow-sm transition-all">
               <div className="flex items-start gap-3">
                 {step.icon && (
                   <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md border-2 border-purple-300 bg-purple-50 dark:border-purple-700 dark:bg-purple-900/20">
@@ -74,10 +74,10 @@ const OnboardingModal = memo(function OnboardingModal({
                   </div>
                 )}
                 <div className="min-w-0">
-                  <h2 className="mb-1 text-base font-bold text-gray-900 dark:text-white sm:text-lg">
+                  <h2 className="mb-1 text-base font-bold text-card-foreground sm:text-lg">
                     {step.title}
                   </h2>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
+                  <p className="text-xs text-muted-foreground sm:text-sm">
                     {step.description}
                   </p>
                 </div>
@@ -85,10 +85,10 @@ const OnboardingModal = memo(function OnboardingModal({
             </div>
           ) : (
             <>
-              <h2 className="mb-1.5 text-base font-bold text-gray-900 dark:text-white sm:text-lg">
+              <h2 className="mb-1.5 text-base font-bold text-card-foreground sm:text-lg">
                 {step.title}
               </h2>
-              <p className="mb-2 text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
+              <p className="mb-2 text-xs text-muted-foreground sm:text-sm">
                 {step.description}
               </p>
             </>
@@ -124,15 +124,15 @@ const OnboardingModal = memo(function OnboardingModal({
                         onComplete();
                       }
                     }}
-                    className={`group relative flex min-h-[100px] flex-col items-center justify-center border-l-4 ${borderColorMap[option.color]} border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 text-center shadow-sm transition-all active:border-gray-400 active:shadow-md sm:min-h-[110px] hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900`}
+                    className={`group relative flex min-h-[100px] flex-col items-center justify-center border-l-4 ${borderColorMap[option.color]} border-t-2 border-r-2 border-b-2 border-border bg-card p-3 text-center shadow-sm transition-all active:border-accent active:shadow-md sm:min-h-[110px] hover:border-accent hover:shadow-md`}
                   >
                     <div className="mb-2">
                       <IconComponent className={`h-6 w-6 ${iconColorMap[option.color]} sm:h-7 sm:w-7`} />
                     </div>
-                    <h3 className="mb-1 text-xs font-semibold text-gray-900 dark:text-white sm:text-sm">
+                    <h3 className="mb-1 text-xs font-semibold text-card-foreground sm:text-sm">
                       {option.title}
                     </h3>
-                    <p className="hidden text-[10px] leading-tight text-gray-600 dark:text-gray-400 sm:block sm:text-xs">
+                    <p className="hidden text-[10px] leading-tight text-muted-foreground sm:block sm:text-xs">
                       {option.description}
                     </p>
                   </button>
@@ -152,7 +152,7 @@ const OnboardingModal = memo(function OnboardingModal({
                   size="sm"
                   onClick={onPrevious}
                   icon={ChevronLeft}
-                  className="!border-gray-300 !bg-white !text-gray-700 hover:!border-gray-400 hover:!bg-gray-50 dark:!border-gray-700 dark:!bg-gray-800 dark:!text-gray-300"
+                  className="!border-border !bg-card !text-card-foreground hover:!border-accent hover:!bg-accent"
                 >
                   Geri
                 </Button>
@@ -162,7 +162,7 @@ const OnboardingModal = memo(function OnboardingModal({
                   variant="secondary"
                   size="sm"
                   onClick={onSkip}
-                  className="!border-gray-300 !bg-white !text-gray-600 hover:!border-gray-400 hover:!bg-gray-50 dark:!border-gray-700 dark:!bg-gray-800 dark:!text-gray-400"
+                  className="!border-border !bg-card !text-muted-foreground hover:!border-accent hover:!bg-accent"
                 >
                   {step.skipLabel}
                 </Button>

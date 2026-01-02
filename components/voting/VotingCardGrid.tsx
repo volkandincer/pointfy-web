@@ -31,7 +31,7 @@ const VotingCardGrid = memo(function VotingCardGrid({
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+      <h3 className="text-lg font-semibold text-card-foreground">
         Puanını Seç
       </h3>
       <div className="grid grid-cols-4 gap-4 sm:grid-cols-7">
@@ -46,12 +46,12 @@ const VotingCardGrid = memo(function VotingCardGrid({
               key={point}
               onClick={() => handleClick(point)}
               disabled={isDisabled}
-              className={`relative border-2 px-4 py-6 text-xl font-bold transition-all ${
+              className={`relative rounded-md border-2 px-4 py-6 text-xl font-bold transition-all ${
                 isSelected
-                  ? "border-blue-600 bg-blue-600 text-white shadow-md"
+                  ? "border-primary bg-primary text-primary-foreground shadow-md"
                   : isDisabled
-                  ? "border-gray-300 bg-gray-50 text-gray-400 cursor-not-allowed dark:border-gray-700 dark:bg-gray-800 dark:text-gray-600"
-                  : "border-gray-300 bg-white text-gray-900 hover:border-blue-600 hover:bg-blue-50 hover:shadow-md dark:border-gray-600 dark:bg-gray-900 dark:text-white dark:hover:border-blue-500 dark:hover:bg-gray-800"
+                  ? "border-border bg-muted text-muted-foreground cursor-not-allowed opacity-50"
+                  : "border-border bg-card text-card-foreground hover:border-primary hover:bg-primary/10 hover:shadow-md"
               }`}
             >
               {loadingPoint === point ? (

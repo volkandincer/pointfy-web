@@ -7,7 +7,6 @@
 
 import { useEffect, useState } from "react";
 import { UseCaseFactory } from "@/src/application/services/UseCaseFactory";
-import type { TaskInfo } from "@/interfaces/Voting.interface";
 import { container } from "@/src/infrastructure/di/Container";
 import { TaskAdapter } from "@/src/presentation/adapters/TaskAdapter";
 

@@ -39,7 +39,7 @@ const RoomSettingsModal = memo(function RoomSettingsModal({
       <div className="space-y-6">
         {/* Maksimum Katılımcı */}
         <div>
-          <label className="mb-3 block text-sm font-semibold text-gray-700 dark:text-gray-300">
+          <label className="mb-3 block text-sm font-semibold text-card-foreground">
             Maksimum Katılımcı
           </label>
           <div className="flex items-center gap-4">
@@ -52,7 +52,7 @@ const RoomSettingsModal = memo(function RoomSettingsModal({
                 )
               }
               disabled={localSettings.maxParticipants <= 2}
-              className="inline-flex h-12 w-12 items-center justify-center rounded-md border-2 border-gray-300 bg-white text-lg font-bold text-gray-900 transition-all hover:border-gray-400 hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+              className="inline-flex h-12 w-12 items-center justify-center rounded-md border-2 border-border bg-card text-lg font-bold text-card-foreground transition-all hover:border-accent hover:bg-accent disabled:opacity-40 disabled:hover:bg-card"
             >
               −
             </button>
@@ -70,24 +70,24 @@ const RoomSettingsModal = memo(function RoomSettingsModal({
                 )
               }
               disabled={localSettings.maxParticipants >= 20}
-              className="inline-flex h-12 w-12 items-center justify-center rounded-md border-2 border-gray-300 bg-white text-lg font-bold text-gray-900 transition-all hover:border-gray-400 hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+              className="inline-flex h-12 w-12 items-center justify-center rounded-md border-2 border-border bg-card text-lg font-bold text-card-foreground transition-all hover:border-accent hover:bg-accent disabled:opacity-40 disabled:hover:bg-card"
             >
               +
             </button>
           </div>
-          <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+          <p className="mt-2 text-xs text-muted-foreground">
             Minimum: 2, Maksimum: 20
           </p>
         </div>
 
         {/* Özel Oda Toggle */}
-        <div className="rounded-md border-2 border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-800/50">
+        <div className="rounded-md border-2 border-border bg-muted p-4 dark:bg-muted/50">
           <label className="flex cursor-pointer items-center justify-between">
             <div>
-              <span className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <span className="block text-sm font-semibold text-card-foreground">
                 Özel Oda
               </span>
-              <span className="text-xs text-gray-500 dark:text-gray-400">
+              <span className="text-xs text-muted-foreground">
                 Odaya şifre ile erişim sağlayın
               </span>
             </div>
@@ -98,7 +98,7 @@ const RoomSettingsModal = memo(function RoomSettingsModal({
                 onChange={(e) => updateSetting("isPrivate", e.target.checked)}
                 className="peer sr-only"
               />
-              <div className="h-6 w-11 rounded-full bg-gray-300 transition-colors peer-checked:bg-blue-600 dark:bg-gray-700 peer-checked:dark:bg-blue-600"></div>
+              <div className="h-6 w-11 rounded-full bg-muted transition-colors peer-checked:bg-primary dark:bg-muted peer-checked:dark:bg-primary"></div>
               <div className="absolute left-1 top-1 h-4 w-4 rounded-full bg-white transition-transform peer-checked:translate-x-5"></div>
             </div>
           </label>
@@ -107,7 +107,7 @@ const RoomSettingsModal = memo(function RoomSettingsModal({
         {/* Şifre Input */}
         {localSettings.isPrivate && (
           <div>
-            <label className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300">
+            <label className="mb-2 block text-sm font-semibold text-card-foreground">
               Oda Şifresi (4 karakter)
             </label>
             <div className="flex items-center gap-2">
@@ -121,12 +121,12 @@ const RoomSettingsModal = memo(function RoomSettingsModal({
                 }}
                 maxLength={4}
                 placeholder="4 karakterli şifre"
-                className="flex-1 rounded-md border-2 border-gray-300 bg-white px-4 py-3 text-center text-lg font-bold tracking-widest text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-400"
+                className="flex-1 rounded-md border-2 border-border bg-card px-4 py-3 text-center text-lg font-bold tracking-widest text-card-foreground outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-blue-400"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
-                className="rounded-md border-2 border-gray-300 bg-white p-3 text-gray-700 transition-all hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                className="rounded-md border-2 border-border bg-card p-3 text-card-foreground transition-all hover:border-accent hover:bg-accent"
               >
                 {showPassword ? (
                   <EyeOff className="h-5 w-5" />
@@ -149,13 +149,13 @@ const RoomSettingsModal = memo(function RoomSettingsModal({
         )}
 
         {/* İzleyicilere İzin Ver Toggle */}
-        <div className="rounded-md border-2 border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-800/50">
+        <div className="rounded-md border-2 border-border bg-muted p-4 dark:bg-muted/50">
           <label className="flex cursor-pointer items-center justify-between">
             <div>
-              <span className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <span className="block text-sm font-semibold text-card-foreground">
                 İzleyicilere İzin Ver
               </span>
-              <span className="text-xs text-gray-500 dark:text-gray-400">
+              <span className="text-xs text-muted-foreground">
                 İzleyiciler oy veremez, sadece görüntüleyebilir
               </span>
             </div>
@@ -168,20 +168,20 @@ const RoomSettingsModal = memo(function RoomSettingsModal({
                 }
                 className="peer sr-only"
               />
-              <div className="h-6 w-11 rounded-full bg-gray-300 transition-colors peer-checked:bg-blue-600 dark:bg-gray-700 peer-checked:dark:bg-blue-600"></div>
+              <div className="h-6 w-11 rounded-full bg-muted transition-colors peer-checked:bg-primary dark:bg-muted peer-checked:dark:bg-primary"></div>
               <div className="absolute left-1 top-1 h-4 w-4 rounded-full bg-white transition-transform peer-checked:translate-x-5"></div>
             </div>
           </label>
         </div>
 
         {/* Otomatik Açıklama Toggle */}
-        <div className="rounded-md border-2 border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-800/50">
+        <div className="rounded-md border-2 border-border bg-muted p-4 dark:bg-muted/50">
           <label className="flex cursor-pointer items-center justify-between">
             <div>
-              <span className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <span className="block text-sm font-semibold text-card-foreground">
                 Otomatik Açıklama
               </span>
-              <span className="text-xs text-gray-500 dark:text-gray-400">
+              <span className="text-xs text-muted-foreground">
                 Tüm oylar verildiğinde otomatik olarak açıklanır
               </span>
             </div>
@@ -192,7 +192,7 @@ const RoomSettingsModal = memo(function RoomSettingsModal({
                 onChange={(e) => updateSetting("autoReveal", e.target.checked)}
                 className="peer sr-only"
               />
-              <div className="h-6 w-11 rounded-full bg-gray-300 transition-colors peer-checked:bg-blue-600 dark:bg-gray-700 peer-checked:dark:bg-blue-600"></div>
+              <div className="h-6 w-11 rounded-full bg-muted transition-colors peer-checked:bg-primary dark:bg-muted peer-checked:dark:bg-primary"></div>
               <div className="absolute left-1 top-1 h-4 w-4 rounded-full bg-white transition-transform peer-checked:translate-x-5"></div>
             </div>
           </label>

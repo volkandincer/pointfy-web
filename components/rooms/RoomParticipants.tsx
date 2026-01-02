@@ -20,10 +20,10 @@ const RoomParticipants = memo(function RoomParticipants({
 
   if (loading) {
     return (
-      <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+      <div className="rounded-md border-2 border-border bg-card p-4 shadow-sm">
         <div className="flex items-center gap-2">
-          <div className="h-8 w-8 animate-pulse border-2 border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
-          <div className="h-4 w-24 animate-pulse rounded bg-gray-100 dark:bg-gray-800" />
+          <div className="h-8 w-8 animate-pulse border-2 border-border bg-muted" />
+          <div className="h-4 w-24 animate-pulse rounded bg-muted" />
         </div>
       </div>
     );
@@ -40,12 +40,12 @@ const RoomParticipants = memo(function RoomParticipants({
   }
 
   return (
-    <div className="rounded-md border-2 border-gray-300 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+    <div className="rounded-md border-2 border-border bg-card shadow-sm">
       {/* Accordion Header - Tıklanabilir */}
       <button
         onClick={() => participants.length > 0 && setShowAll(!showAll)}
         disabled={participants.length === 0}
-        className="w-full p-4 text-left transition-colors hover:bg-gray-50/50 disabled:cursor-default disabled:hover:bg-white dark:hover:bg-gray-800/50 dark:disabled:hover:bg-gray-900"
+        className="w-full p-4 text-left transition-colors hover:bg-accent/50 disabled:cursor-default disabled:hover:bg-card"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -53,10 +53,10 @@ const RoomParticipants = memo(function RoomParticipants({
               <Users className="h-4 w-4" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-gray-900 dark:text-white">
+              <h3 className="text-sm font-bold text-card-foreground">
                 Katılımcılar
               </h3>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
+              <p className="text-xs text-muted-foreground">
                 {participants.length} kişi
               </p>
             </div>
@@ -82,10 +82,10 @@ const RoomParticipants = memo(function RoomParticipants({
               </div>
               {/* Accordion Toggle Icon */}
               <div
-                className={`flex h-8 w-8 items-center justify-center border-2 border-gray-300 bg-gray-50 text-gray-600 transition-all duration-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 ${
+                className={`flex h-8 w-8 items-center justify-center border-2 border-border bg-muted text-muted-foreground transition-all duration-200 ${
                   showAll
-                    ? "rotate-180 bg-blue-50 border-blue-300 dark:bg-blue-900/20 dark:border-blue-500"
-                    : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                    ? "rotate-180 bg-primary/10 border-primary"
+                    : "hover:bg-accent"
                 }`}
               >
                 <ChevronDown className="h-4 w-4" />
@@ -103,7 +103,7 @@ const RoomParticipants = memo(function RoomParticipants({
             : "max-h-0 opacity-0"
         }`}
       >
-        <div className="border-t-2 border-gray-200/70 px-4 pb-4 pt-3 dark:border-gray-800/70">
+        <div className="border-t-2 border-border px-4 pb-4 pt-3">
           <div className="space-y-1.5 overflow-y-auto pr-2 max-h-80">
             {participants.map((participant) => (
               <CompactParticipantCard
@@ -119,7 +119,7 @@ const RoomParticipants = memo(function RoomParticipants({
       {/* Empty State */}
       {participants.length === 0 && (
         <div className="px-4 py-3 text-center">
-          <p className="text-xs text-gray-500 dark:text-gray-400">
+          <p className="text-xs text-muted-foreground">
             Henüz katılımcı yok
           </p>
         </div>
@@ -158,10 +158,10 @@ const CompactParticipantCard = memo(function CompactParticipantCard({
 
   return (
     <div
-      className={`group flex items-center gap-2 border-2 border-gray-300 p-2 transition-all hover:shadow-sm hover:border-gray-400 ${
+      className={`group flex items-center gap-2 border-2 border-border p-2 transition-all hover:shadow-sm hover:border-primary ${
         isCurrentUser
-          ? "border-blue-300/60 bg-blue-50/50 dark:border-blue-500/60 dark:bg-blue-900/20"
-          : "border-gray-200/70 bg-gray-50/50 hover:border-blue-300/50 hover:bg-blue-50/30 dark:border-gray-700/70 dark:bg-gray-800/30 dark:hover:border-blue-500/30 dark:hover:bg-blue-900/10"
+          ? "border-primary/60 bg-primary/10"
+          : "border-border bg-muted/50 hover:border-primary/50 hover:bg-primary/10"
       }`}
     >
       {/* Kompakt Avatar */}
@@ -188,8 +188,8 @@ const CompactParticipantCard = memo(function CompactParticipantCard({
           <p
             className={`truncate text-xs font-semibold ${
               isCurrentUser
-                ? "text-blue-900 dark:text-blue-100"
-                : "text-gray-900 dark:text-white"
+                ? "text-primary"
+                : "text-card-foreground"
             }`}
           >
             {participant.username}
@@ -207,7 +207,7 @@ const CompactParticipantCard = memo(function CompactParticipantCard({
               {status}
             </span>
           ) : (
-            <span className="text-[10px] text-gray-500 dark:text-gray-400">
+            <span className="text-[10px] text-muted-foreground">
               {status}
             </span>
           )}

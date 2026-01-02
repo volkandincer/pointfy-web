@@ -1,9 +1,15 @@
 "use client";
 
 import { memo } from "react";
-import { Trash2, Edit, Calendar, RefreshCw, FileText, MoreVertical } from "lucide-react";
+import {
+  Trash2,
+  Edit,
+  Calendar,
+  RefreshCw,
+  FileText,
+} from "lucide-react";
 import Button from "@/components/ui/Button";
-import EmptyState from "@/components/jira/EmptyState";
+import EmptyState from "@/components/ui/EmptyState";
 import type { Note } from "@/interfaces/Note.interface";
 
 interface NoteListProps {
@@ -23,7 +29,10 @@ const CATEGORY_LABELS: Record<string, string> = {
   general: "Genel",
 };
 
-const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string }> = {
+const CATEGORY_COLORS: Record<
+  string,
+  { bg: string; text: string; border: string }
+> = {
   personal: {
     bg: "bg-pink-50 dark:bg-pink-900/20",
     text: "text-pink-700 dark:text-pink-400",
@@ -50,9 +59,9 @@ const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string
     border: "border-red-300 dark:border-red-700",
   },
   general: {
-    bg: "bg-gray-50 dark:bg-gray-800",
-    text: "text-gray-700 dark:text-gray-300",
-    border: "border-gray-300 dark:border-gray-700",
+    bg: "bg-muted",
+    text: "text-card-foreground",
+    border: "border-border",
   },
 };
 
@@ -109,86 +118,99 @@ const NoteList = memo(function NoteList({
         const updatedValue = note.updated_at;
         const isUpdated = updatedValue && updatedValue !== note.created_at;
 
-        // Border color mapping
-        const getBorderColor = (borderClass: string): string => {
-          if (borderClass.includes('yellow')) return '#eab308';
-          if (borderClass.includes('purple')) return '#a855f7';
-          if (borderClass.includes('blue')) return '#2563eb';
-          if (borderClass.includes('green')) return '#16a34a';
-          if (borderClass.includes('red')) return '#dc2626';
-          if (borderClass.includes('orange')) return '#f97316';
-          if (borderClass.includes('pink')) return '#ec4899';
-          return '#6b7280';
+        // Get border color class based on category
+        const getBorderColorClass = (borderClass: string): string => {
+          if (borderClass.includes("yellow"))
+            return "border-l-yellow-600 dark:border-l-yellow-500";
+          if (borderClass.includes("purple"))
+            return "border-l-purple-600 dark:border-l-purple-500";
+          if (borderClass.includes("blue"))
+            return "border-l-blue-600 dark:border-l-blue-500";
+          if (borderClass.includes("green"))
+            return "border-l-green-600 dark:border-l-green-500";
+          if (borderClass.includes("red"))
+            return "border-l-red-600 dark:border-l-red-500";
+          if (borderClass.includes("orange"))
+            return "border-l-orange-600 dark:border-l-orange-500";
+          if (borderClass.includes("pink"))
+            return "border-l-pink-600 dark:border-l-pink-500";
+          return "border-l-primary dark:border-l-primary";
         };
+
+        const borderColorClass = getBorderColorClass(categoryStyle.border);
 
         return (
           <div
             key={note.id}
-            className="group relative flex flex-col border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
-            style={{
-              borderLeftColor: getBorderColor(categoryStyle.border),
-            }}
+            className={`group relative flex min-h-[180px] flex-col overflow-hidden rounded-lg border-l-4 ${borderColorClass} border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl`}
           >
-            {/* Header - Category Badge & Actions */}
-            <div className="mb-3 flex items-start justify-between gap-2">
-              <span
-                className={`rounded-md border-2 px-2.5 py-1 text-xs font-semibold shadow-sm ${categoryStyle.bg} ${categoryStyle.text} ${categoryStyle.border}`}
-              >
-                {getCategoryLabel(note.category)}
-              </span>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (confirm("Bu notu silmek istediğinize emin misiniz?")) {
-                    onDelete(note.id);
-                  }
-                }}
-                className="rounded-md border-2 border-transparent p-1.5 text-gray-400 transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-600 dark:text-gray-500 dark:hover:border-red-700 dark:hover:bg-red-900/20 dark:hover:text-red-400"
-                title="Sil"
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
-            </div>
-
+            {/* Glow Effect */}
+            <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
             {/* Content */}
-            <div
-              onClick={() => onEdit(note)}
-              className="mb-3 flex-1 cursor-pointer"
-            >
-              <p className="line-clamp-4 text-sm leading-relaxed text-gray-900 dark:text-white">
-                {note.content}
-              </p>
-            </div>
-
-            {/* Footer - Date & Edit Button */}
-            <div className="mt-auto space-y-2.5 border-t-2 border-gray-200 pt-3 dark:border-gray-800">
-              {/* Date Info */}
-              <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
-                <Calendar className="h-3.5 w-3.5 shrink-0" />
-                <span>{formatDate(dateValue)}</span>
-                {formatTime(dateValue) && (
-                  <span className="text-gray-400">• {formatTime(dateValue)}</span>
-                )}
-                {isUpdated && updatedValue && (
-                  <>
-                    <span className="text-gray-400">•</span>
-                    <RefreshCw className="h-3.5 w-3.5 shrink-0" />
-                    <span>Güncellendi</span>
-                  </>
-                )}
+            <div className="relative z-10 flex flex-1 flex-col">
+              {/* Header - Category Badge & Actions */}
+              <div className="mb-3 flex items-start justify-between gap-2">
+                <span
+                  className={`rounded-md border-2 px-2.5 py-1 text-xs font-semibold shadow-sm ${categoryStyle.bg} ${categoryStyle.text} ${categoryStyle.border}`}
+                >
+                  {getCategoryLabel(note.category)}
+                </span>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (confirm("Bu notu silmek istediğinize emin misiniz?")) {
+                      onDelete(note.id);
+                    }
+                  }}
+                  className="rounded-lg border-2 border-transparent p-1.5 text-muted-foreground transition-colors hover:border-destructive hover:bg-destructive/10 hover:text-destructive"
+                  title="Sil"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
               </div>
 
-              {/* Edit Button */}
-              <Button
-                variant="outline"
-                size="sm"
-                fullWidth
+              {/* Content */}
+              <div
                 onClick={() => onEdit(note)}
-                icon={Edit}
-                className="border-yellow-600 text-yellow-600 hover:border-yellow-700 hover:bg-yellow-50 hover:text-yellow-700 dark:border-yellow-500 dark:text-yellow-400 dark:hover:border-yellow-400 dark:hover:bg-yellow-900/20"
+                className="mb-3 flex-1 cursor-pointer"
               >
-                Düzenle
-              </Button>
+                <p className="line-clamp-4 text-sm leading-relaxed text-card-foreground">
+                  {note.content}
+                </p>
+              </div>
+
+              {/* Footer - Date & Edit Button */}
+              <div className="mt-auto space-y-2.5 border-t-2 border-border pt-3">
+                {/* Date Info */}
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <Calendar className="h-3.5 w-3.5 shrink-0" />
+                  <span>{formatDate(dateValue)}</span>
+                  {formatTime(dateValue) && (
+                    <span className="text-muted-foreground/70">
+                      • {formatTime(dateValue)}
+                    </span>
+                  )}
+                  {isUpdated && updatedValue && (
+                    <>
+                      <span className="text-muted-foreground/70">•</span>
+                      <RefreshCw className="h-3.5 w-3.5 shrink-0" />
+                      <span>Güncellendi</span>
+                    </>
+                  )}
+                </div>
+
+                {/* Edit Button */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  fullWidth
+                  onClick={() => onEdit(note)}
+                  icon={Edit}
+                  className="border-primary text-primary hover:border-primary hover:bg-primary/10 hover:text-primary"
+                >
+                  Düzenle
+                </Button>
+              </div>
             </div>
           </div>
         );

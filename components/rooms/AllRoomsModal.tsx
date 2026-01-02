@@ -5,15 +5,11 @@ import { useRouter } from "next/navigation";
 import { Search, X, Home, ChevronRight } from "lucide-react";
 import Modal from "@/components/ui/Modal";
 import RoomPinModal from "@/components/rooms/RoomPinModal";
-import EmptyState from "@/components/jira/EmptyState";
+import EmptyState from "@/components/ui/EmptyState";
 import { useToastContext } from "@/contexts/ToastContext";
 import type { RoomInfo } from "@/interfaces/Room.interface";
 import { getSupabase } from "@/lib/supabase";
-import {
-  checkRoomEntry,
-  verifyRoomPin,
-  addUserToRoom,
-} from "@/lib/roomUtils";
+import { checkRoomEntry, verifyRoomPin, addUserToRoom } from "@/lib/roomUtils";
 
 interface AllRoomsModalProps {
   open: boolean;
@@ -52,7 +48,7 @@ const AllRoomsModal = memo(function AllRoomsModal({
         setLoading(true);
         setError(null);
         const supabase = getSupabase();
-        
+
         const { data: userData } = await supabase.auth.getUser();
         if (userData.user) {
           setUserKey(userData.user.id);
@@ -70,7 +66,9 @@ const AllRoomsModal = memo(function AllRoomsModal({
 
         const { data, error: fetchError } = await supabase
           .from("rooms")
-          .select("id, name, code, created_by_username, is_active, created_at, room_type")
+          .select(
+            "id, name, code, created_by_username, is_active, created_at, room_type"
+          )
           .eq("is_active", true)
           .eq("status", "active")
           .order("created_at", { ascending: false });
@@ -99,7 +97,7 @@ const AllRoomsModal = memo(function AllRoomsModal({
   const handleRoomClick = async (roomId: string) => {
     try {
       const result = await checkRoomEntry(roomId);
-      
+
       if (result.error) {
         showToast(result.error, "error");
         return;
@@ -119,7 +117,7 @@ const AllRoomsModal = memo(function AllRoomsModal({
       }
       onClose();
       router.push(`/app/rooms/${roomId}`);
-    } catch (err) {
+    } catch {
       showToast("Odaya giriş yapılırken bir hata oluştu.", "error");
     }
   };
@@ -176,20 +174,20 @@ const AllRoomsModal = memo(function AllRoomsModal({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Oda adı, kod veya oluşturan ile ara..."
-            className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-3 pl-10 text-sm outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
+            className="w-full rounded-md border-2 border-border bg-background px-4 py-3 pl-10 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
             >
               <X className="h-4 w-4" />
             </button>
           )}
         </div>
         {searchQuery && (
-          <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+          <p className="mt-2 text-xs text-muted-foreground">
             {filteredRooms.length} oda bulundu
           </p>
         )}
@@ -201,13 +199,13 @@ const AllRoomsModal = memo(function AllRoomsModal({
             {Array.from({ length: 3 }).map((_, idx) => (
               <div
                 key={idx}
-                className="h-20 animate-pulse border-l-4 border-l-blue-400 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm sm:p-4 dark:border-l-blue-500 dark:border-gray-700 dark:bg-gray-900"
+                className="h-20 animate-pulse border-l-4 border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-card p-3 shadow-sm sm:p-4"
               />
             ))}
           </div>
         ) : error ? (
           <div className="py-8 text-center">
-            <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+            <p className="text-sm text-destructive">{error}</p>
           </div>
         ) : rooms.length === 0 ? (
           <EmptyState
@@ -225,8 +223,8 @@ const AllRoomsModal = memo(function AllRoomsModal({
           <div className="space-y-3">
             {filteredRooms.map((room) => {
               const isRetro = room.room_type === "retro";
-              const borderColor = isRetro 
-                ? "border-l-purple-600 dark:border-l-purple-500" 
+              const borderColor = isRetro
+                ? "border-l-purple-600 dark:border-l-purple-500"
                 : "border-l-blue-600 dark:border-l-blue-500";
               const iconBorderColor = isRetro
                 ? "border-purple-600 dark:border-purple-500"
@@ -240,42 +238,46 @@ const AllRoomsModal = memo(function AllRoomsModal({
               const arrowBorderColor = isRetro
                 ? "border-purple-600 bg-purple-600 group-hover:bg-purple-700 group-hover:border-purple-700"
                 : "border-blue-600 bg-blue-600 group-hover:bg-blue-700 group-hover:border-blue-700";
-              
-              return (
-              <button
-                key={room.id}
-                onClick={() => handleRoomClick(room.id)}
-                className={`group w-full border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 text-left shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900`}
-              >
-                <div className="flex items-center gap-4">
-                  {/* Icon Container */}
-                  <div className={`flex h-12 w-12 shrink-0 items-center justify-center border-2 ${iconBorderColor} ${iconBgColor}`}>
-                    <Home className={`h-6 w-6 ${iconTextColor}`} />
-                  </div>
 
-                  {/* Content */}
-                  <div className="min-w-0 flex-1">
-                    <h3 className="mb-1 truncate text-base font-semibold text-gray-900 dark:text-white">
-                      {room.name || "Oda"}
-                    </h3>
-                    <div className="flex items-center gap-2">
-                      <span className="rounded-md border-2 border-gray-300 bg-white px-2 py-0.5 text-xs font-semibold text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
-                        {room.code}
-                      </span>
-                      {room.created_by_username && (
-                        <span className="text-xs font-semibold text-green-600 dark:text-green-400">
-                          {room.created_by_username}
+              return (
+                <button
+                  key={room.id}
+                  onClick={() => handleRoomClick(room.id)}
+                  className={`group w-full border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-border bg-card p-3 text-left shadow-sm transition-all active:border-accent active:shadow-md sm:p-4 hover:border-accent hover:shadow-md`}
+                >
+                  <div className="flex items-center gap-4">
+                    {/* Icon Container */}
+                    <div
+                      className={`flex h-12 w-12 shrink-0 items-center justify-center border-2 ${iconBorderColor} ${iconBgColor}`}
+                    >
+                      <Home className={`h-6 w-6 ${iconTextColor}`} />
+                    </div>
+
+                    {/* Content */}
+                    <div className="min-w-0 flex-1">
+                      <h3 className="mb-1 truncate text-base font-semibold text-card-foreground">
+                        {room.name || "Oda"}
+                      </h3>
+                      <div className="flex items-center gap-2">
+                        <span className="rounded-md border-2 border-border bg-card px-2 py-0.5 text-xs font-semibold text-card-foreground shadow-sm">
+                          {room.code}
                         </span>
-                      )}
+                        {room.created_by_username && (
+                          <span className="text-xs font-semibold text-success">
+                            {room.created_by_username}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Arrow Icon */}
+                    <div
+                      className={`flex h-7 w-7 shrink-0 items-center justify-center border-2 ${arrowBorderColor} text-white transition-colors`}
+                    >
+                      <ChevronRight className="h-4 w-4" />
                     </div>
                   </div>
-
-                  {/* Arrow Icon */}
-                  <div className={`flex h-7 w-7 shrink-0 items-center justify-center border-2 ${arrowBorderColor} text-white transition-colors`}>
-                    <ChevronRight className="h-4 w-4" />
-                  </div>
-                </div>
-              </button>
+                </button>
               );
             })}
           </div>
@@ -284,7 +286,7 @@ const AllRoomsModal = memo(function AllRoomsModal({
 
       <button
         onClick={onClose}
-        className="mt-6 w-full rounded-md border-2 border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
+        className="mt-6 w-full rounded-md border-2 border-border bg-card px-4 py-3 text-sm font-semibold text-card-foreground transition-colors hover:bg-accent hover:border-border"
       >
         Kapat
       </button>
@@ -304,4 +306,3 @@ const AllRoomsModal = memo(function AllRoomsModal({
 });
 
 export default AllRoomsModal;
-

@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { Link2, Loader2, AlertCircle } from "lucide-react";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
@@ -58,7 +58,7 @@ const CreateJiraIssueModal = memo(function CreateJiraIssueModal({
         if (mounted && userRow?.jira_base_url) {
           setJiraBaseUrl(userRow.jira_base_url);
         }
-      } catch (err) {
+      } catch {
         // Jira base URL fetch error
       }
     }
@@ -283,19 +283,19 @@ const CreateJiraIssueModal = memo(function CreateJiraIssueModal({
 
         {/* Project Selection */}
         <div>
-          <label className="mb-1.5 block text-sm font-semibold text-gray-900 dark:text-white">
+          <label className="mb-1.5 block text-sm font-semibold text-card-foreground">
             Proje <span className="text-red-600 dark:text-red-400">*</span>
           </label>
           {loadingProjects ? (
             <div className="flex items-center gap-2 rounded-md border-2 border-gray-300 bg-white p-3 dark:border-gray-700 dark:bg-gray-800">
-              <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
-              <span className="text-sm text-gray-500 dark:text-gray-400">Projeler yükleniyor...</span>
+              <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+              <span className="text-sm text-muted-foreground">Projeler yükleniyor...</span>
             </div>
           ) : (
             <select
               value={selectedProjectKey}
               onChange={(e) => setSelectedProjectKey(e.target.value)}
-              className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none transition focus:border-purple-600 focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-purple-500"
+              className="w-full rounded-md border-2 border-border bg-card px-4 py-2.5 text-sm text-card-foreground outline-none transition focus:border-purple-600 focus:ring-2 focus:ring-purple-600/20 dark:focus:border-purple-500"
             >
               <option value="">Proje seçin...</option>
               {projects.map((project) => (
@@ -310,19 +310,19 @@ const CreateJiraIssueModal = memo(function CreateJiraIssueModal({
         {/* Issue Type Selection */}
         {selectedProjectKey && (
           <div>
-            <label className="mb-1.5 block text-sm font-semibold text-gray-900 dark:text-white">
+            <label className="mb-1.5 block text-sm font-semibold text-card-foreground">
               Issue Tipi <span className="text-red-600 dark:text-red-400">*</span>
             </label>
             {loadingIssueTypes ? (
               <div className="flex items-center gap-2 rounded-md border-2 border-gray-300 bg-white p-3 dark:border-gray-700 dark:bg-gray-800">
-                <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
-                <span className="text-sm text-gray-500 dark:text-gray-400">Issue type&apos;ları yükleniyor...</span>
+                <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">Issue type&apos;ları yükleniyor...</span>
               </div>
             ) : issueTypes.length > 0 ? (
               <select
                 value={selectedIssueTypeId}
                 onChange={(e) => setSelectedIssueTypeId(e.target.value)}
-                className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none transition focus:border-purple-600 focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-purple-500"
+                className="w-full rounded-md border-2 border-border bg-card px-4 py-2.5 text-sm text-card-foreground outline-none transition focus:border-purple-600 focus:ring-2 focus:ring-purple-600/20 dark:focus:border-purple-500"
               >
                 {issueTypes.map((type) => (
                   <option key={type.id} value={type.id}>
@@ -331,14 +331,14 @@ const CreateJiraIssueModal = memo(function CreateJiraIssueModal({
                 ))}
               </select>
             ) : (
-              <p className="text-sm text-gray-500 dark:text-gray-400">Issue type bulunamadı</p>
+              <p className="text-sm text-muted-foreground">Issue type bulunamadı</p>
             )}
           </div>
         )}
 
         {/* Summary */}
         <div>
-          <label className="mb-1.5 block text-sm font-semibold text-gray-900 dark:text-white">
+          <label className="mb-1.5 block text-sm font-semibold text-card-foreground">
             Başlık <span className="text-red-600 dark:text-red-400">*</span>
           </label>
           <input
@@ -347,17 +347,17 @@ const CreateJiraIssueModal = memo(function CreateJiraIssueModal({
             onChange={(e) => setSummary(e.target.value)}
             placeholder="Issue başlığı..."
             maxLength={255}
-            className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 outline-none transition focus:border-purple-600 focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500"
+            className="w-full rounded-md border-2 border-border bg-card px-4 py-2.5 text-sm text-card-foreground placeholder-muted-foreground outline-none transition focus:border-purple-600 focus:ring-2 focus:ring-purple-600/20 dark:focus:border-purple-500"
           />
-          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+          <p className="mt-1 text-xs text-muted-foreground">
             {summary.length}/255
           </p>
         </div>
 
         {/* Description */}
         <div>
-          <label className="mb-1.5 block text-sm font-semibold text-gray-900 dark:text-white">
-            Açıklama <span className="text-xs font-normal text-gray-500 dark:text-gray-400">(İsteğe Bağlı)</span>
+          <label className="mb-1.5 block text-sm font-semibold text-card-foreground">
+            Açıklama <span className="text-xs font-normal text-muted-foreground">(İsteğe Bağlı)</span>
           </label>
           <textarea
             value={description}
@@ -367,7 +367,7 @@ const CreateJiraIssueModal = memo(function CreateJiraIssueModal({
             maxLength={5000}
             className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 placeholder-gray-500 outline-none transition focus:border-purple-600 focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500"
           />
-          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+          <p className="mt-1 text-xs text-muted-foreground">
             {description.length}/5000
           </p>
         </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useState } from "react";
-import { Zap, RotateCcw, Settings, Check, Home, FileText, ChevronDown, ChevronUp, Users, Lock, Eye, Sparkles } from "lucide-react";
+import { Zap, RotateCcw, Settings, Check, Home, ChevronDown, ChevronUp, Users, Lock, Eye, Sparkles } from "lucide-react";
 import Button from "@/components/ui/Button";
 import type {
   RoomType,
@@ -78,13 +78,13 @@ const CreateRoomForm = memo(function CreateRoomForm({
       {/* Oda Tipi Seçimi - Kompakt Tab'lar */}
       <div>
         <div className="mb-3 flex items-center gap-2">
-          <Sparkles className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-          <label className="text-sm font-semibold text-gray-900 dark:text-white">
+            <Sparkles className="h-4 w-4 text-primary" />
+          <label className="text-sm font-semibold text-card-foreground">
             Oda Tipi
           </label>
-          <span className="text-red-600 dark:text-red-400">*</span>
+          <span className="text-destructive">*</span>
         </div>
-        <div className="border-b-2 border-gray-200 dark:border-gray-700">
+        <div className="border-b-2 border-border">
           <div className="flex gap-1">
             {ROOM_TYPES.map((type) => {
               const isSelected = roomType === type.key;
@@ -99,9 +99,9 @@ const CreateRoomForm = memo(function CreateRoomForm({
                   className={`flex flex-1 items-center justify-center gap-2 border-b-2 px-4 py-3 text-sm font-semibold transition ${
                     isSelected
                       ? isBlue
-                        ? "border-blue-600 text-blue-600 dark:text-blue-400"
-                        : "border-purple-600 text-purple-600 dark:text-purple-400"
-                      : "border-transparent text-gray-600 hover:border-gray-300 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+                        ? "border-primary text-primary"
+                        : "border-primary text-primary"
+                      : "border-transparent text-muted-foreground hover:border-border hover:text-card-foreground"
                   }`}
                 >
                   <IconComponent className="h-4 w-4" />
@@ -112,8 +112,8 @@ const CreateRoomForm = memo(function CreateRoomForm({
           </div>
         </div>
         {selectedType && (
-          <div className="mt-3 rounded-md border-2 border-gray-200 bg-gray-50 p-3 dark:border-gray-800 dark:bg-gray-800/50">
-            <p className="text-xs text-gray-600 dark:text-gray-400">
+          <div className="mt-3 rounded-md border-2 border-border bg-muted/50 p-3">
+            <p className="text-xs text-muted-foreground">
               {selectedType.description}
             </p>
           </div>
@@ -126,7 +126,7 @@ const CreateRoomForm = memo(function CreateRoomForm({
         <div>
           <label
             htmlFor="room-name"
-            className="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+            className="mb-2 block text-sm font-semibold text-card-foreground"
           >
             Oda Adı <span className="text-red-600 dark:text-red-400">*</span>
           </label>
@@ -138,17 +138,17 @@ const CreateRoomForm = memo(function CreateRoomForm({
             placeholder="Örn: Sprint Planning, Q1 Review, Daily Standup"
             maxLength={50}
             required
-            className={`w-full rounded-md border-2 px-4 py-3 text-base text-gray-900 outline-none transition focus:ring-2 ${
+            className={`w-full rounded-md border-2 px-4 py-3 text-base text-card-foreground outline-none transition focus:ring-2 ${
               nameError
-                ? "border-red-300 bg-red-50 focus:border-red-500 focus:ring-red-500/20 dark:border-red-700 dark:bg-red-900/20 dark:focus:border-red-500"
-                : "border-gray-300 bg-white focus:border-blue-500 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:focus:border-blue-400"
-            } dark:text-white`}
+                ? "border-destructive bg-destructive/10 focus:border-destructive focus:ring-destructive/20"
+                : "border-input bg-input focus:border-primary focus:ring-primary/20"
+            }`}
           />
           <div className="mt-2 flex items-center justify-between">
-            <p className={`text-xs ${nameError ? "text-red-600 dark:text-red-400" : "text-gray-500 dark:text-gray-400"}`}>
+            <p className={`text-xs ${nameError ? "text-destructive" : "text-muted-foreground"}`}>
               {nameError ? "Oda adı en az 3 karakter olmalıdır" : "Minimum 3 karakter gerekli"}
             </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+            <p className="text-xs text-muted-foreground">
               {name.length}/50
             </p>
           </div>
@@ -158,9 +158,9 @@ const CreateRoomForm = memo(function CreateRoomForm({
         <div>
           <label
             htmlFor="room-desc"
-            className="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+            className="mb-2 block text-sm font-semibold text-card-foreground"
           >
-            Açıklama <span className="text-xs font-normal text-gray-500 dark:text-gray-400">(Opsiyonel)</span>
+            Açıklama <span className="text-xs font-normal text-muted-foreground">(Opsiyonel)</span>
           </label>
           <textarea
             id="room-desc"
@@ -169,40 +169,40 @@ const CreateRoomForm = memo(function CreateRoomForm({
             placeholder="Bu oda için kısa bir açıklama ekleyin..."
             rows={3}
             maxLength={200}
-            className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-400"
+            className="w-full rounded-md border-2 border-input bg-input px-4 py-3 text-base text-card-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
-          <p className="mt-2 text-right text-xs text-gray-500 dark:text-gray-400">
+          <p className="mt-2 text-right text-xs text-muted-foreground">
             {description.length}/200
           </p>
         </div>
       </div>
 
       {/* Gelişmiş Ayarlar - Accordion */}
-      <div className="rounded-md border-2 border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-800/50">
+      <div className="rounded-md border-2 border-border bg-muted/50">
         <button
           type="button"
           onClick={() => setShowAdvancedSettings(!showAdvancedSettings)}
-          className="flex w-full items-center justify-between p-5 text-left transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+          className="flex w-full items-center justify-between p-5 text-left transition-colors hover:bg-muted"
         >
           <div className="flex items-center gap-3">
-            <Settings className="h-5 w-5 text-gray-600 dark:text-gray-400" />
-            <span className="text-sm font-semibold text-gray-900 dark:text-white">
+            <Settings className="h-5 w-5 text-muted-foreground" />
+            <span className="text-sm font-semibold text-card-foreground">
               Gelişmiş Ayarlar
             </span>
           </div>
           {showAdvancedSettings ? (
-            <ChevronUp className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+            <ChevronUp className="h-5 w-5 text-muted-foreground" />
           ) : (
-            <ChevronDown className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+            <ChevronDown className="h-5 w-5 text-muted-foreground" />
           )}
         </button>
 
         {showAdvancedSettings && (
-          <div className="border-t-2 border-gray-200 p-5 space-y-6 dark:border-gray-800">
+          <div className="border-t-2 border-border p-5 space-y-6">
             {/* Maksimum Katılımcı */}
             <div>
-              <label className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
-                <Users className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+              <label className="mb-3 flex items-center gap-2 text-sm font-semibold text-card-foreground">
+                <Users className="h-4 w-4 text-primary" />
                 Maksimum Katılımcı
               </label>
               <div className="flex items-center gap-4">
@@ -215,12 +215,12 @@ const CreateRoomForm = memo(function CreateRoomForm({
                     }))
                   }
                   disabled={settings.maxParticipants <= 2}
-                  className="inline-flex h-12 w-12 items-center justify-center rounded-md border-2 border-gray-300 bg-white text-lg font-bold text-gray-900 transition-all hover:border-gray-400 hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                  className="inline-flex h-12 w-12 items-center justify-center rounded-md border-2 border-border bg-card text-lg font-bold text-card-foreground transition-all hover:border-accent hover:bg-accent disabled:opacity-40 disabled:hover:bg-card dark:hover:bg-accent"
                 >
                   −
                 </button>
-                <div className="flex h-16 w-20 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-50 dark:border-blue-500 dark:bg-blue-900/20">
-                  <span className="text-2xl font-bold text-blue-700 dark:text-blue-400">
+                <div className="flex h-16 w-20 items-center justify-center rounded-md border-2 border-primary bg-primary/10">
+                  <span className="text-2xl font-bold text-primary">
                     {settings.maxParticipants}
                   </span>
                 </div>
@@ -233,26 +233,26 @@ const CreateRoomForm = memo(function CreateRoomForm({
                     }))
                   }
                   disabled={settings.maxParticipants >= 20}
-                  className="inline-flex h-12 w-12 items-center justify-center rounded-md border-2 border-gray-300 bg-white text-lg font-bold text-gray-900 transition-all hover:border-gray-400 hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                  className="inline-flex h-12 w-12 items-center justify-center rounded-md border-2 border-border bg-card text-lg font-bold text-card-foreground transition-all hover:border-accent hover:bg-accent disabled:opacity-40 disabled:hover:bg-card dark:hover:bg-accent"
                 >
                   +
                 </button>
               </div>
-              <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+              <p className="mt-2 text-xs text-muted-foreground">
                 Minimum: 2, Maksimum: 20
               </p>
             </div>
 
             {/* Özel Oda Toggle */}
-            <div className="rounded-md border-2 border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
+            <div className="rounded-md border-2 border-border bg-card p-4">
               <label className="flex cursor-pointer items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <Lock className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                  <Lock className="h-5 w-5 text-muted-foreground" />
                   <div>
-                    <span className="block text-sm font-semibold text-gray-900 dark:text-white">
+                    <span className="block text-sm font-semibold text-card-foreground">
                       Özel Oda
                     </span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                    <span className="text-xs text-muted-foreground">
                       Odaya şifre ile erişim sağlayın
                     </span>
                   </div>
@@ -270,8 +270,8 @@ const CreateRoomForm = memo(function CreateRoomForm({
                     }
                     className="peer sr-only"
                   />
-                  <div className="h-6 w-11 rounded-full bg-gray-300 transition-colors peer-checked:bg-blue-600 dark:bg-gray-700 peer-checked:dark:bg-blue-600"></div>
-                  <div className="absolute left-1 top-1 h-4 w-4 rounded-full bg-white transition-transform peer-checked:translate-x-5"></div>
+                  <div className="h-6 w-11 rounded-full bg-muted transition-colors peer-checked:bg-primary"></div>
+                  <div className="absolute left-1 top-1 h-4 w-4 rounded-full bg-background transition-transform peer-checked:translate-x-5"></div>
                 </div>
               </label>
             </div>
@@ -279,7 +279,7 @@ const CreateRoomForm = memo(function CreateRoomForm({
             {/* Şifre Input */}
             {settings.isPrivate && (
               <div>
-                <label className="mb-2 block text-sm font-semibold text-gray-900 dark:text-white">
+                <label className="mb-2 block text-sm font-semibold text-card-foreground">
                   Oda Şifresi (4 karakter) <span className="text-red-600 dark:text-red-400">*</span>
                 </label>
                 <div className="flex items-center gap-2">
@@ -293,16 +293,16 @@ const CreateRoomForm = memo(function CreateRoomForm({
                     }}
                     maxLength={4}
                     placeholder="1234"
-                    className={`flex-1 rounded-md border-2 px-4 py-3 text-center text-lg font-bold tracking-widest text-gray-900 outline-none transition focus:ring-2 ${
+                    className={`flex-1 rounded-md border-2 px-4 py-3 text-center text-lg font-bold tracking-widest text-card-foreground outline-none transition focus:ring-2 ${
                       passwordError
-                        ? "border-red-300 bg-red-50 focus:border-red-500 focus:ring-red-500/20 dark:border-red-700 dark:bg-red-900/20 dark:focus:border-red-500"
-                        : "border-gray-300 bg-white focus:border-blue-500 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:focus:border-blue-400"
-                    } dark:text-white`}
+                        ? "border-destructive bg-destructive/10 focus:border-destructive focus:ring-destructive/20"
+                        : "border-input bg-input focus:border-primary focus:ring-primary/20"
+                    }`}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
-                    className="rounded-md border-2 border-gray-300 bg-white p-3 text-gray-700 transition-all hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                    className="rounded-md border-2 border-border bg-card p-3 text-card-foreground transition-all hover:border-accent hover:bg-accent dark:hover:bg-accent"
                   >
                     {showPassword ? (
                       <Eye className="h-5 w-5" />
@@ -312,16 +312,16 @@ const CreateRoomForm = memo(function CreateRoomForm({
                   </button>
                 </div>
                 {settings.roomPassword.length === 4 ? (
-                  <p className="mt-2 flex items-center gap-1 text-xs text-green-600 dark:text-green-400">
+                  <p className="mt-2 flex items-center gap-1 text-xs text-primary">
                     <Check className="h-4 w-4" />
                     Şifre kaydedildi
                   </p>
                 ) : passwordError ? (
-                  <p className="mt-2 text-xs text-red-600 dark:text-red-400">
+                  <p className="mt-2 text-xs text-destructive">
                     4 karakterli şifre gerekli
                   </p>
                 ) : (
-                  <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                  <p className="mt-2 text-xs text-muted-foreground">
                     4 karakterli şifre girin (harf veya rakam)
                   </p>
                 )}
@@ -329,15 +329,15 @@ const CreateRoomForm = memo(function CreateRoomForm({
             )}
 
             {/* İzleyicilere İzin Ver Toggle */}
-            <div className="rounded-md border-2 border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
+            <div className="rounded-md border-2 border-border bg-card p-4">
               <label className="flex cursor-pointer items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <Eye className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                  <Eye className="h-5 w-5 text-muted-foreground" />
                   <div>
-                    <span className="block text-sm font-semibold text-gray-900 dark:text-white">
+                    <span className="block text-sm font-semibold text-card-foreground">
                       İzleyicilere İzin Ver
                     </span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                    <span className="text-xs text-muted-foreground">
                       İzleyiciler oy veremez, sadece görüntüleyebilir
                     </span>
                   </div>
@@ -354,22 +354,22 @@ const CreateRoomForm = memo(function CreateRoomForm({
                     }
                     className="peer sr-only"
                   />
-                  <div className="h-6 w-11 rounded-full bg-gray-300 transition-colors peer-checked:bg-blue-600 dark:bg-gray-700 peer-checked:dark:bg-blue-600"></div>
-                  <div className="absolute left-1 top-1 h-4 w-4 rounded-full bg-white transition-transform peer-checked:translate-x-5"></div>
+                  <div className="h-6 w-11 rounded-full bg-muted transition-colors peer-checked:bg-primary"></div>
+                  <div className="absolute left-1 top-1 h-4 w-4 rounded-full bg-background transition-transform peer-checked:translate-x-5"></div>
                 </div>
               </label>
             </div>
 
             {/* Otomatik Açıklama Toggle */}
-            <div className="rounded-md border-2 border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
+            <div className="rounded-md border-2 border-border bg-card p-4">
               <label className="flex cursor-pointer items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <Sparkles className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                  <Sparkles className="h-5 w-5 text-muted-foreground" />
                   <div>
-                    <span className="block text-sm font-semibold text-gray-900 dark:text-white">
+                    <span className="block text-sm font-semibold text-card-foreground">
                       Otomatik Açıklama
                     </span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                    <span className="text-xs text-muted-foreground">
                       Tüm oylar verildiğinde otomatik olarak açıklanır
                     </span>
                   </div>
@@ -386,8 +386,8 @@ const CreateRoomForm = memo(function CreateRoomForm({
                     }
                     className="peer sr-only"
                   />
-                  <div className="h-6 w-11 rounded-full bg-gray-300 transition-colors peer-checked:bg-blue-600 dark:bg-gray-700 peer-checked:dark:bg-blue-600"></div>
-                  <div className="absolute left-1 top-1 h-4 w-4 rounded-full bg-white transition-transform peer-checked:translate-x-5"></div>
+                  <div className="h-6 w-11 rounded-full bg-muted transition-colors peer-checked:bg-primary"></div>
+                  <div className="absolute left-1 top-1 h-4 w-4 rounded-full bg-background transition-transform peer-checked:translate-x-5"></div>
                 </div>
               </label>
             </div>
@@ -410,7 +410,7 @@ const CreateRoomForm = memo(function CreateRoomForm({
           {loading ? "Oda oluşturuluyor..." : "Oda Oluştur"}
         </Button>
         {!isFormValid && (
-          <p className="mt-3 text-center text-sm text-gray-600 dark:text-gray-400">
+          <p className="mt-3 text-center text-sm text-muted-foreground">
             {name.trim().length < 3 && "Oda adı en az 3 karakter olmalıdır"}
             {name.trim().length >= 3 && settings.isPrivate && settings.roomPassword.length !== 4 && "Özel oda için 4 karakterli şifre gerekli"}
           </p>

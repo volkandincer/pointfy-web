@@ -174,7 +174,6 @@ export async function POST(request: Request) {
       }
     } catch (typeCheckError) {
       // Issue type kontrolü başarısız olursa devam et (belki API farklıdır)
-      // eslint-disable-next-line no-console
       console.warn("Issue type kontrolü başarısız:", typeCheckError);
     }
 

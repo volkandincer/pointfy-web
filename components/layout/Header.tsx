@@ -1,8 +1,25 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { memo, useState, useEffect, useRef } from "react";
-import { Layers, X, Menu, Home, Zap, ClipboardList, FileText, Settings, CheckSquare, Sparkles, Info, Mail, ChevronDown, User, LogOut, Sun, Moon } from "lucide-react";
+import {
+  X,
+  Menu,
+  Home,
+  Zap,
+  ClipboardList,
+  FileText,
+  CheckSquare,
+  Sparkles,
+  Info,
+  Mail,
+  ChevronDown,
+  User,
+  LogOut,
+  Sun,
+  Moon,
+} from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { getSupabase } from "@/lib/supabase";
 import { lockBodyScroll, unlockBodyScroll } from "@/lib/utils/scrollLock";
@@ -13,21 +30,9 @@ interface HeaderProps {
   navigationItems: NavigationItem[];
 }
 
-// Navigation item icon mapping
-const getNavIcon = (href: string) => {
-  if (href === "/" || href.startsWith("/app/rooms")) return Home;
-  if (href.startsWith("/app/jira")) return Zap;
-  if (href.startsWith("/app/boards")) return ClipboardList;
-  if (href.startsWith("/app/tasks")) return CheckSquare;
-  if (href.startsWith("/app/notes")) return FileText;
-  if (href.startsWith("/app/account")) return Settings;
-  if (href === "/features" || href === "/#features") return Sparkles;
-  if (href === "/about") return Info;
-  if (href === "/contact") return Mail;
-  return null;
-};
-
 const Header = memo(function Header({ navigationItems }: HeaderProps) {
+  // navigationItems prop is kept for interface compatibility but not currently used
+  void navigationItems;
   const pathname = usePathname();
   const router = useRouter();
   const { theme, toggleTheme } = useTheme();
@@ -88,7 +93,10 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
   // More menu dışına tıklanınca kapat
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (moreMenuRef.current && !moreMenuRef.current.contains(event.target as Node)) {
+      if (
+        moreMenuRef.current &&
+        !moreMenuRef.current.contains(event.target as Node)
+      ) {
         setMoreMenuOpen(false);
       }
     };
@@ -119,60 +127,66 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b-2 border-border bg-background shadow-sm">
+    <header className="sticky top-0 z-50 w-full border-b-2 border-border/60 bg-background/80 backdrop-blur-md shadow-sm">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
         {/* Logo */}
         <Link
           href="/"
-          className="group flex items-center gap-2.5 text-xl font-bold transition-all"
+          className="group flex items-center gap-1 text-xl font-bold transition-all hover:opacity-80"
           onClick={closeMobileMenu}
         >
-          <div className="flex h-9 w-9 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-600 shadow-sm transition-all group-hover:border-blue-700 group-hover:bg-blue-700 group-hover:shadow-md">
-            <Layers className="h-5 w-5 text-white" />
+          <div className="relative flex h-10 w-10 shrink-0 items-center justify-center">
+            <Image
+              src="/logo.png"
+              alt="TeamHubX Logo"
+              width={40}
+              height={40}
+              className="h-full w-full object-contain"
+              priority
+              unoptimized
+            />
           </div>
-          <span className="font-bold text-foreground">
-            TeamHubX
-          </span>
+          <span className="font-bold text-foreground">TeamHubX</span>
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-1 md:flex">
+        <nav className="hidden items-center gap-2 md:flex">
           {/* Ana Sayfa */}
           <Link
             href="/"
-            className={`group flex min-h-[44px] items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold transition-all ${
+            className={`group relative flex min-h-[44px] items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-all duration-200 ${
               pathname === "/"
-                ? "bg-primary/10 text-primary"
-                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                ? "bg-primary/10 text-primary shadow-sm"
+                : "text-muted-foreground hover:bg-accent/80 hover:text-accent-foreground"
             }`}
           >
-            <Home className="h-4 w-4" />
+            <Home className="h-4 w-4 transition-transform group-hover:scale-110" />
             <span>Ana Sayfa</span>
           </Link>
 
           {/* Jira */}
           <Link
             href="/app/jira"
-            className={`group flex min-h-[44px] items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold transition-all ${
+            className={`group relative flex min-h-[44px] items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-all duration-200 ${
               pathname?.startsWith("/app/jira")
-                ? "bg-primary/10 text-primary"
-                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                ? "bg-primary/10 text-primary shadow-sm"
+                : "text-muted-foreground hover:bg-accent/80 hover:text-accent-foreground"
             }`}
           >
-            <Zap className="h-4 w-4" />
+            <Zap className="h-4 w-4 transition-transform group-hover:scale-110" />
             <span>Jira</span>
           </Link>
 
           {/* Board'lar */}
           <Link
             href="/app/boards"
-            className={`group flex min-h-[44px] items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold transition-all ${
+            className={`group relative flex min-h-[44px] items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-all duration-200 ${
               pathname?.startsWith("/app/boards")
-                ? "bg-primary/10 text-primary"
-                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                ? "bg-primary/10 text-primary shadow-sm"
+                : "text-muted-foreground hover:bg-accent/80 hover:text-accent-foreground"
             }`}
           >
-            <ClipboardList className="h-4 w-4" />
+            <ClipboardList className="h-4 w-4 transition-transform group-hover:scale-110" />
             <span>Board&apos;lar</span>
           </Link>
 
@@ -180,19 +194,28 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
           <div className="relative" ref={moreMenuRef}>
             <button
               onClick={() => setMoreMenuOpen(!moreMenuOpen)}
-              className={`group flex min-h-[44px] items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold transition-all ${
-                moreMenuOpen || pathname?.startsWith("/app/tasks") || pathname?.startsWith("/app/notes") || pathname === "/features" || pathname === "/about" || pathname === "/contact"
-                  ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+              className={`group relative flex min-h-[44px] items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-all duration-200 ${
+                moreMenuOpen ||
+                pathname?.startsWith("/app/tasks") ||
+                pathname?.startsWith("/app/notes") ||
+                pathname === "/features" ||
+                pathname === "/about" ||
+                pathname === "/contact"
+                  ? "bg-primary/10 text-primary shadow-sm"
+                  : "text-muted-foreground hover:bg-accent/80 hover:text-accent-foreground"
               }`}
             >
               <span>Daha Fazla</span>
-              <ChevronDown className={`h-4 w-4 transition-transform ${moreMenuOpen ? "rotate-180" : ""}`} />
+              <ChevronDown
+                className={`h-4 w-4 transition-transform duration-200 ${
+                  moreMenuOpen ? "rotate-180" : ""
+                }`}
+              />
             </button>
 
             {/* Dropdown Menu */}
             {moreMenuOpen && (
-              <div className="absolute right-0 top-full z-50 mt-1 w-48 border-2 border-border bg-popover shadow-md">
+              <div className="absolute right-0 top-full z-50 mt-2 w-56 rounded-lg border-2 border-border/60 bg-popover/95 backdrop-blur-md shadow-xl">
                 <div className="py-1">
                   <Link
                     href="/app/tasks"
@@ -255,7 +278,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                     <Mail className="h-4 w-4" />
                     <span>İletişim</span>
                   </Link>
-                  
+
                   {/* Theme Switcher */}
                   <div className="my-1 border-t-2 border-border" />
                   <div className="flex min-h-[44px] items-center justify-between gap-3 px-4 py-2">
@@ -277,7 +300,11 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                       className={`relative flex h-6 w-11 items-center rounded-full border-2 border-border transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 ${
                         theme === "dark" ? "bg-primary" : "bg-muted"
                       }`}
-                      aria-label={theme === "dark" ? "Light mode'a geç" : "Dark mode'a geç"}
+                      aria-label={
+                        theme === "dark"
+                          ? "Light mode'a geç"
+                          : "Dark mode'a geç"
+                      }
                     >
                       <span
                         className={`block h-4 w-4 rounded-full bg-background transition-transform ${
@@ -286,7 +313,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                       />
                     </button>
                   </div>
-                  
+
                   {isAuthed && (
                     <>
                       <div className="my-1 border-t-2 border-border" />
@@ -337,14 +364,14 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
         <div className="flex items-center gap-2 md:hidden">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md border-2 border-border bg-card text-foreground transition-all hover:border-border hover:bg-accent active:bg-accent"
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border-2 border-border/60 bg-card/80 backdrop-blur-sm text-foreground transition-all duration-200 hover:border-primary/50 hover:bg-accent/80 active:bg-accent"
             aria-label={mobileMenuOpen ? "Menüyü Kapat" : "Menüyü Aç"}
             aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? (
-              <X className="h-6 w-6" />
+              <X className="h-6 w-6 transition-transform" />
             ) : (
-              <Menu className="h-6 w-6" />
+              <Menu className="h-6 w-6 transition-transform" />
             )}
           </button>
         </div>
@@ -355,7 +382,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
         <>
           {/* Backdrop */}
           <div
-            className="fixed inset-0 z-40 bg-black/20 md:hidden"
+            className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm md:hidden"
             onClick={closeMobileMenu}
             onTouchStart={(e) => {
               e.preventDefault();
@@ -363,7 +390,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
             }}
           />
           {/* Menu Content */}
-          <div className="absolute left-0 right-0 z-50 border-t-2 border-border bg-background shadow-md md:hidden">
+          <div className="absolute left-0 right-0 z-50 border-t-2 border-border/60 bg-background/95 backdrop-blur-md shadow-xl md:hidden">
             <nav className="container mx-auto px-4 py-3">
               <div className="flex flex-col gap-1">
                 {/* Ana Sayfa */}
@@ -389,7 +416,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                   className={`flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-base font-semibold transition-all active:bg-gray-200 dark:active:bg-gray-700 ${
                     pathname?.startsWith("/app/jira")
                       ? "bg-primary/10 text-primary"
-                      : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                      : "text-card-foreground hover:bg-accent hover:text-foreground"
                   }`}
                 >
                   <Zap className="h-5 w-5 shrink-0" />
@@ -404,7 +431,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                   className={`flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-base font-semibold transition-all active:bg-gray-200 dark:active:bg-gray-700 ${
                     pathname?.startsWith("/app/boards")
                       ? "bg-primary/10 text-primary"
-                      : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                      : "text-card-foreground hover:bg-accent hover:text-foreground"
                   }`}
                 >
                   <ClipboardList className="h-5 w-5 shrink-0" />
@@ -419,7 +446,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                   className={`flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-base font-semibold transition-all active:bg-gray-200 dark:active:bg-gray-700 ${
                     pathname?.startsWith("/app/tasks")
                       ? "bg-primary/10 text-primary"
-                      : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                      : "text-card-foreground hover:bg-accent hover:text-foreground"
                   }`}
                 >
                   <CheckSquare className="h-5 w-5 shrink-0" />
@@ -434,7 +461,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                   className={`flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-base font-semibold transition-all active:bg-gray-200 dark:active:bg-gray-700 ${
                     pathname?.startsWith("/app/notes")
                       ? "bg-primary/10 text-primary"
-                      : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                      : "text-card-foreground hover:bg-accent hover:text-foreground"
                   }`}
                 >
                   <FileText className="h-5 w-5 shrink-0" />
@@ -451,7 +478,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                   className={`flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-base font-semibold transition-all active:bg-gray-200 dark:active:bg-gray-700 ${
                     pathname === "/features"
                       ? "bg-primary/10 text-primary"
-                      : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                      : "text-card-foreground hover:bg-accent hover:text-foreground"
                   }`}
                 >
                   <Sparkles className="h-5 w-5 shrink-0" />
@@ -466,7 +493,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                   className={`flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-base font-semibold transition-all active:bg-gray-200 dark:active:bg-gray-700 ${
                     pathname === "/about"
                       ? "bg-primary/10 text-primary"
-                      : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                      : "text-card-foreground hover:bg-accent hover:text-foreground"
                   }`}
                 >
                   <Info className="h-5 w-5 shrink-0" />
@@ -481,7 +508,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                   className={`flex min-h-[48px] items-center gap-3 rounded-md px-4 py-3 text-base font-semibold transition-all active:bg-gray-200 dark:active:bg-gray-700 ${
                     pathname === "/contact"
                       ? "bg-primary/10 text-primary"
-                      : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                      : "text-card-foreground hover:bg-accent hover:text-foreground"
                   }`}
                 >
                   <Mail className="h-5 w-5 shrink-0" />
@@ -535,7 +562,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                     </Link>
                   </>
                 )}
-                
+
                 {/* Theme Switcher - Mobile */}
                 <div className="my-1 border-t-2 border-border" />
                 <div className="flex min-h-[48px] items-center justify-between gap-3 rounded-md border-2 border-border bg-card px-4 py-3">
@@ -558,7 +585,9 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
                     className={`relative flex h-7 w-12 items-center rounded-full border-2 border-border transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 ${
                       theme === "dark" ? "bg-primary" : "bg-muted"
                     }`}
-                    aria-label={theme === "dark" ? "Light mode'a geç" : "Dark mode'a geç"}
+                    aria-label={
+                      theme === "dark" ? "Light mode'a geç" : "Dark mode'a geç"
+                    }
                   >
                     <span
                       className={`block h-5 w-5 rounded-full bg-background transition-transform ${

@@ -3,6 +3,7 @@
 import { memo, useState, useEffect, useCallback } from "react";
 import { CheckCircle2, AlertCircle } from "lucide-react";
 import Modal from "@/components/ui/Modal";
+import Button from "@/components/ui/Button";
 import { getSupabase } from "@/lib/supabase";
 
 interface JiraStoryPointModalProps {
@@ -109,14 +110,14 @@ const JiraStoryPointModal = memo(function JiraStoryPointModal({
     <Modal open={open} onClose={onClose} title="Jira Story Point Set Et">
       <div className="space-y-4">
         {error && (
-          <div className="flex items-center gap-2 border-2 border-red-300 bg-red-50 p-3 text-sm text-red-700 shadow-sm dark:border-red-700 dark:bg-red-900/20 dark:text-red-400">
+          <div className="flex items-center gap-2 border-2 border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive shadow-sm">
             <AlertCircle className="h-4 w-4 flex-shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         {success && (
-          <div className="flex items-center gap-2 border-2 border-green-300 bg-green-50 p-3 text-sm text-green-700 shadow-sm dark:border-green-700 dark:bg-green-900/20 dark:text-green-400">
+          <div className="flex items-center gap-2 border-2 border-green-600/50 bg-green-600/10 p-3 text-sm text-green-600 dark:text-green-400 shadow-sm">
             <CheckCircle2 className="h-4 w-4 flex-shrink-0" />
             <span>Story point başarıyla Jira&apos;ya gönderildi!</span>
           </div>
@@ -126,7 +127,7 @@ const JiraStoryPointModal = memo(function JiraStoryPointModal({
           <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
             Issue
           </label>
-          <div className="rounded-md border-2 border-gray-300 bg-gray-50 px-3 py-2 font-mono text-sm text-gray-900 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+          <div className="rounded-md border-2 border-border bg-muted px-3 py-2 font-mono text-sm text-card-foreground shadow-sm">
             {issueKey}
           </div>
         </div>
@@ -134,11 +135,11 @@ const JiraStoryPointModal = memo(function JiraStoryPointModal({
         <div>
           <label
             htmlFor="story-points"
-            className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+            className="mb-2 block text-sm font-medium text-card-foreground"
           >
             Story Points
           </label>
-          <div className="mb-2 text-xs text-gray-500 dark:text-gray-400">
+          <div className="mb-2 text-xs text-muted-foreground">
             Ortalama puan: {averagePoint.toFixed(1)} → Yuvarlanmış: {Math.round(averagePoint)}
           </div>
           <input
@@ -155,29 +156,32 @@ const JiraStoryPointModal = memo(function JiraStoryPointModal({
                 setStoryPoints(0);
               }
             }}
-            className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            className="w-full rounded-md border-2 border-input bg-input px-3 py-2 text-card-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
             placeholder="Story points"
           />
         </div>
 
         <div className="flex items-center justify-end gap-3 pt-4">
-          <button
+          <Button
             type="button"
+            variant="secondary"
+            size="md"
             onClick={onClose}
             disabled={loading}
-            className="inline-flex h-10 items-center justify-center rounded-md border-2 border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 disabled:opacity-60"
           >
             {success ? "Kapat" : "İptal"}
-          </button>
+          </Button>
           {!success && (
-            <button
+            <Button
               type="button"
+              variant="primary"
+              size="md"
               onClick={handleSubmit}
               disabled={loading || storyPoints < 0}
-              className="inline-flex h-10 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-600 px-5 text-sm font-semibold text-white transition hover:border-blue-700 hover:bg-blue-700 disabled:opacity-60 dark:border-blue-500 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700"
+              loading={loading}
             >
               {loading ? "Gönderiliyor..." : "Jira'ya Gönder"}
-            </button>
+            </Button>
           )}
         </div>
       </div>

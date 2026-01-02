@@ -60,19 +60,19 @@ export default function ContactPage() {
         <div className="mx-auto max-w-2xl">
           {/* Header Section */}
           <div className="mb-8 text-center">
-            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
-              <Mail className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-md border-2 border-primary bg-primary/10">
+              <Mail className="h-8 w-8 text-primary" />
             </div>
-            <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+            <h1 className="mb-2 text-3xl font-bold text-card-foreground sm:text-4xl">
               İletişim
             </h1>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-muted-foreground">
               Sorularınız, önerileriniz veya geri bildirimleriniz için bizimle iletişime geçin.
             </p>
           </div>
 
           {/* Form Card */}
-          <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:p-8">
+          <div className="rounded-md border-2 border-border bg-card p-6 shadow-sm sm:p-8">
             <form onSubmit={handleSubmit} className="space-y-5" noValidate>
               <input
                 type="text"
@@ -86,7 +86,7 @@ export default function ContactPage() {
               <div>
                 <label
                   htmlFor="name"
-                  className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                  className="mb-2 block text-sm font-semibold text-card-foreground"
                 >
                   Ad Soyad
                 </label>
@@ -98,7 +98,7 @@ export default function ContactPage() {
                   onChange={(e) =>
                     setForm((f) => ({ ...f, name: e.target.value }))
                   }
-                  className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
+                  className="w-full rounded-md border-2 border-input bg-input px-4 py-2.5 text-card-foreground outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
                   placeholder="Adınız ve soyadınız"
                 />
               </div>
@@ -106,7 +106,7 @@ export default function ContactPage() {
               <div>
                 <label
                   htmlFor="email"
-                  className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                  className="mb-2 block text-sm font-semibold text-card-foreground"
                 >
                   E-posta
                 </label>
@@ -118,7 +118,7 @@ export default function ContactPage() {
                   onChange={(e) =>
                     setForm((f) => ({ ...f, email: e.target.value }))
                   }
-                  className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
+                  className="w-full rounded-md border-2 border-input bg-input px-4 py-2.5 text-card-foreground outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
                   placeholder="ornek@email.com"
                 />
               </div>
@@ -126,7 +126,7 @@ export default function ContactPage() {
               <div>
                 <label
                   htmlFor="message"
-                  className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                  className="mb-2 block text-sm font-semibold text-card-foreground"
                 >
                   Mesaj
                 </label>
@@ -138,7 +138,7 @@ export default function ContactPage() {
                   onChange={(e) =>
                     setForm((f) => ({ ...f, message: e.target.value }))
                   }
-                  className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
+                  className="w-full rounded-md border-2 border-input bg-input px-4 py-2.5 text-card-foreground outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
                   placeholder="Mesajınızı buraya yazın..."
                 />
               </div>
@@ -148,8 +148,8 @@ export default function ContactPage() {
                 <div
                   className={`flex items-center gap-2 rounded-md border-2 p-3 ${
                     result.type === "success"
-                      ? "border-green-300 bg-green-50 text-green-700 dark:border-green-700 dark:bg-green-900/20 dark:text-green-400"
-                      : "border-red-300 bg-red-50 text-red-700 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400"
+                      ? "border-green-600/50 bg-green-600/10 text-green-600 dark:text-green-400"
+                      : "border-destructive/50 bg-destructive/10 text-destructive"
                   }`}
                 >
                   {result.type === "success" ? (

@@ -2,6 +2,7 @@
 
 import { memo, useCallback, useEffect, useState } from "react";
 import { RefreshCw, CheckCircle2, Pause, Crown, BarChart3, X, RotateCcw } from "lucide-react";
+import Card from "@/components/ui/Card";
 import { getSupabase } from "@/lib/supabase";
 import { useVotes } from "@/hooks/useVotes";
 import { useVotingSession } from "@/hooks/useVotingSession";
@@ -104,12 +105,12 @@ const AdminVotingView = memo(function AdminVotingView({
 
   return (
     <div className="space-y-6">
-      <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+      <Card padding="lg">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+          <h2 className="text-xl font-bold text-card-foreground">
             {activeTask.title}
           </h2>
-          <span className="flex items-center gap-1.5 rounded-md border-2 border-blue-300 bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700 shadow-sm dark:border-blue-700 dark:bg-blue-900 dark:text-blue-300">
+          <span className="flex items-center gap-1.5 rounded-md border-2 border-primary/50 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary shadow-sm">
             {isVotingActive ? (
               <>
                 <RefreshCw className="h-3.5 w-3.5" />
@@ -129,102 +130,102 @@ const AdminVotingView = memo(function AdminVotingView({
           </span>
         </div>
         {activeTask.description && (
-          <p className="mb-4 text-gray-600 dark:text-gray-400">
+          <p className="mb-4 text-muted-foreground">
             {activeTask.description}
           </p>
         )}
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div>
-            <span className="text-gray-500 dark:text-gray-400">
+            <span className="text-muted-foreground">
               Toplam Katılımcı
             </span>
-            <p className="font-semibold text-gray-900 dark:text-white">
+            <p className="font-semibold text-card-foreground">
               {votes.length}
             </p>
           </div>
         </div>
-      </div>
+      </Card>
 
       {isVotingActive && (
-        <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+        <Card padding="lg">
           <div className="mb-4 text-center">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-muted-foreground">
               Kalan Süre
             </p>
-            <p className="text-3xl font-bold text-gray-900 dark:text-white">
+            <p className="text-3xl font-bold text-card-foreground">
               {remainingTime} saniye
             </p>
           </div>
-        </div>
+        </Card>
       )}
 
-      <div className="border-2 border-amber-300 bg-amber-50 p-6 dark:border-amber-700 dark:bg-amber-900/20">
+      <Card padding="lg" borderColor="primary" className="border-2 border-primary/50 bg-primary/10">
         <div className="flex items-center gap-3">
-          <Crown className="h-6 w-6 text-amber-600 dark:text-amber-400" />
+          <Crown className="h-6 w-6 text-primary" />
           <div>
-            <p className="font-semibold text-gray-900 dark:text-white">
+            <p className="font-semibold text-card-foreground">
               Admin Modu
             </p>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-muted-foreground">
               Puanlama yapamazsınız
             </p>
           </div>
         </div>
-      </div>
+      </Card>
 
       {activeTask.status === "completed" && validVotes.length > 0 && (
-        <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
-          <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">
+        <Card padding="lg">
+          <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-card-foreground">
             <BarChart3 className="h-5 w-5" />
             Final Sonuçları
           </h3>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <span className="text-gray-500 dark:text-gray-400">
+              <span className="text-muted-foreground">
                 Ortalama Puan
               </span>
-              <p className="font-semibold text-gray-900 dark:text-white">
+              <p className="font-semibold text-card-foreground">
                 {avgPoint}
               </p>
             </div>
             <div>
-              <span className="text-gray-500 dark:text-gray-400">
+              <span className="text-muted-foreground">
                 En Yüksek
               </span>
-              <p className="font-semibold text-gray-900 dark:text-white">
+              <p className="font-semibold text-card-foreground">
                 {maxPoint}
               </p>
             </div>
             <div>
-              <span className="text-gray-500 dark:text-gray-400">En Düşük</span>
-              <p className="font-semibold text-gray-900 dark:text-white">
+              <span className="text-muted-foreground">En Düşük</span>
+              <p className="font-semibold text-card-foreground">
                 {minPoint}
               </p>
             </div>
             <div>
-              <span className="text-gray-500 dark:text-gray-400">
+              <span className="text-muted-foreground">
                 Toplam Katılımcı
               </span>
-              <p className="font-semibold text-gray-900 dark:text-white">
+              <p className="font-semibold text-card-foreground">
                 {validVotes.length}
               </p>
             </div>
           </div>
-        </div>
+        </Card>
       )}
 
       {isVotingActive && (
         <div className="space-y-3">
           {/* Puan Durumu */}
           {validVotes.length === 0 && (
-            <div className="border-2 border-yellow-300 bg-yellow-50 p-4 dark:border-yellow-700 dark:bg-yellow-900/20">
-              <p className="text-sm font-semibold text-yellow-800 dark:text-yellow-300">
+            <Card padding="md" borderColor="primary" className="border-2 border-primary/50 bg-primary/10">
+              <p className="text-sm font-semibold text-primary">
                 ⚠️ Henüz hiç puan verilmedi
               </p>
-              <p className="mt-1 text-xs text-yellow-700 dark:text-yellow-400">
+              <p className="mt-1 text-xs text-muted-foreground">
                 Katılımcılar puan vermeye başladığında burada görünecek
               </p>
-            </div>
+            </Card>
           )}
 
           {/* Admin Aksiyon Butonları */}
@@ -263,28 +264,28 @@ const AdminVotingView = memo(function AdminVotingView({
 
       {/* Oylama aktif değilse ve task pending ise */}
       {!isVotingActive && activeTask.status === "pending" && (
-        <div className="border-2 border-gray-300 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
-          <p className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">
+        <Card padding="md">
+          <p className="mb-3 text-sm font-semibold text-card-foreground">
             Oylama beklemede
           </p>
-          <p className="text-xs text-gray-600 dark:text-gray-400">
+          <p className="text-xs text-muted-foreground">
             Task listesinden yeni bir task seçebilir veya bu task&apos;ı tekrar aktif edebilirsiniz.
           </p>
-        </div>
+        </Card>
       )}
 
-      <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
-        <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+      <Card padding="lg">
+        <h3 className="mb-4 text-lg font-semibold text-card-foreground">
           Katılımcı Puanları
         </h3>
         {votesLoading ? (
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-muted-foreground">
             Yükleniyor...
           </p>
         ) : votes.length === 0 ? (
           <div className="py-8 text-center">
-            <BarChart3 className="mx-auto mb-2 h-12 w-12 text-gray-400 dark:text-gray-500" />
-            <p className="text-sm font-medium text-gray-900 dark:text-white">
+            <BarChart3 className="mx-auto mb-2 h-12 w-12 text-muted-foreground" />
+            <p className="text-sm font-medium text-card-foreground">
               Henüz puan yok
             </p>
           </div>
@@ -293,19 +294,19 @@ const AdminVotingView = memo(function AdminVotingView({
             {votes.map((vote) => (
               <div
                 key={vote.user_key || vote.user_name}
-                className="flex items-center justify-between border-2 border-gray-300 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800"
+                className="flex items-center justify-between rounded-md border-2 border-border bg-muted p-3"
               >
-                <span className="font-medium text-gray-900 dark:text-white">
+                <span className="font-medium text-card-foreground">
                   {vote.user_name}
                 </span>
-                <span className="font-semibold text-gray-900 dark:text-white">
+                <span className="font-semibold text-card-foreground">
                   {vote.point ?? "Girilmedi"}
                 </span>
               </div>
             ))}
           </div>
         )}
-      </div>
+      </Card>
     </div>
   );
 });
