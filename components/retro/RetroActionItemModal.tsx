@@ -152,125 +152,137 @@ const RetroActionItemModal = memo(function RetroActionItemModal({
       title={isEdit ? "Aksiyon Maddesini Düzenle" : "Yeni Aksiyon Maddesi Ekle"}
     >
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Content Input */}
-        <div>
-          <label
-            htmlFor="action-item-content"
-            className="mb-1 block text-sm font-medium text-muted-foreground"
-          >
-            Aksiyon Maddesi
-          </label>
-          <textarea
-            id="action-item-content"
-            rows={4}
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="Aksiyon maddesini yazın..."
-            required
-            className="w-full rounded-md border-2 border-input bg-input px-3 py-2 text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-          />
+        {/* Content Input Card */}
+        <div className="group relative overflow-hidden rounded-lg border-l-4 border-l-primary dark:border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md">
+          {/* Glow Effect */}
+          <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
+          
+          {/* Content */}
+          <div className="relative z-10">
+            <label
+              htmlFor="action-item-content"
+              className="mb-2 block text-sm font-medium text-card-foreground"
+            >
+              Aksiyon Maddesi
+            </label>
+            <textarea
+              id="action-item-content"
+              rows={4}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder="Aksiyon maddesini yazın..."
+              required
+              className="w-full rounded-md border-2 border-input bg-background px-3 py-2 text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+            />
+          </div>
         </div>
 
-        {/* Flag Selection */}
-        <div>
-          <label className="mb-2 block text-sm font-medium text-muted-foreground">
-            Flag / Etiket
-          </label>
+        {/* Flag Selection Card */}
+        <div className="group relative overflow-hidden rounded-lg border-l-4 border-l-primary dark:border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md">
+          {/* Glow Effect */}
+          <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
           
-          {/* Predefined Flags */}
-          <div className="mb-3 flex flex-wrap gap-2">
-            {PREDEFINED_FLAGS.map((flag) => (
-              <button
-                key={flag.value}
-                type="button"
-                onClick={() => handleFlagSelect(flag.value)}
-                className={`inline-flex items-center gap-1.5 rounded-md border-2 px-3 py-1.5 text-xs font-semibold transition ${
-                  selectedFlag === flag.value
-                    ? "border-foreground bg-foreground text-background"
-                    : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                }`}
-              >
-                <flag.icon className="h-3.5 w-3.5" />
-                {flag.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Custom Flags */}
-          {customFlags.length > 0 && (
+          {/* Content */}
+          <div className="relative z-10">
+            <label className="mb-2 block text-sm font-medium text-card-foreground">
+              Flag / Etiket
+            </label>
+          
+            {/* Predefined Flags */}
             <div className="mb-3 flex flex-wrap gap-2">
-              {customFlags.map((customFlag) => (
+              {PREDEFINED_FLAGS.map((flag) => (
                 <button
-                  key={customFlag.id}
+                  key={flag.value}
                   type="button"
-                  onClick={() => handleCustomFlagSelect(customFlag.id)}
-                  className={`rounded-md border-2 px-3 py-1.5 text-xs font-semibold transition ${
-                    selectedCustomFlag === customFlag.id
-                      ? "border-foreground bg-foreground text-background"
-                      : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                  onClick={() => handleFlagSelect(flag.value)}
+                  className={`inline-flex items-center gap-1.5 rounded-md border-2 px-3 py-1.5 text-xs font-semibold transition ${
+                    selectedFlag === flag.value
+                      ? "border-foreground bg-foreground text-background shadow-sm"
+                      : "border-border bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                   }`}
-                  style={{
-                    borderColor:
-                      selectedCustomFlag === customFlag.id
-                        ? undefined
-                        : customFlag.flag_color,
-                  }}
                 >
-                  {customFlag.flag_name}
+                  <flag.icon className="h-3.5 w-3.5" />
+                  {flag.label}
                 </button>
               ))}
             </div>
-          )}
 
-          {/* Add Custom Flag */}
-          {onAddCustomFlag && (
-            <div>
-              {!showCustomFlagInput ? (
-                <button
-                  type="button"
-                  onClick={() => setShowCustomFlagInput(true)}
-                  className="rounded-md border-2 border-dashed border-border bg-card px-3 py-1.5 text-xs font-semibold text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                >
-                  + Custom Flag Ekle
-                </button>
-              ) : (
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={newCustomFlagName}
-                    onChange={(e) => setNewCustomFlagName(e.target.value)}
-                    placeholder="Flag adı..."
-                    className="flex-1 rounded-md border-2 border-input bg-input px-3 py-1.5 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        handleAddCustomFlag();
-                      }
-                    }}
-                  />
-                  <Button
+            {/* Custom Flags */}
+            {customFlags.length > 0 && (
+              <div className="mb-3 flex flex-wrap gap-2">
+                {customFlags.map((customFlag) => (
+                  <button
+                    key={customFlag.id}
                     type="button"
-                    onClick={handleAddCustomFlag}
-                    variant="primary"
-                    size="sm"
-                  >
-                    Ekle
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      setShowCustomFlagInput(false);
-                      setNewCustomFlagName("");
+                    onClick={() => handleCustomFlagSelect(customFlag.id)}
+                    className={`rounded-md border-2 px-3 py-1.5 text-xs font-semibold transition ${
+                      selectedCustomFlag === customFlag.id
+                        ? "border-foreground bg-foreground text-background shadow-sm"
+                        : "border-border bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                    }`}
+                    style={{
+                      borderColor:
+                        selectedCustomFlag === customFlag.id
+                          ? undefined
+                          : customFlag.flag_color,
                     }}
-                    variant="secondary"
-                    size="sm"
                   >
-                    İptal
-                  </Button>
-                </div>
-              )}
-            </div>
-          )}
+                    {customFlag.flag_name}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Add Custom Flag */}
+            {onAddCustomFlag && (
+              <div>
+                {!showCustomFlagInput ? (
+                  <button
+                    type="button"
+                    onClick={() => setShowCustomFlagInput(true)}
+                    className="rounded-md border-2 border-dashed border-border bg-card px-3 py-1.5 text-xs font-semibold text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                  >
+                    + Custom Flag Ekle
+                  </button>
+                ) : (
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={newCustomFlagName}
+                      onChange={(e) => setNewCustomFlagName(e.target.value)}
+                      placeholder="Flag adı..."
+                      className="flex-1 rounded-md border-2 border-input bg-background px-3 py-1.5 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleAddCustomFlag();
+                        }
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      onClick={handleAddCustomFlag}
+                      variant="primary"
+                      size="sm"
+                    >
+                      Ekle
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        setShowCustomFlagInput(false);
+                        setNewCustomFlagName("");
+                      }}
+                      variant="secondary"
+                      size="sm"
+                    >
+                      İptal
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Actions */}

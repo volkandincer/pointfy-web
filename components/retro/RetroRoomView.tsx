@@ -10,7 +10,6 @@ import type { RetroCategory, RetroCard } from "@/interfaces/Retro.interface";
 import RetroCardModal from "./RetroCardModal";
 import RetroActionItems from "./RetroActionItems";
 import Button from "@/components/ui/Button";
-import Card from "@/components/ui/Card";
 
 interface RetroRoomViewProps {
   roomId: string;
@@ -310,25 +309,39 @@ const RetroRoomView = memo(function RetroRoomView({
 
       {/* Timer Display */}
       {timerActive && (
-        <Card className={`${
+        <div className={`group relative overflow-hidden rounded-lg border-l-4 ${
           timerWarning
-            ? "border-destructive/50 bg-destructive/10"
-            : "border-primary/50 bg-primary/10"
-        }`}>
-          <div className="flex items-center justify-between">
+            ? "border-l-red-600 dark:border-l-red-500"
+            : "border-l-primary dark:border-l-primary"
+        } border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-5`}>
+          {/* Glow Effect */}
+          <div className={`absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br blur-xl transition-all group-hover:scale-150 ${
+            timerWarning
+              ? "from-red-500/10 to-red-500/5"
+              : "from-primary/10 to-primary/5"
+          }`} />
+          
+          {/* Content */}
+          <div className="relative z-10 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <span className="text-2xl">⏱️</span>
-              <div>
-                <p className={`text-lg font-bold ${
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-transparent transition-transform group-hover:scale-110">
+                <Timer className={`h-6 w-6 ${
                   timerWarning
-                    ? "text-destructive"
+                    ? "text-red-600 dark:text-red-400"
+                    : "text-primary"
+                }`} />
+              </div>
+              <div>
+                <p className={`text-2xl font-bold ${
+                  timerWarning
+                    ? "text-red-600 dark:text-red-400"
                     : "text-primary"
                 }`}>
                   {Math.floor(remainingSeconds / 60)}:{(remainingSeconds % 60).toString().padStart(2, "0")}
                 </p>
                 <p className={`text-xs font-medium ${
                   timerWarning
-                    ? "text-destructive"
+                    ? "text-red-600 dark:text-red-400"
                     : "text-primary"
                 }`}>
                   {timerWarning ? "Son 10 saniye!" : "Kart gönderme süresi"}
@@ -345,42 +358,52 @@ const RetroRoomView = memo(function RetroRoomView({
               </Button>
             )}
           </div>
-        </Card>
+        </div>
       )}
 
       {/* Status and Reveal Button */}
       {cardsRevealed ? (
-        <Card className="border-success/50 bg-success/10">
-          <div className="flex items-center justify-center gap-3">
-            <PartyPopper className="h-6 w-6 text-success" />
-            <p className="font-semibold text-success">
+        <div className="group relative overflow-hidden rounded-lg border-l-4 border-l-green-600 dark:border-l-green-500 border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-5">
+          {/* Glow Effect */}
+          <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-green-500/10 to-green-500/5 blur-xl transition-all group-hover:scale-150" />
+          
+          {/* Content */}
+          <div className="relative z-10 flex items-center justify-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-green-500/20 to-transparent transition-transform group-hover:scale-110">
+              <PartyPopper className="h-6 w-6 text-green-600 dark:text-green-400" />
+            </div>
+            <p className="font-semibold text-green-600 dark:text-green-400">
               Tüm kartlar açıldı! Yeni kart eklenemez.
             </p>
           </div>
-        </Card>
+        </div>
       ) : (
-        <Card>
-          <div className="flex items-center justify-between">
+        <div className="group relative overflow-hidden rounded-lg border-l-4 border-l-primary dark:border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-5">
+          {/* Glow Effect */}
+          <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
+          
+          {/* Content */}
+          <div className="relative z-10 flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Layers className="h-5 w-5 text-muted-foreground" />
-                <div className="text-sm">
-                  <span className="font-semibold text-card-foreground">
-                    {revealedCards.length}
-                  </span>
-                  <span className="text-muted-foreground">
-                    {" "}
-                    açık
-                  </span>
-                  <span className="mx-2 text-muted-foreground opacity-50">•</span>
-                  <span className="font-semibold text-card-foreground">
-                    {hiddenCards.length}
-                  </span>
-                  <span className="text-muted-foreground">
-                    {" "}
-                    gizli
-                  </span>
-                </div>
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-transparent transition-transform group-hover:scale-110">
+                <Layers className="h-6 w-6 text-primary" />
+              </div>
+              <div className="text-sm">
+                <span className="text-lg font-bold text-card-foreground">
+                  {revealedCards.length}
+                </span>
+                <span className="text-muted-foreground">
+                  {" "}
+                  açık
+                </span>
+                <span className="mx-2 text-muted-foreground opacity-50">•</span>
+                <span className="text-lg font-bold text-card-foreground">
+                  {hiddenCards.length}
+                </span>
+                <span className="text-muted-foreground">
+                  {" "}
+                  gizli
+                </span>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -409,197 +432,231 @@ const RetroRoomView = memo(function RetroRoomView({
               )}
             </div>
           </div>
-        </Card>
+        </div>
       )}
 
       {/* Add Card Form */}
       {!cardsRevealed && (
         <form
           onSubmit={handleSubmitCard}
-          className={`rounded-md border-2 p-4 shadow-sm ${
+          className={`group relative overflow-hidden rounded-lg border-l-4 ${
             isAdmin && !timerActive
-              ? "border-warning/50 bg-warning/10"
+              ? "border-l-yellow-600 dark:border-l-yellow-500"
               : timerActive && remainingSeconds === 0
-              ? "border-destructive/50 bg-destructive/10"
+              ? "border-l-red-600 dark:border-l-red-500"
               : timerWarning
-              ? "border-warning/50 bg-warning/10"
-              : "border-border bg-card"
-          }`}
+              ? "border-l-yellow-600 dark:border-l-yellow-500"
+              : "border-l-primary dark:border-l-primary"
+          } border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md transition-all duration-300 sm:p-5`}
         >
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
-            {/* Category Selector */}
-            <div className="flex gap-2">
-              {(["mad", "sad", "glad"] as RetroCategory[]).map((category) => {
-                const info = getCategoryInfo(category);
-                const isActive = activeTab === category;
-                const activeColor =
-                  info.color === "red"
-                    ? "bg-destructive/10 border-destructive text-destructive"
-                    : info.color === "blue"
-                    ? "bg-primary/10 border-primary text-primary"
-                    : "bg-success/10 border-success text-success";
-
-                return (
-                  <button
-                    key={category}
-                    type="button"
-                    onClick={() => setActiveTab(category)}
-                    className={`flex items-center gap-1.5 rounded-md border-2 px-3 py-2 text-sm font-semibold transition-all ${
-                      isActive
-                        ? activeColor
-                        : "border-border bg-muted text-muted-foreground hover:bg-accent"
-                    }`}
-                  >
-                    <info.icon className="h-4 w-4" />
-                    <span className="hidden sm:inline">{info.title}</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Text Input */}
-            <div className="flex-1">
-              <textarea
-                ref={textareaRef}
-                value={cardContent}
-                onChange={(e) => setCardContent(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder={`${getCategoryInfo(activeTab).title} kategorisine kart ekle...`}
-                className={`w-full resize-none rounded-md border-2 px-4 py-3 text-sm placeholder-muted-foreground focus:outline-none focus:ring-2 ${
-                  isAdmin && !timerActive
-                    ? "border-warning/50 bg-warning/10 text-muted-foreground cursor-not-allowed"
-                    : timerActive && remainingSeconds === 0
-                    ? "border-destructive/50 bg-destructive/10 text-muted-foreground cursor-not-allowed"
-                    : timerWarning
-                    ? "border-warning/50 bg-warning/10 text-foreground focus:border-warning focus:ring-warning/20"
-                    : "border-input bg-input text-foreground focus:border-primary focus:ring-primary/20"
-                }`}
-                rows={2}
-                disabled={isSubmitting || (isAdmin && !timerActive) || (timerActive && remainingSeconds === 0)}
-              />
-            </div>
-
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              disabled={isSubmitting || !cardContent.trim() || (isAdmin && !timerActive) || (timerActive && remainingSeconds === 0)}
-              variant={timerWarning ? "primary" : "primary"}
-              size="md"
-              icon={Send}
-              loading={isSubmitting}
-              className={timerWarning ? "border-orange-600 bg-orange-600 text-white hover:border-orange-700 hover:bg-orange-700" : ""}
-            >
-              Gönder
-            </Button>
-          </div>
-          <p className={`mt-2 text-xs ${
+          {/* Glow Effect */}
+          <div className={`absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br blur-xl transition-all group-hover:scale-150 ${
             isAdmin && !timerActive
-              ? "text-warning font-semibold"
+              ? "from-yellow-500/10 to-yellow-500/5"
               : timerActive && remainingSeconds === 0
-              ? "text-destructive font-semibold"
+              ? "from-red-500/10 to-red-500/5"
               : timerWarning
-              ? "text-warning font-semibold"
-              : "text-muted-foreground"
-          }`}>
-            {isAdmin && !timerActive
-              ? "Admin: Lütfen önce timer'ı başlatın!"
-              : timerActive && remainingSeconds === 0
-              ? "Süre doldu! Artık kart eklenemez."
-              : timerWarning
-              ? "Son 10 saniye! Hızlıca gönderin!"
-              : "İpucu: Göndermek için Cmd/Ctrl + Enter tuşlarına basın"}
-          </p>
+              ? "from-yellow-500/10 to-yellow-500/5"
+              : "from-primary/10 to-primary/5"
+          }`} />
+          
+          {/* Content */}
+          <div className="relative z-10">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+              {/* Category Selector */}
+              <div className="flex gap-2">
+                {(["mad", "sad", "glad"] as RetroCategory[]).map((category) => {
+                  const info = getCategoryInfo(category);
+                  const isActive = activeTab === category;
+                  const activeColor =
+                    info.color === "red"
+                      ? "bg-destructive/10 border-destructive text-destructive"
+                      : info.color === "blue"
+                      ? "bg-primary/10 border-primary text-primary"
+                      : "bg-success/10 border-success text-success";
+
+                  return (
+                    <button
+                      key={category}
+                      type="button"
+                      onClick={() => setActiveTab(category)}
+                      className={`flex items-center gap-1.5 rounded-md border-2 px-3 py-2 text-sm font-semibold transition-all ${
+                        isActive
+                          ? activeColor
+                          : "border-border bg-muted text-muted-foreground hover:bg-accent"
+                      }`}
+                    >
+                      <info.icon className="h-4 w-4" />
+                      <span className="hidden sm:inline">{info.title}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Text Input */}
+              <div className="flex-1">
+                <textarea
+                  ref={textareaRef}
+                  value={cardContent}
+                  onChange={(e) => setCardContent(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder={`${getCategoryInfo(activeTab).title} kategorisine kart ekle...`}
+                  className={`w-full resize-none rounded-md border-2 px-4 py-3 text-sm placeholder-muted-foreground focus:outline-none focus:ring-2 ${
+                    isAdmin && !timerActive
+                      ? "border-warning/50 bg-warning/10 text-muted-foreground cursor-not-allowed"
+                      : timerActive && remainingSeconds === 0
+                      ? "border-destructive/50 bg-destructive/10 text-muted-foreground cursor-not-allowed"
+                      : timerWarning
+                      ? "border-warning/50 bg-warning/10 text-foreground focus:border-warning focus:ring-warning/20"
+                      : "border-input bg-input text-foreground focus:border-primary focus:ring-primary/20"
+                  }`}
+                  rows={2}
+                  disabled={isSubmitting || (isAdmin && !timerActive) || (timerActive && remainingSeconds === 0)}
+                />
+              </div>
+
+              {/* Submit Button */}
+              <Button
+                type="submit"
+                disabled={isSubmitting || !cardContent.trim() || (isAdmin && !timerActive) || (timerActive && remainingSeconds === 0)}
+                variant={timerWarning ? "primary" : "primary"}
+                size="md"
+                icon={Send}
+                loading={isSubmitting}
+                className={timerWarning ? "border-orange-600 bg-orange-600 text-white hover:border-orange-700 hover:bg-orange-700" : ""}
+              >
+                Gönder
+              </Button>
+            </div>
+            <p className={`relative mt-2 text-xs ${
+              isAdmin && !timerActive
+                ? "text-warning font-semibold"
+                : timerActive && remainingSeconds === 0
+                ? "text-destructive font-semibold"
+                : timerWarning
+                ? "text-warning font-semibold"
+                : "text-muted-foreground"
+            }`}>
+              {isAdmin && !timerActive
+                ? "Admin: Lütfen önce timer'ı başlatın!"
+                : timerActive && remainingSeconds === 0
+                ? "Süre doldu! Artık kart eklenemez."
+                : timerWarning
+                ? "Son 10 saniye! Hızlıca gönderin!"
+                : "İpucu: Göndermek için Cmd/Ctrl + Enter tuşlarına basın"}
+            </p>
+          </div>
         </form>
       )}
 
       {/* Timer Start Modal */}
       {showTimerModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <Card className="w-full max-w-2xl">
-            <h3 className="mb-4 text-xl font-bold text-card-foreground">
-              Timer Başlat
-            </h3>
-            <p className="mb-6 text-sm text-muted-foreground">
-              Kart gönderme süresini seçin
-            </p>
+          <div className="group relative w-full max-w-2xl overflow-hidden rounded-lg border-l-4 border-l-primary dark:border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-6 shadow-xl">
+            {/* Glow Effect */}
+            <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
             
-            {/* Timer Seçenekleri - Kartlar */}
-            <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {timerOptions.map((option) => {
-                const isSelected = selectedDuration === option.minutes;
-                return (
-                  <button
-                    key={option.minutes}
-                    type="button"
-                    onClick={() => setSelectedDuration(option.minutes)}
-                    className={`rounded-md border-2 p-4 text-center transition-all ${
-                      isSelected
-                        ? "border-primary bg-primary/10 shadow-sm"
-                        : "border-border bg-card hover:border-primary hover:bg-primary/5"
-                    }`}
-                  >
-                    <div className={`text-2xl font-bold ${
-                      isSelected
-                        ? "text-primary"
-                        : "text-card-foreground"
-                    }`}>
-                      {option.label}
-                    </div>
-                    <div className={`mt-1 text-xs ${
-                      isSelected
-                        ? "text-primary"
-                        : "text-muted-foreground"
-                    }`}>
-                      {option.seconds} saniye
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
+            {/* Content */}
+            <div className="relative z-10">
+              <h3 className="mb-4 text-xl font-bold text-card-foreground">
+                Timer Başlat
+              </h3>
+              <p className="mb-6 text-sm text-muted-foreground">
+                Kart gönderme süresini seçin
+              </p>
+              
+              {/* Timer Seçenekleri - Kartlar */}
+              <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {timerOptions.map((option) => {
+                  const isSelected = selectedDuration === option.minutes;
+                  return (
+                    <button
+                      key={option.minutes}
+                      type="button"
+                      onClick={() => setSelectedDuration(option.minutes)}
+                      className={`group/option relative overflow-hidden rounded-lg border-l-4 ${
+                        isSelected
+                          ? "border-l-primary dark:border-l-primary"
+                          : "border-l-border"
+                      } border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 text-center shadow-sm transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-md ${
+                        isSelected ? "ring-2 ring-primary" : ""
+                      }`}
+                    >
+                      <div className={`text-2xl font-bold ${
+                        isSelected
+                          ? "text-primary"
+                          : "text-card-foreground"
+                      }`}>
+                        {option.label}
+                      </div>
+                      <div className={`mt-1 text-xs ${
+                        isSelected
+                          ? "text-primary"
+                          : "text-muted-foreground"
+                      }`}>
+                        {option.seconds} saniye
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
 
-            <div className="flex gap-3">
-              <Button
-                onClick={() => {
-                  setShowTimerModal(false);
-                  setSelectedDuration(null);
-                }}
-                variant="secondary"
-                size="md"
-                fullWidth
-              >
-                İptal
-              </Button>
-              <Button
-                onClick={handleStartTimer}
-                disabled={selectedDuration === null}
-                variant="primary"
-                size="md"
-                fullWidth
-              >
-                Başlat
-              </Button>
+              <div className="flex gap-3">
+                <Button
+                  onClick={() => {
+                    setShowTimerModal(false);
+                    setSelectedDuration(null);
+                  }}
+                  variant="secondary"
+                  size="md"
+                  fullWidth
+                >
+                  İptal
+                </Button>
+                <Button
+                  onClick={handleStartTimer}
+                  disabled={selectedDuration === null}
+                  variant="primary"
+                  size="md"
+                  fullWidth
+                >
+                  Başlat
+                </Button>
+              </div>
             </div>
-          </Card>
+          </div>
         </div>
       )}
 
       {/* Cards List */}
       <div className="space-y-3">
         {categoryCards.length === 0 ? (
-          <Card className="p-8 text-center">
-            {(() => {
-              const CategoryIcon = getCategoryInfo(activeTab).icon;
-              return <CategoryIcon className="mx-auto mb-2 h-12 w-12 text-muted-foreground" />;
-            })()}
-            <p className="font-medium text-card-foreground">
-              Henüz kart yok
-            </p>
-            <p className="text-sm text-muted-foreground">
-              {cardsRevealed
-                ? "Kartlar açıldı, yeni kart eklenemez."
-                : "Yukarıdaki formu kullanarak ilk kartı ekleyebilirsiniz."}
-            </p>
-          </Card>
+          <div className="group relative overflow-hidden rounded-lg border-l-4 border-l-primary dark:border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-8 text-center shadow-md">
+            {/* Glow Effect */}
+            <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
+            
+            {/* Content */}
+            <div className="relative z-10">
+              {(() => {
+                const CategoryIcon = getCategoryInfo(activeTab).icon;
+                return (
+                  <div className="mb-4 flex justify-center">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-transparent">
+                      <CategoryIcon className="h-8 w-8 text-primary" />
+                    </div>
+                  </div>
+                );
+              })()}
+              <p className="font-medium text-card-foreground">
+                Henüz kart yok
+              </p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {cardsRevealed
+                  ? "Kartlar açıldı, yeni kart eklenemez."
+                  : "Yukarıdaki formu kullanarak ilk kartı ekleyebilirsiniz."}
+              </p>
+            </div>
+          </div>
         ) : (
           categoryCards.map((card) => {
             const isOwnCard = card.user_key === userKey;
@@ -626,77 +683,91 @@ const RetroRoomView = memo(function RetroRoomView({
                     badge: "bg-success/10 text-success border-success/50",
                   };
 
+            // Glow effect color
+            const glowColor =
+              categoryInfo.color === "red"
+                ? "from-red-500/10 to-red-500/5"
+                : categoryInfo.color === "blue"
+                ? "from-primary/10 to-primary/5"
+                : "from-green-500/10 to-green-500/5";
+
             return (
               <div
                 key={card.id}
-                className={`group relative border-l-4 ${cardStyles.borderLeft} border-t-2 border-r-2 border-b-2 border-border bg-card p-3 shadow-sm transition-all active:border-accent active:shadow-md sm:p-4 hover:border-accent hover:shadow-md`}
+                className={`group relative overflow-hidden rounded-lg border-l-4 ${cardStyles.borderLeft} border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-3 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-4`}
               >
-                {/* Kategori Badge */}
-                <div className="mb-2 flex items-center justify-between">
-                  <span
-                    className={`inline-flex items-center gap-1.5 rounded-md border-2 px-2 py-0.5 text-xs font-semibold shadow-sm ${cardStyles.badge}`}
-                  >
-                    <categoryInfo.icon className="h-3.5 w-3.5" />
-                    <span>{categoryInfo.title}</span>
-                  </span>
-                  <span className="text-xs font-medium text-muted-foreground">
-                    {new Date(card.created_at).toLocaleTimeString("tr-TR", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </span>
-                </div>
-
-                {/* Kullanıcı Adı */}
-                <div className="mb-2 flex items-center gap-2">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-border bg-muted text-xs font-bold text-muted-foreground">
-                    {card.user_name.charAt(0).toUpperCase()}
-                  </div>
-                  <span className="text-sm font-semibold text-card-foreground">
-                    {card.user_name}
-                  </span>
-                </div>
-
-                {/* Kart İçeriği */}
-                {canViewContent ? (
-                  <div className="mb-3">
-                    <p className="text-sm leading-relaxed text-foreground">
-                      {card.content}
-                    </p>
-                  </div>
-                ) : (
-                  <div className="mb-3 border-2 border-dashed border-border bg-muted/50 p-4 text-center">
-                    <Lock className="mx-auto mb-2 h-8 w-8 text-muted-foreground opacity-50" />
-                    <p className="text-xs font-medium text-muted-foreground">
-                      Kart Gizli
-                    </p>
-                    <p className="mt-1 text-[10px] text-muted-foreground">
-                      Admin açana kadar bekleyin
-                    </p>
-                  </div>
-                )}
-
-                {/* Action Buttons */}
-                {isOwnCard && !cardsRevealed && (
-                  <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
-                    <Button
-                      onClick={() => handleOpenEdit(card)}
-                      variant="primary"
-                      size="sm"
-                      fullWidth
+                {/* Glow Effect */}
+                <div className={`absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br ${glowColor} blur-xl transition-all group-hover:scale-150`} />
+                
+                {/* Content */}
+                <div className="relative z-10">
+                  {/* Kategori Badge */}
+                  <div className="mb-2 flex items-center justify-between">
+                    <span
+                      className={`inline-flex items-center gap-1.5 rounded-md border-2 px-2 py-0.5 text-xs font-semibold shadow-sm ${cardStyles.badge}`}
                     >
-                      ✎ Düzenle
-                    </Button>
-                    <Button
-                      onClick={() => handleDeleteCard(card)}
-                      variant="danger"
-                      size="sm"
-                      fullWidth
-                    >
-                      🗑️ Sil
-                    </Button>
+                      <categoryInfo.icon className="h-3.5 w-3.5" />
+                      <span>{categoryInfo.title}</span>
+                    </span>
+                    <span className="text-xs font-medium text-muted-foreground">
+                      {new Date(card.created_at).toLocaleTimeString("tr-TR", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </span>
                   </div>
-                )}
+
+                  {/* Kullanıcı Adı */}
+                  <div className="mb-2 flex items-center gap-2">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-border bg-muted text-xs font-bold text-muted-foreground">
+                      {card.user_name.charAt(0).toUpperCase()}
+                    </div>
+                    <span className="text-sm font-semibold text-card-foreground">
+                      {card.user_name}
+                    </span>
+                  </div>
+
+                  {/* Kart İçeriği */}
+                  {canViewContent ? (
+                    <div className="mb-3">
+                      <p className="text-sm leading-relaxed text-foreground">
+                        {card.content}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="mb-3 rounded-md border-2 border-dashed border-border bg-muted/50 p-4 text-center">
+                      <Lock className="mx-auto mb-2 h-8 w-8 text-muted-foreground opacity-50" />
+                      <p className="text-xs font-medium text-muted-foreground">
+                        Kart Gizli
+                      </p>
+                      <p className="mt-1 text-[10px] text-muted-foreground">
+                        Admin açana kadar bekleyin
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Action Buttons */}
+                  {isOwnCard && !cardsRevealed && (
+                    <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+                      <Button
+                        onClick={() => handleOpenEdit(card)}
+                        variant="primary"
+                        size="sm"
+                        fullWidth
+                      >
+                        ✎ Düzenle
+                      </Button>
+                      <Button
+                        onClick={() => handleDeleteCard(card)}
+                        variant="danger"
+                        size="sm"
+                        fullWidth
+                      >
+                        🗑️ Sil
+                      </Button>
+                    </div>
+                  )}
+                </div>
               </div>
             );
           })

@@ -283,25 +283,41 @@ const AdminVotingView = memo(function AdminVotingView({
             Yükleniyor...
           </p>
         ) : votes.length === 0 ? (
-          <div className="py-8 text-center">
-            <BarChart3 className="mx-auto mb-2 h-12 w-12 text-muted-foreground" />
-            <p className="text-sm font-medium text-card-foreground">
-              Henüz puan yok
-            </p>
+          <div className="group relative overflow-hidden rounded-lg border-l-4 border-l-primary dark:border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-8 text-center shadow-md">
+            {/* Glow Effect */}
+            <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
+            
+            {/* Content */}
+            <div className="relative z-10">
+              <div className="mb-4 flex justify-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-transparent">
+                  <BarChart3 className="h-8 w-8 text-primary" />
+                </div>
+              </div>
+              <p className="text-sm font-medium text-card-foreground">
+                Henüz puan yok
+              </p>
+            </div>
           </div>
         ) : (
           <div className="space-y-2">
             {votes.map((vote) => (
               <div
                 key={vote.user_key || vote.user_name}
-                className="flex items-center justify-between rounded-md border-2 border-border bg-muted p-3"
+                className="group relative overflow-hidden rounded-lg border-l-4 border-l-primary dark:border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-3 shadow-sm transition-all duration-300 hover:scale-[1.01] hover:shadow-md"
               >
+                {/* Glow Effect */}
+                <div className="absolute right-0 top-0 h-16 w-16 translate-x-4 -translate-y-4 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
+                
+                {/* Content */}
+                <div className="relative z-10 flex items-center justify-between">
                 <span className="font-medium text-card-foreground">
                   {vote.user_name}
                 </span>
-                <span className="font-semibold text-card-foreground">
-                  {vote.point ?? "Girilmedi"}
-                </span>
+                  <span className="font-semibold text-card-foreground">
+                    {vote.point ?? "Girilmedi"}
+                  </span>
+                </div>
               </div>
             ))}
           </div>

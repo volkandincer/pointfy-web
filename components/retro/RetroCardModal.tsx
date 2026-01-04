@@ -79,52 +79,69 @@ const RetroCardModal = memo(function RetroCardModal({
       title={isEdit ? "Kartı Düzenle" : "Yeni Kart Ekle"}
     >
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Category Selector */}
-        <div className="flex gap-2">
-          {(["mad", "sad", "glad"] as RetroCategory[]).map((cat) => {
-            const info = getCategoryInfo(cat);
-            const isSelected = category === cat;
-            const bgColorClass =
-              info.color === "red"
-                ? "bg-destructive border-destructive text-destructive-foreground"
-                : info.color === "blue"
-                ? "bg-primary border-primary text-primary-foreground"
-                : "bg-success border-success text-success-foreground";
-            return (
-              <button
-                key={cat}
-                type="button"
-                onClick={() => setCategory(cat)}
-                className={`flex items-center justify-center gap-2 flex-1 border-2 px-3 py-2 font-semibold transition-colors ${
-                  isSelected
-                    ? `${bgColorClass}`
-                    : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                }`}
-              >
-                <info.icon className="h-5 w-5" />
-                {info.title}
-              </button>
-            );
-          })}
+        {/* Category Selector Card */}
+        <div className="group relative overflow-hidden rounded-lg border-l-4 border-l-primary dark:border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md">
+          {/* Glow Effect */}
+          <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
+          
+          {/* Content */}
+          <div className="relative z-10">
+            <label className="mb-2 block text-sm font-medium text-card-foreground">
+              Kategori
+            </label>
+            <div className="flex gap-2">
+              {(["mad", "sad", "glad"] as RetroCategory[]).map((cat) => {
+                const info = getCategoryInfo(cat);
+                const isSelected = category === cat;
+                const bgColorClass =
+                  info.color === "red"
+                    ? "bg-destructive/10 border-destructive text-destructive"
+                    : info.color === "blue"
+                    ? "bg-primary/10 border-primary text-primary"
+                    : "bg-success/10 border-success text-success";
+                return (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => setCategory(cat)}
+                    className={`flex items-center justify-center gap-2 flex-1 rounded-md border-2 px-3 py-2 font-semibold transition-all ${
+                      isSelected
+                        ? `${bgColorClass} shadow-sm`
+                        : "border-border bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                    }`}
+                  >
+                    <info.icon className="h-5 w-5" />
+                    {info.title}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
 
-        {/* Content Input */}
-        <div>
-          <label
-            htmlFor="retro-content"
-            className="mb-1 block text-sm font-medium text-muted-foreground"
-          >
-            Kart İçeriği
-          </label>
-          <textarea
-            id="retro-content"
-            rows={4}
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="Kartınızı yazın..."
-            required
-            className="w-full rounded-md border-2 border-input bg-input px-3 py-2 text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-          />
+        {/* Content Input Card */}
+        <div className="group relative overflow-hidden rounded-lg border-l-4 border-l-primary dark:border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md">
+          {/* Glow Effect */}
+          <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
+          
+          {/* Content */}
+          <div className="relative z-10">
+            <label
+              htmlFor="retro-content"
+              className="mb-2 block text-sm font-medium text-card-foreground"
+            >
+              Kart İçeriği
+            </label>
+            <textarea
+              id="retro-content"
+              rows={4}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder="Kartınızı yazın..."
+              required
+              className="w-full rounded-md border-2 border-input bg-background px-3 py-2 text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+            />
+          </div>
         </div>
 
         {/* Actions */}

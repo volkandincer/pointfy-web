@@ -209,18 +209,35 @@ const PersonalTaskList = memo(function PersonalTaskList({
         
         // Renk belirleme: Önce Jira, sonra kategori
         const categoryColors = getCategoryColorClasses(t.category);
-        const cardClasses = hasJiraIssue
-          ? "border-l-purple-600 dark:border-l-purple-500 bg-purple-50 dark:bg-purple-950/30"
-          : `${categoryColors.border} ${categoryColors.bg}`;
+        const borderColor = hasJiraIssue 
+          ? "border-l-purple-600 dark:border-l-purple-500"
+          : categoryColors.border;
+        const glowColor = hasJiraIssue
+          ? "from-purple-500/10 to-purple-500/5"
+          : t.category === "general"
+          ? "from-blue-500/10 to-blue-500/5"
+          : t.category === "work"
+          ? "from-green-500/10 to-green-500/5"
+          : t.category === "personal"
+          ? "from-pink-500/10 to-pink-500/5"
+          : t.category === "meeting"
+          ? "from-indigo-500/10 to-indigo-500/5"
+          : t.category === "project"
+          ? "from-cyan-500/10 to-cyan-500/5"
+          : "from-primary/10 to-primary/5";
         
         return (
           <div
             key={t.id}
             onClick={() => handleCardClick(t)}
-            className={`group relative flex flex-col border-l-4 p-3 shadow-sm transition-all active:shadow-md sm:p-4 hover:shadow-md cursor-pointer ${cardClasses}`}
+            className={`group relative flex min-h-[140px] flex-col overflow-hidden rounded-lg border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl cursor-pointer`}
           >
-            {/* Header */}
-            <div className="relative mb-3 flex items-start justify-between gap-2">
+            {/* Glow Effect */}
+            <div className={`absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br ${glowColor} blur-xl transition-all group-hover:scale-150`} />
+            {/* Content */}
+            <div className="relative z-10 flex flex-1 flex-col">
+              {/* Header */}
+              <div className="relative mb-3 flex items-start justify-between gap-2">
               <h3 className="flex-1 text-base font-bold text-card-foreground sm:text-lg">
                 {t.title}
               </h3>
@@ -297,24 +314,10 @@ const PersonalTaskList = memo(function PersonalTaskList({
               )}
             </div>
 
-            {/* Actions */}
-            <div
-              className={`relative mt-auto flex items-center gap-2 border-t-2 pt-3 ${
-                hasJiraIssue
-                  ? "border-purple-200 dark:border-purple-900/50"
-                  : t.category === "general"
-                  ? "border-blue-200 dark:border-blue-900/50"
-                  : t.category === "work"
-                  ? "border-green-200 dark:border-green-900/50"
-                  : t.category === "personal"
-                  ? "border-pink-200 dark:border-pink-900/50"
-                  : t.category === "meeting"
-                  ? "border-indigo-200 dark:border-indigo-900/50"
-                  : t.category === "project"
-                  ? "border-cyan-200 dark:border-cyan-900/50"
-                  : "border-gray-200 dark:border-gray-800"
-              }`}
-            >
+              {/* Actions */}
+              <div
+                className={`relative mt-auto flex items-center gap-2 border-t-2 border-border pt-3`}
+              >
               {hasJiraIssue ? (
                 <a
                   href={t.jira_issue_url || "#"}
@@ -362,6 +365,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
                 size="sm"
                 icon={Trash2}
               />
+              </div>
             </div>
           </div>
         );

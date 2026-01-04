@@ -176,7 +176,11 @@ const RecentRooms = memo(function RecentRooms() {
                       className={`group relative flex min-h-[120px] flex-col items-center justify-center overflow-hidden rounded-lg border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 text-center shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl`}
                     >
                       {/* Glow Effect */}
-                      <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
+                      <div className={`absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br blur-xl transition-all group-hover:scale-150 ${
+                        isRetro
+                          ? "from-purple-500/10 to-purple-500/5"
+                          : "from-blue-500/10 to-blue-500/5"
+                      }`} />
                       
                       {/* Icon */}
                       <div className="relative mb-2.5">
@@ -223,7 +227,11 @@ const RecentRooms = memo(function RecentRooms() {
                       className={`group relative flex min-h-[120px] flex-col items-center justify-center overflow-hidden rounded-lg border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 text-center shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl`}
                     >
                       {/* Glow Effect */}
-                      <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
+                      <div className={`absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br blur-xl transition-all group-hover:scale-150 ${
+                        isRetro
+                          ? "from-purple-500/10 to-purple-500/5"
+                          : "from-blue-500/10 to-blue-500/5"
+                      }`} />
                       
                       {/* Icon */}
                       <div className="relative mb-2.5">

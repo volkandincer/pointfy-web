@@ -46,19 +46,31 @@ const VotingCardGrid = memo(function VotingCardGrid({
               key={point}
               onClick={() => handleClick(point)}
               disabled={isDisabled}
-              className={`relative rounded-md border-2 px-4 py-6 text-xl font-bold transition-all ${
+              className={`group relative overflow-hidden rounded-lg border-l-4 ${
                 isSelected
-                  ? "border-primary bg-primary text-primary-foreground shadow-md"
+                  ? "border-l-primary dark:border-l-primary"
+                  : "border-l-border"
+              } border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 px-4 py-6 text-xl font-bold shadow-md transition-all duration-300 ${
+                isSelected
+                  ? "bg-primary text-primary-foreground shadow-lg"
                   : isDisabled
-                  ? "border-border bg-muted text-muted-foreground cursor-not-allowed opacity-50"
-                  : "border-border bg-card text-card-foreground hover:border-primary hover:bg-primary/10 hover:shadow-md"
+                  ? "cursor-not-allowed opacity-50"
+                  : "hover:scale-[1.05] hover:border-border hover:shadow-xl"
               }`}
             >
-              {loadingPoint === point ? (
-                <span className="text-sm">...</span>
-              ) : (
-                point
+              {/* Glow Effect */}
+              {isSelected && (
+                <div className="absolute right-0 top-0 h-16 w-16 translate-x-4 -translate-y-4 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 blur-xl transition-all group-hover:scale-150" />
               )}
+              
+              {/* Content */}
+              <span className="relative z-10">
+                {loadingPoint === point ? (
+                  <span className="text-sm">...</span>
+                ) : (
+                  point
+                )}
+              </span>
             </button>
           );
         })}

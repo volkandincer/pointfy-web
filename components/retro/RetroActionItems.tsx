@@ -12,7 +12,6 @@ import type {
 } from "@/interfaces/RetroActionItem.interface";
 import RetroActionItemModal from "./RetroActionItemModal";
 import Button from "@/components/ui/Button";
-import Card from "@/components/ui/Card";
 
 interface RetroActionItemsProps {
   roomId: string;
@@ -197,15 +196,25 @@ const RetroActionItems = memo(function RetroActionItems({
   // Kartlar açılmadıysa aksiyon maddelerini gösterme
   if (!cardsRevealed) {
     return (
-      <Card className="p-8 text-center">
-        <ClipboardList className="mx-auto mb-3 h-12 w-12 text-muted-foreground" />
-        <p className="font-medium text-card-foreground">
-          Aksiyon Maddeleri
-        </p>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Kartlar açıldıktan sonra aksiyon maddeleri eklenebilir.
-        </p>
-      </Card>
+      <div className="group relative overflow-hidden rounded-lg border-l-4 border-l-primary dark:border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-8 text-center shadow-md">
+        {/* Glow Effect */}
+        <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
+        
+        {/* Content */}
+        <div className="relative z-10">
+          <div className="mb-4 flex justify-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-transparent">
+              <ClipboardList className="h-8 w-8 text-primary" />
+            </div>
+          </div>
+          <p className="font-medium text-card-foreground">
+            Aksiyon Maddeleri
+          </p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Kartlar açıldıktan sonra aksiyon maddeleri eklenebilir.
+          </p>
+        </div>
+      </div>
     );
   }
 
@@ -227,17 +236,23 @@ const RetroActionItems = memo(function RetroActionItems({
 
       {/* Header */}
       <div className="flex flex-col gap-4 no-print sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center border-2 border-primary bg-primary/10">
-            <ClipboardList className="h-6 w-6 text-primary" />
-          </div>
-          <div>
-            <h3 className="text-xl font-bold text-card-foreground">
-              Aksiyon Maddeleri
-            </h3>
-            <p className="text-xs text-muted-foreground">
-              {pendingItems.length} bekleyen, {completedItems.length} tamamlanan
-            </p>
+        <div className="group relative overflow-hidden rounded-lg border-l-4 border-l-primary dark:border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-5">
+          {/* Glow Effect */}
+          <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
+          
+          {/* Content */}
+          <div className="relative z-10 flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-transparent transition-transform group-hover:scale-110">
+              <ClipboardList className="h-6 w-6 text-primary" />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-card-foreground">
+                Aksiyon Maddeleri
+              </h3>
+              <p className="text-xs text-muted-foreground">
+                {pendingItems.length} bekleyen, {completedItems.length} tamamlanan
+              </p>
+            </div>
           </div>
         </div>
         {isAdmin && (
@@ -294,92 +309,98 @@ const RetroActionItems = memo(function RetroActionItems({
             const FlagIcon = flagInfo && "icon" in flagInfo ? flagInfo.icon : null;
 
             return (
-              <Card
+              <div
                 key={item.id}
-                className="group relative border-l-4 border-t-2 border-r-2 border-b-2 border-warning p-3 shadow-sm transition-all active:border-accent active:shadow-md sm:p-4 hover:border-accent hover:shadow-md"
+                className="group relative overflow-hidden rounded-lg border-l-4 border-l-yellow-600 dark:border-l-yellow-500 border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-3 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-4"
               >
-                {/* Flag Badge */}
-                {flagInfo && (
-                  <div className="mb-3">
-                    <span
-                      className="inline-flex items-center gap-1.5 rounded-md border-2 px-3 py-1 text-xs font-bold shadow-sm"
-                      style={{
-                        backgroundColor: `${flagColor}15`,
-                        color: flagColor,
-                        borderColor: flagColor,
-                      }}
-                    >
-                      {FlagIcon && <FlagIcon className="h-3.5 w-3.5" />}
-                      {flagLabel}
-                    </span>
-                  </div>
-                )}
-
+                {/* Glow Effect */}
+                <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-yellow-500/10 to-yellow-500/5 blur-xl transition-all group-hover:scale-150" />
+                
                 {/* Content */}
-                <div className="mb-4">
-                  <p className="text-[15px] leading-7 font-medium text-card-foreground">
-                    {item.content}
-                  </p>
-                </div>
-
-                {/* Footer */}
-                <div className="flex items-center justify-between border-t-2 border-border pt-4">
-                  <div className="flex items-center gap-4 text-xs font-medium text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                      <User className="h-4 w-4" />
-                      <span className="font-semibold text-card-foreground">
-                        {item.created_by_username}
+                <div className="relative z-10">
+                  {/* Flag Badge */}
+                  {flagInfo && (
+                    <div className="mb-3">
+                      <span
+                        className="inline-flex items-center gap-1.5 rounded-md border-2 px-3 py-1 text-xs font-bold shadow-sm"
+                        style={{
+                          backgroundColor: `${flagColor}15`,
+                          color: flagColor,
+                          borderColor: flagColor,
+                        }}
+                      >
+                        {FlagIcon && <FlagIcon className="h-3.5 w-3.5" />}
+                        {flagLabel}
                       </span>
-                    </div>
-                    <span className="text-muted-foreground">•</span>
-                    <div className="flex items-center gap-2">
-                      <Clock className="h-4 w-4" />
-                      <span className="text-muted-foreground">
-                        {new Date(item.created_at).toLocaleDateString("tr-TR", {
-                          day: "numeric",
-                          month: "short",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Action Buttons */}
-                  {isAdmin && (
-                    <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
-                      <Button
-                        onClick={() => handleToggleComplete(item)}
-                        variant="primary"
-                        size="sm"
-                        icon={CheckCircle2}
-                        title="Tamamla"
-                        className="border-green-600 bg-green-600 text-white hover:border-green-700 hover:bg-green-700"
-                      >
-                        Tamamla
-                      </Button>
-                      <Button
-                        onClick={() => handleOpenEdit(item)}
-                        variant="primary"
-                        size="sm"
-                        icon={Edit}
-                        title="Düzenle"
-                      >
-                        Düzenle
-                      </Button>
-                      <Button
-                        onClick={() => handleDeleteItem(item)}
-                        variant="danger"
-                        size="sm"
-                        icon={Trash2}
-                        title="Sil"
-                      >
-                        Sil
-                      </Button>
                     </div>
                   )}
+
+                  {/* Content */}
+                  <div className="mb-4">
+                    <p className="text-[15px] leading-7 font-medium text-card-foreground">
+                      {item.content}
+                    </p>
+                  </div>
+
+                  {/* Footer */}
+                  <div className="flex items-center justify-between border-t-2 border-border pt-4">
+                    <div className="flex items-center gap-4 text-xs font-medium text-muted-foreground">
+                      <div className="flex items-center gap-2">
+                        <User className="h-4 w-4" />
+                        <span className="font-semibold text-card-foreground">
+                          {item.created_by_username}
+                        </span>
+                      </div>
+                      <span className="text-muted-foreground">•</span>
+                      <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4" />
+                        <span className="text-muted-foreground">
+                          {new Date(item.created_at).toLocaleDateString("tr-TR", {
+                            day: "numeric",
+                            month: "short",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    {isAdmin && (
+                      <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+                        <Button
+                          onClick={() => handleToggleComplete(item)}
+                          variant="primary"
+                          size="sm"
+                          icon={CheckCircle2}
+                          title="Tamamla"
+                          className="border-green-600 bg-green-600 text-white hover:border-green-700 hover:bg-green-700"
+                        >
+                          Tamamla
+                        </Button>
+                        <Button
+                          onClick={() => handleOpenEdit(item)}
+                          variant="primary"
+                          size="sm"
+                          icon={Edit}
+                          title="Düzenle"
+                        >
+                          Düzenle
+                        </Button>
+                        <Button
+                          onClick={() => handleDeleteItem(item)}
+                          variant="danger"
+                          size="sm"
+                          icon={Trash2}
+                          title="Sil"
+                        >
+                          Sil
+                        </Button>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </Card>
+              </div>
             );
           })}
         </div>
@@ -416,99 +437,105 @@ const RetroActionItems = memo(function RetroActionItems({
             const FlagIcon = flagInfo && "icon" in flagInfo ? flagInfo.icon : null;
 
             return (
-              <Card
+              <div
                 key={item.id}
-                className="group relative border-l-4 border-t-2 border-r-2 border-b-2 border-success p-3 shadow-sm transition-all active:border-accent active:shadow-md sm:p-4 hover:border-accent hover:shadow-md"
+                className="group relative overflow-hidden rounded-lg border-l-4 border-l-green-600 dark:border-l-green-500 border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-3 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl sm:p-4"
               >
-                {/* Completed Badge */}
-                <div className="absolute right-4 top-4">
-                  <div className="flex h-8 w-8 items-center justify-center border-2 border-success bg-success text-success-foreground">
-                    <CheckCircle2 className="h-5 w-5" />
-                  </div>
-                </div>
-
-                {/* Flag Badge */}
-                {flagInfo && (
-                  <div className="mb-3">
-                    <span
-                      className="inline-flex items-center gap-1.5 rounded-md border-2 px-3 py-1 text-xs font-bold shadow-sm opacity-75"
-                      style={{
-                        backgroundColor: `${flagColor}15`,
-                        color: flagColor,
-                        borderColor: flagColor,
-                      }}
-                    >
-                      {FlagIcon && <FlagIcon className="h-3.5 w-3.5" />}
-                      {flagLabel}
-                    </span>
-                  </div>
-                )}
-
+                {/* Glow Effect */}
+                <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-green-500/10 to-green-500/5 blur-xl transition-all group-hover:scale-150" />
+                
                 {/* Content */}
-                <div className="mb-4 pr-12">
-                  <p className="text-[15px] leading-7 font-medium text-muted-foreground line-through">
-                    {item.content}
-                  </p>
-                </div>
-
-                {/* Footer */}
-                <div className="flex items-center justify-between border-t-2 border-success/50 pt-4">
-                  <div className="flex items-center gap-4 text-xs font-medium text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                      <User className="h-4 w-4" />
-                      <span className="font-semibold text-card-foreground">
-                        {item.created_by_username}
-                      </span>
-                    </div>
-                    <span className="text-muted-foreground">•</span>
-                    <div className="flex items-center gap-2">
-                      <CheckCircle2 className="h-4 w-4" />
-                      <span className="text-muted-foreground">
-                        {item.completed_at &&
-                          new Date(item.completed_at).toLocaleDateString("tr-TR", {
-                            day: "numeric",
-                            month: "short",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                      </span>
+                <div className="relative z-10">
+                  {/* Completed Badge */}
+                  <div className="absolute right-4 top-4 z-20">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-green-600 bg-green-600 text-white shadow-sm dark:border-green-500 dark:bg-green-600">
+                      <CheckCircle2 className="h-5 w-5" />
                     </div>
                   </div>
 
-                  {/* Action Buttons */}
-                  {isAdmin && (
-                    <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
-                      <Button
-                        onClick={() => handleToggleComplete(item)}
-                        variant="secondary"
-                        size="sm"
-                        icon={RotateCcw}
-                        title="Geri Al"
+                  {/* Flag Badge */}
+                  {flagInfo && (
+                    <div className="mb-3">
+                      <span
+                        className="inline-flex items-center gap-1.5 rounded-md border-2 px-3 py-1 text-xs font-bold shadow-sm opacity-75"
+                        style={{
+                          backgroundColor: `${flagColor}15`,
+                          color: flagColor,
+                          borderColor: flagColor,
+                        }}
                       >
-                        Geri Al
-                      </Button>
-                      <Button
-                        onClick={() => handleOpenEdit(item)}
-                        variant="primary"
-                        size="sm"
-                        icon={Edit}
-                        title="Düzenle"
-                      >
-                        Düzenle
-                      </Button>
-                      <Button
-                        onClick={() => handleDeleteItem(item)}
-                        variant="danger"
-                        size="sm"
-                        icon={Trash2}
-                        title="Sil"
-                      >
-                        Sil
-                      </Button>
+                        {FlagIcon && <FlagIcon className="h-3.5 w-3.5" />}
+                        {flagLabel}
+                      </span>
                     </div>
                   )}
+
+                  {/* Content */}
+                  <div className="mb-4 pr-12">
+                    <p className="text-[15px] leading-7 font-medium text-muted-foreground line-through">
+                      {item.content}
+                    </p>
+                  </div>
+
+                  {/* Footer */}
+                  <div className="flex items-center justify-between border-t-2 border-border pt-4">
+                    <div className="flex items-center gap-4 text-xs font-medium text-muted-foreground">
+                      <div className="flex items-center gap-2">
+                        <User className="h-4 w-4" />
+                        <span className="font-semibold text-card-foreground">
+                          {item.created_by_username}
+                        </span>
+                      </div>
+                      <span className="text-muted-foreground">•</span>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="h-4 w-4" />
+                        <span className="text-muted-foreground">
+                          {item.completed_at &&
+                            new Date(item.completed_at).toLocaleDateString("tr-TR", {
+                              day: "numeric",
+                              month: "short",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    {isAdmin && (
+                      <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+                        <Button
+                          onClick={() => handleToggleComplete(item)}
+                          variant="secondary"
+                          size="sm"
+                          icon={RotateCcw}
+                          title="Geri Al"
+                        >
+                          Geri Al
+                        </Button>
+                        <Button
+                          onClick={() => handleOpenEdit(item)}
+                          variant="primary"
+                          size="sm"
+                          icon={Edit}
+                          title="Düzenle"
+                        >
+                          Düzenle
+                        </Button>
+                        <Button
+                          onClick={() => handleDeleteItem(item)}
+                          variant="danger"
+                          size="sm"
+                          icon={Trash2}
+                          title="Sil"
+                        >
+                          Sil
+                        </Button>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </Card>
+              </div>
             );
           })}
         </div>
@@ -516,31 +543,37 @@ const RetroActionItems = memo(function RetroActionItems({
 
       {/* Empty State */}
       {actionItems.length === 0 && (
-        <Card className="border-dashed p-12 text-center">
-          <div className="mb-4 flex justify-center">
-            <div className="flex h-16 w-16 items-center justify-center border-2 border-primary bg-primary/10">
-              <ClipboardList className="h-8 w-8 text-primary" />
+        <div className="group relative overflow-hidden rounded-lg border-l-4 border-l-primary dark:border-l-primary border-t-2 border-r-2 border-b-2 border-dashed border-border bg-gradient-to-br from-card via-card to-card/50 p-12 text-center shadow-md">
+          {/* Glow Effect */}
+          <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
+          
+          {/* Content */}
+          <div className="relative z-10">
+            <div className="mb-4 flex justify-center">
+              <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-transparent">
+                <ClipboardList className="h-8 w-8 text-primary" />
+              </div>
             </div>
+            <h3 className="mb-2 text-lg font-bold text-card-foreground">
+              Henüz aksiyon maddesi yok
+            </h3>
+            <p className="mb-6 text-sm text-muted-foreground">
+              {isAdmin
+                ? "İlk aksiyon maddesini ekleyerek başlayın."
+                : "Admin aksiyon maddesi eklediğinde burada görünecek."}
+            </p>
+            {isAdmin && (
+              <Button
+                onClick={() => setShowAddModal(true)}
+                variant="primary"
+                size="lg"
+                icon={Plus}
+              >
+                İlk Aksiyon Maddesini Ekle
+              </Button>
+            )}
           </div>
-          <h3 className="mb-2 text-lg font-bold text-card-foreground">
-            Henüz aksiyon maddesi yok
-          </h3>
-          <p className="mb-6 text-sm text-muted-foreground">
-            {isAdmin
-              ? "İlk aksiyon maddesini ekleyerek başlayın."
-              : "Admin aksiyon maddesi eklediğinde burada görünecek."}
-          </p>
-          {isAdmin && (
-            <Button
-              onClick={() => setShowAddModal(true)}
-              variant="primary"
-              size="lg"
-              icon={Plus}
-            >
-              İlk Aksiyon Maddesini Ekle
-            </Button>
-          )}
-        </Card>
+        </div>
       )}
 
       {/* Add Modal */}

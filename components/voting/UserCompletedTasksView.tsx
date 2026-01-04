@@ -2,7 +2,6 @@
 
 import { memo } from "react";
 import { CheckCircle2, ClipboardList } from "lucide-react";
-import Card from "@/components/ui/Card";
 import { useCompletedTasks } from "@/hooks/useCompletedTasks";
 import { useVotes } from "@/hooks/useVotes";
 
@@ -34,15 +33,25 @@ const UserCompletedTasksView = memo(function UserCompletedTasksView({
 
   if (completedTasks.length === 0) {
     return (
-      <Card padding="lg" className="text-center">
-        <ClipboardList className="mx-auto mb-3 h-12 w-12 text-muted-foreground" />
-        <p className="mb-1 text-lg font-semibold text-card-foreground">
-          Henüz tamamlanan task yok
-        </p>
-        <p className="text-sm text-muted-foreground">
-          Task&apos;lar tamamlandığında burada görünecek
-        </p>
-      </Card>
+      <div className="group relative overflow-hidden rounded-lg border-l-4 border-l-primary dark:border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-8 text-center shadow-md">
+        {/* Glow Effect */}
+        <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
+        
+        {/* Content */}
+        <div className="relative z-10">
+          <div className="mb-4 flex justify-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-transparent">
+              <ClipboardList className="h-8 w-8 text-primary" />
+            </div>
+          </div>
+          <p className="mb-1 text-lg font-semibold text-card-foreground">
+            Henüz tamamlanan task yok
+          </p>
+          <p className="text-sm text-muted-foreground">
+            Task&apos;lar tamamlandığında burada görünecek
+          </p>
+        </div>
+      </div>
     );
   }
 
@@ -104,11 +113,12 @@ const CompletedTaskCard = memo(function CompletedTaskCard({
   };
 
   return (
-    <Card
-      padding="md"
-      borderColor="primary"
-      className="group relative border-l-4 border-l-green-600 dark:border-l-green-500"
-    >
+    <div className="group relative overflow-hidden rounded-lg border-l-4 border-l-green-600 dark:border-l-green-500 border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md transition-all duration-300 hover:scale-[1.01] hover:border-border hover:shadow-xl sm:p-5">
+      {/* Glow Effect */}
+      <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-green-500/10 to-green-500/5 blur-xl transition-all group-hover:scale-150" />
+      
+      {/* Content */}
+      <div className="relative z-10">
       {/* Header */}
       <div className="mb-3 flex items-start justify-between">
         <div className="flex-1">
@@ -165,23 +175,35 @@ const CompletedTaskCard = memo(function CompletedTaskCard({
 
       {/* Votes List - Kim ne verdi */}
       {votes.length > 0 && (
-        <Card padding="md" className="mb-3">
-          <h4 className="mb-2 text-sm font-semibold text-card-foreground">
-            Puanlar
-          </h4>
-          <div className="space-y-2">
-            {votes.map((vote) => {
-              const isCurrentUser =
-                vote.user_key === userKey || vote.user_name === username;
-              return (
-                <div
-                  key={vote.user_key || vote.user_name}
-                  className={`flex items-center justify-between rounded-md border-2 p-2.5 ${
-                    isCurrentUser
-                      ? "border-primary/50 bg-primary/10"
-                      : "border-border bg-muted"
-                  }`}
-                >
+        <div className="group relative mb-3 overflow-hidden rounded-lg border-l-4 border-l-primary dark:border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md">
+          {/* Glow Effect */}
+          <div className="absolute right-0 top-0 h-20 w-20 translate-x-5 -translate-y-5 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
+          
+          {/* Content */}
+          <div className="relative z-10">
+            <h4 className="mb-2 text-sm font-semibold text-card-foreground">
+              Puanlar
+            </h4>
+            <div className="space-y-2">
+              {votes.map((vote) => {
+                const isCurrentUser =
+                  vote.user_key === userKey || vote.user_name === username;
+                return (
+                  <div
+                    key={vote.user_key || vote.user_name}
+                    className={`group/vote relative overflow-hidden rounded-lg border-l-4 ${
+                      isCurrentUser
+                        ? "border-l-primary dark:border-l-primary"
+                        : "border-l-border"
+                    } border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-2.5 shadow-sm transition-all duration-300 hover:scale-[1.01] hover:shadow-md`}
+                  >
+                    {/* Glow Effect for vote item */}
+                    {isCurrentUser && (
+                      <div className="absolute right-0 top-0 h-12 w-12 translate-x-3 -translate-y-3 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover/vote:scale-150" />
+                    )}
+                    
+                    {/* Content */}
+                    <div className="relative z-10 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-medium text-card-foreground">
                       {vote.user_name}
@@ -192,14 +214,16 @@ const CompletedTaskCard = memo(function CompletedTaskCard({
                       </span>
                     )}
                   </div>
-                  <span className="text-base font-bold text-card-foreground sm:text-lg">
-                    {vote.point ?? "—"}
-                  </span>
-                </div>
-              );
-            })}
+                      <span className="text-base font-bold text-card-foreground sm:text-lg">
+                        {vote.point ?? "—"}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </Card>
+        </div>
       )}
 
       {/* Meta */}
@@ -209,7 +233,8 @@ const CompletedTaskCard = memo(function CompletedTaskCard({
         </span>
         <span>{formatDate(task.updated_at)}</span>
       </div>
-    </Card>
+      </div>
+    </div>
   );
 });
 

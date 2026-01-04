@@ -147,9 +147,15 @@ const BoardList = memo(function BoardList({
 
   if (error) {
     return (
-      <div className="rounded-md border-2 border-destructive/30 bg-destructive/10 p-4 text-destructive">
-        <p className="font-semibold">Hata:</p>
-        <p>{error}</p>
+      <div className="group relative overflow-hidden rounded-lg border-l-4 border-l-red-600 dark:border-l-red-500 border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md">
+        {/* Glow Effect */}
+        <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-red-500/10 to-red-500/5 blur-xl transition-all group-hover:scale-150" />
+        
+        {/* Content */}
+        <div className="relative z-10">
+          <p className="mb-1 font-semibold text-red-600 dark:text-red-400">Hata:</p>
+          <p className="text-sm text-card-foreground">{error}</p>
+        </div>
       </div>
     );
   }

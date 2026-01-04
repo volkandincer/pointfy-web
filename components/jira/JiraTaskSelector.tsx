@@ -443,46 +443,78 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
               description={searchQuery ? "Farklı bir arama terimi deneyin" : "Bu board'da issue bulunmuyor."}
             />
           ) : (
-            <div className="max-h-[400px] space-y-2 overflow-y-auto">
-              {filteredIssues.map((issue) => (
-                <button
-                  key={issue.id}
-                  type="button"
-                  onClick={() => handleTaskSelect(issue)}
-                  className="w-full rounded-md border-2 border-gray-300 bg-white p-3 text-left transition-all hover:border-blue-600 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-500"
-                >
-                  <div className="mb-1 flex items-center gap-2">
-                    <span className="font-mono text-xs font-semibold text-blue-600 dark:text-blue-400">
-                      {issue.key}
-                    </span>
-                    <span
-                      className={`rounded-md border-2 px-2 py-0.5 text-[10px] font-semibold shadow-sm ${getStatusColorClasses(issue.statusColor || "gray")}`}
-                    >
-                      {issue.status}
-                    </span>
-                  </div>
-                  <h4 className="mb-1 font-semibold text-card-foreground">
-                    {issue.summary}
-                  </h4>
-                  {issue.description && (
-                    <p className="text-xs text-muted-foreground line-clamp-2">
-                      {issue.description}
-                    </p>
-                  )}
-                  <div className="mt-2 flex items-center gap-2">
-                    {issue.priority && (
-                      <span className={`rounded-md border-2 px-2 py-0.5 text-[10px] font-medium shadow-sm ${getPriorityColorClasses(issue.priority)}`}>
-                        {issue.priority}
-                      </span>
-                    )}
-                    {issue.type && (
-                      <span className="rounded-md border-2 border-purple-300 bg-purple-100 px-2 py-0.5 text-[10px] font-medium text-purple-700 shadow-sm dark:border-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
-                        {issue.type}
-                      </span>
-                    )}
-                  </div>
-                </button>
-              ))}
+            <div className="max-h-[400px] space-y-3 overflow-y-auto">
+              {filteredIssues.map((issue) => {
+                // Status color'a göre border color belirle
+                const getStatusBorderColor = (statusColor: string | undefined): string => {
+                  if (!statusColor) return "border-l-primary dark:border-l-primary";
+                  const colorMap: Record<string, string> = {
+                    green: "border-l-green-600 dark:border-l-green-500",
+                    yellow: "border-l-yellow-600 dark:border-l-yellow-500",
+                    blue: "border-l-blue-600 dark:border-l-blue-500",
+                    red: "border-l-red-600 dark:border-l-red-500",
+                    gray: "border-l-gray-600 dark:border-l-gray-500",
+                  };
+                  return colorMap[statusColor] || "border-l-primary dark:border-l-primary";
+                };
+
+                const borderColor = getStatusBorderColor(issue.statusColor);
+                const glowColor = issue.statusColor === "green"
+                  ? "from-green-500/10 to-green-500/5"
+                  : issue.statusColor === "yellow"
+                  ? "from-yellow-500/10 to-yellow-500/5"
+                  : issue.statusColor === "blue"
+                  ? "from-blue-500/10 to-blue-500/5"
+                  : issue.statusColor === "red"
+                  ? "from-red-500/10 to-red-500/5"
+                  : "from-primary/10 to-primary/5";
+
+                return (
+                  <button
+                    key={issue.id}
+                    type="button"
+                    onClick={() => handleTaskSelect(issue)}
+                    className={`group relative flex min-h-[120px] w-full flex-col overflow-hidden rounded-lg border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 text-left shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl`}
+                  >
+                    {/* Glow Effect */}
+                    <div className={`absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br ${glowColor} blur-xl transition-all group-hover:scale-150`} />
+                    
+                    {/* Content */}
+                    <div className="relative z-10 flex flex-1 flex-col">
+                      <div className="mb-2 flex items-center gap-2">
+                        <span className="font-mono text-xs font-semibold text-blue-600 dark:text-blue-400">
+                          {issue.key}
+                        </span>
+                        <span
+                          className={`rounded-md border-2 px-2 py-0.5 text-[10px] font-semibold shadow-sm ${getStatusColorClasses(issue.statusColor || "gray")}`}
+                        >
+                          {issue.status}
+                        </span>
+                      </div>
+                      <h4 className="mb-2 font-semibold text-card-foreground">
+                        {issue.summary}
+                      </h4>
+                      {issue.description && (
+                        <p className="mb-3 text-xs leading-relaxed text-muted-foreground line-clamp-2">
+                          {issue.description}
+                        </p>
+                      )}
+                      <div className="mt-auto flex items-center gap-2">
+                        {issue.priority && (
+                          <span className={`rounded-md border-2 px-2 py-0.5 text-[10px] font-medium shadow-sm ${getPriorityColorClasses(issue.priority)}`}>
+                            {issue.priority}
+                          </span>
+                        )}
+                        {issue.type && (
+                          <span className="rounded-md border-2 border-purple-300 bg-purple-100 px-2 py-0.5 text-[10px] font-medium text-purple-700 shadow-sm dark:border-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
+                            {issue.type}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>

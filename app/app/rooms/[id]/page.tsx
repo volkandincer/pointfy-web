@@ -428,20 +428,26 @@ export default function RoomDetailPage() {
               </>
             ) : (
               <div className="space-y-6">
-                <Card padding="lg" className="text-center">
-                  <div className="mb-4 flex justify-center">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-lg border-2 border-primary/50 bg-primary/10">
-                      <Clock className="h-8 w-8 text-primary" />
+                <div className="group relative overflow-hidden rounded-lg border-l-4 border-l-primary dark:border-l-primary border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-8 text-center shadow-md">
+                  {/* Glow Effect */}
+                  <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
+                  
+                  {/* Content */}
+                  <div className="relative z-10">
+                    <div className="mb-4 flex justify-center">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-transparent">
+                        <Clock className="h-8 w-8 text-primary" />
+                      </div>
                     </div>
+                    <p className="mb-1 text-lg font-semibold text-card-foreground">
+                      Aktif Task Yok
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Şu anda aktif bir task yok. Admin yeni bir task başlatana
+                      kadar bekleyin.
+                    </p>
                   </div>
-                  <p className="mb-1 text-lg font-semibold text-card-foreground">
-                    Aktif Task Yok
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    Şu anda aktif bir task yok. Admin yeni bir task başlatana
-                    kadar bekleyin.
-                  </p>
-                </Card>
+                </div>
 
                 {/* User için tamamlanan task'lar */}
                 {!isAdmin && (

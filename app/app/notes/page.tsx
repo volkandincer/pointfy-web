@@ -1,9 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { FileText, Briefcase, Heart, Lightbulb, CheckSquare, AlertCircle, Folder } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import SectionHeader from "@/components/ui/SectionHeader";
+import StatsCard from "@/components/ui/StatsCard";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type { Note } from "@/interfaces/Note.interface";
@@ -53,6 +55,45 @@ export default function NotesPage() {
     ? notes 
     : notes.filter((n) => n.category === selectedCategory);
 
+  // Kategori bazlı stats
+  const categoryStats = useMemo(() => {
+    return {
+      total: notes.length,
+      personal: notes.filter((n) => n.category === "personal").length,
+      work: notes.filter((n) => n.category === "work").length,
+      ideas: notes.filter((n) => n.category === "ideas").length,
+      todo: notes.filter((n) => n.category === "todo").length,
+      important: notes.filter((n) => n.category === "important").length,
+      general: notes.filter((n) => n.category === "general").length,
+    };
+  }, [notes]);
+
+  // Kategori icon mapping
+  const getCategoryIcon = (category: string) => {
+    const iconMap: Record<string, typeof FileText> = {
+      personal: Heart,
+      work: Briefcase,
+      ideas: Lightbulb,
+      todo: CheckSquare,
+      important: AlertCircle,
+      general: Folder,
+    };
+    return iconMap[category] || FileText;
+  };
+
+  // Kategori color mapping
+  const getCategoryColor = (category: string): "pink" | "blue" | "purple" | "yellow" | "red" | "primary" => {
+    const colorMap: Record<string, "pink" | "blue" | "purple" | "yellow" | "red" | "primary"> = {
+      personal: "pink",
+      work: "blue",
+      ideas: "purple",
+      todo: "yellow",
+      important: "red",
+      general: "primary",
+    };
+    return colorMap[category] || "primary";
+  };
+
   return (
     <>
       <Header navigationItems={navigationItems} />
@@ -65,6 +106,76 @@ export default function NotesPage() {
                   title="Notlarım"
                   description="Kişisel notlarınızı kategorilere ayırın ve organize edin"
                 />
+
+                {/* Stats Cards */}
+                <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                  <StatsCard
+                    icon={FileText}
+                    value={categoryStats.total}
+                    label="Toplam Not"
+                    color="primary"
+                  />
+                  {categoryStats.personal > 0 && (
+                    <StatsCard
+                      icon={getCategoryIcon("personal")}
+                      value={categoryStats.personal}
+                      label="Kişisel"
+                      color={getCategoryColor("personal")}
+                      onClick={() => setSelectedCategory(selectedCategory === "personal" ? "Tümü" : "personal")}
+                      className={selectedCategory === "personal" ? "ring-2 ring-pink-500" : ""}
+                    />
+                  )}
+                  {categoryStats.work > 0 && (
+                    <StatsCard
+                      icon={getCategoryIcon("work")}
+                      value={categoryStats.work}
+                      label="İş"
+                      color={getCategoryColor("work")}
+                      onClick={() => setSelectedCategory(selectedCategory === "work" ? "Tümü" : "work")}
+                      className={selectedCategory === "work" ? "ring-2 ring-blue-500" : ""}
+                    />
+                  )}
+                  {categoryStats.ideas > 0 && (
+                    <StatsCard
+                      icon={getCategoryIcon("ideas")}
+                      value={categoryStats.ideas}
+                      label="Fikir"
+                      color={getCategoryColor("ideas")}
+                      onClick={() => setSelectedCategory(selectedCategory === "ideas" ? "Tümü" : "ideas")}
+                      className={selectedCategory === "ideas" ? "ring-2 ring-purple-500" : ""}
+                    />
+                  )}
+                  {categoryStats.todo > 0 && (
+                    <StatsCard
+                      icon={getCategoryIcon("todo")}
+                      value={categoryStats.todo}
+                      label="Yapılacaklar"
+                      color={getCategoryColor("todo")}
+                      onClick={() => setSelectedCategory(selectedCategory === "todo" ? "Tümü" : "todo")}
+                      className={selectedCategory === "todo" ? "ring-2 ring-yellow-500" : ""}
+                    />
+                  )}
+                  {categoryStats.important > 0 && (
+                    <StatsCard
+                      icon={getCategoryIcon("important")}
+                      value={categoryStats.important}
+                      label="Önemli"
+                      color={getCategoryColor("important")}
+                      onClick={() => setSelectedCategory(selectedCategory === "important" ? "Tümü" : "important")}
+                      className={selectedCategory === "important" ? "ring-2 ring-red-500" : ""}
+                    />
+                  )}
+                  {categoryStats.general > 0 && (
+                    <StatsCard
+                      icon={getCategoryIcon("general")}
+                      value={categoryStats.general}
+                      label="Genel"
+                      color={getCategoryColor("general")}
+                      onClick={() => setSelectedCategory(selectedCategory === "general" ? "Tümü" : "general")}
+                      className={selectedCategory === "general" ? "ring-2 ring-primary" : ""}
+                    />
+                  )}
+                </div>
 
               {/* Category Filter - Pill Style Tabs */}
               {categories.length > 1 && (

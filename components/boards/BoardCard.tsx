@@ -108,7 +108,12 @@ const BoardCard = memo(function BoardCard({
       className={`group relative flex min-h-[140px] flex-col overflow-hidden rounded-lg border-l-4 ${borderColorClass} border-t-2 border-r-2 border-b-2 border-border bg-gradient-to-br from-card via-card to-card/50 p-4 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-border hover:shadow-xl`}
     >
       {/* Glow Effect */}
-      <div className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-xl transition-all group-hover:scale-150" />
+      <div 
+        className="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br blur-xl transition-all group-hover:scale-150"
+        style={{
+          background: `radial-gradient(circle, ${getColorWithOpacity(boardColor, 0.1)}, ${getColorWithOpacity(boardColor, 0.05)})`,
+        }}
+      />
 
       {/* Content */}
       <div className="relative z-10 flex flex-1 flex-col">
