@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import ScrollLockCleanup from "@/components/layout/ScrollLockCleanup";
 import ThemeScript from "@/components/layout/ThemeScript";
+import BottomNavWrapper from "@/components/layout/BottomNavWrapper";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -33,6 +34,7 @@ export default function RootLayout({
         <ThemeScript />
         <ScrollLockCleanup />
         {children}
+        <BottomNavWrapper />
       </body>
     </html>
   );

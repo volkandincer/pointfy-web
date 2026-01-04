@@ -121,6 +121,12 @@
   body {
     @apply bg-background text-foreground;
   }
+  /* Bottom navigation için padding */
+  @media (max-width: 768px) {
+    body {
+      padding-bottom: 64px;
+    }
+  }
 }
 
 /* Print Styles for Retro Action Items */
