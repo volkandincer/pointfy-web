@@ -57,8 +57,8 @@ const Button = memo(
       // Size classes
       const sizeClasses = {
         sm: "px-3 py-1.5 text-xs min-h-[36px]",
-        md: "px-4 py-2.5 text-sm min-h-[44px]",
-        lg: "px-6 py-3.5 text-base min-h-[52px]",
+        md: "px-4 py-2.5 text-xs min-h-[44px]",
+        lg: "px-6 py-3.5 text-sm min-h-[52px]",
       };
 
       // Width classes

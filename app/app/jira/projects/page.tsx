@@ -206,7 +206,7 @@ export default function JiraProjectsPage() {
                   </div>
                   <ChevronRight className="h-5 w-5 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100" />
                 </div>
-                <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+                <h3 className="mb-2 text-base font-semibold text-gray-900 dark:text-white">
                   {project.name}
                 </h3>
                 <div className="space-y-1">
@@ -238,7 +238,7 @@ export default function JiraProjectsPage() {
                       <Folder className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                     </div>
                     <div>
-                      <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
+                      <h3 className="mb-1 text-base font-semibold text-gray-900 dark:text-white">
                         {project.name}
                       </h3>
                       <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">

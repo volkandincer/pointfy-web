@@ -62,7 +62,7 @@ const PageHeader = memo(function PageHeader({
               </div>
             )}
             <div className="flex h-10 min-w-0 flex-1 flex-col justify-center">
-              <h1 className="text-xl font-semibold leading-tight text-foreground sm:text-2xl">
+              <h1 className="text-base font-semibold leading-tight text-foreground sm:text-lg">
                 {title}
               </h1>
               {description && (

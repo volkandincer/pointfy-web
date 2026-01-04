@@ -39,7 +39,7 @@ export default function ThirdPartyPage() {
               ve saklanması konusunda rol oynayabilir.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               1. Veri Depolama ve Altyapı Hizmetleri
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -60,7 +60,7 @@ export default function ThirdPartyPage() {
               edebilirsiniz.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               2. Hosting ve CDN Hizmetleri
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -74,7 +74,7 @@ export default function ThirdPartyPage() {
               <li>Güvenlik ve DDoS koruması sağlar</li>
             </ul>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               3. Analytics ve İstatistik Hizmetleri (İsteğe Bağlı)
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -89,7 +89,7 @@ export default function ThirdPartyPage() {
               <li>Hizmet iyileştirmeleri için veri sağlar</li>
             </ul>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               4. Veri İşleme ve Güvenlik
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -102,7 +102,7 @@ export default function ThirdPartyPage() {
               <li>Veri koruma yasalarına uyum sağlar</li>
             </ul>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               5. Veri Paylaşımı ve Aktarımı
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -117,7 +117,7 @@ export default function ThirdPartyPage() {
               standart sözleşme maddeleri uygulanır.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               6. Hizmet Sağlayıcı Değişiklikleri
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -126,7 +126,7 @@ export default function ThirdPartyPage() {
               sağlayıcı listesi bu sayfada yayınlanmaktadır.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               7. Kullanıcı Hakları
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -141,7 +141,7 @@ export default function ThirdPartyPage() {
               bizimle iletişime geçebilirsiniz.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               8. İletişim
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">

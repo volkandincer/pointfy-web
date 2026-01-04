@@ -31,7 +31,7 @@ const VotingCardGrid = memo(function VotingCardGrid({
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+      <h3 className="text-base font-semibold text-gray-900 dark:text-white">
         Puanını Seç
       </h3>
       <div className="grid grid-cols-4 gap-4 sm:grid-cols-7">

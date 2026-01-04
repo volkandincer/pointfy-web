@@ -237,7 +237,7 @@ export default function VotedTasksPage() {
             ) : votedTasks.length === 0 ? (
               <div className="rounded-md border-2 border-gray-300 bg-white p-8 text-center shadow-sm sm:p-12 dark:border-gray-700 dark:bg-gray-900">
                 <BarChart3 className="mx-auto mb-3 h-12 w-12 text-gray-400 dark:text-gray-500" />
-                <p className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
+                <p className="mb-1 text-base font-semibold text-gray-900 dark:text-white">
                   Henüz puanladığınız task yok
                 </p>
                 <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
@@ -256,7 +256,7 @@ export default function VotedTasksPage() {
                   >
                     <div className="mb-3 flex items-start justify-between">
                       <div className="flex-1">
-                        <h3 className="mb-1.5 text-lg font-bold text-gray-900 dark:text-white">
+                        <h3 className="mb-1.5 text-base font-bold text-gray-900 dark:text-white">
                           {task.task_title}
                         </h3>
                         {task.task_description && (
@@ -283,7 +283,7 @@ export default function VotedTasksPage() {
                         <span className="text-xs text-gray-500 dark:text-gray-400">
                           Verdiğiniz Puan
                         </span>
-                        <p className="mt-1 text-lg font-bold text-gray-900 dark:text-white">
+                        <p className="mt-1 text-base font-bold text-gray-900 dark:text-white">
                           {task.user_point ?? "—"}
                         </p>
                       </div>
@@ -291,7 +291,7 @@ export default function VotedTasksPage() {
                         <span className="text-xs text-gray-500 dark:text-gray-400">
                           Ortalama Puan
                         </span>
-                        <p className="mt-1 text-lg font-bold text-gray-900 dark:text-white">
+                        <p className="mt-1 text-base font-bold text-gray-900 dark:text-white">
                           {task.average_point > 0 ? task.average_point : "—"}
                         </p>
                       </div>
@@ -299,7 +299,7 @@ export default function VotedTasksPage() {
                         <span className="text-xs text-gray-500 dark:text-gray-400">
                           Toplam Oy
                         </span>
-                        <p className="mt-1 text-lg font-bold text-gray-900 dark:text-white">
+                        <p className="mt-1 text-base font-bold text-gray-900 dark:text-white">
                           {task.total_votes}
                         </p>
                       </div>

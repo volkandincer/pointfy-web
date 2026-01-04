@@ -96,7 +96,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
           href="/"
           className="group flex items-center transition-opacity hover:opacity-80"
         >
-          <span className="bg-gradient-to-r from-primary via-primary to-primary/80 bg-clip-text text-base font-bold tracking-tight text-transparent transition-all group-hover:from-primary group-hover:via-primary/90 group-hover:to-primary/70 md:text-lg md:text-xl">
+          <span className="bg-gradient-to-r from-primary via-primary to-primary/80 bg-clip-text text-sm font-bold tracking-tight text-transparent transition-all group-hover:from-primary group-hover:via-primary/90 group-hover:to-primary/70 md:text-base">
             TeamHubX
           </span>
         </Link>

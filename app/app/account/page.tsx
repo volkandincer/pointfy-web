@@ -340,7 +340,7 @@ export default function AccountPage() {
 
             {/* Profil Bilgileri */}
             <div className="mb-6 rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
-              <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+              <h2 className="mb-4 text-base font-semibold text-gray-900 dark:text-white">
                 Profil Bilgileri
               </h2>
               <div className="space-y-4">
@@ -419,7 +419,7 @@ export default function AccountPage() {
 
             {/* Jira Bağlantısı */}
             <div className="mb-6 rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
-              <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+              <h2 className="mb-4 text-base font-semibold text-gray-900 dark:text-white">
                 Jira Bağlantısı
               </h2>
               <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
@@ -454,7 +454,7 @@ export default function AccountPage() {
 
             {/* Çıkış Yap */}
             <div className="border-2 border-red-300 bg-red-50 p-6 shadow-sm dark:border-red-700 dark:bg-red-900/10">
-              <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+              <h2 className="mb-2 text-base font-semibold text-gray-900 dark:text-white">
                 Hesap İşlemleri
               </h2>
 

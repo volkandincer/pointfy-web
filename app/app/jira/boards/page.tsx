@@ -320,7 +320,7 @@ export default function JiraBoardsPage() {
                   })()}
                   <ChevronRight className="h-5 w-5 shrink-0 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100" />
                 </div>
-                <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+                <h3 className="mb-2 text-base font-semibold text-gray-900 dark:text-white">
                   {board.name}
                 </h3>
                 <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
@@ -359,7 +359,7 @@ export default function JiraBoardsPage() {
                       );
                     })()}
                     <div>
-                      <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
+                      <h3 className="mb-1 text-base font-semibold text-gray-900 dark:text-white">
                         {board.name}
                       </h3>
                       <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">

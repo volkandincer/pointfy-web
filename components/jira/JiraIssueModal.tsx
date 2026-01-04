@@ -77,7 +77,7 @@ const JiraIssueModal = memo(function JiraIssueModal({
           <div className="mb-4 flex items-start justify-between">
             <div className="flex-1">
               <div className="mb-3 flex flex-wrap items-center gap-2">
-                <span className="font-mono text-lg font-bold text-blue-600 dark:text-blue-400">
+                <span className="font-mono text-base font-bold text-blue-600 dark:text-blue-400">
                   {issue.key}
                 </span>
                 <span

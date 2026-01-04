@@ -5,6 +5,7 @@ import { RefreshCw, Pause, BarChart3 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { getSupabase } from "@/lib/supabase";
 import VotingCardGrid from "./VotingCardGrid";
+import EmptyState from "@/components/jira/EmptyState";
 import { useVotes } from "@/hooks/useVotes";
 import { useVotingSession } from "@/hooks/useVotingSession";
 import type { TaskInfo } from "@/interfaces/Voting.interface";
@@ -81,7 +82,7 @@ const UserVotingView = memo(function UserVotingView({
     <div className="space-y-6">
       <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+          <h2 className="text-base font-bold text-gray-900 dark:text-white">
             {activeTask.title}
           </h2>
           <span className="flex items-center gap-1.5 rounded-md border-2 border-blue-300 bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700 shadow-sm dark:border-blue-700 dark:bg-blue-900 dark:text-blue-300">
@@ -129,7 +130,7 @@ const UserVotingView = memo(function UserVotingView({
             <p className="text-sm text-gray-600 dark:text-gray-400">
               Kalan Süre
             </p>
-            <p className="text-3xl font-bold text-gray-900 dark:text-white">
+            <p className="text-lg font-bold text-gray-900 dark:text-white">
               {remainingTime} saniye
             </p>
           </div>
@@ -158,7 +159,7 @@ const UserVotingView = memo(function UserVotingView({
       )}
 
       <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
-        <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+        <h3 className="mb-4 text-base font-semibold text-gray-900 dark:text-white">
           Katılımcı Puanları
         </h3>
         {votesLoading ? (
@@ -166,15 +167,11 @@ const UserVotingView = memo(function UserVotingView({
             Yükleniyor...
           </p>
         ) : votes.length === 0 ? (
-          <div className="py-8 text-center">
-            <BarChart3 className="mx-auto mb-2 h-12 w-12 text-gray-400 dark:text-gray-500" />
-            <p className="text-sm font-medium text-gray-900 dark:text-white">
-              Henüz puan yok
-            </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              Katılımcılar puan vermeye başladığında burada görünecek
-            </p>
-          </div>
+          <EmptyState
+            icon={BarChart3}
+            title="Henüz puan yok"
+            description="Katılımcılar puan vermeye başladığında burada görünecek"
+          />
         ) : (
           <div className="space-y-2">
             {votes.map((vote) => (

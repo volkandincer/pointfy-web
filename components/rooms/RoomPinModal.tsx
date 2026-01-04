@@ -59,7 +59,7 @@ const RoomPinModal = memo(function RoomPinModal({
                 handleSubmit();
               }
             }}
-            className={`flex-1 rounded-md border-2 px-4 py-3 text-center text-lg font-semibold tracking-widest outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-800 dark:text-white ${
+            className={`flex-1 rounded-md border-2 px-4 py-3 text-center text-base font-semibold tracking-widest outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-800 dark:text-white ${
               pinInput.length > 0 && pinInput.length !== 4
                 ? "border-red-300 bg-red-50 dark:border-red-700 dark:bg-red-900/20"
                 : "border-gray-300 bg-white dark:border-gray-700"

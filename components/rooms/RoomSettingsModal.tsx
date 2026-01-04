@@ -52,12 +52,12 @@ const RoomSettingsModal = memo(function RoomSettingsModal({
                 )
               }
               disabled={localSettings.maxParticipants <= 2}
-              className="inline-flex h-12 w-12 items-center justify-center rounded-md border-2 border-gray-300 bg-white text-lg font-bold text-gray-900 transition-all hover:border-gray-400 hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+              className="inline-flex h-12 w-12 items-center justify-center rounded-md border-2 border-gray-300 bg-white text-base font-bold text-gray-900 transition-all hover:border-gray-400 hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
             >
               −
             </button>
             <div className="flex h-16 w-20 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-50 dark:border-blue-500 dark:bg-blue-900/20">
-              <span className="text-2xl font-bold text-blue-700 dark:text-blue-400">
+              <span className="text-base font-bold text-blue-700 dark:text-blue-400">
                 {localSettings.maxParticipants}
               </span>
             </div>
@@ -70,7 +70,7 @@ const RoomSettingsModal = memo(function RoomSettingsModal({
                 )
               }
               disabled={localSettings.maxParticipants >= 20}
-              className="inline-flex h-12 w-12 items-center justify-center rounded-md border-2 border-gray-300 bg-white text-lg font-bold text-gray-900 transition-all hover:border-gray-400 hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+              className="inline-flex h-12 w-12 items-center justify-center rounded-md border-2 border-gray-300 bg-white text-base font-bold text-gray-900 transition-all hover:border-gray-400 hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
             >
               +
             </button>
@@ -121,7 +121,7 @@ const RoomSettingsModal = memo(function RoomSettingsModal({
                 }}
                 maxLength={4}
                 placeholder="4 karakterli şifre"
-                className="flex-1 rounded-md border-2 border-gray-300 bg-white px-4 py-3 text-center text-lg font-bold tracking-widest text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-400"
+                className="flex-1 rounded-md border-2 border-gray-300 bg-white px-4 py-3 text-center text-base font-bold tracking-widest text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-400"
               />
               <button
                 type="button"

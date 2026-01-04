@@ -280,7 +280,7 @@ export default function JiraSettingsPage() {
       {/* Connection Status Card */}
       <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <h2 className="text-base font-semibold text-gray-900 dark:text-white">
             Bağlantı Durumu
           </h2>
           <div
@@ -384,7 +384,7 @@ export default function JiraSettingsPage() {
 
       {/* Base URL Configuration */}
       <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
-        <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+        <h2 className="mb-4 text-base font-semibold text-gray-900 dark:text-white">
           Jira Base URL Yapılandırması
         </h2>
         <div className="space-y-4">

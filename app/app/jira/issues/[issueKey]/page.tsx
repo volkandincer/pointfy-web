@@ -563,7 +563,7 @@ export default function JiraIssueDetailPage() {
               </span>
             )}
           </div>
-          <h1 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
+          <h1 className="text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
             {issue.summary}
           </h1>
         </div>

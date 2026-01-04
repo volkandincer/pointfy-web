@@ -29,77 +29,69 @@ export default function BoardsPage() {
     <>
       <Header navigationItems={navigationItems} />
         <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
-          <div className="container mx-auto px-4 py-12">
+          <div className="container mx-auto px-4 py-8">
             <div className="mx-auto max-w-7xl">
               {/* Header Section */}
-              <div className="mb-8">
-                <PageHeader
-                  title="Board'larım"
-                  description="Task'larınızı ve notlarınızı organize edin, projelerinizi yönetin"
-                  icon={ClipboardList}
-                  iconColor="green"
-                />
-
-                {/* Stats Cards */}
-                <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
-                    <div className="mb-4 flex items-center gap-3">
-                      <div className="flex h-12 w-12 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20">
-                        <ClipboardList className="h-6 w-6 text-green-600 dark:text-green-400" />
-                      </div>
-                      <div>
-                        <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalBoards}</div>
-                        <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Toplam Board</div>
-                      </div>
+              <div className="mb-6">
+                <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <PageHeader
+                    title="Board'larım"
+                    description="Task'larınızı ve notlarınızı organize edin, projelerinizi yönetin"
+                    icon={ClipboardList}
+                    iconColor="green"
+                  />
+                  
+                  {/* Stats - Inline Badge Style */}
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-1.5 rounded-full border border-green-600/30 bg-green-50 px-3 py-1.5 dark:bg-green-900/20 dark:border-green-700/30">
+                      <ClipboardList className="h-3.5 w-3.5 text-green-600 dark:text-green-400" />
+                      <span className="text-xs font-semibold text-green-700 dark:text-green-400">
+                        {stats.totalBoards} Toplam
+                      </span>
                     </div>
-                  </div>
-
-                  <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
-                    <div className="mb-4 flex items-center gap-3">
-                      <div className="flex h-12 w-12 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20">
-                        <ClipboardList className="h-6 w-6 text-green-600 dark:text-green-400" />
-                      </div>
-                      <div>
-                        <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats.activeBoards}</div>
-                        <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Aktif Board</div>
-                      </div>
+                    <div className="flex items-center gap-1.5 rounded-full border border-green-600/30 bg-green-50 px-3 py-1.5 dark:bg-green-900/20 dark:border-green-700/30">
+                      <span className="text-xs font-semibold text-green-700 dark:text-green-400">
+                        {stats.activeBoards} Aktif
+                      </span>
                     </div>
-                  </div>
-
-                  <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-5 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
-                    <div className="mb-4 flex items-center gap-3">
-                      <div className="flex h-12 w-12 items-center justify-center border-2 border-gray-600 bg-gray-50 dark:bg-gray-800">
-                        <Archive className="h-6 w-6 text-gray-600 dark:text-gray-400" />
+                    {stats.archivedBoards > 0 && (
+                      <div className="flex items-center gap-1.5 rounded-full border border-gray-300 bg-gray-50 px-3 py-1.5 dark:bg-gray-800 dark:border-gray-700">
+                        <Archive className="h-3.5 w-3.5 text-gray-600 dark:text-gray-400" />
+                        <span className="text-xs font-semibold text-gray-700 dark:text-gray-400">
+                          {stats.archivedBoards}
+                        </span>
                       </div>
-                      <div>
-                        <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats.archivedBoards}</div>
-                        <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Arşivlenmiş</div>
-                      </div>
-                    </div>
+                    )}
                   </div>
                 </div>
 
-                {/* Tab Buttons */}
-                <div className="inline-flex rounded-md border-2 border-gray-300 bg-white p-1 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                {/* Tab Buttons - Underline Style */}
+                <div className="flex items-center gap-6 border-b border-gray-300 dark:border-gray-700">
                   <button
                     onClick={() => setShowArchived(false)}
-                    className={`px-6 py-2.5 text-sm font-semibold transition-colors ${
+                    className={`relative pb-2 text-xs font-semibold transition-colors ${
                       !showArchived
-                        ? "border-2 border-green-600 bg-green-600 text-white"
-                        : "border-2 border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+                        ? "text-green-600 dark:text-green-400"
+                        : "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
                     }`}
                   >
                     Aktif Board&apos;lar
+                    {!showArchived && (
+                      <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-green-600 dark:bg-green-400" />
+                    )}
                   </button>
                   <button
                     onClick={() => setShowArchived(true)}
-                    className={`px-6 py-2.5 text-sm font-semibold transition-colors ${
+                    className={`relative pb-2 text-xs font-semibold transition-colors ${
                       showArchived
-                        ? "border-2 border-green-600 bg-green-600 text-white"
-                        : "border-2 border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+                        ? "text-green-600 dark:text-green-400"
+                        : "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
                     }`}
                   >
                     Arşivlenmiş
+                    {showArchived && (
+                      <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-green-600 dark:bg-green-400" />
+                    )}
                   </button>
                 </div>
               </div>

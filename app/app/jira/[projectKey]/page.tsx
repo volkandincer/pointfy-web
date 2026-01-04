@@ -445,7 +445,7 @@ export default function JiraProjectDetailPage() {
         </button>
         <div className="mb-6">
           <div className="flex items-center gap-3">
-            <h1 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
+            <h1 className="text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
               {projectName || projectKey}
             </h1>
             {projectKey && (
@@ -482,7 +482,7 @@ export default function JiraProjectDetailPage() {
             <div className="text-xs font-medium text-gray-600 dark:text-gray-400">
               Toplam Issue
             </div>
-            <div className="mt-1 text-3xl font-bold text-blue-700 dark:text-blue-300">
+            <div className="mt-1 text-base font-bold text-blue-700 dark:text-blue-300">
               {allIssues.length}
             </div>
           </div>
@@ -495,7 +495,7 @@ export default function JiraProjectDetailPage() {
             <div className="text-xs font-medium text-gray-600 dark:text-gray-400">
               Açık
             </div>
-            <div className="mt-1 text-3xl font-bold text-orange-700 dark:text-orange-300">
+            <div className="mt-1 text-base font-bold text-orange-700 dark:text-orange-300">
               {
                 allIssues.filter(
                   (i) => i.statusColor !== "green" && !i.resolved
@@ -512,7 +512,7 @@ export default function JiraProjectDetailPage() {
             <div className="text-xs font-medium text-gray-600 dark:text-gray-400">
               Tamamlanan
             </div>
-            <div className="mt-1 text-3xl font-bold text-green-700 dark:text-green-300">
+            <div className="mt-1 text-base font-bold text-green-700 dark:text-green-300">
               {
                 allIssues.filter((i) => i.statusColor === "green" || i.resolved)
                   .length
@@ -528,7 +528,7 @@ export default function JiraProjectDetailPage() {
             <div className="text-xs font-medium text-gray-600 dark:text-gray-400">
               Filtrelenmiş
             </div>
-            <div className="mt-1 text-3xl font-bold text-purple-700 dark:text-purple-300">
+            <div className="mt-1 text-base font-bold text-purple-700 dark:text-purple-300">
               {filteredIssues.length}
             </div>
           </div>
@@ -955,7 +955,7 @@ export default function JiraProjectDetailPage() {
                           </div>
 
                           {/* Title */}
-                          <h3 className="mb-2 text-lg font-bold leading-snug text-gray-900 dark:text-white">
+                          <h3 className="mb-2 text-base font-bold leading-snug text-gray-900 dark:text-white">
                             {issue.summary}
                           </h3>
 

@@ -40,7 +40,7 @@ export default function PrivacyPage() {
               korunduğunu açıklamaktadır. Bu politikayı dikkatlice okuyun.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               1. Veri Sorumlusu
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -48,7 +48,7 @@ export default function PrivacyPage() {
               kapsamındaki tüm veri işleme faaliyetlerinden sorumluyuz.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               2. Toplanan Veriler
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -75,7 +75,7 @@ export default function PrivacyPage() {
               </li>
             </ul>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               3. Veri İşleme Amaçları
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -90,7 +90,7 @@ export default function PrivacyPage() {
               <li>Kullanıcı desteği sağlamak</li>
             </ul>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               4. Veri İşleme Hukuki Dayanakları
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -114,7 +114,7 @@ export default function PrivacyPage() {
               </li>
             </ul>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               5. Veri Saklama Süreleri
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -139,7 +139,7 @@ export default function PrivacyPage() {
               </li>
             </ul>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               6. Veri Güvenliği
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -148,7 +148,7 @@ export default function PrivacyPage() {
               Verileriniz güvenli bulut altyapısı üzerinde saklanmaktadır.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               7. Veri Paylaşımı
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -170,7 +170,7 @@ export default function PrivacyPage() {
               </li>
             </ul>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               8. Veri Aktarımı
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -179,7 +179,7 @@ export default function PrivacyPage() {
               standart sözleşme maddeleri uygulanır.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               9. Kullanıcı Hakları (GDPR)
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -218,7 +218,7 @@ export default function PrivacyPage() {
               Bu haklarınızı kullanmak için bizimle iletişime geçebilirsiniz.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               10. Çocukların Gizliliği
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -227,7 +227,7 @@ export default function PrivacyPage() {
               bu verileri derhal sileriz.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               11. Politika Değişiklikleri
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -236,7 +236,7 @@ export default function PrivacyPage() {
               her zaman bu sayfada yayınlanmaktadır.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               12. İletişim
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -252,7 +252,7 @@ export default function PrivacyPage() {
               sayfasını ziyaret edebilirsiniz.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               13. Şikayet Hakkı
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">

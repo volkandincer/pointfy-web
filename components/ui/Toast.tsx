@@ -2,6 +2,7 @@
 
 import { memo, useEffect, useState } from "react";
 import { CheckCircle2, XCircle, Info } from "lucide-react";
+import Button from "./Button";
 
 export interface ToastProps {
   message: string;
@@ -55,7 +56,9 @@ const Toast = memo(function Toast({
           <p className="text-sm font-medium">{message}</p>
         </div>
         {action && (
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => {
               action.onClick();
               setVisible(false);
@@ -63,10 +66,10 @@ const Toast = memo(function Toast({
                 onClose?.();
               }, 300);
             }}
-            className="rounded-md border-2 border-white/30 bg-white/20 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-white/30"
+            className="border-white/30 bg-white/20 text-white hover:bg-white/30"
           >
             {action.label}
-          </button>
+          </Button>
         )}
       </div>
     </div>

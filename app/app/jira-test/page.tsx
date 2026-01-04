@@ -533,7 +533,7 @@ export default function JiraTestPage() {
         <main className="container mx-auto px-4 py-16">
           <div className="mx-auto max-w-3xl">
             <div className="rounded-md border-2 border-yellow-200/70 bg-yellow-50/50 p-6 shadow-sm dark:border-yellow-800/70 dark:bg-yellow-900/10">
-              <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+              <h2 className="mb-2 text-base font-semibold text-gray-900 dark:text-white">
                 Jira Bağlantısı Gerekli
               </h2>
               <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">

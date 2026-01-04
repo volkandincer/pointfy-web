@@ -14,6 +14,7 @@ import EditBoardModal from "@/components/boards/EditBoardModal";
 import JiraTaskPromptModal from "@/components/boards/JiraTaskPromptModal";
 import JiraTaskSelector from "@/components/jira/JiraTaskSelector";
 import Modal from "@/components/ui/Modal";
+import EmptyState from "@/components/jira/EmptyState";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type { Board, BoardInput } from "@/interfaces/Board.interface";
@@ -615,11 +616,11 @@ export default function BoardDetailPage() {
       <>
         <Header navigationItems={navigationItems} />
         <main className="container mx-auto px-4 py-16">
-          <div className="rounded-md border-2 border-gray-200 bg-white p-6 text-center sm:p-8 dark:border-gray-800 dark:bg-gray-900">
-            <p className="text-gray-600 dark:text-gray-400">
-              Board bulunamadı.
-            </p>
-          </div>
+          <EmptyState
+            icon={ClipboardList}
+            title="Board bulunamadı"
+            description="Aradığınız board mevcut değil veya erişim yetkiniz yok."
+          />
         </main>
         <Footer navigationItems={navigationItems} />
       </>
@@ -1000,7 +1001,7 @@ export default function BoardDetailPage() {
             <div className="w-full max-w-2xl rounded-md border-2 border-gray-300 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
               <div className="border-b-2 border-gray-200 p-4 dark:border-gray-800">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                  <h3 className="text-base font-bold text-gray-900 dark:text-white">
                     Mevcut Task&apos;lardan Seç
                   </h3>
                   <button
@@ -1019,15 +1020,11 @@ export default function BoardDetailPage() {
                     <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-green-600"></div>
                   </div>
                 ) : availableTasks.length === 0 ? (
-                  <div className="py-12 text-center">
-                    <ClipboardList className="mx-auto h-12 w-12 text-gray-400" />
-                    <p className="mt-4 text-sm font-medium text-gray-900 dark:text-white">
-                      Eklenebilecek task bulunamadı
-                    </p>
-                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                      Tüm task&apos;larınız zaten bu board&apos;a ekli
-                    </p>
-                  </div>
+                  <EmptyState
+                    icon={ClipboardList}
+                    title="Eklenebilecek task bulunamadı"
+                    description="Tüm task'larınız zaten bu board'a ekli"
+                  />
                 ) : (
                   <div className="space-y-2">
                     {availableTasks.map((task) => (

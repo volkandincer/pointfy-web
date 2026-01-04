@@ -9,6 +9,8 @@ import { useToastContext } from "@/contexts/ToastContext";
 import type { RetroCategory, RetroCard } from "@/interfaces/Retro.interface";
 import RetroCardModal from "./RetroCardModal";
 import RetroActionItems from "./RetroActionItems";
+import { Textarea } from "@/components/ui/Input";
+import Button from "@/components/ui/Button";
 
 interface RetroRoomViewProps {
   roomId: string;
@@ -317,7 +319,7 @@ const RetroRoomView = memo(function RetroRoomView({
             <div className="flex items-center gap-3">
               <span className="text-2xl">⏱️</span>
               <div>
-                <p className={`text-lg font-bold ${
+                <p className={`text-base font-bold ${
                   timerWarning
                     ? "text-red-700 dark:text-red-300"
                     : "text-blue-700 dark:text-blue-300"
@@ -461,13 +463,16 @@ const RetroRoomView = memo(function RetroRoomView({
 
             {/* Text Input */}
             <div className="flex-1">
-              <textarea
+              <Textarea
                 ref={textareaRef}
                 value={cardContent}
                 onChange={(e) => setCardContent(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={`${getCategoryInfo(activeTab).title} kategorisine kart ekle...`}
-                className={`w-full resize-none rounded-md border-2 px-4 py-3 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 ${
+                rows={2}
+                disabled={isSubmitting || (isAdmin && !timerActive) || (timerActive && remainingSeconds === 0)}
+                size="md"
+                className={`${
                   isAdmin && !timerActive
                     ? "border-yellow-300 bg-yellow-50 text-gray-500 cursor-not-allowed dark:border-yellow-800 dark:bg-yellow-950/30"
                     : timerActive && remainingSeconds === 0
@@ -476,37 +481,29 @@ const RetroRoomView = memo(function RetroRoomView({
                     ? "border-orange-300 bg-orange-50 text-gray-900 focus:border-orange-500 focus:ring-orange-500/20 dark:border-orange-700 dark:bg-orange-950/30 dark:text-white"
                     : "border-gray-300 bg-gray-50 text-gray-900 focus:border-indigo-500 focus:ring-indigo-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-indigo-400"
                 }`}
-                rows={2}
-                disabled={isSubmitting || (isAdmin && !timerActive) || (timerActive && remainingSeconds === 0)}
               />
             </div>
 
             {/* Submit Button */}
-            <button
+            <Button
               type="submit"
+              variant={timerWarning ? "danger" : "primary"}
+              size="md"
               disabled={isSubmitting || !cardContent.trim() || (isAdmin && !timerActive) || (timerActive && remainingSeconds === 0)}
-              className={`flex items-center justify-center gap-2 rounded-md px-6 py-3 text-sm font-bold text-white shadow-md transition-all ${
+              loading={isSubmitting}
+              icon={Send}
+              className={`${
                 isAdmin && !timerActive
-                  ? "bg-yellow-500 cursor-not-allowed"
+                  ? "!bg-yellow-500 !border-yellow-500"
                   : timerActive && remainingSeconds === 0
-                  ? "bg-gray-400 cursor-not-allowed"
+                  ? "!bg-gray-400 !border-gray-400"
                   : timerWarning
-                  ? "border-2 border-orange-600 bg-orange-600 hover:border-orange-700 hover:bg-orange-700 hover:shadow-md"
-                  : "border-2 border-indigo-600 bg-indigo-600 hover:border-indigo-700 hover:bg-indigo-700 hover:shadow-md"
-              } disabled:opacity-50 disabled:cursor-not-allowed`}
+                  ? "!border-orange-600 !bg-orange-600 hover:!border-orange-700 hover:!bg-orange-700"
+                  : "!border-indigo-600 !bg-indigo-600 hover:!border-indigo-700 hover:!bg-indigo-700"
+              }`}
             >
-              {isSubmitting ? (
-                <>
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                  <span>Gönderiliyor...</span>
-                </>
-              ) : (
-                <>
-                  <Send className="h-5 w-5" />
-                  <span>Gönder</span>
-                </>
-              )}
-            </button>
+              {isSubmitting ? "Gönderiliyor..." : "Gönder"}
+            </Button>
           </div>
           <p className={`mt-2 text-xs ${
             isAdmin && !timerActive
@@ -554,7 +551,7 @@ const RetroRoomView = memo(function RetroRoomView({
                         : "border-gray-200 bg-white hover:border-purple-300 hover:bg-purple-50/50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-purple-600 dark:hover:bg-purple-950/20"
                     }`}
                   >
-                    <div className={`text-2xl font-bold ${
+                    <div className={`text-base font-bold ${
                       isSelected
                         ? "text-purple-600 dark:text-purple-400"
                         : "text-gray-700 dark:text-gray-300"

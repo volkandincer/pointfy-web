@@ -28,7 +28,7 @@ const CompletedTasksView = memo(function CompletedTasksView({
       <div className="border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-6 dark:border-gray-700 dark:bg-gray-900">
         <div className="mb-4 flex items-center gap-3">
           <CheckCircle2 className="h-6 w-6 text-green-600 dark:text-green-400" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <h3 className="text-base font-semibold text-gray-900 dark:text-white">
             Tamamlanan Task Kartları
           </h3>
         </div>
@@ -49,7 +49,7 @@ const CompletedTasksView = memo(function CompletedTasksView({
     <div className="border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-6 dark:border-gray-700 dark:bg-gray-900">
       <div className="mb-4 flex items-center gap-3">
         <CheckCircle2 className="h-6 w-6 text-green-600 dark:text-green-400" />
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+        <h3 className="text-base font-semibold text-gray-900 dark:text-white">
           Tamamlanan Task Kartları
         </h3>
       </div>

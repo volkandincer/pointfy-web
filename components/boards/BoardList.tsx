@@ -7,6 +7,7 @@ import BoardCard from "./BoardCard";
 import CreateBoardModal from "./CreateBoardModal";
 import EditBoardModal from "./EditBoardModal";
 import EmptyState from "@/components/jira/EmptyState";
+import Button from "@/components/ui/Button";
 import { useBoards } from "@/hooks/useBoards";
 import { useToastContext } from "@/contexts/ToastContext";
 import type { Board, BoardInput } from "@/interfaces/Board.interface";
@@ -134,11 +135,11 @@ const BoardList = memo(function BoardList({
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {[1, 2, 3].map((i) => (
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {[1, 2, 3, 4].map((i) => (
           <div
             key={i}
-            className="h-40 animate-pulse border-l-4 border-l-green-400 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm sm:p-4 dark:border-l-green-500 dark:border-gray-700 dark:bg-gray-900"
+            className="h-32 animate-pulse rounded-md border border-gray-300 bg-white dark:border-gray-700 dark:bg-gray-900"
           />
         ))}
       </div>
@@ -157,15 +158,20 @@ const BoardList = memo(function BoardList({
   return (
     <>
       {!showArchived && (
-        <div className="mb-6 flex items-center justify-end">
-          <button
+        <div className="mb-6 flex items-center justify-between border-b border-gray-300 pb-4 dark:border-gray-700">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+            {filteredBoards.length} Board
+          </h2>
+          <Button
+            variant="primary"
+            size="sm"
             onClick={() => setShowCreateModal(true)}
             disabled={actionLoading}
-            className="group inline-flex min-h-[44px] items-center gap-2 rounded-md border-2 border-green-600 bg-green-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all active:border-green-700 active:bg-green-700 active:shadow-md sm:px-6 sm:py-3 hover:border-green-700 hover:bg-green-700 hover:shadow-md disabled:opacity-60 disabled:hover:shadow-sm dark:border-green-500 dark:bg-green-600 dark:text-white dark:hover:bg-green-700"
+            icon={Plus}
+            className="!border-green-600 !bg-green-600 hover:!border-green-700 hover:!bg-green-700 dark:!border-green-500 dark:!bg-green-600 dark:hover:!bg-green-700"
           >
-            <Plus className="h-5 w-5 transition-transform group-hover:rotate-90" />
-            Yeni Board Oluştur
-          </button>
+            Yeni Board
+          </Button>
         </div>
       )}
 
@@ -178,7 +184,7 @@ const BoardList = memo(function BoardList({
           onAction={!showArchived ? () => setShowCreateModal(true) : undefined}
         />
       ) : (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filteredBoards.map((board) => (
             <BoardCard
               key={board.id}

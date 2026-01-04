@@ -38,7 +38,7 @@ export default function TermsPage() {
               kabul etmiş sayılırsınız. Lütfen bu şartları dikkatlice okuyun.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               1. Hizmetin Kapsamı
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -48,7 +48,7 @@ export default function TermsPage() {
               sağlanmaktadır.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               2. Hesap Oluşturma ve Güvenlik
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -59,7 +59,7 @@ export default function TermsPage() {
               yapılan tüm işlemlerden sorumlusunuz.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               3. Kullanım Koşulları
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -76,7 +76,7 @@ export default function TermsPage() {
               <li>Diğer kullanıcıların verilerine yetkisiz erişim sağlamak</li>
             </ul>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               4. Kullanıcı İçeriği
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -87,7 +87,7 @@ export default function TermsPage() {
               onaylama yükümlülüğü taşımaz.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               5. Fikri Mülkiyet Hakları
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -102,7 +102,7 @@ export default function TermsPage() {
               için kullanma lisansı vermiş olursunuz.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               6. Hizmet Kesintileri ve Değişiklikler
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -112,7 +112,7 @@ export default function TermsPage() {
               değiştirme, askıya alma veya sonlandırma hakkını saklı tutarız.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               7. Sorumluluk Reddi
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -123,7 +123,7 @@ export default function TermsPage() {
               özel, arızi veya sonuç zararlarından sorumlu değiliz.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               8. Garanti Reddi
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -133,7 +133,7 @@ export default function TermsPage() {
               ancak bunlarla sınırlı olmamak üzere, tüm garantiler reddedilir.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               9. Tazminat
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -143,7 +143,7 @@ export default function TermsPage() {
               ücretleri dahil) bizi zararsız tutmayı kabul edersiniz.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               10. Hesap Sonlandırma
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -153,7 +153,7 @@ export default function TermsPage() {
               silinebilir ve geri alınamaz.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               11. Üçüncü Taraf Hizmetler
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -162,7 +162,7 @@ export default function TermsPage() {
               sorumlu değiliz. Üçüncü taraf hizmetlerin kullanımı kendi riskinizdedir.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               12. Değişiklikler
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -173,7 +173,7 @@ export default function TermsPage() {
               anlamına gelir.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               13. Uygulanacak Hukuk ve Uyuşmazlık Çözümü
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -183,7 +183,7 @@ export default function TermsPage() {
               mahkemeleri yetkilidir.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               14. Bölünebilirlik
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -192,7 +192,7 @@ export default function TermsPage() {
               mümkün olduğunca geçerli bir hükümle değiştirilecektir.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               15. İletişim
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">

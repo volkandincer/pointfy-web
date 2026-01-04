@@ -7,6 +7,7 @@ import { useVotes } from "@/hooks/useVotes";
 import { useVotingSession } from "@/hooks/useVotingSession";
 import { useToastContext } from "@/contexts/ToastContext";
 import Button from "@/components/ui/Button";
+import EmptyState from "@/components/jira/EmptyState";
 import type { TaskInfo } from "@/interfaces/Voting.interface";
 
 interface AdminVotingViewProps {
@@ -151,7 +152,7 @@ const AdminVotingView = memo(function AdminVotingView({
             <p className="text-sm text-gray-600 dark:text-gray-400">
               Kalan Süre
             </p>
-            <p className="text-3xl font-bold text-gray-900 dark:text-white">
+            <p className="text-lg font-bold text-gray-900 dark:text-white">
               {remainingTime} saniye
             </p>
           </div>
@@ -174,7 +175,7 @@ const AdminVotingView = memo(function AdminVotingView({
 
       {activeTask.status === "completed" && validVotes.length > 0 && (
         <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
-          <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">
+          <h3 className="mb-4 flex items-center gap-2 text-base font-semibold text-gray-900 dark:text-white">
             <BarChart3 className="h-5 w-5" />
             Final Sonuçları
           </h3>
@@ -274,7 +275,7 @@ const AdminVotingView = memo(function AdminVotingView({
       )}
 
       <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
-        <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+        <h3 className="mb-4 text-base font-semibold text-gray-900 dark:text-white">
           Katılımcı Puanları
         </h3>
         {votesLoading ? (
@@ -282,12 +283,11 @@ const AdminVotingView = memo(function AdminVotingView({
             Yükleniyor...
           </p>
         ) : votes.length === 0 ? (
-          <div className="py-8 text-center">
-            <BarChart3 className="mx-auto mb-2 h-12 w-12 text-gray-400 dark:text-gray-500" />
-            <p className="text-sm font-medium text-gray-900 dark:text-white">
-              Henüz puan yok
-            </p>
-          </div>
+          <EmptyState
+            icon={BarChart3}
+            title="Henüz puan yok"
+            description="Katılımcılar puan vermeye başladığında burada görünecek"
+          />
         ) : (
           <div className="space-y-2">
             {votes.map((vote) => (

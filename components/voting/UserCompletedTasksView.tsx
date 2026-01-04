@@ -35,7 +35,7 @@ const UserCompletedTasksView = memo(function UserCompletedTasksView({
     return (
       <div className="border-2 border-gray-300 bg-white p-6 text-center shadow-sm sm:p-8 dark:border-gray-700 dark:bg-gray-900">
         <ClipboardList className="mx-auto mb-3 h-12 w-12 text-gray-400 dark:text-gray-500" />
-        <p className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
+        <p className="mb-1 text-base font-semibold text-gray-900 dark:text-white">
           Henüz tamamlanan task yok
         </p>
         <p className="text-sm text-gray-600 dark:text-gray-400">

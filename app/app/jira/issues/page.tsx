@@ -358,7 +358,7 @@ export default function JiraIssuesPage() {
           <div className="flex w-full items-center justify-between">
             <div className="flex items-center gap-2">
               <Filter className="h-5 w-5 text-gray-600 dark:text-gray-400" />
-              <span className="text-lg font-bold text-gray-900 dark:text-white">
+              <span className="text-base font-bold text-gray-900 dark:text-white">
                 Filtreler
               </span>
             </div>

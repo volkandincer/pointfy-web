@@ -253,7 +253,7 @@ export default function JiraSearchPage() {
 
       {/* Quick Search Templates */}
       <div className="border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
-        <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+        <h2 className="mb-4 text-base font-semibold text-gray-900 dark:text-white">
           Hızlı Arama Şablonları
         </h2>
         <div className="flex flex-wrap gap-3">
@@ -275,7 +275,7 @@ export default function JiraSearchPage() {
       {/* Search History */}
       {showHistory && searchHistory.length > 0 && (
         <div className="border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
-          <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+          <h2 className="mb-4 text-base font-semibold text-gray-900 dark:text-white">
             Arama Geçmişi
           </h2>
           <div className="space-y-2">
@@ -325,7 +325,7 @@ export default function JiraSearchPage() {
       ) : results.length > 0 ? (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h2 className="text-base font-semibold text-gray-900 dark:text-white">
               Sonuçlar
             </h2>
             <span className="text-sm text-gray-600 dark:text-gray-400">

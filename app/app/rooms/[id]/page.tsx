@@ -360,7 +360,7 @@ export default function RoomDetailPage() {
           <div className="mx-auto max-w-5xl">
             <div className="mb-6 flex items-center justify-between">
               <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                <h1 className="text-base font-bold text-gray-900 dark:text-white">
                   {room?.name || "Oda"}
                 </h1>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -429,7 +429,7 @@ export default function RoomDetailPage() {
                       <Clock className="h-8 w-8 text-amber-600 dark:text-amber-400" />
                     </div>
                   </div>
-                  <p className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
+                  <p className="mb-1 text-base font-semibold text-gray-900 dark:text-white">
                     Aktif Task Yok
                   </p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -461,7 +461,7 @@ export default function RoomDetailPage() {
                             <div>
                               <div className="flex items-center gap-2">
                                 <Clock className="h-5 w-5 text-amber-600 dark:text-amber-400" />
-                                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                                <h2 className="text-base font-semibold text-gray-900 dark:text-white">
                                   Puanlanmayı Bekleyen Task&apos;lar
                                 </h2>
                               </div>

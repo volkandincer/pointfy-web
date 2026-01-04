@@ -4,6 +4,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { FileText, Tag, X } from "lucide-react";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
+import { Textarea } from "@/components/ui/Input";
 import type { Note, NoteInput } from "@/interfaces/Note.interface";
 
 interface NoteModalProps {
@@ -117,7 +118,7 @@ const NoteModal = memo(function NoteModal({
             </div>
             Not İçeriği <span className="text-red-600 dark:text-red-400">*</span>
           </label>
-          <textarea
+          <Textarea
             id="note-content"
             placeholder="Notunuzu buraya yazın..."
             rows={4}
@@ -126,7 +127,9 @@ const NoteModal = memo(function NoteModal({
             maxLength={500}
             disabled={loading}
             autoFocus
-            className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-yellow-400 sm:px-4 sm:py-3 sm:text-base"
+            size="md"
+            showCharCount
+            className="focus:border-yellow-500 focus:ring-yellow-500/20 dark:focus:border-yellow-400"
           />
           <div className="mt-1.5 flex items-center justify-between sm:mt-2">
             <p className="text-[10px] text-gray-500 dark:text-gray-400 sm:text-xs">

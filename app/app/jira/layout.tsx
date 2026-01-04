@@ -145,7 +145,7 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
                       <Link2 className="h-12 w-12" />
                     </div>
                   </div>
-                  <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
+                  <h2 className="mb-2 text-base font-bold text-gray-900 dark:text-white">
                     Jira Bağlantısı Gerekli
                   </h2>
                   <p className="text-gray-600 dark:text-gray-400">
@@ -198,7 +198,7 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
               <div className="sticky top-6">
                 <div className="rounded-md border-2 border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                   <div className="mb-4">
-                    <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+                    <h2 className="text-base font-bold text-gray-900 dark:text-white">
                       Jira Modülü
                     </h2>
                     <p className="text-xs text-gray-500 dark:text-gray-400">

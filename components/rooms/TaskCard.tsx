@@ -4,6 +4,8 @@ import { memo, useEffect, useState, useMemo } from "react";
 import { Link2, CheckCircle2, RefreshCw, Clock, BarChart3 } from "lucide-react";
 import { getSupabase } from "@/lib/supabase";
 import Modal from "@/components/ui/Modal";
+import Input from "@/components/ui/Input";
+import Button from "@/components/ui/Button";
 import { useToastContext } from "@/contexts/ToastContext";
 import type { TaskInfo } from "@/interfaces/Voting.interface";
 
@@ -542,7 +544,7 @@ const TaskCard = memo(function TaskCard({
             task.jira_id ? (
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
-                  <input
+                  <Input
                     type="number"
                     min="0"
                     step="0.5"
@@ -571,7 +573,9 @@ const TaskCard = memo(function TaskCard({
                       setInputFocused(false);
                     }}
                     onClick={(e) => e.stopPropagation()}
-                    className="w-20 rounded-md border-2 border-blue-300 bg-white px-2 py-1 text-sm font-bold text-gray-900 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:border-blue-600 dark:bg-gray-800 dark:text-white dark:focus:ring-blue-800"
+                    size="sm"
+                    fullWidth={false}
+                    className="w-20 !border-blue-300 !bg-white !text-gray-900 focus:!border-blue-500 focus:!ring-blue-200 dark:!border-blue-600 dark:!bg-gray-800 dark:!text-white dark:focus:!ring-blue-800"
                     placeholder="0"
                   />
                   <span className="text-xs text-gray-500 dark:text-gray-400">
@@ -580,36 +584,40 @@ const TaskCard = memo(function TaskCard({
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {jiraStoryPoints !== null && jiraStoryPoints > 0 && (
-                    <button
+                    <Button
                       type="button"
+                      variant={selectedSource === "jira" ? "primary" : "secondary"}
+                      size="sm"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleSourceSelect("jira");
                       }}
-                      className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all ${
+                      className={`${
                         selectedSource === "jira"
-                          ? "bg-blue-100 text-blue-700 ring-2 ring-blue-300 dark:bg-blue-900/40 dark:text-blue-300 dark:ring-blue-600"
-                          : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                          ? "!bg-blue-100 !text-blue-700 !ring-2 !ring-blue-300 dark:!bg-blue-900/40 dark:!text-blue-300 dark:!ring-blue-600"
+                          : "!bg-gray-100 !text-gray-600 hover:!bg-gray-200 dark:!bg-gray-700 dark:!text-gray-300 dark:hover:!bg-gray-600"
                       }`}
                     >
                       Jira&apos;da: {jiraStoryPoints}
-                    </button>
+                    </Button>
                   )}
                   {avgPoint > 0 && (
-                    <button
+                    <Button
                       type="button"
+                      variant={selectedSource === "average" ? "primary" : "secondary"}
+                      size="sm"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleSourceSelect("average");
                       }}
-                      className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all ${
+                      className={`${
                         selectedSource === "average"
-                          ? "bg-blue-100 text-blue-700 ring-2 ring-blue-300 dark:bg-blue-900/40 dark:text-blue-300 dark:ring-blue-600"
-                          : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                          ? "!bg-blue-100 !text-blue-700 !ring-2 !ring-blue-300 dark:!bg-blue-900/40 dark:!text-blue-300 dark:!ring-blue-600"
+                          : "!bg-gray-100 !text-gray-600 hover:!bg-gray-200 dark:!bg-gray-700 dark:!text-gray-300 dark:hover:!bg-gray-600"
                       }`}
                     >
                       Ortalama: {avgPoint}
-                    </button>
+                    </Button>
                   )}
                 </div>
               </div>

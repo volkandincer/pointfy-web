@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import { getSupabase } from "@/lib/supabase";
@@ -240,10 +241,13 @@ function LoginPageContent() {
 
               {/* Tab buttons */}
               <div className="mb-8 flex gap-2 rounded-md border-2 border-gray-300 bg-gray-100 p-1 dark:border-gray-700 dark:bg-gray-800">
-                <button
-                  className={`flex-1 border-2 px-4 py-2.5 text-sm font-semibold transition-colors ${
+                <Button
+                  variant={isLogin ? "primary" : "ghost"}
+                  size="md"
+                  fullWidth
+                  className={`flex-1 ${
                     isLogin
-                      ? "border-blue-600 bg-blue-600 text-white"
+                      ? ""
                       : "border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                   }`}
                   onClick={() => {
@@ -252,11 +256,14 @@ function LoginPageContent() {
                   }}
                 >
                   Giriş Yap
-                </button>
-                <button
-                  className={`flex-1 border-2 px-4 py-2.5 text-sm font-semibold transition-colors ${
+                </Button>
+                <Button
+                  variant={!isLogin ? "primary" : "ghost"}
+                  size="md"
+                  fullWidth
+                  className={`flex-1 ${
                     !isLogin
-                      ? "border-blue-600 bg-blue-600 text-white"
+                      ? ""
                       : "border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                   }`}
                   onClick={() => {
@@ -265,11 +272,11 @@ function LoginPageContent() {
                   }}
                 >
                   Kayıt Ol
-                </button>
+                </Button>
               </div>
 
               {/* Title */}
-              <h1 className="mb-8 text-center text-2xl font-bold text-gray-900 dark:text-white">
+              <h1 className="mb-8 text-center text-base font-bold text-gray-900 dark:text-white sm:text-lg">
                 {isLogin ? "Hesabınıza Giriş Yapın" : "Yeni Hesap Oluşturun"}
               </h1>
 
@@ -278,58 +285,37 @@ function LoginPageContent() {
                 onSubmit={isLogin ? handleLogin : handleSignup}
                 className="space-y-5"
               >
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    E-posta
-                  </label>
-                  <input
-                    id="email"
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
-                    placeholder="ornek@email.com"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="password"
-                    className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    Şifre
-                  </label>
-                  <input
-                    id="password"
-                    type="password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
-                    placeholder="••••••••"
-                  />
-                </div>
+                <Input
+                  id="email"
+                  type="email"
+                  label="E-posta"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="ornek@email.com"
+                  size="md"
+                />
+                <Input
+                  id="password"
+                  type="password"
+                  label="Şifre"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  size="md"
+                />
                 {!isLogin && (
-                  <div>
-                    <label
-                      htmlFor="username"
-                      className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
-                    >
-                      Kullanıcı Adı
-                    </label>
-                    <input
-                      id="username"
-                      type="text"
-                      required
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
-                      placeholder="kullaniciadi"
-                    />
-                  </div>
+                  <Input
+                    id="username"
+                    type="text"
+                    label="Kullanıcı Adı"
+                    required
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="kullaniciadi"
+                    size="md"
+                  />
                 )}
                 <Button
                   type="submit"

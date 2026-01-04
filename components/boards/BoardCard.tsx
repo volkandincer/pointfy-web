@@ -85,37 +85,40 @@ const BoardCard = memo(function BoardCard({
   return (
     <Link
       href={`/app/boards/${board.id}`}
-      className="group relative block border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
-      style={{
-        borderLeftColor: boardColor,
-      }}
+      className="group relative block overflow-hidden rounded-lg border border-gray-300 bg-white p-4 transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
     >
+      {/* Top Color Bar */}
+      <div
+        className="absolute left-0 top-0 h-1 w-full"
+        style={{ backgroundColor: boardColor }}
+      />
 
       {/* Content */}
       <div className="relative z-10">
         {/* Header */}
-        <div className="relative mb-4">
-          <div className="flex items-start gap-3 pr-20">
-            {/* Icon Box */}
+        <div className="relative mb-3">
+          <div className="flex items-start gap-3 pr-12">
+            {/* Icon Box - Modern */}
             <div
-              className="flex h-10 w-10 shrink-0 items-center justify-center border-2 bg-gray-50 transition-colors sm:h-12 sm:w-12 dark:bg-gray-800"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border-2 transition-transform group-hover:scale-105"
               style={{
                 borderColor: boardColor,
+                backgroundColor: getColorWithOpacity(boardColor, 0.1),
               }}
             >
               <ClipboardList 
-                className="h-5 w-5 sm:h-6 sm:w-6"
+                className="h-5 w-5"
                 style={{ color: boardColor }}
               />
             </div>
 
             {/* Title and Description */}
             <div className="min-w-0 flex-1">
-              <h3 className="mb-1 text-lg font-bold text-gray-900 dark:text-white line-clamp-2 sm:mb-1.5 sm:text-xl">
+              <h3 className="mb-1 text-sm font-bold text-gray-900 dark:text-white line-clamp-2">
                 {board.name}
               </h3>
               {board.description && (
-                <p className="line-clamp-2 text-xs leading-relaxed text-gray-600 dark:text-gray-400 sm:line-clamp-3 sm:text-sm">
+                <p className="line-clamp-2 text-xs leading-relaxed text-gray-600 dark:text-gray-400">
                   {board.description}
                 </p>
               )}
@@ -123,11 +126,11 @@ const BoardCard = memo(function BoardCard({
           </div>
 
           {/* Action Buttons - Absolute positioned */}
-          <div className="absolute right-0 top-0 z-20 flex shrink-0 gap-1 opacity-0 transition-opacity group-hover:opacity-100 sm:gap-1.5">
+          <div className="absolute right-0 top-0 z-20 flex shrink-0 gap-1 opacity-0 transition-opacity group-hover:opacity-100">
             {onEdit && (
               <button
                 onClick={handleEdit}
-                className="flex h-9 w-9 items-center justify-center rounded-md border-2 border-blue-600 bg-white shadow-sm text-blue-600 transition-all hover:border-blue-700 hover:bg-blue-50 active:bg-blue-100 sm:h-10 sm:w-10 dark:bg-gray-900 dark:border-blue-500 dark:text-blue-400 dark:hover:bg-blue-900/20 dark:active:bg-blue-900/30"
+                className="flex h-8 w-8 items-center justify-center rounded-md border border-blue-600 bg-white text-blue-600 transition-all hover:border-blue-700 hover:bg-blue-50 dark:bg-gray-900 dark:border-blue-500 dark:text-blue-400 dark:hover:bg-blue-900/20"
                 title="Düzenle"
               >
                 <Edit className="h-4 w-4" />
@@ -136,7 +139,7 @@ const BoardCard = memo(function BoardCard({
             {onArchive && (
               <button
                 onClick={handleArchive}
-                className="flex h-9 w-9 items-center justify-center rounded-md border-2 border-gray-300 bg-white shadow-sm text-gray-600 transition-all hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 sm:h-10 sm:w-10 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:active:bg-gray-700"
+                className="flex h-8 w-8 items-center justify-center rounded-md border border-gray-300 bg-white text-gray-600 transition-all hover:border-gray-400 hover:bg-gray-50 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
                 title={board.is_archived ? "Arşivden Çıkar" : "Arşivle"}
               >
                 {board.is_archived ? (
@@ -149,7 +152,7 @@ const BoardCard = memo(function BoardCard({
             {onDelete && (
               <button
                 onClick={handleDelete}
-                className="flex h-9 w-9 items-center justify-center rounded-md border-2 border-red-600 bg-white shadow-sm text-red-600 transition-all hover:border-red-700 hover:bg-red-50 active:bg-red-100 sm:h-10 sm:w-10 dark:bg-gray-900 dark:border-red-500 dark:text-red-400 dark:hover:bg-red-900/20 dark:active:bg-red-900/30"
+                className="flex h-8 w-8 items-center justify-center rounded-md border border-red-600 bg-white text-red-600 transition-all hover:border-red-700 hover:bg-red-50 dark:bg-gray-900 dark:border-red-500 dark:text-red-400 dark:hover:bg-red-900/20"
                 title="Sil"
               >
                 <Trash2 className="h-4 w-4" />
@@ -158,14 +161,10 @@ const BoardCard = memo(function BoardCard({
           </div>
         </div>
 
-        {/* Bottom Color Indicator */}
-        <div className="flex items-center gap-3">
+        {/* Bottom - Color Dot Indicator */}
+        <div className="flex items-center justify-end">
           <div
-            className="h-1 flex-1"
-            style={{ backgroundColor: boardColor }}
-          />
-          <div
-            className="h-6 w-6 border-2 border-gray-300 dark:border-gray-700"
+            className="h-2 w-2 rounded-full"
             style={{ backgroundColor: boardColor }}
           />
         </div>

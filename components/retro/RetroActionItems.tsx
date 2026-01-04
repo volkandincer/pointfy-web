@@ -6,6 +6,7 @@ import { getSupabase } from "@/lib/supabase";
 import { useRetroActionItems } from "@/hooks/useRetroActionItems";
 import { useRoomCustomFlags } from "@/hooks/useRoomCustomFlags";
 import { useToastContext } from "@/contexts/ToastContext";
+import EmptyState from "@/components/jira/EmptyState";
 import type {
   RetroActionItem,
   RetroActionItemInput,
@@ -211,7 +212,7 @@ const RetroActionItems = memo(function RetroActionItems({
     <div className="space-y-4 print-section">
       {/* Print Header - Only visible when printing */}
       <div className="print-header mb-6 hidden">
-        <h1 className="text-2xl font-bold text-gray-900">Aksiyon Maddeleri</h1>
+        <h1 className="text-base font-bold text-gray-900">Aksiyon Maddeleri</h1>
         <p className="mt-2 text-sm text-gray-600">
           Tarih: {new Date().toLocaleDateString("tr-TR", {
             day: "numeric",
@@ -511,30 +512,17 @@ const RetroActionItems = memo(function RetroActionItems({
 
       {/* Empty State */}
       {actionItems.length === 0 && (
-        <div className="rounded-md border-2 border-dashed border-gray-300 bg-white p-12 text-center dark:border-gray-700 dark:bg-gray-900">
-          <div className="mb-4 flex justify-center">
-            <div className="flex h-16 w-16 items-center justify-center border-2 border-indigo-600 bg-indigo-50 dark:bg-indigo-900/30">
-              <ClipboardList className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
-            </div>
-          </div>
-          <h3 className="mb-2 text-lg font-bold text-gray-900 dark:text-white">
-            Henüz aksiyon maddesi yok
-          </h3>
-          <p className="mb-6 text-sm text-gray-500 dark:text-gray-400">
-            {isAdmin
+        <EmptyState
+          icon={ClipboardList}
+          title="Henüz aksiyon maddesi yok"
+          description={
+            isAdmin
               ? "İlk aksiyon maddesini ekleyerek başlayın."
-              : "Admin aksiyon maddesi eklediğinde burada görünecek."}
-          </p>
-          {isAdmin && (
-            <button
-              onClick={() => setShowAddModal(true)}
-              className="mx-auto flex items-center gap-3 border-2 border-indigo-600 bg-indigo-600 px-8 py-4 text-base font-bold text-white transition-colors hover:bg-indigo-700 hover:border-indigo-700"
-            >
-              <Plus className="h-6 w-6" />
-              İlk Aksiyon Maddesini Ekle
-            </button>
-          )}
-        </div>
+              : "Admin aksiyon maddesi eklediğinde burada görünecek."
+          }
+          actionLabel={isAdmin ? "İlk Aksiyon Maddesini Ekle" : undefined}
+          onAction={isAdmin ? () => setShowAddModal(true) : undefined}
+        />
       )}
 
       {/* Add Modal */}

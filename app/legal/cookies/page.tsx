@@ -40,7 +40,7 @@ export default function CookiesPage() {
               açıklamaktadır.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               1. Çerez Nedir?
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -50,7 +50,7 @@ export default function CookiesPage() {
               iyileştirmesini sağlar.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               2. Kullandığımız Çerez Türleri
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -124,7 +124,7 @@ export default function CookiesPage() {
               </li>
             </ul>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               3. Çerez Saklama Süreleri
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -141,7 +141,7 @@ export default function CookiesPage() {
               </li>
             </ul>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               4. Üçüncü Taraf Çerezler
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -157,7 +157,7 @@ export default function CookiesPage() {
               sayfasını ziyaret edebilirsiniz.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               5. Çerez Yönetimi
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -186,7 +186,7 @@ export default function CookiesPage() {
               </li>
             </ul>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               6. Çerez Onayı
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -195,7 +195,7 @@ export default function CookiesPage() {
               onay ekranı görüntülenir.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               7. Çerez Politikası Değişiklikleri
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
@@ -204,7 +204,7 @@ export default function CookiesPage() {
               her zaman bu sayfada yayınlanmaktadır.
             </p>
 
-            <h2 className="mt-8 text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="mt-8 text-base font-semibold text-gray-900 dark:text-white">
               8. İletişim
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">

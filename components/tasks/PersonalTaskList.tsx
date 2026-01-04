@@ -145,14 +145,56 @@ const PersonalTaskList = memo(function PersonalTaskList({
     }
   }, [router, onEdit]);
 
-  // Kategori renklerini al (filtrelerdeki renklerle aynı)
+  // Kategori renklerini al (gradient için)
   const getCategoryColor = (category: string) => {
-    const colors: Record<string, { border: string; bg: string; borderDark: string; bgDark: string }> = {
-      general: { border: "#2563eb", bg: "#dbeafe", borderDark: "#3b82f6", bgDark: "rgba(30, 64, 175, 0.2)" }, // blue
-      work: { border: "#16a34a", bg: "#dcfce7", borderDark: "#22c55e", bgDark: "rgba(20, 83, 45, 0.2)" }, // green
-      personal: { border: "#db2777", bg: "#fce7f3", borderDark: "#ec4899", bgDark: "rgba(190, 24, 93, 0.2)" }, // pink
-      meeting: { border: "#4f46e5", bg: "#e0e7ff", borderDark: "#6366f1", bgDark: "rgba(55, 48, 163, 0.2)" }, // indigo
-      project: { border: "#0891b2", bg: "#cffafe", borderDark: "#06b6d4", bgDark: "rgba(8, 145, 178, 0.2)" }, // cyan
+    const colors: Record<string, { 
+      border: string; 
+      bg: string; 
+      bgGradient: string;
+      borderDark: string; 
+      bgDark: string;
+      bgGradientDark: string;
+    }> = {
+      general: { 
+        border: "#2563eb", 
+        bg: "#dbeafe", 
+        bgGradient: "from-blue-50 via-blue-100/50 to-white",
+        borderDark: "#3b82f6", 
+        bgDark: "rgba(30, 64, 175, 0.3)",
+        bgGradientDark: "from-blue-950/40 via-blue-900/30 to-gray-900"
+      },
+      work: { 
+        border: "#16a34a", 
+        bg: "#dcfce7", 
+        bgGradient: "from-green-50 via-green-100/50 to-white",
+        borderDark: "#22c55e", 
+        bgDark: "rgba(20, 83, 45, 0.3)",
+        bgGradientDark: "from-green-950/40 via-green-900/30 to-gray-900"
+      },
+      personal: { 
+        border: "#db2777", 
+        bg: "#fce7f3", 
+        bgGradient: "from-pink-50 via-pink-100/50 to-white",
+        borderDark: "#ec4899", 
+        bgDark: "rgba(190, 24, 93, 0.3)",
+        bgGradientDark: "from-pink-950/40 via-pink-900/30 to-gray-900"
+      },
+      meeting: { 
+        border: "#4f46e5", 
+        bg: "#e0e7ff", 
+        bgGradient: "from-indigo-50 via-indigo-100/50 to-white",
+        borderDark: "#6366f1", 
+        bgDark: "rgba(55, 48, 163, 0.3)",
+        bgGradientDark: "from-indigo-950/40 via-indigo-900/30 to-gray-900"
+      },
+      project: { 
+        border: "#0891b2", 
+        bg: "#cffafe", 
+        bgGradient: "from-cyan-50 via-cyan-100/50 to-white",
+        borderDark: "#06b6d4", 
+        bgDark: "rgba(8, 145, 178, 0.3)",
+        bgGradientDark: "from-cyan-950/40 via-cyan-900/30 to-gray-900"
+      },
     };
     return colors[category] || colors.general;
   };
@@ -168,7 +210,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
   };
 
   return (
-    <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 sm:gap-4">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       {tasks.map((t) => {
         const priorityInfo = getPriorityInfo(t.priority ?? 1);
         const hasJiraIssue = !!t.jira_issue_key && !!t.jira_issue_url;
@@ -177,7 +219,14 @@ const PersonalTaskList = memo(function PersonalTaskList({
         // Renk belirleme: Önce Jira, sonra kategori, sonra priority
         let cardColor;
         if (hasJiraIssue) {
-          cardColor = { border: "#a855f7", bg: "#faf5ff", borderDark: "#9333ea", bgDark: "rgba(168, 85, 247, 0.2)" }; // purple
+          cardColor = { 
+            border: "#a855f7", 
+            bg: "#faf5ff", 
+            bgGradient: "from-purple-50 via-purple-100/50 to-white",
+            borderDark: "#9333ea", 
+            bgDark: "rgba(168, 85, 247, 0.3)",
+            bgGradientDark: "from-purple-950/40 via-purple-900/30 to-gray-900"
+          };
         } else {
           const categoryColor = getCategoryColor(t.category);
           cardColor = categoryColor;
@@ -187,30 +236,30 @@ const PersonalTaskList = memo(function PersonalTaskList({
           <div
             key={t.id}
             onClick={() => handleCardClick(t)}
-            className="group relative flex flex-col border-l-4 p-3 shadow-sm transition-all active:shadow-md sm:p-4 hover:shadow-md cursor-pointer"
+            className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-300 bg-white p-5 transition-all hover:border-gray-400 hover:shadow-lg cursor-pointer dark:border-gray-700 dark:bg-gray-900"
             style={{
-              borderLeftColor: cardColor.border,
-              backgroundColor: cardColor.bg,
+              borderColor: cardColor.border,
             }}
           >
-            {/* Dark mode background overlay */}
-            <div 
-              className="pointer-events-none absolute inset-0 opacity-0 dark:opacity-100 transition-opacity" 
-              style={{ backgroundColor: cardColor.bgDark }} 
+            {/* Top Color Bar */}
+            <div
+              className="absolute left-0 top-0 h-1.5 w-full"
+              style={{ backgroundColor: cardColor.border }}
             />
+
             {/* Header */}
             <div className="relative mb-3 flex items-start justify-between gap-2">
-              <h3 className="flex-1 text-base font-bold text-gray-900 dark:text-white sm:text-lg">
+              <h3 className="flex-1 text-base font-bold text-gray-900 dark:text-white line-clamp-2">
                 {t.title}
               </h3>
               <div className="flex shrink-0 items-center gap-1.5">
                 {hasJiraIssue && (
-                  <span className="rounded-md border-2 border-purple-600 bg-purple-600 px-2 py-0.5 font-mono text-xs font-bold text-white shadow-sm dark:border-purple-500 dark:bg-purple-600 dark:text-white">
+                  <span className="rounded-md border border-purple-600 bg-purple-600 px-2 py-1 font-mono text-xs font-bold text-white shadow-sm dark:border-purple-500 dark:bg-purple-600">
                     {t.jira_issue_key}
                   </span>
                 )}
                 <span
-                  className={`rounded-md border-2 px-2 py-0.5 text-xs font-semibold ${priorityInfo.bg} ${priorityInfo.text}`}
+                  className={`rounded-md border px-2 py-1 text-xs font-semibold shadow-sm ${priorityInfo.bg} ${priorityInfo.text}`}
                   style={{
                     borderColor: t.priority === 3 ? '#dc2626' : t.priority === 2 ? '#2563eb' : '#6b7280',
                   }}
@@ -222,8 +271,8 @@ const PersonalTaskList = memo(function PersonalTaskList({
 
             {/* Description */}
             {t.description && (
-              <div className="relative mb-3">
-                <p className="line-clamp-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+              <div className="relative mb-4">
+                <p className="line-clamp-2 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
                   {t.description}
                 </p>
               </div>
@@ -231,10 +280,10 @@ const PersonalTaskList = memo(function PersonalTaskList({
 
             {/* Jira Info - Minimal */}
             {hasJiraIssue && jiraTask && (
-              <div className="relative mb-3 flex flex-wrap items-center gap-2">
+              <div className="relative mb-2 flex flex-wrap items-center gap-1.5">
                 {jiraTask.status && (
                   <span
-                    className={`rounded-md border-2 px-2 py-0.5 text-xs font-semibold shadow-sm ${getStatusColorClasses(
+                    className={`rounded border px-1.5 py-0.5 text-[10px] font-semibold ${getStatusColorClasses(
                       jiraTask.statusColor
                     )}`}
                   >
@@ -242,15 +291,15 @@ const PersonalTaskList = memo(function PersonalTaskList({
                   </span>
                 )}
                 {jiraTask.assignee && (
-                  <div className="flex items-center gap-1.5 rounded-md border-2 border-gray-300 bg-gray-50 px-2 py-0.5 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                  <div className="flex items-center gap-1 rounded border border-gray-300 bg-gray-50 px-1.5 py-0.5 dark:border-gray-700 dark:bg-gray-800">
                     {jiraTask.assignee.avatar && (
                       <img
                         src={jiraTask.assignee.avatar}
                         alt={jiraTask.assignee.name}
-                        className="h-4 w-4 rounded-full border border-gray-300 dark:border-gray-600"
+                        className="h-3 w-3 rounded-full border border-gray-300 dark:border-gray-600"
                       />
                     )}
-                    <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                    <span className="text-[10px] font-medium text-gray-700 dark:text-gray-300">
                       {jiraTask.assignee.name}
                     </span>
                   </div>
@@ -259,9 +308,9 @@ const PersonalTaskList = memo(function PersonalTaskList({
             )}
 
             {/* Info - Minimal */}
-            <div className="relative mb-3 flex flex-wrap items-center gap-2">
+            <div className="relative mb-4 flex flex-wrap items-center gap-2">
               <span
-                className="rounded-md border-2 px-2 py-0.5 text-xs font-medium shadow-sm"
+                className="rounded-md border px-2.5 py-1 text-xs font-medium shadow-sm"
                 style={{
                   borderColor: hasJiraIssue ? "#a855f7" : getCategoryColor(t.category).border,
                   backgroundColor: hasJiraIssue ? "#faf5ff" : getCategoryColor(t.category).bg,
@@ -271,27 +320,34 @@ const PersonalTaskList = memo(function PersonalTaskList({
                 {getCategoryLabel(t.category)}
               </span>
               {t.created_at && (
-                <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
-                  <Calendar className="h-3 w-3" />
+                <div className="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400">
+                  <Calendar className="h-3.5 w-3.5" />
                   <span>{formatDate(t.created_at)}</span>
                 </div>
               )}
             </div>
 
             {/* Actions */}
-            <div
-              className="relative mt-auto flex items-center gap-2 border-t-2 pt-3"
-              style={{
-                borderTopColor: hasJiraIssue ? "rgba(168, 85, 247, 0.3)" : `${cardColor.border}40`,
-              }}
-            >
+            <div className="relative mt-auto flex items-center gap-2 border-t-2 pt-4" style={{ borderTopColor: `${cardColor.border}40` }}>
               {hasJiraIssue ? (
                 <a
                   href={t.jira_issue_url || "#"}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="flex-1 inline-flex items-center justify-center gap-2 rounded-md border-2 border-purple-600 bg-purple-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-all hover:border-purple-700 hover:bg-purple-700 hover:shadow-md active:border-purple-800 active:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500/20 disabled:cursor-not-allowed disabled:opacity-60 dark:border-purple-500 dark:bg-purple-600 dark:hover:border-purple-400 dark:hover:bg-purple-500 min-h-[36px]"
+                  className="flex-1 inline-flex h-9 items-center justify-center gap-2 rounded-md border-2 px-4 text-sm font-semibold text-white shadow-sm transition-all hover:shadow-md"
+                  style={{
+                    borderColor: cardColor.border,
+                    backgroundColor: cardColor.border,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = cardColor.borderDark;
+                    e.currentTarget.style.backgroundColor = cardColor.borderDark;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = cardColor.border;
+                    e.currentTarget.style.backgroundColor = cardColor.border;
+                  }}
                 >
                   <ExternalLink className="h-4 w-4" />
                   <span>Jira&apos;da Aç</span>
@@ -306,32 +362,41 @@ const PersonalTaskList = memo(function PersonalTaskList({
                   size="sm"
                   icon={Link2}
                   fullWidth
-                  className="!border-orange-600 !bg-orange-600 hover:!border-orange-700 hover:!bg-orange-700 dark:!border-orange-500 dark:!bg-orange-600 dark:hover:!border-orange-400 dark:hover:!bg-orange-500"
+                  className="!h-9 !text-white !shadow-sm hover:!shadow-md"
+                  style={{
+                    borderColor: cardColor.border,
+                    backgroundColor: cardColor.border,
+                  }}
                 >
                   Jira&apos;da Aç
                 </Button>
               ) : null}
-              <Button
+              <button
                 onClick={(e) => {
                   e.stopPropagation();
                   onEdit(t);
                 }}
-                variant="secondary"
-                size="sm"
-                icon={Edit}
-                className="!border-gray-300 !bg-white !text-gray-700 hover:!border-gray-400 hover:!bg-gray-50 dark:!border-gray-700 dark:!bg-gray-800 dark:!text-gray-300 dark:hover:!border-gray-600 dark:hover:!bg-gray-700"
-              />
-              <Button
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border-2 transition-colors hover:bg-white/10"
+                style={{
+                  borderColor: cardColor.border,
+                  color: cardColor.border,
+                }}
+                title="Düzenle"
+              >
+                <Edit className="h-4 w-4" />
+              </button>
+              <button
                 onClick={(e) => {
                   e.stopPropagation();
                   if (confirm(`"${t.title}" task'ını silmek istediğinize emin misiniz?`)) {
                     onDelete(t.id);
                   }
                 }}
-                variant="danger"
-                size="sm"
-                icon={Trash2}
-              />
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border-2 border-red-400 text-red-400 transition-colors hover:bg-red-400/10 dark:border-red-500 dark:text-red-500"
+                title="Sil"
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
             </div>
           </div>
         );

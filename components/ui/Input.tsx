@@ -50,9 +50,9 @@ const Input = memo(
       const currentLength = typeof value === "string" ? value.length : 0;
 
       const sizeClasses = {
-        sm: "px-3 py-2 text-sm min-h-[36px]",
-        md: "px-4 py-2.5 text-sm min-h-[44px]",
-        lg: "px-5 py-3 text-base min-h-[52px]",
+        sm: "px-3 py-2 text-xs min-h-[36px]",
+        md: "px-4 py-2.5 text-xs min-h-[44px]",
+        lg: "px-5 py-3 text-sm min-h-[52px]",
       };
 
       const labelSizeClasses = {
@@ -160,9 +160,9 @@ const Textarea = memo(
       const currentLength = typeof value === "string" ? value.length : 0;
 
       const sizeClasses = {
-        sm: "px-3 py-2 text-sm min-h-[72px]",
-        md: "px-4 py-2.5 text-sm min-h-[88px]",
-        lg: "px-5 py-3 text-base min-h-[104px]",
+        sm: "px-3 py-2 text-xs min-h-[72px]",
+        md: "px-4 py-2.5 text-xs min-h-[88px]",
+        lg: "px-5 py-3 text-sm min-h-[104px]",
       };
 
       const labelSizeClasses = {

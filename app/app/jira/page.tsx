@@ -2,7 +2,14 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { Folder, ClipboardList, Pin, Search, ChevronRight, Zap } from "lucide-react";
+import {
+  Folder,
+  ClipboardList,
+  Pin,
+  Search,
+  ChevronRight,
+  Zap,
+} from "lucide-react";
 import PageHeader from "@/components/layout/PageHeader";
 import Button from "@/components/ui/Button";
 import { getStatusColorClasses } from "@/lib/jira/colors";
@@ -142,7 +149,7 @@ export default function JiraDashboardPage() {
           <div className="mb-2 flex h-8 w-8 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20 sm:mb-3 sm:h-12 sm:w-12">
             <Folder className="h-4 w-4 text-purple-600 dark:text-purple-400 sm:h-6 sm:w-6" />
           </div>
-          <div className="text-lg font-bold text-gray-900 dark:text-white sm:text-2xl">
+          <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">
             {loading ? (
               <span className="inline-block h-5 w-8 animate-pulse bg-gray-200 dark:bg-gray-800 sm:h-8 sm:w-12" />
             ) : (
@@ -161,7 +168,7 @@ export default function JiraDashboardPage() {
           <div className="mb-2 flex h-8 w-8 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20 sm:mb-3 sm:h-12 sm:w-12">
             <ClipboardList className="h-4 w-4 text-green-600 dark:text-green-400 sm:h-6 sm:w-6" />
           </div>
-          <div className="text-lg font-bold text-gray-900 dark:text-white sm:text-2xl">
+          <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">
             {loading ? (
               <span className="inline-block h-5 w-8 animate-pulse bg-gray-200 dark:bg-gray-800 sm:h-8 sm:w-12" />
             ) : (
@@ -180,7 +187,7 @@ export default function JiraDashboardPage() {
           <div className="mb-2 flex h-8 w-8 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20 sm:mb-3 sm:h-12 sm:w-12">
             <Pin className="h-4 w-4 text-purple-600 dark:text-purple-400 sm:h-6 sm:w-6" />
           </div>
-          <div className="text-lg font-bold text-gray-900 dark:text-white sm:text-2xl">
+          <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">
             {loading ? (
               <span className="inline-block h-5 w-8 animate-pulse bg-gray-200 dark:bg-gray-800 sm:h-8 sm:w-12" />
             ) : (
@@ -199,7 +206,7 @@ export default function JiraDashboardPage() {
           <div className="mb-2 flex h-8 w-8 items-center justify-center border-2 border-orange-600 bg-orange-50 dark:bg-orange-900/20 sm:mb-3 sm:h-12 sm:w-12">
             <Search className="h-4 w-4 text-orange-600 dark:text-orange-400 sm:h-6 sm:w-6" />
           </div>
-          <div className="text-lg font-bold text-gray-900 dark:text-white sm:text-2xl">
+          <div className="text-base font-bold text-gray-900 dark:text-white sm:text-lg">
             —
           </div>
           <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 sm:text-sm">
@@ -217,7 +224,7 @@ export default function JiraDashboardPage() {
               <div className="flex h-10 w-10 items-center justify-center border-2 border-purple-600 bg-purple-50 dark:bg-purple-900/20">
                 <Folder className="h-5 w-5 text-purple-600 dark:text-purple-400" />
               </div>
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+              <h2 className="text-base font-bold text-gray-900 dark:text-white">
                 Son Projeler
               </h2>
             </div>
@@ -291,7 +298,7 @@ export default function JiraDashboardPage() {
               <div className="flex h-10 w-10 items-center justify-center border-2 border-green-600 bg-green-50 dark:bg-green-900/20">
                 <ClipboardList className="h-5 w-5 text-green-600 dark:text-green-400" />
               </div>
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+              <h2 className="text-base font-bold text-gray-900 dark:text-white">
                 Son Issue&apos;lar
               </h2>
             </div>

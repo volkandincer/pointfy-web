@@ -13,10 +13,10 @@ const CTA = memo(function CTA() {
             <Download className="h-8 w-8 text-primary-foreground" />
           </div>
         </div>
-        <h2 className="mb-4 text-3xl font-bold tracking-tight text-primary-foreground md:text-4xl">
+        <h2 className="mb-4 text-lg font-bold tracking-tight text-primary-foreground md:text-xl">
           Hemen Başlayın
         </h2>
-        <p className="mb-8 text-base text-primary-foreground/90 md:text-lg">
+        <p className="mb-8 text-sm text-primary-foreground/90 md:text-base">
           TeamHubX&apos;ı indirin ve takımınızla daha verimli çalışmaya başlayın.
         </p>
         <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:justify-center">

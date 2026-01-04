@@ -6,6 +6,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import PageHeader from "@/components/layout/PageHeader";
 import Button from "@/components/ui/Button";
+import Input, { Textarea } from "@/components/ui/Input";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type {
   ContactApiResponse,
@@ -79,65 +80,44 @@ export default function ContactPage() {
                 aria-hidden="true"
               />
               
-              <div>
-                <label
-                  htmlFor="name"
-                  className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300"
-                >
-                  Ad Soyad
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  required
-                  value={form.name}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, name: e.target.value }))
-                  }
-                  className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
-                  placeholder="Adınız ve soyadınız"
-                />
-              </div>
+              <Input
+                id="name"
+                type="text"
+                label="Ad Soyad"
+                required
+                value={form.name}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, name: e.target.value }))
+                }
+                placeholder="Adınız ve soyadınız"
+                size="md"
+              />
 
-              <div>
-                <label
-                  htmlFor="email"
-                  className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300"
-                >
-                  E-posta
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  required
-                  value={form.email}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, email: e.target.value }))
-                  }
-                  className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
-                  placeholder="ornek@email.com"
-                />
-              </div>
+              <Input
+                id="email"
+                type="email"
+                label="E-posta"
+                required
+                value={form.email}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, email: e.target.value }))
+                }
+                placeholder="ornek@email.com"
+                size="md"
+              />
 
-              <div>
-                <label
-                  htmlFor="message"
-                  className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300"
-                >
-                  Mesaj
-                </label>
-                <textarea
-                  id="message"
-                  required
-                  rows={6}
-                  value={form.message}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, message: e.target.value }))
-                  }
-                  className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
-                  placeholder="Mesajınızı buraya yazın..."
-                />
-              </div>
+              <Textarea
+                id="message"
+                label="Mesaj"
+                required
+                rows={6}
+                value={form.message}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, message: e.target.value }))
+                }
+                placeholder="Mesajınızı buraya yazın..."
+                size="md"
+              />
 
               {/* Result Message */}
               {result && (
