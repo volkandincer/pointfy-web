@@ -260,7 +260,7 @@ export default function PersonalTasksPage() {
                       disabled={syncing}
                       className="!border-purple-600 !bg-white !text-purple-600 hover:!border-purple-700 hover:!bg-purple-50 dark:!border-purple-500 dark:!bg-gray-800 dark:!text-purple-400 dark:hover:!border-purple-400 dark:hover:!bg-purple-900/20"
                     >
-                      Jira'dan Sync
+                      Jira&apos;dan Sync
                     </Button>
                   )}
                   <Button

@@ -1,8 +1,10 @@
 "use client";
 
 import { memo, useState } from "react";
-import { Zap, RotateCcw, Settings, Check, Home, FileText, ChevronDown, ChevronUp, Users, Lock, Eye, Sparkles } from "lucide-react";
+import { Zap, RotateCcw, Settings, ChevronDown, ChevronUp, Lock, Eye, Sparkles, Plus, Minus } from "lucide-react";
 import Button from "@/components/ui/Button";
+import Input, { Textarea } from "@/components/ui/Input";
+import Switch from "@/components/ui/Switch";
 import type {
   RoomType,
   RoomSettings,
@@ -15,22 +17,20 @@ interface CreateRoomFormProps {
   initialRoomType?: RoomType;
 }
 
-const ROOM_TYPES: { key: RoomType; label: string; icon: typeof Zap; color: string; description: string; features: string[] }[] = [
+const ROOM_TYPES: { key: RoomType; label: string; icon: typeof Zap; color: "blue" | "purple"; description: string }[] = [
   { 
     key: "poker", 
     label: "Planning Poker", 
     icon: Zap,
     color: "blue",
-    description: "Task'lar için story point tahmini yapın",
-    features: ["Story point tahmini", "Fibonacci serisi", "Anonim oylama"]
+    description: "Task'lar için story point tahmini yapın"
   },
   { 
     key: "retro", 
     label: "Retrospective", 
     icon: RotateCcw,
     color: "purple",
-    description: "Sprint sonrası geri bildirim toplayın",
-    features: ["Glad/Sad/Mad kategorileri", "Anonim kartlar", "Action items"]
+    description: "Sprint sonrası geri bildirim toplayın"
   },
 ];
 
@@ -52,7 +52,6 @@ const CreateRoomForm = memo(function CreateRoomForm({
     autoReveal: false,
   });
   const [showAdvancedSettings, setShowAdvancedSettings] = useState<boolean>(false);
-  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const isFormValid =
     name.trim().length >= 3 &&
@@ -71,141 +70,116 @@ const CreateRoomForm = memo(function CreateRoomForm({
 
   const nameError = name.trim().length > 0 && name.trim().length < 3;
   const passwordError = settings.isPrivate && settings.roomPassword.length > 0 && settings.roomPassword.length !== 4;
-  const selectedType = ROOM_TYPES.find(t => t.key === roomType);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Oda Tipi Seçimi - Kompakt Tab'lar */}
-      <div>
-        <div className="mb-3 flex items-center gap-2">
-          <Sparkles className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-          <label className="text-sm font-semibold text-gray-900 dark:text-white">
-            Oda Tipi
-          </label>
-          <span className="text-red-600 dark:text-red-400">*</span>
-        </div>
-        <div className="border-b-2 border-gray-200 dark:border-gray-700">
-          <div className="flex gap-1">
-            {ROOM_TYPES.map((type) => {
-              const isSelected = roomType === type.key;
-              const IconComponent = type.icon;
-              const isBlue = type.color === "blue";
-              
-              return (
-                <button
-                  key={type.key}
-                  type="button"
-                  onClick={() => setRoomType(type.key)}
-                  className={`flex flex-1 items-center justify-center gap-2 border-b-2 px-4 py-3 text-sm font-semibold transition ${
-                    isSelected
-                      ? isBlue
-                        ? "border-blue-600 text-blue-600 dark:text-blue-400"
-                        : "border-purple-600 text-purple-600 dark:text-purple-400"
-                      : "border-transparent text-gray-600 hover:border-gray-300 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
-                  }`}
-                >
-                  <IconComponent className="h-4 w-4" />
-                  <span>{type.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-        {selectedType && (
-          <div className="mt-3 rounded-md border-2 border-gray-200 bg-gray-50 p-3 dark:border-gray-800 dark:bg-gray-800/50">
-            <p className="text-xs text-gray-600 dark:text-gray-400">
-              {selectedType.description}
-            </p>
-          </div>
-        )}
-      </div>
-
-      {/* Form Alanları */}
-      <div className="space-y-6">
-        {/* Oda Adı */}
-        <div>
-          <label
-            htmlFor="room-name"
-            className="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
-          >
-            Oda Adı <span className="text-red-600 dark:text-red-400">*</span>
-          </label>
-          <input
-            id="room-name"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Örn: Sprint Planning, Q1 Review, Daily Standup"
-            maxLength={50}
-            required
-            className={`w-full rounded-md border-2 px-4 py-3 text-base text-gray-900 outline-none transition focus:ring-2 ${
-              nameError
-                ? "border-red-300 bg-red-50 focus:border-red-500 focus:ring-red-500/20 dark:border-red-700 dark:bg-red-900/20 dark:focus:border-red-500"
-                : "border-gray-300 bg-white focus:border-blue-500 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:focus:border-blue-400"
-            } dark:text-white`}
-          />
-          <div className="mt-2 flex items-center justify-between">
-            <p className={`text-xs ${nameError ? "text-red-600 dark:text-red-400" : "text-gray-500 dark:text-gray-400"}`}>
-              {nameError ? "Oda adı en az 3 karakter olmalıdır" : "Minimum 3 karakter gerekli"}
-            </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              {name.length}/50
-            </p>
-          </div>
-        </div>
-
-        {/* Açıklama */}
-        <div>
-          <label
-            htmlFor="room-desc"
-            className="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
-          >
-            Açıklama <span className="text-xs font-normal text-gray-500 dark:text-gray-400">(Opsiyonel)</span>
-          </label>
-          <textarea
-            id="room-desc"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Bu oda için kısa bir açıklama ekleyin..."
-            rows={3}
-            maxLength={200}
-            className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-400"
-          />
-          <p className="mt-2 text-right text-xs text-gray-500 dark:text-gray-400">
-            {description.length}/200
-          </p>
+      {/* Room Type Selection */}
+      <div className="space-y-3">
+        <label className="text-sm font-semibold text-foreground">
+          Oda Tipi <span className="text-destructive">*</span>
+        </label>
+        <div className="flex gap-3">
+          {ROOM_TYPES.map((type) => {
+            const isSelected = roomType === type.key;
+            const Icon = type.icon;
+            const isBlue = type.color === "blue";
+            const borderColor = isSelected
+              ? isBlue
+                ? "border-blue-600 dark:border-blue-500"
+                : "border-purple-600 dark:border-purple-500"
+              : "border-border";
+            const bgColor = isSelected
+              ? isBlue
+                ? "bg-blue-50 dark:bg-blue-900/20"
+                : "bg-purple-50 dark:bg-purple-900/20"
+              : "bg-card";
+            const iconBg = isBlue
+              ? "bg-blue-50 dark:bg-blue-900/20"
+              : "bg-purple-50 dark:bg-purple-900/20";
+            const iconText = isBlue
+              ? "text-blue-600 dark:text-blue-400"
+              : "text-purple-600 dark:text-purple-400";
+            
+            return (
+              <button
+                key={type.key}
+                type="button"
+                onClick={() => setRoomType(type.key)}
+                className={`flex flex-1 items-center gap-3 rounded-md border-2 ${borderColor} ${bgColor} p-4 transition-all hover:shadow-sm`}
+              >
+                <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border ${iconBg}`}>
+                  <Icon className={`h-5 w-5 ${iconText}`} />
+                </div>
+                <div className="flex-1 text-left">
+                  <div className="text-sm font-semibold text-foreground">
+                    {type.label}
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    {type.description}
+                  </div>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      {/* Gelişmiş Ayarlar - Accordion */}
-      <div className="rounded-md border-2 border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-800/50">
+      {/* Basic Information */}
+      <div className="space-y-5">
+        <Input
+          id="room-name"
+          label="Oda Adı"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Örn: Sprint Planning, Q1 Review"
+          maxLength={50}
+          required
+          error={nameError ? "Oda adı en az 3 karakter olmalıdır" : undefined}
+          helperText={!nameError ? "Minimum 3 karakter gerekli" : undefined}
+          showCharCount
+        />
+
+        <Textarea
+          id="room-desc"
+          label="Açıklama"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Bu oda için kısa bir açıklama ekleyin..."
+          rows={3}
+          maxLength={200}
+          showCharCount
+        />
+      </div>
+
+      {/* Advanced Settings */}
+      <div className="space-y-4">
         <button
           type="button"
           onClick={() => setShowAdvancedSettings(!showAdvancedSettings)}
-          className="flex w-full items-center justify-between p-5 text-left transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+          className="flex w-full items-center justify-between rounded-md border border-border bg-card p-4 text-left shadow-sm transition-all hover:shadow-md"
         >
-          <div className="flex items-center gap-3">
-            <Settings className="h-5 w-5 text-gray-600 dark:text-gray-400" />
-            <span className="text-sm font-semibold text-gray-900 dark:text-white">
+          <div className="flex items-center gap-2">
+            <Settings className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm font-semibold text-foreground">
               Gelişmiş Ayarlar
             </span>
           </div>
           {showAdvancedSettings ? (
-            <ChevronUp className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+            <ChevronUp className="h-4 w-4 text-muted-foreground" />
           ) : (
-            <ChevronDown className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+            <ChevronDown className="h-4 w-4 text-muted-foreground" />
           )}
         </button>
 
         {showAdvancedSettings && (
-          <div className="border-t-2 border-gray-200 p-5 space-y-6 dark:border-gray-800">
-            {/* Maksimum Katılımcı */}
-            <div>
-              <label className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
-                <Users className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+          <div className="space-y-4">
+            {/* Max Participants */}
+            <div className="rounded-md border border-border bg-card p-4 shadow-sm">
+              <label className="mb-3 block text-sm font-semibold text-foreground">
                 Maksimum Katılımcı
               </label>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() =>
@@ -215,12 +189,12 @@ const CreateRoomForm = memo(function CreateRoomForm({
                     }))
                   }
                   disabled={settings.maxParticipants <= 2}
-                  className="inline-flex h-12 w-12 items-center justify-center rounded-md border-2 border-gray-300 bg-white text-lg font-bold text-gray-900 transition-all hover:border-gray-400 hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                  className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border bg-background text-foreground transition-all hover:bg-accent disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  −
+                  <Minus className="h-4 w-4" />
                 </button>
-                <div className="flex h-16 w-20 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-50 dark:border-blue-500 dark:bg-blue-900/20">
-                  <span className="text-2xl font-bold text-blue-700 dark:text-blue-400">
+                <div className="flex h-9 min-w-[4rem] items-center justify-center rounded-md border border-border bg-muted px-3">
+                  <span className="text-sm font-semibold text-foreground">
                     {settings.maxParticipants}
                   </span>
                 </div>
@@ -233,58 +207,43 @@ const CreateRoomForm = memo(function CreateRoomForm({
                     }))
                   }
                   disabled={settings.maxParticipants >= 20}
-                  className="inline-flex h-12 w-12 items-center justify-center rounded-md border-2 border-gray-300 bg-white text-lg font-bold text-gray-900 transition-all hover:border-gray-400 hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                  className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border bg-background text-foreground transition-all hover:bg-accent disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  +
+                  <Plus className="h-4 w-4" />
                 </button>
+                <span className="ml-auto text-xs text-muted-foreground">
+                  2-20 arası
+                </span>
               </div>
-              <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                Minimum: 2, Maksimum: 20
-              </p>
             </div>
 
-            {/* Özel Oda Toggle */}
-            <div className="rounded-md border-2 border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
-              <label className="flex cursor-pointer items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Lock className="h-5 w-5 text-gray-600 dark:text-gray-400" />
-                  <div>
-                    <span className="block text-sm font-semibold text-gray-900 dark:text-white">
-                      Özel Oda
-                    </span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                      Odaya şifre ile erişim sağlayın
-                    </span>
-                  </div>
-                </div>
-                <div className="relative">
-                  <input
-                    type="checkbox"
-                    checked={settings.isPrivate}
-                    onChange={(e) =>
-                      setSettings((prev) => ({
-                        ...prev,
-                        isPrivate: e.target.checked,
-                        roomPassword: e.target.checked ? prev.roomPassword : "",
-                      }))
-                    }
-                    className="peer sr-only"
-                  />
-                  <div className="h-6 w-11 rounded-full bg-gray-300 transition-colors peer-checked:bg-blue-600 dark:bg-gray-700 peer-checked:dark:bg-blue-600"></div>
-                  <div className="absolute left-1 top-1 h-4 w-4 rounded-full bg-white transition-transform peer-checked:translate-x-5"></div>
-                </div>
-              </label>
-            </div>
+            {/* Switches */}
+            <div className="space-y-3">
+              <div className="rounded-md border border-border bg-card p-4 shadow-sm">
+                <Switch
+                  id="is-private"
+                  label="Özel Oda"
+                  description="Odaya şifre ile erişim sağlayın"
+                  icon={<Lock className="h-4 w-4" />}
+                  checked={settings.isPrivate}
+                  onChange={(e) =>
+                    setSettings((prev) => ({
+                      ...prev,
+                      isPrivate: e.target.checked,
+                      roomPassword: e.target.checked ? prev.roomPassword : "",
+                    }))
+                  }
+                  variant="compact"
+                  className="!border-0 !bg-transparent !p-0"
+                />
+              </div>
 
-            {/* Şifre Input */}
-            {settings.isPrivate && (
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-gray-900 dark:text-white">
-                  Oda Şifresi (4 karakter) <span className="text-red-600 dark:text-red-400">*</span>
-                </label>
-                <div className="flex items-center gap-2">
-                  <input
-                    type={showPassword ? "text" : "password"}
+              {settings.isPrivate && (
+                <div className="rounded-md border border-border bg-card p-4 shadow-sm">
+                  <Input
+                    id="room-password"
+                    label="Oda Şifresi"
+                    type="password"
                     value={settings.roomPassword}
                     onChange={(e) => {
                       const val = e.target.value.replace(/[^a-zA-Z0-9]/g, "");
@@ -293,124 +252,75 @@ const CreateRoomForm = memo(function CreateRoomForm({
                     }}
                     maxLength={4}
                     placeholder="1234"
-                    className={`flex-1 rounded-md border-2 px-4 py-3 text-center text-lg font-bold tracking-widest text-gray-900 outline-none transition focus:ring-2 ${
-                      passwordError
-                        ? "border-red-300 bg-red-50 focus:border-red-500 focus:ring-red-500/20 dark:border-red-700 dark:bg-red-900/20 dark:focus:border-red-500"
-                        : "border-gray-300 bg-white focus:border-blue-500 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:focus:border-blue-400"
-                    } dark:text-white`}
+                    required
+                    showPasswordToggle
+                    error={passwordError ? "4 karakterli şifre gerekli" : undefined}
+                    helperText={
+                      settings.roomPassword.length === 4
+                        ? undefined
+                        : !passwordError
+                          ? "4 karakter (harf veya rakam)"
+                          : undefined
+                    }
+                    className="text-center text-base font-semibold tracking-widest"
                   />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((v) => !v)}
-                    className="rounded-md border-2 border-gray-300 bg-white p-3 text-gray-700 transition-all hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-                  >
-                    {showPassword ? (
-                      <Eye className="h-5 w-5" />
-                    ) : (
-                      <Lock className="h-5 w-5" />
-                    )}
-                  </button>
                 </div>
-                {settings.roomPassword.length === 4 ? (
-                  <p className="mt-2 flex items-center gap-1 text-xs text-green-600 dark:text-green-400">
-                    <Check className="h-4 w-4" />
-                    Şifre kaydedildi
-                  </p>
-                ) : passwordError ? (
-                  <p className="mt-2 text-xs text-red-600 dark:text-red-400">
-                    4 karakterli şifre gerekli
-                  </p>
-                ) : (
-                  <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                    4 karakterli şifre girin (harf veya rakam)
-                  </p>
-                )}
+              )}
+
+              <div className="rounded-md border border-border bg-card p-4 shadow-sm">
+                <Switch
+                  id="allow-spectators"
+                  label="İzleyicilere İzin Ver"
+                  description="İzleyiciler oy veremez, sadece görüntüleyebilir"
+                  icon={<Eye className="h-4 w-4" />}
+                  checked={settings.allowSpectators}
+                  onChange={(e) =>
+                    setSettings((prev) => ({
+                      ...prev,
+                      allowSpectators: e.target.checked,
+                    }))
+                  }
+                  variant="compact"
+                  className="!border-0 !bg-transparent !p-0"
+                />
               </div>
-            )}
 
-            {/* İzleyicilere İzin Ver Toggle */}
-            <div className="rounded-md border-2 border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
-              <label className="flex cursor-pointer items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Eye className="h-5 w-5 text-gray-600 dark:text-gray-400" />
-                  <div>
-                    <span className="block text-sm font-semibold text-gray-900 dark:text-white">
-                      İzleyicilere İzin Ver
-                    </span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                      İzleyiciler oy veremez, sadece görüntüleyebilir
-                    </span>
-                  </div>
-                </div>
-                <div className="relative">
-                  <input
-                    type="checkbox"
-                    checked={settings.allowSpectators}
-                    onChange={(e) =>
-                      setSettings((prev) => ({
-                        ...prev,
-                        allowSpectators: e.target.checked,
-                      }))
-                    }
-                    className="peer sr-only"
-                  />
-                  <div className="h-6 w-11 rounded-full bg-gray-300 transition-colors peer-checked:bg-blue-600 dark:bg-gray-700 peer-checked:dark:bg-blue-600"></div>
-                  <div className="absolute left-1 top-1 h-4 w-4 rounded-full bg-white transition-transform peer-checked:translate-x-5"></div>
-                </div>
-              </label>
+              <div className="rounded-md border border-border bg-card p-4 shadow-sm">
+                <Switch
+                  id="auto-reveal"
+                  label="Otomatik Açıklama"
+                  description="Tüm oylar verildiğinde otomatik olarak açıklanır"
+                  icon={<Sparkles className="h-4 w-4" />}
+                  checked={settings.autoReveal}
+                  onChange={(e) =>
+                    setSettings((prev) => ({
+                      ...prev,
+                      autoReveal: e.target.checked,
+                    }))
+                  }
+                  variant="compact"
+                  className="!border-0 !bg-transparent !p-0"
+                />
+              </div>
             </div>
-
-            {/* Otomatik Açıklama Toggle */}
-            <div className="rounded-md border-2 border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
-              <label className="flex cursor-pointer items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Sparkles className="h-5 w-5 text-gray-600 dark:text-gray-400" />
-                  <div>
-                    <span className="block text-sm font-semibold text-gray-900 dark:text-white">
-                      Otomatik Açıklama
-                    </span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                      Tüm oylar verildiğinde otomatik olarak açıklanır
-                    </span>
-                  </div>
-                </div>
-                <div className="relative">
-                  <input
-                    type="checkbox"
-                    checked={settings.autoReveal}
-                    onChange={(e) =>
-                      setSettings((prev) => ({
-                        ...prev,
-                        autoReveal: e.target.checked,
-                      }))
-                    }
-                    className="peer sr-only"
-                  />
-                  <div className="h-6 w-11 rounded-full bg-gray-300 transition-colors peer-checked:bg-blue-600 dark:bg-gray-700 peer-checked:dark:bg-blue-600"></div>
-                  <div className="absolute left-1 top-1 h-4 w-4 rounded-full bg-white transition-transform peer-checked:translate-x-5"></div>
-                </div>
-              </label>
-            </div>
-
           </div>
         )}
       </div>
 
       {/* Submit Button */}
-      <div className="pt-2">
+      <div className="space-y-2 border-t border-border pt-6">
         <Button
           type="submit"
           variant="primary"
           size="lg"
           fullWidth
           loading={loading}
-          icon={Home}
           disabled={!isFormValid}
         >
-          {loading ? "Oda oluşturuluyor..." : "Oda Oluştur"}
+          {loading ? "Oluşturuluyor..." : "Oda Oluştur"}
         </Button>
         {!isFormValid && (
-          <p className="mt-3 text-center text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-center text-xs text-muted-foreground">
             {name.trim().length < 3 && "Oda adı en az 3 karakter olmalıdır"}
             {name.trim().length >= 3 && settings.isPrivate && settings.roomPassword.length !== 4 && "Özel oda için 4 karakterli şifre gerekli"}
           </p>

@@ -178,7 +178,8 @@ export default function JiraBoardsPage() {
         icon={ClipboardList}
         iconColor="blue"
         actions={
-              onClick={fetchBoards}
+          <button
+            onClick={fetchBoards}
             disabled={loading}
             className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
           >

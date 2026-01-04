@@ -2,7 +2,7 @@
 
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Home, DoorOpen } from "lucide-react";
+import { DoorOpen } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import PageHeader from "@/components/layout/PageHeader";
@@ -134,17 +134,17 @@ function CreateRoomPageContent() {
   return (
     <>
       <Header navigationItems={navigationItems} />
-      <main className="min-h-screen bg-white dark:bg-gray-900">
-        <div className="container mx-auto px-4 py-12">
-          <div className="mx-auto max-w-3xl">
+      <main className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-8 sm:py-12">
+          <div className="mx-auto max-w-2xl">
             <PageHeader
               title="Yeni Oda Oluştur"
               description="Takımınızla birlikte çalışmak için bir oda oluşturun"
               icon={DoorOpen}
               iconColor="blue"
-              className="mb-10"
+              className="mb-8"
             />
-            <div className="rounded-md border-2 border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900 sm:p-8">
+            <div>
               <CreateRoomForm
                 onSubmit={handleCreate}
                 loading={loading}
