@@ -13,16 +13,16 @@ export default function RoomsPage() {
   return (
     <>
       <Header navigationItems={navigationItems} />
-      <main className="pb-8">
-        <div className="container mx-auto px-4 pt-8">
+      <main className="container mx-auto px-4 py-8">
+        <div className="mx-auto max-w-7xl">
           <PageHeader
             title="Aktif Odalar"
             description="Mevcut odalara katılın veya yeni bir oda oluşturun"
             icon={DoorOpen}
             iconColor="blue"
           />
+          <RecentRooms />
         </div>
-        <RecentRooms />
       </main>
       <Footer navigationItems={navigationItems} />
     </>

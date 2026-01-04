@@ -156,84 +156,103 @@ const RecentRooms = memo(function RecentRooms() {
   };
 
   return (
-    <section className="container mx-auto px-4 py-8">
-      <div className="mx-auto max-w-6xl">
+    <section className="mt-6">
+      <div>
 
         {loading ? (
-          <div className="space-y-4">
-            {Array.from({ length: 5 }).map((_, idx) => (
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, idx) => (
               <div
                 key={idx}
-                className="h-32 animate-pulse border-l-4 border-l-primary border-t border-r border-b border-border bg-card p-6 shadow-sm"
+                className="h-40 animate-pulse rounded-lg border border-gray-300 bg-white dark:border-gray-700 dark:bg-gray-900"
               />
             ))}
           </div>
         ) : displayedRooms.length > 0 ? (
           <>
             {/* Rooms List */}
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {displayedRooms.map((r) => {
                 const isRetro = r.room_type === "retro";
-                const borderColor = isRetro 
-                  ? "border-l-purple-600 dark:border-l-purple-500" 
-                  : "border-l-blue-600 dark:border-l-blue-500";
-                const iconGradient = isRetro
-                  ? "from-purple-500 to-purple-600"
-                  : "from-blue-500 to-blue-600";
-                const badgeBg = isRetro
-                  ? "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300"
-                  : "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300";
+                const cardColor = isRetro 
+                  ? { border: "#9333ea", borderDark: "#a855f7" } // purple
+                  : { border: "#2563eb", borderDark: "#3b82f6" }; // blue
                 const RoomIcon = isRetro ? RefreshCw : Users;
                 
                 return (
                   <button
                     key={r.id}
                     onClick={() => handleRoomClick(r.id)}
-                    className={`group relative flex w-full items-center gap-4 border-l-4 ${borderColor} border-t border-r border-b border-border bg-card p-4 text-left shadow-sm transition-all hover:border-border hover:shadow-md sm:gap-5 sm:p-5`}
+                    className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-300 bg-white p-5 text-left transition-all hover:border-gray-400 hover:shadow-lg cursor-pointer dark:border-gray-700 dark:bg-gray-900"
+                    style={{
+                      borderColor: cardColor.border,
+                    }}
                   >
-                    {/* Icon with Gradient Background */}
-                    <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-md border-2 ${borderColor} bg-gradient-to-br ${iconGradient} shadow-md transition-transform group-hover:scale-105 sm:h-14 sm:w-14`}>
-                      <RoomIcon className="h-6 w-6 text-white sm:h-7 sm:w-7" />
+                    {/* Top Color Bar */}
+                    <div
+                      className="absolute left-0 top-0 h-1.5 w-full"
+                      style={{ backgroundColor: cardColor.border }}
+                    />
+
+                    {/* Icon */}
+                    <div 
+                      className="mb-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border-2 transition-transform group-hover:scale-105"
+                      style={{
+                        borderColor: cardColor.border,
+                        backgroundColor: `${cardColor.border}15`,
+                      }}
+                    >
+                      <RoomIcon 
+                        className="h-5 w-5"
+                        style={{ color: cardColor.border }}
+                      />
                     </div>
 
                     {/* Content */}
                     <div className="flex flex-1 flex-col gap-2 min-w-0">
-                      {/* Header Row */}
-                      <div className="flex items-start justify-between gap-4">
+                      {/* Header */}
+                      <div className="flex items-start justify-between gap-2">
                         <div className="flex-1 min-w-0">
-                          <div className="mb-1 flex items-center gap-2">
-                            <h3 className="truncate text-base font-semibold text-card-foreground sm:text-lg">
+                          <div className="mb-1.5 flex items-center gap-1.5">
+                            <h3 className="truncate text-base font-bold text-gray-900 dark:text-white line-clamp-2">
                               {r.name || "İsimsiz Oda"}
                             </h3>
                             {r.is_private && (
-                              <Lock className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                              <Lock className="h-4 w-4 shrink-0 text-gray-500 dark:text-gray-400" />
                             )}
                           </div>
-                          <div className="flex items-center gap-2 text-xs text-muted-foreground sm:gap-3 sm:text-sm">
-                            <span className="rounded-md border border-border bg-muted px-2 py-0.5 font-mono text-xs font-semibold text-foreground sm:px-2.5 sm:py-1 sm:text-sm">
+                          <div className="flex items-center gap-2">
+                            <span className="rounded-md border border-gray-300 bg-gray-50 px-2 py-1 font-mono text-xs font-semibold text-gray-900 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white">
                               {r.code}
                             </span>
-                            <div className={`rounded-md border border-border px-2 py-0.5 text-[10px] font-semibold sm:px-2.5 sm:py-1 sm:text-xs ${badgeBg}`}>
+                            <span 
+                              className="rounded-md border px-2 py-1 text-xs font-medium shadow-sm"
+                              style={{
+                                borderColor: cardColor.border,
+                                backgroundColor: `${cardColor.border}15`,
+                                color: cardColor.border,
+                              }}
+                            >
                               {isRetro ? "Retro" : "Poker Planning"}
-                            </div>
+                            </span>
                           </div>
                         </div>
-                        <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 sm:h-5 sm:w-5" />
+                        <ArrowRight className="h-4 w-4 shrink-0 text-gray-400 transition-transform group-hover:translate-x-1 dark:text-gray-500" />
                       </div>
 
-                      {/* Details Row */}
-                      <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground sm:gap-4 sm:text-sm">
+                      {/* Details */}
+                      <div className="mt-auto flex flex-wrap items-center gap-3 border-t-2 pt-3" style={{ borderTopColor: `${cardColor.border}40` }}>
                         {r.created_by_username && (
-                          <div className="flex items-center gap-1.5">
-                            <Users className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                            <span className="font-medium text-foreground">
+                          <div className="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400">
+                            <Users className="h-3.5 w-3.5" />
+                            <span className="font-medium text-gray-900 dark:text-white">
                               {r.created_by_username}
                             </span>
                           </div>
                         )}
                         {r.created_at && (
-                          <div className="flex items-center gap-1.5">
-                            <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                          <div className="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400">
+                            <Calendar className="h-3.5 w-3.5" />
                             <span>{formatDate(r.created_at)}</span>
                           </div>
                         )}
@@ -246,17 +265,16 @@ const RecentRooms = memo(function RecentRooms() {
 
             {/* View All Button */}
             {hasMoreRooms && (
-              <div className="mt-6">
-                <button
+              <div className="mt-6 flex justify-center">
+                <Button
                   onClick={() => setShowAllRoomsModal(true)}
-                  className="group flex w-full items-center justify-center gap-3 rounded-md border-2 border-primary bg-card px-4 py-3 text-sm font-semibold text-primary shadow-sm transition-all hover:border-primary hover:bg-primary/10 hover:text-primary hover:shadow-md"
+                  variant="secondary"
+                  size="sm"
+                  icon={ClipboardList}
+                  className="!border-blue-600 !text-blue-600 hover:!border-blue-700 hover:!bg-blue-50 dark:!border-blue-500 dark:!text-blue-400 dark:hover:!bg-blue-900/20"
                 >
-                  <ClipboardList className="h-5 w-5" />
-                  <span>Tüm odaları gör</span>
-                  <span className="flex h-6 w-6 items-center justify-center rounded-md border-2 border-primary bg-primary text-xs font-bold text-primary-foreground">
-                    {displayedRooms.length - 20}
-                  </span>
-                </button>
+                  Tüm Odaları Gör ({displayedRooms.length - 20})
+                </Button>
               </div>
             )}
           </>

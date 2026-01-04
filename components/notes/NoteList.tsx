@@ -1,8 +1,7 @@
 "use client";
 
 import { memo } from "react";
-import { Trash2, Edit, Calendar, RefreshCw, FileText, MoreVertical } from "lucide-react";
-import Button from "@/components/ui/Button";
+import { Trash2, Edit, Calendar, RefreshCw, FileText } from "lucide-react";
 import EmptyState from "@/components/jira/EmptyState";
 import type { Note } from "@/interfaces/Note.interface";
 
@@ -74,14 +73,6 @@ function formatDate(dateValue: string | number | undefined): string {
   });
 }
 
-function formatTime(dateValue: string | number | undefined): string {
-  if (!dateValue) return "";
-  const date = new Date(dateValue);
-  return date.toLocaleTimeString("tr-TR", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
 
 const NoteList = memo(function NoteList({
   notes,
@@ -101,41 +92,97 @@ const NoteList = memo(function NoteList({
     );
   }
 
+  // Kategori renklerini al (task card'larındaki gibi)
+  const getCategoryColor = (category: string) => {
+    const colors: Record<string, { border: string; bg: string; borderDark: string }> = {
+      personal: { border: "#ec4899", bg: "#fce7f3", borderDark: "#db2777" }, // pink
+      work: { border: "#2563eb", bg: "#dbeafe", borderDark: "#1d4ed8" }, // blue
+      ideas: { border: "#a855f7", bg: "#f3e8ff", borderDark: "#9333ea" }, // purple
+      todo: { border: "#eab308", bg: "#fef9c3", borderDark: "#ca8a04" }, // yellow
+      important: { border: "#dc2626", bg: "#fee2e2", borderDark: "#b91c1c" }, // red
+      general: { border: "#6b7280", bg: "#f3f4f6", borderDark: "#4b5563" }, // gray
+    };
+    return colors[category] || colors.general;
+  };
+
   return (
-    <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 sm:gap-4">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       {notes.map((note) => {
-        const categoryStyle = getCategoryStyle(note.category);
+        const cardColor = getCategoryColor(note.category);
         const dateValue = note.createdAt || note.created_at;
         const updatedValue = note.updated_at;
         const isUpdated = updatedValue && updatedValue !== note.created_at;
 
-        // Border color mapping
-        const getBorderColor = (borderClass: string): string => {
-          if (borderClass.includes('yellow')) return '#eab308';
-          if (borderClass.includes('purple')) return '#a855f7';
-          if (borderClass.includes('blue')) return '#2563eb';
-          if (borderClass.includes('green')) return '#16a34a';
-          if (borderClass.includes('red')) return '#dc2626';
-          if (borderClass.includes('orange')) return '#f97316';
-          if (borderClass.includes('pink')) return '#ec4899';
-          return '#6b7280';
-        };
-
         return (
           <div
             key={note.id}
-            className="group relative flex flex-col border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-4 shadow-sm transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+            onClick={() => onEdit(note)}
+            className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-300 bg-white p-4 transition-all hover:border-gray-400 hover:shadow-md cursor-pointer dark:border-gray-700 dark:bg-gray-900"
             style={{
-              borderLeftColor: getBorderColor(categoryStyle.border),
+              borderColor: cardColor.border,
             }}
           >
-            {/* Header - Category Badge & Actions */}
-            <div className="mb-3 flex items-start justify-between gap-2">
+            {/* Top Color Bar */}
+            <div
+              className="absolute left-0 top-0 h-1 w-full"
+              style={{ backgroundColor: cardColor.border }}
+            />
+
+            {/* Header - Category Badge */}
+            <div className="relative mb-2">
               <span
-                className={`rounded-md border-2 px-2.5 py-1 text-xs font-semibold shadow-sm ${categoryStyle.bg} ${categoryStyle.text} ${categoryStyle.border}`}
+                className="rounded border px-2 py-0.5 text-xs font-medium"
+                style={{
+                  borderColor: cardColor.border,
+                  backgroundColor: `${cardColor.border}15`,
+                  color: cardColor.border,
+                }}
               >
                 {getCategoryLabel(note.category)}
               </span>
+            </div>
+
+            {/* Content */}
+            <div className="relative mb-3 flex-1 min-h-[50px]">
+              <p className="line-clamp-4 text-sm leading-relaxed text-gray-900 dark:text-white">
+                {note.content}
+              </p>
+            </div>
+
+            {/* Footer - Date & Action Buttons */}
+            <div className="relative mt-auto flex items-center gap-2 border-t pt-2.5" style={{ borderTopColor: `${cardColor.border}30` }}>
+              <div className="flex flex-1 items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400">
+                <Calendar className="h-3.5 w-3.5 shrink-0" />
+                <span>{formatDate(dateValue)}</span>
+                {isUpdated && updatedValue && (
+                  <>
+                    <span className="text-gray-400">•</span>
+                    <RefreshCw className="h-3.5 w-3.5 shrink-0" />
+                  </>
+                )}
+              </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit(note);
+                }}
+                className="flex h-6 w-6 shrink-0 items-center justify-center rounded border-2 transition-colors hover:bg-white/10"
+                style={{
+                  borderColor: `${cardColor.border}80`,
+                  color: cardColor.border,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = cardColor.border;
+                  e.currentTarget.style.backgroundColor = `${cardColor.border}20`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = `${cardColor.border}80`;
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                }}
+                title="Düzenle"
+              >
+                <Edit className="h-3 w-3" />
+              </button>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -143,52 +190,11 @@ const NoteList = memo(function NoteList({
                     onDelete(note.id);
                   }
                 }}
-                className="rounded-md border-2 border-transparent p-1.5 text-gray-400 transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-600 dark:text-gray-500 dark:hover:border-red-700 dark:hover:bg-red-900/20 dark:hover:text-red-400"
+                className="flex h-6 w-6 shrink-0 items-center justify-center rounded border-2 border-red-400 text-red-400 transition-colors hover:bg-red-400/10 dark:border-red-500 dark:text-red-500"
                 title="Sil"
               >
-                <Trash2 className="h-4 w-4" />
+                <Trash2 className="h-3 w-3" />
               </button>
-            </div>
-
-            {/* Content */}
-            <div
-              onClick={() => onEdit(note)}
-              className="mb-3 flex-1 cursor-pointer"
-            >
-              <p className="line-clamp-4 text-sm leading-relaxed text-gray-900 dark:text-white">
-                {note.content}
-              </p>
-            </div>
-
-            {/* Footer - Date & Edit Button */}
-            <div className="mt-auto space-y-2.5 border-t-2 border-gray-200 pt-3 dark:border-gray-800">
-              {/* Date Info */}
-              <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
-                <Calendar className="h-3.5 w-3.5 shrink-0" />
-                <span>{formatDate(dateValue)}</span>
-                {formatTime(dateValue) && (
-                  <span className="text-gray-400">• {formatTime(dateValue)}</span>
-                )}
-                {isUpdated && updatedValue && (
-                  <>
-                    <span className="text-gray-400">•</span>
-                    <RefreshCw className="h-3.5 w-3.5 shrink-0" />
-                    <span>Güncellendi</span>
-                  </>
-                )}
-              </div>
-
-              {/* Edit Button */}
-              <Button
-                variant="outline"
-                size="sm"
-                fullWidth
-                onClick={() => onEdit(note)}
-                icon={Edit}
-                className="border-yellow-600 text-yellow-600 hover:border-yellow-700 hover:bg-yellow-50 hover:text-yellow-700 dark:border-yellow-500 dark:text-yellow-400 dark:hover:border-yellow-400 dark:hover:bg-yellow-900/20"
-              >
-                Düzenle
-              </Button>
             </div>
           </div>
         );

@@ -1,10 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { FileText } from "lucide-react";
+import { FileText, Plus } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import PageHeader from "@/components/layout/PageHeader";
+import Button from "@/components/ui/Button";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type { Note } from "@/interfaces/Note.interface";
@@ -59,55 +60,68 @@ export default function NotesPage() {
   return (
     <>
       <Header navigationItems={navigationItems} />
-      <main className="min-h-screen bg-white dark:bg-gray-900">
-        <div className="container mx-auto px-4 py-8 sm:py-12">
-          <div className="mx-auto max-w-7xl">
-            {/* Header Section */}
-            <div className="mb-8">
+      <main className="container mx-auto px-4 py-8">
+        <div className="mx-auto max-w-7xl">
+          {/* Header Section */}
+          <div className="mb-6">
+            <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <PageHeader
                 title="Notlarım"
                 description="Kişisel notlarınızı kategorilere ayırın ve organize edin"
                 icon={FileText}
                 iconColor="yellow"
               />
-
-              {/* Category Filter - Pill Style Tabs */}
-              {categories.length > 1 && (
-                <div className="mb-6">
-                  <div className="flex flex-wrap gap-2">
-                    {categories.map((cat) => {
-                      const isActive = selectedCategory === cat;
-                      return (
-                        <button
-                          key={cat}
-                          onClick={() => setSelectedCategory(cat)}
-                          className={`whitespace-nowrap rounded-md border-2 px-4 py-2 text-sm font-semibold transition ${
-                            isActive
-                              ? "border-yellow-600 bg-yellow-600 text-white shadow-sm hover:border-yellow-700 hover:bg-yellow-700 dark:border-yellow-500 dark:bg-yellow-600 dark:hover:border-yellow-400 dark:hover:bg-yellow-500"
-                              : "border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:bg-gray-700"
-                          }`}
-                        >
-                          {getCategoryLabel(cat)}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
+              <Button
+                onClick={() => {
+                  setEditingNote(null);
+                  setShowModal(true);
+                }}
+                variant="primary"
+                size="sm"
+                icon={Plus}
+                className="!border-yellow-600 !bg-yellow-600 hover:!border-yellow-700 hover:!bg-yellow-700 dark:!border-yellow-500 dark:!bg-yellow-600 dark:hover:!border-yellow-400 dark:hover:!bg-yellow-500"
+              >
+                Yeni Not
+              </Button>
             </div>
 
-            {/* Notes List */}
-            <div>
-              {loading ? (
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {[1, 2, 3, 4, 5, 6].map((i) => (
-                    <div
-                      key={i}
-                      className="h-48 animate-pulse border-l-4 border-l-yellow-400 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm sm:p-4 dark:border-l-yellow-500 dark:border-gray-700 dark:bg-gray-900"
-                    />
-                  ))}
-                </div>
-              ) : (
+            {/* Category Filter - Badge Style */}
+            {categories.length > 1 && (
+              <div className="mb-4 flex flex-wrap items-center gap-2">
+                {categories.map((cat) => {
+                  const isActive = selectedCategory === cat;
+                  return (
+                    <button
+                      key={cat}
+                      onClick={() => setSelectedCategory(cat)}
+                      className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 transition-colors ${
+                        isActive
+                          ? "border-yellow-600 bg-yellow-50 dark:bg-yellow-900/20 dark:border-yellow-500"
+                          : "border-gray-300 bg-white hover:border-gray-400 dark:border-gray-700 dark:bg-gray-900"
+                      }`}
+                    >
+                      <span className="text-xs font-semibold text-gray-900 dark:text-white">
+                        {getCategoryLabel(cat)}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Notes List */}
+          <div>
+            {loading ? (
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <div
+                    key={i}
+                    className="h-40 animate-pulse rounded-lg border border-gray-300 bg-white dark:border-gray-700 dark:bg-gray-900"
+                  />
+                ))}
+              </div>
+            ) : (
                 <NoteList
                   notes={filteredNotes}
                   onDelete={async (id) => {
@@ -133,7 +147,6 @@ export default function NotesPage() {
               )}
             </div>
           </div>
-        </div>
       </main>
 
       {/* Note Modal */}
