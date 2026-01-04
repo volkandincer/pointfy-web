@@ -26,30 +26,47 @@ const featureConfig: Record<string, { icon: LucideIcon; color: string }> = {
   "6": { icon: Sparkles, color: "pink" },
 };
 
-const colorClasses: Record<string, { border: string; icon: string }> = {
+const colorClasses: Record<string, { 
+  iconBg: string; 
+  iconText: string; 
+  border: string;
+  iconBgGradient: string;
+}> = {
   blue: {
-    border: "border-l-blue-600 dark:border-l-blue-500",
-    icon: "text-blue-600 dark:text-blue-400",
+    iconBg: "bg-blue-50 dark:bg-blue-900/20",
+    iconText: "text-blue-600 dark:text-blue-400",
+    border: "border-blue-600 dark:border-blue-500",
+    iconBgGradient: "from-blue-500 to-blue-600",
   },
   green: {
-    border: "border-l-green-600 dark:border-l-green-500",
-    icon: "text-green-600 dark:text-green-400",
+    iconBg: "bg-green-50 dark:bg-green-900/20",
+    iconText: "text-green-600 dark:text-green-400",
+    border: "border-green-600 dark:border-green-500",
+    iconBgGradient: "from-green-500 to-green-600",
   },
   purple: {
-    border: "border-l-purple-600 dark:border-l-purple-500",
-    icon: "text-purple-600 dark:text-purple-400",
+    iconBg: "bg-purple-50 dark:bg-purple-900/20",
+    iconText: "text-purple-600 dark:text-purple-400",
+    border: "border-purple-600 dark:border-purple-500",
+    iconBgGradient: "from-purple-500 to-purple-600",
   },
   orange: {
-    border: "border-l-orange-600 dark:border-l-orange-500",
-    icon: "text-orange-600 dark:text-orange-400",
+    iconBg: "bg-orange-50 dark:bg-orange-900/20",
+    iconText: "text-orange-600 dark:text-orange-400",
+    border: "border-orange-600 dark:border-orange-500",
+    iconBgGradient: "from-orange-500 to-orange-600",
   },
   yellow: {
-    border: "border-l-yellow-600 dark:border-l-yellow-500",
-    icon: "text-yellow-600 dark:text-yellow-400",
+    iconBg: "bg-yellow-50 dark:bg-yellow-900/20",
+    iconText: "text-yellow-600 dark:text-yellow-400",
+    border: "border-yellow-600 dark:border-yellow-500",
+    iconBgGradient: "from-yellow-500 to-yellow-600",
   },
   pink: {
-    border: "border-l-pink-600 dark:border-l-pink-500",
-    icon: "text-pink-600 dark:text-pink-400",
+    iconBg: "bg-pink-50 dark:bg-pink-900/20",
+    iconText: "text-pink-600 dark:text-pink-400",
+    border: "border-pink-600 dark:border-pink-500",
+    iconBgGradient: "from-pink-500 to-pink-600",
   },
 };
 
@@ -57,41 +74,48 @@ const Features = memo(function Features({ features }: FeaturesProps) {
   const memoizedFeatures = useMemo(() => features, [features]);
 
   return (
-    <section id="features" className="container mx-auto px-4 py-12">
+    <section id="features" className="container mx-auto px-4 py-16 md:py-20">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-8 text-center">
-          <h2 className="mb-2 text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+        <div className="mb-12 text-center">
+          <h2 className="mb-3 text-3xl font-bold tracking-tight text-foreground md:text-4xl">
             Özellikler
           </h2>
-          <p className="text-sm text-muted-foreground md:text-base">
+          <p className="text-base text-muted-foreground md:text-lg">
             TeamHubX ile takımınızı yönetmek hiç bu kadar kolay olmamıştı
           </p>
         </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {memoizedFeatures.map((feature) => {
+        <div className="space-y-8 md:space-y-16">
+          {memoizedFeatures.map((feature, index) => {
             const config = featureConfig[feature.id] || { icon: CheckSquare, color: "blue" };
             const colors = colorClasses[config.color] || colorClasses.blue;
             const IconComponent = config.icon;
+            const isEven = index % 2 === 0;
 
             return (
               <div
                 key={feature.id}
-                className={`group relative flex min-h-[100px] flex-col items-center justify-center border-l-4 ${colors.border} border-t-2 border-r-2 border-b-2 border-border bg-card p-3 text-center shadow-sm transition-all active:border-border active:shadow-md sm:min-h-[120px] sm:p-4 hover:border-border hover:shadow-md`}
+                className={`group flex flex-col items-center gap-6 border border-border bg-card p-6 shadow-sm transition-all hover:border-border hover:shadow-md md:flex-row md:gap-8 md:p-8 ${
+                  isEven ? "md:flex-row" : "md:flex-row-reverse"
+                }`}
               >
-                {/* Icon */}
-                <div className="mb-2 sm:mb-2.5">
-                  <IconComponent className={`h-6 w-6 sm:h-7 sm:w-7 ${colors.icon}`} />
+                {/* Icon Section */}
+                <div className="flex shrink-0 items-center justify-center md:w-1/3">
+                  <div
+                    className={`flex h-20 w-20 items-center justify-center rounded-md border-2 ${colors.border} bg-gradient-to-br ${colors.iconBgGradient} shadow-md transition-transform group-hover:scale-105 md:h-28 md:w-28`}
+                  >
+                    <IconComponent className={`h-10 w-10 text-white md:h-14 md:w-14`} />
+                  </div>
                 </div>
 
-                {/* Title */}
-                <h3 className="mb-1 text-xs font-semibold text-card-foreground sm:text-sm">
-                  {feature.title}
-                </h3>
-
-                {/* Description */}
-                <p className="hidden text-[10px] leading-tight text-muted-foreground sm:block sm:text-xs">
-                  {feature.description}
-                </p>
+                {/* Content Section */}
+                <div className="flex flex-1 flex-col justify-center text-center md:text-left">
+                  <h3 className="mb-3 text-xl font-bold text-foreground md:text-2xl lg:text-3xl">
+                    {feature.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-muted-foreground md:text-base lg:text-lg">
+                    {feature.description}
+                  </p>
+                </div>
               </div>
             );
           })}

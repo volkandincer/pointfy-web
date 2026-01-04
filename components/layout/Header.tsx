@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { memo, useState, useEffect, useRef, useCallback } from "react";
-import { Home, Zap, ClipboardList, FileText, CheckSquare, Info, Mail, ChevronDown, User, LogOut, Sun, Moon } from "lucide-react";
+import { Home, Zap, ClipboardList, FileText, CheckSquare, Info, Mail, ChevronDown, User, LogOut, Sun, Moon, DoorOpen } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { getSupabase } from "@/lib/supabase";
 import { useTheme } from "@/hooks/useTheme";
@@ -125,6 +125,18 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
           >
             <Zap className="h-4 w-4" />
             <span>Jira</span>
+          </Link>
+
+          <Link
+            href="/app/rooms"
+            className={`flex min-h-[36px] items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+              isActive("/app/rooms")
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+            }`}
+          >
+            <DoorOpen className="h-4 w-4" />
+            <span>Odalar</span>
           </Link>
 
           <Link

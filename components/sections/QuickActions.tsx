@@ -59,32 +59,39 @@ const QuickActions = memo(function QuickActions({ actions }: QuickActionsProps) 
   const getIcon = (actionId: string) => {
     const IconComponent = iconMap[actionId];
     const iconColor = iconColorMap[actionId] || "text-gray-700 dark:text-gray-300";
-    return IconComponent ? <IconComponent className={`h-6 w-6 sm:h-7 sm:w-7 ${iconColor}`} /> : null;
+    return IconComponent ? <IconComponent className={`h-5 w-5 sm:h-6 sm:w-6 ${iconColor}`} /> : null;
   };
 
   const getBorderColor = (actionId: string) => {
     return colorMap[actionId] || "border-l-blue-600 dark:border-l-blue-500";
   };
 
+  const getIconBgColor = (actionId: string) => {
+    const bgMap: Record<string, string> = {
+      "create-room": "bg-blue-50 dark:bg-blue-900/20",
+      "jira": "bg-purple-50 dark:bg-purple-900/20",
+      "boards": "bg-green-50 dark:bg-green-900/20",
+      "personal-tasks": "bg-orange-50 dark:bg-orange-900/20",
+      "notes": "bg-yellow-50 dark:bg-yellow-900/20",
+      "voted-tasks": "bg-indigo-50 dark:bg-indigo-900/20",
+      "retro": "bg-pink-50 dark:bg-pink-900/20",
+      "account": "bg-cyan-50 dark:bg-cyan-900/20",
+    };
+    return bgMap[actionId] || "bg-gray-50 dark:bg-gray-800";
+  };
+
   return (
-    <section className="container mx-auto px-4 py-4 sm:py-6">
+    <section className="container mx-auto px-4 py-6 sm:py-8">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-3 sm:mb-4">
-          <h2 className="mb-0.5 text-lg font-bold tracking-tight text-foreground sm:text-xl md:text-2xl">
-            Hızlı İşlemler
-          </h2>
-          <p className="text-xs text-muted-foreground sm:text-sm">
-            Takım çalışmanızı başlatın
-          </p>
-        </div>
 
         {/* Tüm Action'lar - Kompakt Grid */}
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4">
           {actions.map((action) => {
             const IconComponent = getIcon(action.id);
             const borderColor = getBorderColor(action.id);
+            const iconBg = getIconBgColor(action.id);
             
-            const baseClasses = `group relative flex min-h-[100px] flex-col items-center justify-center border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-border bg-card p-3 text-center shadow-sm transition-all active:border-border active:shadow-md sm:min-h-[120px] sm:p-4 hover:border-border hover:shadow-md`;
+            const baseClasses = `group relative flex min-h-[110px] flex-col items-center justify-center border-l-4 ${borderColor} border-t border-r border-b border-border bg-card p-4 text-center shadow-sm transition-all sm:min-h-[130px] sm:p-5 hover:border-border hover:shadow-md`;
             
             return action.onClick ? (
               <button
@@ -92,10 +99,10 @@ const QuickActions = memo(function QuickActions({ actions }: QuickActionsProps) 
                 onClick={action.onClick}
                 className={baseClasses}
               >
-                <div className="mb-2 sm:mb-2.5">
+                <div className={`mb-3 flex h-12 w-12 items-center justify-center rounded-md border border-border ${iconBg} transition-colors group-hover:border-border sm:mb-4 sm:h-14 sm:w-14`}>
                   {IconComponent}
                 </div>
-                <h3 className="mb-1 text-xs font-semibold text-card-foreground sm:text-sm">
+                <h3 className="mb-1.5 text-xs font-semibold text-card-foreground sm:text-sm">
                   {action.title}
                 </h3>
                 <p className="hidden text-[10px] leading-tight text-muted-foreground sm:block sm:text-xs">
@@ -108,10 +115,10 @@ const QuickActions = memo(function QuickActions({ actions }: QuickActionsProps) 
                 href={action.href}
                 className={baseClasses}
               >
-                <div className="mb-2 sm:mb-2.5">
+                <div className={`mb-3 flex h-12 w-12 items-center justify-center rounded-md border border-border ${iconBg} transition-colors group-hover:border-border sm:mb-4 sm:h-14 sm:w-14`}>
                   {IconComponent}
                 </div>
-                <h3 className="mb-1 text-xs font-semibold text-card-foreground sm:text-sm">
+                <h3 className="mb-1.5 text-xs font-semibold text-card-foreground sm:text-sm">
                   {action.title}
                 </h3>
                 <p className="hidden text-[10px] leading-tight text-muted-foreground sm:block sm:text-xs">

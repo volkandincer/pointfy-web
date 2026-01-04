@@ -7,7 +7,6 @@ import Hero from "@/components/sections/Hero";
 import QuickActions from "@/components/sections/QuickActions";
 import Features from "@/components/sections/Features";
 import CTA from "@/components/sections/CTA";
-import RecentRooms from "@/components/sections/RecentRooms";
 import HomeWelcome from "@/components/sections/HomeWelcome";
 import GlobalNoteFab from "@/components/notes/GlobalNoteFab";
 import ToastContainer from "@/components/ui/ToastContainer";
@@ -194,10 +193,9 @@ function HomePageContent() {
   return (
     <>
       <Header navigationItems={navigationItems} />
-      <main>
+      <main className="pb-8">
         {userId ? <HomeWelcome /> : <Hero />}
         <QuickActions actions={actions} />
-        <RecentRooms />
         {!userId && (
           <>
             <Features features={features} />

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { memo, useCallback } from "react";
-import { Home, Zap, ClipboardList, CheckSquare, FileText, User } from "lucide-react";
+import { Home, Zap, ClipboardList, CheckSquare, FileText, User, DoorOpen } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 const BottomNavigation = memo(function BottomNavigation() {
@@ -23,6 +23,11 @@ const BottomNavigation = memo(function BottomNavigation() {
       icon: Home,
     },
     {
+      href: "/app/rooms",
+      label: "Odalar",
+      icon: DoorOpen,
+    },
+    {
       href: "/app/jira",
       label: "Jira",
       icon: Zap,
@@ -36,11 +41,6 @@ const BottomNavigation = memo(function BottomNavigation() {
       href: "/app/tasks",
       label: "Task'lar",
       icon: CheckSquare,
-    },
-    {
-      href: "/app/notes",
-      label: "Notlar",
-      icon: FileText,
     },
   ];
 
