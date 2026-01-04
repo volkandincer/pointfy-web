@@ -1,7 +1,9 @@
 "use client";
 
+import { DoorOpen } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import PageHeader from "@/components/layout/PageHeader";
 import RecentRooms from "@/components/sections/RecentRooms";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
@@ -13,14 +15,12 @@ export default function RoomsPage() {
       <Header navigationItems={navigationItems} />
       <main className="pb-8">
         <div className="container mx-auto px-4 pt-8">
-          <div className="mb-8">
-            <h1 className="mb-2 text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-              Aktif Odalar
-            </h1>
-            <p className="text-base text-muted-foreground md:text-lg">
-              Mevcut odalara katılın veya yeni bir oda oluşturun
-            </p>
-          </div>
+          <PageHeader
+            title="Aktif Odalar"
+            description="Mevcut odalara katılın veya yeni bir oda oluşturun"
+            icon={DoorOpen}
+            iconColor="blue"
+          />
         </div>
         <RecentRooms />
       </main>

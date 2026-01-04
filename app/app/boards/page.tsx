@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { ClipboardList, Archive } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import PageHeader from "@/components/layout/PageHeader";
 import BoardList from "@/components/boards/BoardList";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import { useBoards } from "@/hooks/useBoards";
@@ -32,14 +33,12 @@ export default function BoardsPage() {
             <div className="mx-auto max-w-7xl">
               {/* Header Section */}
               <div className="mb-8">
-                <div className="mb-6">
-                  <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
-                    Board&apos;larım
-                  </h1>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Task&apos;larınızı ve notlarınızı organize edin, projelerinizi yönetin
-                  </p>
-                </div>
+                <PageHeader
+                  title="Board'larım"
+                  description="Task'larınızı ve notlarınızı organize edin, projelerinizi yönetin"
+                  icon={ClipboardList}
+                  iconColor="green"
+                />
 
                 {/* Stats Cards */}
                 <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

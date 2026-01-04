@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { Folder, ClipboardList, Pin, Search, ChevronRight } from "lucide-react";
+import { Folder, ClipboardList, Pin, Search, ChevronRight, Zap } from "lucide-react";
+import PageHeader from "@/components/layout/PageHeader";
 import Button from "@/components/ui/Button";
 import { getStatusColorClasses } from "@/lib/jira/colors";
 import type { JiraBoard, JiraTask } from "@/interfaces/Jira.interface";
@@ -125,15 +126,12 @@ export default function JiraDashboardPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
-          Dashboard
-        </h1>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          Jira projelerinizin ve issue&apos;larınızın özeti
-        </p>
-      </div>
+      <PageHeader
+        title="Dashboard"
+        description="Jira projelerinizin ve issue'larınızın özeti"
+        icon={Zap}
+        iconColor="blue"
+      />
 
       {/* Stats Cards */}
       <div className="grid grid-cols-4 gap-2 sm:gap-4">

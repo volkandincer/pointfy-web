@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Settings } from "lucide-react";
+import PageHeader from "@/components/layout/PageHeader";
 import { getSupabase } from "@/lib/supabase";
 import { useToastContext } from "@/contexts/ToastContext";
 
@@ -268,15 +270,12 @@ export default function JiraSettingsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
-          Jira Ayarları
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          Jira bağlantınızı yönetin ve yapılandırın
-        </p>
-      </div>
+      <PageHeader
+        title="Jira Ayarları"
+        description="Jira bağlantınızı yönetin ve yapılandırın"
+        icon={Settings}
+        iconColor="blue"
+      />
 
       {/* Connection Status Card */}
       <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">

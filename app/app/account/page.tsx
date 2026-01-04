@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { X, CheckCircle2, Link2 } from "lucide-react";
+import { X, CheckCircle2, Link2, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import PageHeader from "@/components/layout/PageHeader";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
 import { useToastContext } from "@/contexts/ToastContext";
@@ -316,14 +317,12 @@ export default function AccountPage() {
         <Header navigationItems={navigationItems} />
         <main className="container mx-auto px-4 py-16">
           <div className="mx-auto max-w-3xl">
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                Hesabım
-              </h1>
-              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                Profil bilgilerinizi yönetin
-              </p>
-            </div>
+            <PageHeader
+              title="Hesabım"
+              description="Profil bilgilerinizi yönetin"
+              icon={User}
+              iconColor="primary"
+            />
 
             {/* Error mesajı (OAuth callback'ten döndükten sonra) */}
             {errorMessage && (

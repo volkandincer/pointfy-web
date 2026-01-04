@@ -1,6 +1,7 @@
 import { Shield } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import PageHeader from "@/components/layout/PageHeader";
 import type { Metadata } from "next";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import { getDefaultNavigationItems } from "@/lib/utils";
@@ -19,18 +20,13 @@ export default function PrivacyPage() {
       <Header navigationItems={navigationItems} />
       <main className="container mx-auto px-4 py-12 sm:py-16">
         <div className="mx-auto max-w-4xl">
-          {/* Header Section */}
-          <div className="mb-8 text-center">
-            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
-              <Shield className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-            </div>
-            <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
-              Gizlilik Politikası
-            </h1>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Kişisel verilerinizin nasıl toplandığını, kullanıldığını ve korunduğunu öğrenin.
-            </p>
-          </div>
+          <PageHeader
+            title="Gizlilik Politikası"
+            description="Kişisel verilerinizin nasıl toplandığını, kullanıldığını ve korunduğunu öğrenin."
+            icon={Shield}
+            iconColor="blue"
+            className="mb-8 text-center"
+          />
 
           {/* Content Card */}
           <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:p-8">

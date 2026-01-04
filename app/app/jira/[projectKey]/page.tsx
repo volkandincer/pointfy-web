@@ -445,7 +445,7 @@ export default function JiraProjectDetailPage() {
         </button>
         <div className="mb-6">
           <div className="flex items-center gap-3">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+            <h1 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
               {projectName || projectKey}
             </h1>
             {projectKey && (

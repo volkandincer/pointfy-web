@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { Pin, BarChart3, LayoutGrid, X, Search, ChevronRight } from "lucide-react";
+import { Pin, BarChart3, LayoutGrid, X, Search, ChevronRight, ClipboardList } from "lucide-react";
+import PageHeader from "@/components/layout/PageHeader";
 import FilterDropdown from "@/components/jira/FilterDropdown";
 import FilterChip from "@/components/jira/FilterChip";
 import EmptyState from "@/components/jira/EmptyState";
@@ -171,24 +172,20 @@ export default function JiraBoardsPage() {
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
-            Board&apos;lar
-          </h1>
-          <p className="text-sm text-gray-600 dark:text-gray-400 sm:text-base">
-            Tüm Jira board&apos;larınızı görüntüleyin ve yönetin
-          </p>
-        </div>
-        <button
-          onClick={fetchBoards}
-          disabled={loading}
-          className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
-        >
-          {loading ? "Yükleniyor..." : "Yenile"}
-        </button>
-      </div>
+      <PageHeader
+        title="Board'lar"
+        description="Tüm Jira board'larınızı görüntüleyin ve yönetin"
+        icon={ClipboardList}
+        iconColor="blue"
+        actions={
+              onClick={fetchBoards}
+            disabled={loading}
+            className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
+          >
+            {loading ? "Yükleniyor..." : "Yenile"}
+          </button>
+        }
+      />
 
       {/* Search and Filters */}
       <div className="space-y-4">

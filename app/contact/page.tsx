@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Mail, CheckCircle2, AlertCircle } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import PageHeader from "@/components/layout/PageHeader";
 import Button from "@/components/ui/Button";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type {
@@ -58,18 +59,13 @@ export default function ContactPage() {
       <Header navigationItems={navigationItems} />
       <main className="container mx-auto px-4 py-12 sm:py-16">
         <div className="mx-auto max-w-2xl">
-          {/* Header Section */}
-          <div className="mb-8 text-center">
-            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
-              <Mail className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-            </div>
-            <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
-              İletişim
-            </h1>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Sorularınız, önerileriniz veya geri bildirimleriniz için bizimle iletişime geçin.
-            </p>
-          </div>
+          <PageHeader
+            title="İletişim"
+            description="Sorularınız, önerileriniz veya geri bildirimleriniz için bizimle iletişime geçin."
+            icon={Mail}
+            iconColor="blue"
+            className="mb-8 text-center"
+          />
 
           {/* Form Card */}
           <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:p-8">

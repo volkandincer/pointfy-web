@@ -2,9 +2,10 @@
 
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Home } from "lucide-react";
+import { Home, DoorOpen } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import PageHeader from "@/components/layout/PageHeader";
 import CreateRoomForm from "@/components/rooms/CreateRoomForm";
 import { useToastContext } from "@/contexts/ToastContext";
 import { getDefaultNavigationItems } from "@/lib/utils";
@@ -136,14 +137,13 @@ function CreateRoomPageContent() {
       <main className="min-h-screen bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4 py-12">
           <div className="mx-auto max-w-3xl">
-            <div className="mb-10">
-              <h1 className="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-                Yeni Oda Oluştur
-              </h1>
-              <p className="text-base text-gray-600 dark:text-gray-400">
-                Takımınızla birlikte çalışmak için bir oda oluşturun
-              </p>
-            </div>
+            <PageHeader
+              title="Yeni Oda Oluştur"
+              description="Takımınızla birlikte çalışmak için bir oda oluşturun"
+              icon={DoorOpen}
+              iconColor="blue"
+              className="mb-10"
+            />
             <div className="rounded-md border-2 border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900 sm:p-8">
               <CreateRoomForm
                 onSubmit={handleCreate}

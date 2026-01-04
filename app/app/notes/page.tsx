@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { FileText } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import PageHeader from "@/components/layout/PageHeader";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type { Note } from "@/interfaces/Note.interface";
@@ -63,19 +64,12 @@ export default function NotesPage() {
           <div className="mx-auto max-w-7xl">
             {/* Header Section */}
             <div className="mb-8">
-              <div className="mb-6">
-                <div className="mb-2 flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-md border-2 border-yellow-600 bg-yellow-50 dark:bg-yellow-900/20">
-                    <FileText className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
-                  </div>
-                  <h1 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
-                    Notlarım
-                  </h1>
-                </div>
-                <p className="ml-13 text-sm text-gray-600 dark:text-gray-400 sm:ml-0">
-                  Kişisel notlarınızı kategorilere ayırın ve organize edin
-                </p>
-              </div>
+              <PageHeader
+                title="Notlarım"
+                description="Kişisel notlarınızı kategorilere ayırın ve organize edin"
+                icon={FileText}
+                iconColor="yellow"
+              />
 
               {/* Category Filter - Pill Style Tabs */}
               {categories.length > 1 && (

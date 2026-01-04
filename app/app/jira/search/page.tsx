@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, ExternalLink, History } from "lucide-react";
+import PageHeader from "@/components/layout/PageHeader";
 import EmptyState from "@/components/jira/EmptyState";
 import JqlInput from "@/components/jira/JqlInput";
 import Button from "@/components/ui/Button";
@@ -180,15 +181,12 @@ export default function JiraSearchPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
-          Jira Arama
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          JQL (Jira Query Language) ile gelişmiş arama yapın
-        </p>
-      </div>
+      <PageHeader
+        title="Jira Arama"
+        description="JQL (Jira Query Language) ile gelişmiş arama yapın"
+        icon={Search}
+        iconColor="blue"
+      />
 
       {/* Search Form */}
       <div className="border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">

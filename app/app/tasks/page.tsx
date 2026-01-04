@@ -1,9 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Plus, ClipboardList, AlertCircle, CheckCircle2, Link2, Folder, RefreshCw } from "lucide-react";
+import { Plus, ClipboardList, AlertCircle, CheckCircle2, Link2, Folder, RefreshCw, CheckSquare } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import PageHeader from "@/components/layout/PageHeader";
 import Button from "@/components/ui/Button";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
@@ -242,17 +243,13 @@ export default function PersonalTasksPage() {
       <Header navigationItems={navigationItems} />
         <main className="container mx-auto px-4 py-16">
           <div className="mx-auto max-w-5xl">
-            <div className="mb-6">
-              <div className="mb-6 flex items-center justify-between">
-                <div>
-                  <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
-                    Kişisel Task&apos;larım
-                  </h1>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Oda açarken kullanmak üzere task&apos;larını yönet
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
+            <PageHeader
+              title="Kişisel Task'larım"
+              description="Oda açarken kullanmak üzere task'larını yönet"
+              icon={CheckSquare}
+              iconColor="blue"
+              actions={
+                <>
                   {jiraBaseUrl && (
                     <Button
                       onClick={handleSyncJira}
@@ -263,7 +260,7 @@ export default function PersonalTasksPage() {
                       disabled={syncing}
                       className="!border-purple-600 !bg-white !text-purple-600 hover:!border-purple-700 hover:!bg-purple-50 dark:!border-purple-500 dark:!bg-gray-800 dark:!text-purple-400 dark:hover:!border-purple-400 dark:hover:!bg-purple-900/20"
                     >
-                      Jira&apos;dan Sync
+                      Jira'dan Sync
                     </Button>
                   )}
                   <Button
@@ -278,8 +275,10 @@ export default function PersonalTasksPage() {
                   >
                     Yeni Task Ekle
                   </Button>
-                </div>
-              </div>
+                </>
+              }
+            />
+            <div className="mb-6">
 
               {/* Stats Cards - Minimal & Clickable Filters */}
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-10 sm:gap-3">

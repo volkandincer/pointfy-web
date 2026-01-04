@@ -4,8 +4,10 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { Zap } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import PageHeader from "@/components/layout/PageHeader";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import { logger } from "@/lib/logger";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
@@ -578,14 +580,12 @@ export default function JiraTestPage() {
       <Header navigationItems={navigationItems} />
       <main className="container mx-auto px-4 py-16">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Jira Test Dashboard
-            </h1>
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-              Jira servislerini test edin ve dataları görüntüleyin
-            </p>
-          </div>
+          <PageHeader
+            title="Jira Test Dashboard"
+            description="Jira servislerini test edin ve dataları görüntüleyin"
+            icon={Zap}
+            iconColor="blue"
+          />
 
           {/* Tabs */}
           <div className="mb-6 border-b-2 border-gray-200 dark:border-gray-700">

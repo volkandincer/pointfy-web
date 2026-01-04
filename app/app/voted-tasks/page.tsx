@@ -5,6 +5,7 @@ import Link from "next/link";
 import { CheckCircle2, RefreshCw, Clock, BarChart3 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import PageHeader from "@/components/layout/PageHeader";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type { VoteWithTaskAndRoom } from "@/interfaces/Vote.interface";
@@ -217,16 +218,12 @@ export default function VotedTasksPage() {
       <Header navigationItems={navigationItems} />
         <main className="container mx-auto px-4 py-16">
           <div className="mx-auto max-w-5xl">
-            <div className="mb-6 flex items-center justify-between">
-              <div>
-                <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
-                  Puanladığım Task&apos;lar
-                </h1>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Oy verdiğiniz tüm task&apos;ları görüntüleyin
-                </p>
-              </div>
-            </div>
+            <PageHeader
+              title="Puanladığım Task'lar"
+              description="Oy verdiğiniz tüm task'ları görüntüleyin"
+              icon={CheckCircle2}
+              iconColor="green"
+            />
 
             {loading ? (
               <div className="space-y-4">

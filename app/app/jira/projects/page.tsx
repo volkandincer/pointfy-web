@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Folder, Search, ChevronRight } from "lucide-react";
+import PageHeader from "@/components/layout/PageHeader";
 import EmptyState from "@/components/jira/EmptyState";
 import type { JiraBoard } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
@@ -119,24 +120,21 @@ export default function JiraProjectsPage() {
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
-            Projeler
-          </h1>
-          <p className="text-sm text-gray-600 dark:text-gray-400 sm:text-base">
-            Tüm Jira projelerinizi görüntüleyin ve yönetin
-          </p>
-        </div>
-        <button
-          onClick={fetchProjects}
-          disabled={loading}
-          className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
-        >
-          {loading ? "Yükleniyor..." : "Yenile"}
-        </button>
-      </div>
+      <PageHeader
+        title="Projeler"
+        description="Tüm Jira projelerinizi görüntüleyin ve yönetin"
+        icon={Folder}
+        iconColor="blue"
+        actions={
+          <button
+            onClick={fetchProjects}
+            disabled={loading}
+            className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
+          >
+            {loading ? "Yükleniyor..." : "Yenile"}
+          </button>
+        }
+      />
 
       {/* Search and View Toggle */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
