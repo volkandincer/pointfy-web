@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { UseCaseFactory } from "@/src/application/services/UseCaseFactory";
 import type { RetroCard as DomainRetroCard } from "@/src/domain/entities/RetroCard";
 import type { RetroCard as PresentationRetroCard } from "@/interfaces/Retro.interface";
@@ -16,12 +16,31 @@ interface UseRetroCardsResult {
   cards: PresentationRetroCard[];
   loading: boolean;
   error: string | null;
+  refresh: () => Promise<void>;
 }
 
 export function useRetroCards(roomId: string): UseRetroCardsResult {
   const [cards, setCards] = useState<PresentationRetroCard[]>([]);
   const [loading, setLoading] = useState<boolean>(!!roomId);
   const [error, setError] = useState<string | null>(null);
+
+  const fetchCards = useCallback(async () => {
+    if (!roomId) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+      const getRetroCardsUseCase = UseCaseFactory.getRetroCards();
+      const fetchedCards = await getRetroCardsUseCase.execute(roomId);
+      setCards(RetroCardAdapter.toPresentationArray(fetchedCards));
+      setLoading(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Bilinmeyen hata");
+      setLoading(false);
+    }
+  }, [roomId]);
 
   useEffect(() => {
     if (!roomId) {
@@ -32,51 +51,42 @@ export function useRetroCards(roomId: string): UseRetroCardsResult {
     let unsubscribe: (() => void) | undefined;
 
     (async () => {
-      try {
-        const getRetroCardsUseCase = UseCaseFactory.getRetroCards();
-        const fetchedCards = await getRetroCardsUseCase.execute(roomId);
+      await fetchCards();
 
-        if (!mounted) return;
-        setCards(RetroCardAdapter.toPresentationArray(fetchedCards));
-        setLoading(false);
+      if (!mounted) return;
 
-        // Realtime subscription - repository üzerinden
-        const retroCardRepository = container.getRetroCardRepository();
-        unsubscribe = retroCardRepository.subscribe(
-          roomId,
-          (newCard: DomainRetroCard) => {
-            if (!mounted) return;
-            const presentationCard = RetroCardAdapter.toPresentation(newCard);
-            setCards((prev) => {
-              const exists = prev.some((c) => c.id === presentationCard.id);
-              if (exists) return prev;
-              return [...prev, presentationCard];
-            });
-          },
-          (updatedCard: DomainRetroCard) => {
-            if (!mounted) return;
-            const presentationCard = RetroCardAdapter.toPresentation(updatedCard);
-            setCards((prev) =>
-              prev.map((c) => (c.id === presentationCard.id ? presentationCard : c))
-            );
-          },
-          (deletedId: string) => {
-            if (!mounted) return;
-            setCards((prev) => prev.filter((c) => c.id !== deletedId));
-          }
-        );
-      } catch (err) {
-        if (!mounted) return;
-        setError(err instanceof Error ? err.message : "Bilinmeyen hata");
-        setLoading(false);
-      }
+      // Realtime subscription - repository üzerinden
+      const retroCardRepository = container.getRetroCardRepository();
+      unsubscribe = retroCardRepository.subscribe(
+        roomId,
+        (newCard: DomainRetroCard) => {
+          if (!mounted) return;
+          const presentationCard = RetroCardAdapter.toPresentation(newCard);
+          setCards((prev) => {
+            const exists = prev.some((c) => c.id === presentationCard.id);
+            if (exists) return prev;
+            return [...prev, presentationCard];
+          });
+        },
+        (updatedCard: DomainRetroCard) => {
+          if (!mounted) return;
+          const presentationCard = RetroCardAdapter.toPresentation(updatedCard);
+          setCards((prev) =>
+            prev.map((c) => (c.id === presentationCard.id ? presentationCard : c))
+          );
+        },
+        (deletedId: string) => {
+          if (!mounted) return;
+          setCards((prev) => prev.filter((c) => c.id !== deletedId));
+        }
+      );
     })();
 
     return () => {
       mounted = false;
       if (unsubscribe) unsubscribe();
     };
-  }, [roomId]);
+  }, [roomId, fetchCards]);
 
-  return { cards, loading, error };
+  return { cards, loading, error, refresh: fetchCards };
 }

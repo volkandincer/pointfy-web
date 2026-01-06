@@ -38,6 +38,7 @@ export class RetroCardAdapter {
       is_revealed: card.is_revealed,
       created_at: card.created_at,
       updated_at: card.updated_at,
+      retro_session_id: (card as any).retro_session_id || null,
     });
   }
 

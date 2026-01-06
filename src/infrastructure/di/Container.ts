@@ -9,6 +9,7 @@ import type { ITaskRepository } from "../../domain/repositories/ITaskRepository"
 import type { IBoardRepository } from "../../domain/repositories/IBoardRepository";
 import type { IRetroCardRepository } from "../../domain/repositories/IRetroCardRepository";
 import type { IRetroActionItemRepository } from "../../domain/repositories/IRetroActionItemRepository";
+import type { IRetroSessionRepository } from "../../domain/repositories/IRetroSessionRepository";
 import type { IVoteRepository } from "../../domain/repositories/IVoteRepository";
 import type { IRoomCustomFlagRepository } from "../../domain/repositories/IRoomCustomFlagRepository";
 import type { IContactMessageRepository } from "../../domain/repositories/IContactMessageRepository";
@@ -20,6 +21,7 @@ import { SupabaseTaskRepository } from "../repositories/SupabaseTaskRepository";
 import { SupabaseBoardRepository } from "../repositories/SupabaseBoardRepository";
 import { SupabaseRetroCardRepository } from "../repositories/SupabaseRetroCardRepository";
 import { SupabaseRetroActionItemRepository } from "../repositories/SupabaseRetroActionItemRepository";
+import { SupabaseRetroSessionRepository } from "../repositories/SupabaseRetroSessionRepository";
 import { SupabaseVoteRepository } from "../repositories/SupabaseVoteRepository";
 import { SupabaseRoomCustomFlagRepository } from "../repositories/SupabaseRoomCustomFlagRepository";
 import { SupabaseContactMessageRepository } from "../repositories/SupabaseContactMessageRepository";
@@ -32,6 +34,7 @@ class Container {
   private boardRepository: IBoardRepository | null = null;
   private retroCardRepository: IRetroCardRepository | null = null;
   private retroActionItemRepository: IRetroActionItemRepository | null = null;
+  private retroSessionRepository: IRetroSessionRepository | null = null;
   private voteRepository: IVoteRepository | null = null;
   private roomCustomFlagRepository: IRoomCustomFlagRepository | null = null;
   private contactMessageRepository: IContactMessageRepository | null = null;
@@ -79,6 +82,13 @@ class Container {
     return this.retroActionItemRepository;
   }
 
+  getRetroSessionRepository(): IRetroSessionRepository {
+    if (!this.retroSessionRepository) {
+      this.retroSessionRepository = new SupabaseRetroSessionRepository();
+    }
+    return this.retroSessionRepository;
+  }
+
   getVoteRepository(): IVoteRepository {
     if (!this.voteRepository) {
       this.voteRepository = new SupabaseVoteRepository();
@@ -114,6 +124,7 @@ class Container {
     this.boardRepository = null;
     this.retroCardRepository = null;
     this.retroActionItemRepository = null;
+    this.retroSessionRepository = null;
     this.voteRepository = null;
     this.roomCustomFlagRepository = null;
     this.contactMessageRepository = null;

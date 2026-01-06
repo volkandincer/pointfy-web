@@ -12,15 +12,18 @@ export interface CreateRetroCardData {
   category: RetroCategory;
   content: string;
   isRevealed: boolean;
+  retroSessionId?: string | null;
 }
 
 export interface IRetroCardRepository {
   findById(id: string): Promise<RetroCard | null>;
   findByRoomId(roomId: string): Promise<RetroCard[]>;
   findByRoomIdAndCategory(roomId: string, category: string): Promise<RetroCard[]>;
+  findBySessionId(sessionId: string): Promise<RetroCard[]>;
   create(cardData: CreateRetroCardData): Promise<RetroCard>;
   update(card: RetroCard): Promise<RetroCard>;
   delete(id: string): Promise<void>;
+  deleteCardsWithoutActionItems(sessionId: string): Promise<void>;
   
   // Retro-specific operations
   revealAll(roomId: string): Promise<void>;

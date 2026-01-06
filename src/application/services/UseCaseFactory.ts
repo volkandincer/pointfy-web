@@ -36,6 +36,9 @@ import {
   GetRoomCustomFlagsUseCase,
   CreateRoomCustomFlagUseCase,
   DeleteRoomCustomFlagUseCase,
+  CreateRetroSessionUseCase,
+  CompleteRetroSessionUseCase,
+  GetActiveRetroSessionUseCase,
   GetVotesUseCase,
   CreateContactMessageUseCase,
   UpdateUserJiraBaseUrlUseCase,
@@ -134,11 +137,17 @@ export class UseCaseFactory {
   }
 
   static createRetroCard(): CreateRetroCardUseCase {
-    return new CreateRetroCardUseCase(container.getRetroCardRepository());
+    return new CreateRetroCardUseCase(
+      container.getRetroCardRepository(),
+      container.getRetroSessionRepository()
+    );
   }
 
   static getRetroCards(): GetRetroCardsUseCase {
-    return new GetRetroCardsUseCase(container.getRetroCardRepository());
+    return new GetRetroCardsUseCase(
+      container.getRetroCardRepository(),
+      container.getRetroSessionRepository()
+    );
   }
 
   static revealRetroCards(): RevealRetroCardsUseCase {
@@ -167,6 +176,18 @@ export class UseCaseFactory {
 
   static deleteRoomCustomFlag(): DeleteRoomCustomFlagUseCase {
     return new DeleteRoomCustomFlagUseCase(container.getRoomCustomFlagRepository());
+  }
+
+  static createRetroSession(): CreateRetroSessionUseCase {
+    return new CreateRetroSessionUseCase(container.getRetroSessionRepository());
+  }
+
+  static completeRetroSession(): CompleteRetroSessionUseCase {
+    return new CompleteRetroSessionUseCase(container.getRetroSessionRepository());
+  }
+
+  static getActiveRetroSession(): GetActiveRetroSessionUseCase {
+    return new GetActiveRetroSessionUseCase(container.getRetroSessionRepository());
   }
 
   static getVotes(): GetVotesUseCase {

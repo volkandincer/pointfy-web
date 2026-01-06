@@ -16,20 +16,18 @@ const ToastContainer = memo(function ToastContainer({
   if (toasts.length === 0) return null;
 
   return (
-    <div className="pointer-events-none fixed bottom-4 left-1/2 z-50 -translate-x-1/2 transform">
-      <div className="flex flex-col-reverse gap-2">
-        {toasts.map((toast) => (
-          <div key={toast.id} className="pointer-events-auto">
-            <Toast
-              message={toast.message}
-              type={toast.type}
-              duration={toast.duration}
-              action={toast.action}
-              onClose={() => onRemove(toast.id)}
-            />
-          </div>
-        ))}
-      </div>
+    <div className="pointer-events-none fixed bottom-4 right-4 z-50 flex flex-col-reverse gap-2 sm:bottom-6 sm:right-6">
+      {toasts.map((toast) => (
+        <div key={toast.id} className="pointer-events-auto w-full max-w-sm">
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            duration={toast.duration}
+            action={toast.action}
+            onClose={() => onRemove(toast.id)}
+          />
+        </div>
+      ))}
     </div>
   );
 });

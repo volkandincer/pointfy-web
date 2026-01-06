@@ -36,6 +36,7 @@ export class SupabaseRetroCardRepository implements IRetroCardRepository {
       is_revealed: data.is_revealed,
       created_at: data.created_at,
       updated_at: data.updated_at,
+      retro_session_id: data.retro_session_id || null,
     });
   }
 
@@ -92,7 +93,7 @@ export class SupabaseRetroCardRepository implements IRetroCardRepository {
     );
   }
 
-  async create(cardData: { roomId: string; userId: string; userName: string; category: "mad" | "sad" | "glad"; content: string; isRevealed: boolean }): Promise<RetroCard> {
+  async create(cardData: { roomId: string; userId: string; userName: string; category: "mad" | "sad" | "glad"; content: string; isRevealed: boolean; retroSessionId?: string | null }): Promise<RetroCard> {
     const now = new Date();
     const card = new RetroCard(
       crypto.randomUUID(),
@@ -103,7 +104,8 @@ export class SupabaseRetroCardRepository implements IRetroCardRepository {
       cardData.content,
       cardData.isRevealed,
       now,
-      now
+      now,
+      cardData.retroSessionId || null
     );
 
     const { data, error } = await this.getClient()
@@ -126,7 +128,45 @@ export class SupabaseRetroCardRepository implements IRetroCardRepository {
       is_revealed: data.is_revealed,
       created_at: data.created_at,
       updated_at: data.updated_at,
+      retro_session_id: data.retro_session_id || null,
     });
+  }
+
+  async findBySessionId(sessionId: string): Promise<RetroCard[]> {
+    const { data, error } = await this.getClient()
+      .from("retro_cards")
+      .select("*")
+      .eq("retro_session_id", sessionId)
+      .order("created_at", { ascending: true });
+
+    if (error || !data) {
+      return [];
+    }
+
+    return data.map((row) =>
+      RetroCard.fromRow({
+        id: row.id,
+        room_id: row.room_id,
+        user_key: row.user_key,
+        user_name: row.user_name,
+        category: row.category,
+        content: row.content,
+        is_revealed: row.is_revealed,
+        created_at: row.created_at,
+        updated_at: row.updated_at,
+        retro_session_id: row.retro_session_id || null,
+      })
+    );
+  }
+
+  async deleteCardsWithoutActionItems(sessionId: string): Promise<void> {
+    // Bu session'a ait aksiyon maddesi olmayan kartları sil
+    const { error } = await this.getClient()
+      .rpc("complete_retro_session_and_cleanup", { session_id_param: sessionId });
+
+    if (error) {
+      throw error;
+    }
   }
 
   async update(card: RetroCard): Promise<RetroCard> {
@@ -151,6 +191,7 @@ export class SupabaseRetroCardRepository implements IRetroCardRepository {
       is_revealed: data.is_revealed,
       created_at: data.created_at,
       updated_at: data.updated_at,
+      retro_session_id: data.retro_session_id || null,
     });
   }
 
@@ -202,10 +243,18 @@ export class SupabaseRetroCardRepository implements IRetroCardRepository {
       },
       (payload) => {
         if (payload.eventType === "INSERT" && payload.new) {
-          const card = RetroCard.fromRow(payload.new as Parameters<typeof RetroCard.fromRow>[0]);
+          const row = payload.new as Parameters<typeof RetroCard.fromRow>[0];
+          const card = RetroCard.fromRow({
+            ...row,
+            retro_session_id: row.retro_session_id || null,
+          });
           onInsert(card);
         } else if (payload.eventType === "UPDATE" && payload.new) {
-          const card = RetroCard.fromRow(payload.new as Parameters<typeof RetroCard.fromRow>[0]);
+          const row = payload.new as Parameters<typeof RetroCard.fromRow>[0];
+          const card = RetroCard.fromRow({
+            ...row,
+            retro_session_id: row.retro_session_id || null,
+          });
           onUpdate(card);
         } else if (payload.eventType === "DELETE" && payload.old) {
           onDelete(payload.old.id);

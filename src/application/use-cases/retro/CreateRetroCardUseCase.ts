@@ -4,6 +4,7 @@
  */
 
 import type { IRetroCardRepository } from "../../../domain/repositories/IRetroCardRepository";
+import type { IRetroSessionRepository } from "../../../domain/repositories/IRetroSessionRepository";
 import type { RetroCard, RetroCategory } from "../../../domain/entities/RetroCard";
 
 export interface CreateRetroCardDTO {
@@ -15,7 +16,10 @@ export interface CreateRetroCardDTO {
 }
 
 export class CreateRetroCardUseCase {
-  constructor(private retroCardRepository: IRetroCardRepository) {}
+  constructor(
+    private retroCardRepository: IRetroCardRepository,
+    private retroSessionRepository: IRetroSessionRepository
+  ) {}
 
   async execute(dto: CreateRetroCardDTO): Promise<RetroCard> {
     if (!dto.roomId || dto.roomId.trim().length === 0) {
@@ -31,6 +35,12 @@ export class CreateRetroCardUseCase {
       throw new Error("Invalid retro category");
     }
 
+    // Aktif session'ı bul veya oluştur
+    let activeSession = await this.retroSessionRepository.findActiveByRoomId(dto.roomId);
+    if (!activeSession) {
+      activeSession = await this.retroSessionRepository.create(dto.roomId);
+    }
+
     return this.retroCardRepository.create({
       roomId: dto.roomId,
       userId: dto.userId,
@@ -38,6 +48,7 @@ export class CreateRetroCardUseCase {
       category: dto.category,
       content: dto.content.trim(),
       isRevealed: false,
+      retroSessionId: activeSession.id,
     });
   }
 }

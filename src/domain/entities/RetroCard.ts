@@ -15,7 +15,8 @@ export class RetroCard {
     public content: string,
     public isRevealed: boolean,
     public readonly createdAt: Date,
-    public updatedAt: Date
+    public updatedAt: Date,
+    public retroSessionId: string | null = null
   ) {
     this.validate();
   }
@@ -76,6 +77,7 @@ export class RetroCard {
     is_revealed: boolean;
     created_at: string;
     updated_at: string;
+    retro_session_id?: string | null;
   }): RetroCard {
     return new RetroCard(
       row.id,
@@ -86,7 +88,8 @@ export class RetroCard {
       row.content,
       row.is_revealed,
       new Date(row.created_at),
-      new Date(row.updated_at)
+      new Date(row.updated_at),
+      row.retro_session_id || null
     );
   }
 
@@ -101,6 +104,7 @@ export class RetroCard {
     is_revealed: boolean;
     created_at: string;
     updated_at: string;
+    retro_session_id: string | null;
   } {
     return {
       id: this.id,
@@ -112,6 +116,7 @@ export class RetroCard {
       is_revealed: this.isRevealed,
       created_at: this.createdAt.toISOString(),
       updated_at: this.updatedAt.toISOString(),
+      retro_session_id: this.retroSessionId,
     };
   }
 }

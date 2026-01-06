@@ -51,6 +51,9 @@ export { GetRoomCustomFlagsUseCase } from "./retro/GetRoomCustomFlagsUseCase";
 export { CreateRoomCustomFlagUseCase } from "./retro/CreateRoomCustomFlagUseCase";
 export { DeleteRoomCustomFlagUseCase } from "./retro/DeleteRoomCustomFlagUseCase";
 export type { UpdateRetroActionItemDTO } from "./retro/UpdateRetroActionItemUseCase";
+export { CreateRetroSessionUseCase } from "./retro/CreateRetroSessionUseCase";
+export { CompleteRetroSessionUseCase } from "./retro/CompleteRetroSessionUseCase";
+export { GetActiveRetroSessionUseCase } from "./retro/GetActiveRetroSessionUseCase";
 
 export { GetVotesUseCase } from "./votes/GetVotesUseCase";
 export type { GetVotesDTO } from "./votes/GetVotesUseCase";

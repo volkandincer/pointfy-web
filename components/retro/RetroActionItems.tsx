@@ -23,6 +23,7 @@ interface RetroActionItemsProps {
   isAdmin: boolean;
   cardsRevealed: boolean;
   cards?: RetroCard[];
+  hasActiveSession?: boolean;
 }
 
 const RetroActionItems = memo(function RetroActionItems({
@@ -32,6 +33,7 @@ const RetroActionItems = memo(function RetroActionItems({
   isAdmin,
   cardsRevealed,
   cards = [],
+  hasActiveSession = true,
 }: RetroActionItemsProps) {
   const { actionItems, loading } = useRetroActionItems(roomId);
   const { customFlags, addCustomFlag } = useRoomCustomFlags(roomId, isAdmin);
@@ -86,7 +88,7 @@ const RetroActionItems = memo(function RetroActionItems({
 
         if (error) throw error;
         setShowAddModal(false);
-        showToast("Aksiyon maddesi başarıyla eklendi!", "success");
+        // Başarı mesajı gereksiz - kullanıcı aksiyon maddesini zaten görüyor
       } catch (err) {
         showToast("Aksiyon maddesi eklenirken bir hata oluştu.", "error");
       }
@@ -116,7 +118,7 @@ const RetroActionItems = memo(function RetroActionItems({
 
         if (error) throw error;
         setEditingItem(null);
-        showToast("Aksiyon maddesi başarıyla güncellendi!", "success");
+        // Başarı mesajı gereksiz - kullanıcı değişikliği zaten görüyor
       } catch (err) {
         showToast("Aksiyon maddesi güncellenirken bir hata oluştu.", "error");
       }
@@ -142,7 +144,7 @@ const RetroActionItems = memo(function RetroActionItems({
           .eq("id", item.id);
 
         if (error) throw error;
-        showToast("Aksiyon maddesi başarıyla silindi!", "success");
+        // Başarı mesajı gereksiz - kullanıcı aksiyon maddesinin silindiğini zaten görüyor
       } catch (err) {
         showToast("Aksiyon maddesi silinirken bir hata oluştu.", "error");
       }
@@ -169,12 +171,7 @@ const RetroActionItems = memo(function RetroActionItems({
           .eq("id", item.id);
 
         if (error) throw error;
-        showToast(
-          item.is_completed
-            ? "Aksiyon maddesi beklemeye alındı!"
-            : "Aksiyon maddesi tamamlandı!",
-          "success"
-        );
+        // Başarı mesajı gereksiz - kullanıcı durumu zaten görüyor
       } catch (err) {
         showToast("Aksiyon maddesi güncellenirken bir hata oluştu.", "error");
       }
@@ -201,10 +198,385 @@ const RetroActionItems = memo(function RetroActionItems({
     );
   }
 
-  // Kartlar açılmadıysa aksiyon maddelerini gösterme
+  // Aktif session yoksa, bekleyen aksiyon maddelerini göster (yeni ekleme yapılamaz)
+  if (!hasActiveSession) {
+    // Bekleyen aksiyon maddeleri varsa göster
+    if (pendingItems.length > 0 || completedItems.length > 0) {
+      return (
+        <div className="space-y-4 print-section">
+
+          {/* Pending Items */}
+          {pendingItems.length > 0 && (
+            <div>
+              <div className="mb-3 flex items-center gap-1.5">
+                <div className="h-1 w-1 rounded-full bg-orange-500"></div>
+                <h4 className="text-xs font-semibold uppercase tracking-wide text-gray-700 dark:text-gray-300">
+                  Bekleyen ({pendingItems.length})
+                </h4>
+              </div>
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+                {pendingItems.map((item) => {
+                  const flagInfo = item.flag
+                    ? PREDEFINED_FLAGS[item.flag]
+                    : item.custom_flag
+                    ? customFlags.find((cf) => cf.id === item.custom_flag)
+                    : null;
+
+                  const flagColor =
+                    flagInfo && "color" in flagInfo
+                      ? flagInfo.color
+                      : flagInfo && "flag_color" in flagInfo
+                      ? flagInfo.flag_color
+                      : "#6B7280";
+                  const flagLabel =
+                    flagInfo && "label" in flagInfo
+                      ? flagInfo.label
+                      : flagInfo && "flag_name" in flagInfo
+                      ? flagInfo.flag_name
+                      : "";
+                  const FlagIcon = flagInfo && "icon" in flagInfo ? flagInfo.icon : null;
+
+                  const card = cards.find((c) => c.id === item.retro_card_id);
+                  const getCategoryInfo = (category: string) => {
+                    if (category === "mad") return { title: "Mad", color: "var(--destructive)" };
+                    if (category === "sad") return { title: "Sad", color: "var(--primary)" };
+                    return { title: "Glad", color: "oklch(0.6 0.2 145)" };
+                  };
+                  const categoryInfo = card ? getCategoryInfo(card.category) : null;
+
+                  return (
+                    <div
+                      key={item.id}
+                      onClick={() => setViewingItem(item)}
+                      className="group relative cursor-pointer rounded-md border border-gray-200 bg-white p-3 transition-all hover:border-gray-300 hover:shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:hover:border-gray-600"
+                    >
+                      {/* Flag Badge */}
+                      {flagInfo && (
+                        <div className="mb-2 flex items-center gap-1.5">
+                          <span
+                            className="inline-flex items-center gap-1 rounded border px-1.5 py-0.5 text-[10px] font-medium"
+                            style={{
+                              backgroundColor: `${flagColor}15`,
+                              color: flagColor,
+                              borderColor: flagColor,
+                            }}
+                          >
+                            {FlagIcon && <FlagIcon className="h-2.5 w-2.5" />}
+                            {flagLabel}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Card Info */}
+                      {item.retro_card_id && (() => {
+                        const card = cards.find((c) => c.id === item.retro_card_id);
+                        if (!card) return null;
+                        const getCategoryInfo = (category: string) => {
+                          if (category === "mad") return { title: "Mad", color: "var(--destructive)" };
+                          if (category === "sad") return { title: "Sad", color: "var(--primary)" };
+                          return { title: "Glad", color: "oklch(0.6 0.2 145)" };
+                        };
+                        const categoryInfo = getCategoryInfo(card.category);
+                        return (
+                          <div className="mb-2 flex items-center gap-1.5 rounded border border-gray-200 bg-gray-50 px-2 py-1 dark:border-gray-700 dark:bg-gray-800">
+                            <div className="flex items-center gap-1 rounded border px-1.5 py-0.5 text-[10px] font-medium" style={{ borderColor: categoryInfo.color, color: categoryInfo.color, backgroundColor: `${categoryInfo.color}15` }}>
+                              <FileText className="h-2.5 w-2.5" />
+                              <span>{categoryInfo.title}</span>
+                            </div>
+                            <span className="text-[10px] text-gray-600 dark:text-gray-400 line-clamp-1 max-w-[150px]">
+                              {card.content}
+                            </span>
+                          </div>
+                        );
+                      })()}
+
+                      {/* Content */}
+                      <div className="mb-2 min-h-[40px]">
+                        <p className="text-xs leading-relaxed text-gray-900 dark:text-white line-clamp-3">
+                          {item.content}
+                        </p>
+                      </div>
+
+                      {/* Metadata */}
+                      <div className="flex items-center gap-2 text-[10px] text-gray-500 dark:text-gray-400">
+                        <div className="flex items-center gap-1">
+                          <User className="h-3 w-3" />
+                          <span>{item.created_by_username}</span>
+                        </div>
+                        <span>•</span>
+                        <div className="flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          <span>
+                            {new Date(item.created_at).toLocaleDateString("tr-TR", {
+                              day: "numeric",
+                              month: "short",
+                            })}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Completed Items */}
+          {completedItems.length > 0 && (
+            <div>
+              <div className="mb-3 flex items-center gap-1.5">
+                <div className="h-1 w-1 rounded-full bg-green-500"></div>
+                <h4 className="text-xs font-semibold uppercase tracking-wide text-gray-700 dark:text-gray-300">
+                  Tamamlanan ({completedItems.length})
+                </h4>
+              </div>
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+                {completedItems.map((item) => {
+                  const flagInfo = item.flag
+                    ? PREDEFINED_FLAGS[item.flag]
+                    : item.custom_flag
+                    ? customFlags.find((cf) => cf.id === item.custom_flag)
+                    : null;
+
+                  const flagColor =
+                    flagInfo && "color" in flagInfo
+                      ? flagInfo.color
+                      : flagInfo && "flag_color" in flagInfo
+                      ? flagInfo.flag_color
+                      : "#6B7280";
+                  const flagLabel =
+                    flagInfo && "label" in flagInfo
+                      ? flagInfo.label
+                      : flagInfo && "flag_name" in flagInfo
+                      ? flagInfo.flag_name
+                      : "";
+                  const FlagIcon = flagInfo && "icon" in flagInfo ? flagInfo.icon : null;
+
+                  const card = cards.find((c) => c.id === item.retro_card_id);
+                  const getCategoryInfo = (category: string) => {
+                    if (category === "mad") return { title: "Mad", color: "var(--destructive)" };
+                    if (category === "sad") return { title: "Sad", color: "var(--primary)" };
+                    return { title: "Glad", color: "oklch(0.6 0.2 145)" };
+                  };
+                  const categoryInfo = card ? getCategoryInfo(card.category) : null;
+
+                  return (
+                    <div
+                      key={item.id}
+                      onClick={() => setViewingItem(item)}
+                      className="group relative cursor-pointer rounded-md border border-gray-200 bg-white p-3 opacity-75 transition-all hover:border-gray-300 hover:shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:hover:border-gray-600"
+                    >
+                      {/* Flag Badge */}
+                      {flagInfo && (
+                        <div className="mb-2 flex items-center gap-1.5">
+                          <span
+                            className="inline-flex items-center gap-1 rounded border px-1.5 py-0.5 text-[10px] font-medium"
+                            style={{
+                              backgroundColor: `${flagColor}15`,
+                              color: flagColor,
+                              borderColor: flagColor,
+                            }}
+                          >
+                            {FlagIcon && <FlagIcon className="h-2.5 w-2.5" />}
+                            {flagLabel}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Card Info */}
+                      {item.retro_card_id && (() => {
+                        const card = cards.find((c) => c.id === item.retro_card_id);
+                        if (!card) return null;
+                        const getCategoryInfo = (category: string) => {
+                          if (category === "mad") return { title: "Mad", color: "var(--destructive)" };
+                          if (category === "sad") return { title: "Sad", color: "var(--primary)" };
+                          return { title: "Glad", color: "oklch(0.6 0.2 145)" };
+                        };
+                        const categoryInfo = getCategoryInfo(card.category);
+                        return (
+                          <div className="mb-2 flex items-center gap-1.5 rounded border border-gray-200 bg-gray-50 px-2 py-1 opacity-75 dark:border-gray-700 dark:bg-gray-800">
+                            <div className="flex items-center gap-1 rounded border px-1.5 py-0.5 text-[10px] font-medium" style={{ borderColor: categoryInfo.color, color: categoryInfo.color, backgroundColor: `${categoryInfo.color}15` }}>
+                              <FileText className="h-2.5 w-2.5" />
+                              <span>{categoryInfo.title}</span>
+                            </div>
+                            <span className="text-[10px] text-gray-600 dark:text-gray-400 line-clamp-1 max-w-[150px]">
+                              {card.content}
+                            </span>
+                          </div>
+                        );
+                      })()}
+
+                      {/* Content */}
+                      <div className="mb-2 min-h-[40px]">
+                        <p className="text-xs leading-relaxed text-gray-900 line-through dark:text-white line-clamp-3">
+                          {item.content}
+                        </p>
+                      </div>
+
+                      {/* Metadata */}
+                      <div className="flex items-center gap-2 text-[10px] text-gray-500 dark:text-gray-400">
+                        <div className="flex items-center gap-1">
+                          <User className="h-3 w-3" />
+                          <span>{item.created_by_username}</span>
+                        </div>
+                        <span>•</span>
+                        <div className="flex items-center gap-1">
+                          <CheckCircle2 className="h-3 w-3 text-green-600 dark:text-green-400" />
+                          <span>
+                            {item.completed_at && new Date(item.completed_at).toLocaleDateString("tr-TR", {
+                              day: "numeric",
+                              month: "short",
+                            })}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Viewing Item Modal */}
+          {viewingItem && (() => {
+            const item = viewingItem;
+            const flagInfo = item.flag
+              ? PREDEFINED_FLAGS[item.flag]
+              : item.custom_flag
+              ? customFlags.find((cf) => cf.id === item.custom_flag)
+              : null;
+
+            const flagColor =
+              flagInfo && "color" in flagInfo
+                ? flagInfo.color
+                : flagInfo && "flag_color" in flagInfo
+                ? flagInfo.flag_color
+                : "#6B7280";
+            const flagLabel =
+              flagInfo && "label" in flagInfo
+                ? flagInfo.label
+                : flagInfo && "flag_name" in flagInfo
+                ? flagInfo.flag_name
+                : "";
+            const FlagIcon = flagInfo && "icon" in flagInfo ? flagInfo.icon : null;
+
+            const card = cards.find((c) => c.id === item.retro_card_id);
+            const getCategoryInfo = (category: string) => {
+              if (category === "mad") return { title: "Mad", color: "var(--destructive)" };
+              if (category === "sad") return { title: "Sad", color: "var(--primary)" };
+              return { title: "Glad", color: "oklch(0.6 0.2 145)" };
+            };
+            const categoryInfo = card ? getCategoryInfo(card.category) : null;
+
+            return (
+              <Modal
+                open={!!viewingItem}
+                onClose={() => setViewingItem(null)}
+                title="Aksiyon Detayı"
+              >
+                <div className="space-y-4">
+                  {/* Flag Badge */}
+                  {flagInfo && (
+                    <div>
+                      <span
+                        className="inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-semibold"
+                        style={{
+                          backgroundColor: `${flagColor}15`,
+                          color: flagColor,
+                          borderColor: flagColor,
+                        }}
+                      >
+                        {FlagIcon && <FlagIcon className="h-3.5 w-3.5" />}
+                        {flagLabel}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Card Info */}
+                  {card && categoryInfo && (
+                    <div className="rounded-md border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800">
+                      <div className="mb-2 flex items-center gap-2">
+                        <div className="flex items-center gap-1.5 rounded border px-2 py-1 text-xs font-medium" style={{ borderColor: categoryInfo.color, color: categoryInfo.color, backgroundColor: `${categoryInfo.color}15` }}>
+                          <FileText className="h-3 w-3" />
+                          <span>{categoryInfo.title} Kartı</span>
+                        </div>
+                      </div>
+                      <p className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">{card.content}</p>
+                      <p className="mt-2 text-[10px] text-gray-500 dark:text-gray-400">
+                        Bu aksiyon maddesi yukarıdaki retro kartına bağlıdır.
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Content */}
+                  <div className="rounded-md border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
+                    <p className={`text-sm leading-relaxed ${item.is_completed ? 'text-gray-600 line-through dark:text-gray-400' : 'text-gray-900 dark:text-white'}`}>
+                      {item.content}
+                    </p>
+                  </div>
+
+                  {/* Metadata */}
+                  <div className="flex flex-col gap-2 rounded-md border border-gray-200 bg-gray-50 p-3 text-xs dark:border-gray-700 dark:bg-gray-800">
+                    <div className="flex items-center gap-2">
+                      <User className="h-3.5 w-3.5 text-gray-500 dark:text-gray-400" />
+                      <span className="font-medium text-gray-700 dark:text-gray-300">Oluşturan:</span>
+                      <span className="text-gray-900 dark:text-white">{item.created_by_username}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-3.5 w-3.5 text-gray-500 dark:text-gray-400" />
+                      <span className="font-medium text-gray-700 dark:text-gray-300">Oluşturulma:</span>
+                      <span className="text-gray-900 dark:text-white">
+                        {new Date(item.created_at).toLocaleDateString("tr-TR", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                    </div>
+                    {item.is_completed && item.completed_at && (
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="h-3.5 w-3.5 text-green-600 dark:text-green-400" />
+                        <span className="font-medium text-gray-700 dark:text-gray-300">Tamamlanma:</span>
+                        <span className="text-gray-900 dark:text-white">
+                          {new Date(item.completed_at).toLocaleDateString("tr-TR", {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </Modal>
+            );
+          })()}
+        </div>
+      );
+    }
+
+    // Aksiyon maddesi yoksa empty state göster
+    return (
+      <div className="rounded-md border border-gray-200 bg-white p-8 text-center dark:border-gray-700 dark:bg-gray-900">
+        <ClipboardList className="mx-auto mb-3 h-12 w-12 text-gray-400 dark:text-gray-500" />
+        <p className="font-medium text-gray-900 dark:text-white">
+          Aksiyon Maddeleri
+        </p>
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          Yeni retro başlatıldığında aksiyon maddeleri eklenebilir.
+        </p>
+      </div>
+    );
+  }
+
+  // Aktif session var ama kartlar açılmadıysa empty state göster
   if (!cardsRevealed) {
     return (
-      <div className="rounded-md border-2 border-gray-300 bg-white p-8 text-center shadow-sm dark:border-gray-700 dark:bg-gray-900">
+      <div className="rounded-md border border-gray-200 bg-white p-8 text-center dark:border-gray-700 dark:bg-gray-900">
         <ClipboardList className="mx-auto mb-3 h-12 w-12 text-gray-400 dark:text-gray-500" />
         <p className="font-medium text-gray-900 dark:text-white">
           Aksiyon Maddeleri
@@ -343,11 +715,14 @@ const RetroActionItems = memo(function RetroActionItems({
                   };
                   const categoryInfo = getCategoryInfo(card.category);
                   return (
-                    <div className="mb-2 flex items-center gap-1.5">
+                    <div className="mb-2 flex items-center gap-1.5 rounded border border-gray-200 bg-gray-50 px-2 py-1 dark:border-gray-700 dark:bg-gray-800">
                       <div className="flex items-center gap-1 rounded border px-1.5 py-0.5 text-[10px] font-medium" style={{ borderColor: categoryInfo.color, color: categoryInfo.color, backgroundColor: `${categoryInfo.color}15` }}>
                         <FileText className="h-2.5 w-2.5" />
                         <span>{categoryInfo.title}</span>
                       </div>
+                      <span className="text-[10px] text-gray-600 dark:text-gray-400 line-clamp-1 max-w-[150px]">
+                        {card.content}
+                      </span>
                     </div>
                   );
                 })()}
@@ -489,11 +864,14 @@ const RetroActionItems = memo(function RetroActionItems({
                   };
                   const categoryInfo = getCategoryInfo(card.category);
                   return (
-                    <div className="mb-2 flex items-center gap-1.5">
-                      <div className="flex items-center gap-1 rounded border px-1.5 py-0.5 text-[10px] font-medium opacity-75" style={{ borderColor: categoryInfo.color, color: categoryInfo.color, backgroundColor: `${categoryInfo.color}15` }}>
+                    <div className="mb-2 flex items-center gap-1.5 rounded border border-gray-200 bg-gray-50 px-2 py-1 opacity-75 dark:border-gray-700 dark:bg-gray-800">
+                      <div className="flex items-center gap-1 rounded border px-1.5 py-0.5 text-[10px] font-medium" style={{ borderColor: categoryInfo.color, color: categoryInfo.color, backgroundColor: `${categoryInfo.color}15` }}>
                         <FileText className="h-2.5 w-2.5" />
                         <span>{categoryInfo.title}</span>
                       </div>
+                      <span className="text-[10px] text-gray-600 dark:text-gray-400 line-clamp-1 max-w-[150px]">
+                        {card.content}
+                      </span>
                     </div>
                   );
                 })()}
@@ -685,7 +1063,10 @@ const RetroActionItems = memo(function RetroActionItems({
                       <span>{categoryInfo.title} Kartı</span>
                     </div>
                   </div>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">{card.content}</p>
+                  <p className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">{card.content}</p>
+                  <p className="mt-2 text-[10px] text-gray-500 dark:text-gray-400">
+                    Bu aksiyon maddesi yukarıdaki retro kartına bağlıdır.
+                  </p>
                 </div>
               )}
 
