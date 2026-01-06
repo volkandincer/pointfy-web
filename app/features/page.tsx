@@ -1,16 +1,11 @@
+"use client";
+
 import { Zap } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import PageHeader from "@/components/layout/PageHeader";
-import type { Metadata } from "next";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import { getDefaultNavigationItems } from "@/lib/utils";
-
-export const metadata: Metadata = {
-  title: "Özellikler | TeamHubX",
-  description:
-    "TeamHubX özellikleri: takım odaları, poker planning, retrospektif, görev yönetimi ve gerçek zamanlı işbirliği.",
-};
 
 export default function FeaturesPage() {
   const navigationItems: NavigationItem[] = getDefaultNavigationItems();

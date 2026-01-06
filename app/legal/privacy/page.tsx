@@ -1,17 +1,11 @@
+"use client";
+
 import { Shield } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import PageHeader from "@/components/layout/PageHeader";
-import type { Metadata } from "next";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import { getDefaultNavigationItems } from "@/lib/utils";
-
-export const metadata: Metadata = {
-  title: "Gizlilik Politikası | TeamHubX",
-  description:
-    "TeamHubX gizlilik politikası: hangi verileri topluyoruz ve nasıl koruyoruz.",
-  alternates: { canonical: "/legal/privacy" },
-};
 
 export default function PrivacyPage() {
   const navigationItems: NavigationItem[] = getDefaultNavigationItems();

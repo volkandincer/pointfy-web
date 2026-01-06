@@ -1,15 +1,11 @@
+"use client";
+
 import { DollarSign } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import PageHeader from "@/components/layout/PageHeader";
-import type { Metadata } from "next";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import { getDefaultNavigationItems } from "@/lib/utils";
-
-export const metadata: Metadata = {
-  title: "Fiyatlandırma | TeamHubX",
-  description: "TeamHubX fiyatlandırma seçenekleri ve planlar.",
-};
 
 export default function PricingPage() {
   const navigationItems: NavigationItem[] = getDefaultNavigationItems();

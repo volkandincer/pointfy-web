@@ -1,16 +1,11 @@
+"use client";
+
 import { FileText } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import PageHeader from "@/components/layout/PageHeader";
-import type { Metadata } from "next";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import { getDefaultNavigationItems } from "@/lib/utils";
-
-export const metadata: Metadata = {
-  title: "Kullanım Şartları | TeamHubX",
-  description: "TeamHubX kullanım şartları: hizmet koşulları ve sorumluluklar.",
-  alternates: { canonical: "/legal/terms" },
-};
 
 export default function TermsPage() {
   const navigationItems: NavigationItem[] = getDefaultNavigationItems();

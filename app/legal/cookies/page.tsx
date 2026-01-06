@@ -1,16 +1,11 @@
+"use client";
+
 import { Cookie } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import PageHeader from "@/components/layout/PageHeader";
-import type { Metadata } from "next";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import { getDefaultNavigationItems } from "@/lib/utils";
-
-export const metadata: Metadata = {
-  title: "Çerez Politikası | TeamHubX",
-  description: "TeamHubX çerez politikası: hangi çerezleri neden kullanıyoruz.",
-  alternates: { canonical: "/legal/cookies" },
-};
 
 export default function CookiesPage() {
   const navigationItems: NavigationItem[] = getDefaultNavigationItems();

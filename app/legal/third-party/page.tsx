@@ -1,16 +1,11 @@
+"use client";
+
 import { Link2 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import PageHeader from "@/components/layout/PageHeader";
-import type { Metadata } from "next";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import { getDefaultNavigationItems } from "@/lib/utils";
-
-export const metadata: Metadata = {
-  title: "Üçüncü Taraf Hizmetler | TeamHubX",
-  description: "TeamHubX tarafından kullanılan üçüncü taraf hizmetler.",
-  alternates: { canonical: "/legal/third-party" },
-};
 
 export default function ThirdPartyPage() {
   const navigationItems: NavigationItem[] = getDefaultNavigationItems();
