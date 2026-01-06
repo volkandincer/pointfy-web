@@ -21,6 +21,7 @@ export function getAppUrlFromRequest(request: Request): string {
     "localhost:3000",
     "localhost",
     "teamhubx.com",
+    "www.teamhubx.com",
     "teamhubx-web.vercel.app",
     // Custom domain'ler buraya eklenebilir
   ];
