@@ -20,10 +20,10 @@ const RoomParticipants = memo(function RoomParticipants({
 
   if (loading) {
     return (
-      <div className="rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+      <div className="rounded-md border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-900">
         <div className="flex items-center gap-2">
-          <div className="h-8 w-8 animate-pulse border-2 border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
-          <div className="h-4 w-24 animate-pulse rounded bg-gray-100 dark:bg-gray-800" />
+          <div className="h-6 w-6 animate-pulse rounded border border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
+          <div className="h-3 w-20 animate-pulse rounded bg-gray-100 dark:bg-gray-800" />
         </div>
       </div>
     );
@@ -31,8 +31,8 @@ const RoomParticipants = memo(function RoomParticipants({
 
   if (error) {
     return (
-      <div className="border-2 border-red-300 bg-red-50 p-4 shadow-sm dark:border-red-700 dark:bg-red-900/10">
-        <p className="text-xs text-red-600 dark:text-red-400">
+      <div className="rounded-md border border-red-300 bg-red-50 p-3 dark:border-red-700 dark:bg-red-900/10">
+        <p className="text-[10px] text-red-600 dark:text-red-400">
           Katılımcılar yüklenirken hata oluştu: {error}
         </p>
       </div>
@@ -40,35 +40,35 @@ const RoomParticipants = memo(function RoomParticipants({
   }
 
   return (
-    <div className="rounded-md border-2 border-gray-300 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+    <div className="rounded-md border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
       {/* Accordion Header - Tıklanabilir */}
       <button
         onClick={() => participants.length > 0 && setShowAll(!showAll)}
         disabled={participants.length === 0}
-        className="w-full p-4 text-left transition-colors hover:bg-gray-50/50 disabled:cursor-default disabled:hover:bg-white dark:hover:bg-gray-800/50 dark:disabled:hover:bg-gray-900"
+        className="w-full p-3 text-left transition-colors hover:bg-gray-50/50 disabled:cursor-default disabled:hover:bg-white dark:hover:bg-gray-800/50 dark:disabled:hover:bg-gray-900"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center border-2 border-blue-600 bg-blue-600 text-white dark:border-blue-500 dark:bg-blue-600 dark:text-white">
-              <Users className="h-4 w-4" />
+            <div className="flex h-6 w-6 items-center justify-center rounded border border-blue-600 bg-blue-600 text-white dark:border-blue-500 dark:bg-blue-600">
+              <Users className="h-3.5 w-3.5" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-gray-900 dark:text-white">
+              <h3 className="text-xs font-semibold text-gray-900 dark:text-white">
                 Katılımcılar
               </h3>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
+              <p className="text-[10px] text-gray-600 dark:text-gray-400">
                 {participants.length} kişi
               </p>
             </div>
           </div>
           {participants.length > 0 && (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               {/* Avatar Stack */}
-              <div className="flex -space-x-2">
+              <div className="flex -space-x-1.5">
                 {participants.slice(0, 3).map((participant, idx) => (
                   <div
                     key={participant.user_key}
-                    className={`flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-xs font-bold text-white shadow-sm dark:border-gray-900 ${
+                    className={`flex h-6 w-6 items-center justify-center rounded-full border-2 border-white text-[10px] font-bold text-white dark:border-gray-900 ${
                       participant.user_key === currentUserKey
                         ? "border-blue-600 bg-blue-600 dark:border-blue-500 dark:bg-blue-500"
                         : "border-purple-600 bg-purple-600 dark:border-purple-500 dark:bg-purple-500"
@@ -82,13 +82,13 @@ const RoomParticipants = memo(function RoomParticipants({
               </div>
               {/* Accordion Toggle Icon */}
               <div
-                className={`flex h-8 w-8 items-center justify-center border-2 border-gray-300 bg-gray-50 text-gray-600 transition-all duration-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 ${
+                className={`flex h-6 w-6 items-center justify-center rounded border border-gray-300 bg-gray-50 text-gray-600 transition-all duration-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 ${
                   showAll
                     ? "rotate-180 bg-blue-50 border-blue-300 dark:bg-blue-900/20 dark:border-blue-500"
                     : "hover:bg-gray-100 dark:hover:bg-gray-700"
                 }`}
               >
-                <ChevronDown className="h-4 w-4" />
+                <ChevronDown className="h-3 w-3" />
               </div>
             </div>
           )}
@@ -103,7 +103,7 @@ const RoomParticipants = memo(function RoomParticipants({
             : "max-h-0 opacity-0"
         }`}
       >
-        <div className="border-t-2 border-gray-200/70 px-4 pb-4 pt-3 dark:border-gray-800/70">
+        <div className="border-t border-gray-200 px-3 pb-3 pt-2 dark:border-gray-800">
           <div className="space-y-1.5 overflow-y-auto pr-2 max-h-80">
             {participants.map((participant) => (
               <CompactParticipantCard
@@ -118,8 +118,8 @@ const RoomParticipants = memo(function RoomParticipants({
 
       {/* Empty State */}
       {participants.length === 0 && (
-        <div className="px-4 py-3 text-center">
-          <p className="text-xs text-gray-500 dark:text-gray-400">
+        <div className="px-3 py-2 text-center">
+          <p className="text-[10px] text-gray-500 dark:text-gray-400">
             Henüz katılımcı yok
           </p>
         </div>
@@ -158,16 +158,16 @@ const CompactParticipantCard = memo(function CompactParticipantCard({
 
   return (
     <div
-      className={`group flex items-center gap-2 border-2 border-gray-300 p-2 transition-all hover:shadow-sm hover:border-gray-400 ${
+      className={`group flex items-center gap-1.5 rounded border border-gray-200 p-2 transition-all hover:border-gray-300 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800 ${
         isCurrentUser
           ? "border-blue-300/60 bg-blue-50/50 dark:border-blue-500/60 dark:bg-blue-900/20"
-          : "border-gray-200/70 bg-gray-50/50 hover:border-blue-300/50 hover:bg-blue-50/30 dark:border-gray-700/70 dark:bg-gray-800/30 dark:hover:border-blue-500/30 dark:hover:bg-blue-900/10"
+          : ""
       }`}
     >
       {/* Kompakt Avatar */}
       <div className="relative shrink-0">
         <div
-          className={`flex h-8 w-8 items-center justify-center border-2 text-xs font-bold text-white shadow-sm ${
+          className={`flex h-6 w-6 items-center justify-center rounded-full border-2 text-[10px] font-bold text-white ${
             isCurrentUser
               ? "border-blue-600 bg-blue-600 dark:border-blue-500 dark:bg-blue-500"
               : "border-purple-600 bg-purple-600 dark:border-purple-500 dark:bg-purple-500"
@@ -176,7 +176,7 @@ const CompactParticipantCard = memo(function CompactParticipantCard({
           {participant.username.charAt(0).toUpperCase()}
         </div>
         {isCurrentUser && (
-          <div className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center border-2 border-white bg-green-600 text-[8px] font-bold text-white dark:border-gray-900">
+          <div className="absolute -bottom-0.5 -right-0.5 flex h-3 w-3 items-center justify-center rounded-full border-2 border-white bg-green-600 text-[8px] font-bold text-white dark:border-gray-900">
             ✓
           </div>
         )}
@@ -184,9 +184,9 @@ const CompactParticipantCard = memo(function CompactParticipantCard({
 
       {/* Kompakt Info */}
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1">
           <p
-            className={`truncate text-xs font-semibold ${
+            className={`truncate text-[10px] font-medium ${
               isCurrentUser
                 ? "text-blue-900 dark:text-blue-100"
                 : "text-gray-900 dark:text-white"
@@ -195,19 +195,19 @@ const CompactParticipantCard = memo(function CompactParticipantCard({
             {participant.username}
           </p>
           {participant.is_admin && (
-            <span className="shrink-0 inline-flex items-center gap-0.5 rounded-md border-2 border-amber-300 bg-amber-500 px-1.5 py-0.5 text-[9px] font-bold text-white shadow-sm dark:border-amber-600 dark:bg-amber-600">
-              <Crown className="h-2.5 w-2.5" />
+            <span className="shrink-0 inline-flex items-center gap-0.5 rounded border border-amber-300 bg-amber-500 px-1 py-0.5 text-[8px] font-bold text-white dark:border-amber-600 dark:bg-amber-600">
+              <Crown className="h-2 w-2" />
             </span>
           )}
         </div>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1">
           {isActive ? (
-            <span className="flex items-center gap-1 rounded-md border-2 border-green-300 bg-green-50 px-1.5 py-0.5 text-[10px] font-semibold text-green-700 shadow-sm dark:border-green-700 dark:bg-green-900/30 dark:text-green-400">
-              <span className="h-1.5 w-1.5 border-2 border-green-600 bg-green-500 dark:border-green-400 dark:bg-green-400"></span>
+            <span className="flex items-center gap-0.5 rounded border border-green-300 bg-green-50 px-1 py-0.5 text-[9px] font-medium text-green-700 dark:border-green-700 dark:bg-green-900/30 dark:text-green-400">
+              <span className="h-1 w-1 rounded-full border border-green-600 bg-green-500 dark:border-green-400 dark:bg-green-400"></span>
               {status}
             </span>
           ) : (
-            <span className="text-[10px] text-gray-500 dark:text-gray-400">
+            <span className="text-[9px] text-gray-500 dark:text-gray-400">
               {status}
             </span>
           )}

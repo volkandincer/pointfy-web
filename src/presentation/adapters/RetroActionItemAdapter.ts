@@ -22,6 +22,7 @@ export class RetroActionItemAdapter {
       position: item.position,
       flag: item.flag,
       custom_flag: item.customFlag,
+      retro_card_id: item.retroCardId,
       created_at: item.createdAt.toISOString(),
       updated_at: item.updatedAt.toISOString(),
     };
@@ -42,6 +43,7 @@ export class RetroActionItemAdapter {
       position: item.position,
       flag: item.flag,
       custom_flag: item.custom_flag,
+      retro_card_id: item.retro_card_id,
       created_at: item.created_at,
       updated_at: item.updated_at,
     });

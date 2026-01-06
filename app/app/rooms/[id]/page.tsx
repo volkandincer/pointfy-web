@@ -1,10 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Clock } from "lucide-react";
+import { Clock, ArrowLeft, Plus } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import Button from "@/components/ui/Button";
+import EmptyState from "@/components/jira/EmptyState";
 import UserVotingView from "@/components/voting/UserVotingView";
 import AdminVotingView from "@/components/voting/AdminVotingView";
 import UserCompletedTasksView from "@/components/voting/UserCompletedTasksView";
@@ -356,15 +358,16 @@ export default function RoomDetailPage() {
   return (
     <>
       <Header navigationItems={navigationItems} />
-        <main className="container mx-auto px-4 py-16">
-          <div className="mx-auto max-w-5xl">
-            <div className="mb-6 flex items-center justify-between">
+        <main className="container mx-auto px-4 py-8">
+          <div className="mx-auto max-w-6xl">
+            {/* Header */}
+            <div className="mb-4 flex items-center justify-between rounded-md border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
               <div>
-                <h1 className="text-base font-bold text-gray-900 dark:text-white">
+                <h1 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
                   {room?.name || "Oda"}
                 </h1>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Kod: {room?.code}
+                <p className="text-xs text-gray-600 dark:text-gray-400">
+                  Kod: <span className="font-mono font-semibold">{room?.code}</span>
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -375,12 +378,15 @@ export default function RoomDetailPage() {
                     roomName={room.name || "Oda"}
                   />
                 )}
-                <button
+                <Button
                   onClick={() => router.back()}
-                  className="rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                  variant="outline"
+                  size="sm"
+                  icon={ArrowLeft}
+                  className="!h-8 !px-3 !text-xs"
                 >
-                  ← Geri
-                </button>
+                  Geri
+                </Button>
               </div>
             </div>
 
@@ -423,20 +429,11 @@ export default function RoomDetailPage() {
               </>
             ) : (
               <div className="space-y-6">
-                <div className="rounded-md border-2 border-gray-300 bg-white p-6 text-center shadow-sm sm:p-8 dark:border-gray-700 dark:bg-gray-900">
-                  <div className="mb-4 flex justify-center">
-                    <div className="flex h-16 w-16 items-center justify-center border-2 border-amber-600 bg-amber-50 dark:bg-amber-900/20">
-                      <Clock className="h-8 w-8 text-amber-600 dark:text-amber-400" />
-                    </div>
-                  </div>
-                  <p className="mb-1 text-base font-semibold text-gray-900 dark:text-white">
-                    Aktif Task Yok
-                  </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Şu anda aktif bir task yok. Admin yeni bir task başlatana
-                    kadar bekleyin.
-                  </p>
-                </div>
+                <EmptyState
+                  icon={Clock}
+                  title="Aktif Task Yok"
+                  description="Şu anda aktif bir task yok. Admin yeni bir task başlatana kadar bekleyin."
+                />
 
                 {/* User için tamamlanan task'lar */}
                 {!isAdmin && (
@@ -456,27 +453,30 @@ export default function RoomDetailPage() {
                       );
                       if (pendingTasks.length === 0) return null;
                       return (
-                        <div className="mb-6 border-2 border-amber-300 bg-amber-50 p-6 shadow-sm dark:border-amber-700 dark:bg-amber-900/10">
+                        <div className="mb-6 rounded-lg border border-amber-300 bg-amber-50/50 p-5 dark:border-amber-700 dark:bg-amber-900/10">
                           <div className="mb-4 flex items-center justify-between">
                             <div>
-                              <div className="flex items-center gap-2">
+                              <div className="mb-1.5 flex items-center gap-2">
                                 <Clock className="h-5 w-5 text-amber-600 dark:text-amber-400" />
-                                <h2 className="text-base font-semibold text-gray-900 dark:text-white">
+                                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                                   Puanlanmayı Bekleyen Task&apos;lar
                                 </h2>
                               </div>
-                              <p className="text-xs text-gray-600 dark:text-gray-400">
+                              <p className="text-sm text-gray-600 dark:text-gray-400">
                                 {pendingTasks.length} task puanlamaya hazır
                               </p>
                             </div>
-                            <button
+                            <Button
                               onClick={() => setShowTaskModal(true)}
-                              className="border-2 border-blue-600 bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700"
+                              variant="primary"
+                              size="sm"
+                              icon={Plus}
+                              className="!border-blue-600 !bg-blue-600 hover:!border-blue-700 hover:!bg-blue-700 dark:!border-blue-500 dark:!bg-blue-600 dark:hover:!border-blue-400 dark:hover:!bg-blue-500"
                             >
-                              + Task Ekle
-                            </button>
+                              Task Ekle
+                            </Button>
                           </div>
-                          <div className="space-y-4">
+                          <div className="space-y-3">
                             {pendingTasks.map((task) => (
                               <TaskCard
                                 key={task.id}
@@ -492,34 +492,43 @@ export default function RoomDetailPage() {
                     })()}
 
                     {/* Diğer Task'lar (Active ve Completed) */}
-                    <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                    <div className="rounded-lg border border-gray-300 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
                       <div className="mb-4 flex items-center justify-between">
                         <div>
-                          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                          <h2 className="mb-1.5 text-lg font-semibold text-gray-900 dark:text-white">
                             Task Yönetimi (Admin)
                           </h2>
-                          <p className="text-xs text-gray-600 dark:text-gray-400">
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
                             Aktif ve tamamlanan task&apos;lar
                           </p>
                         </div>
-                        <button
+                        <Button
                           onClick={() => setShowTaskModal(true)}
-                          className="border-2 border-blue-600 bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700"
+                          variant="primary"
+                          size="sm"
+                          icon={Plus}
+                          className="!border-blue-600 !bg-blue-600 hover:!border-blue-700 hover:!bg-blue-700 dark:!border-blue-500 dark:!bg-blue-600 dark:hover:!border-blue-400 dark:hover:!bg-blue-500"
                         >
-                          + Task Ekle
-                        </button>
+                          Task Ekle
+                        </Button>
                       </div>
                       {tasksLoading ? (
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Yükleniyor...
-                        </p>
+                        <div className="py-8 text-center">
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                            Yükleniyor...
+                          </p>
+                        </div>
                       ) : tasks.filter((t) => t.status !== "pending").length ===
                         0 ? (
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Henüz aktif veya tamamlanan task yok.
-                        </p>
+                        <EmptyState
+                          icon={Clock}
+                          title="Henüz aktif veya tamamlanan task yok"
+                          description="İlk task'ınızı ekleyerek başlayın"
+                          actionLabel="Task Ekle"
+                          onAction={() => setShowTaskModal(true)}
+                        />
                       ) : (
-                        <div className="space-y-4">
+                        <div className="space-y-3">
                           {tasks
                             .filter((t) => t.status !== "pending")
                             .map((task) => (

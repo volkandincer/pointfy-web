@@ -14,6 +14,7 @@ export interface CreateRetroActionItemData {
   completedAt: Date | null;
   flag: RetroActionItemFlag | null;
   customFlag: string | null;
+  retroCardId: string | null;
 }
 
 export interface IRetroActionItemRepository {

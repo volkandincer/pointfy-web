@@ -1,16 +1,20 @@
 "use client";
 
 import { memo, useState, useCallback, useMemo, useRef, useEffect } from "react";
-import { Timer, Layers, Angry, Frown, Smile, PartyPopper, Lightbulb, Lock, Clock, XCircle, CheckCircle2, Send } from "lucide-react";
+import { Timer, Layers, Angry, Frown, Smile, PartyPopper, Lock, Send, Edit, Trash2, Plus } from "lucide-react";
 import { getSupabase } from "@/lib/supabase";
 import { useRetroCards } from "@/hooks/useRetroCards";
 import { useRetroTimer } from "@/hooks/useRetroTimer";
 import { useToastContext } from "@/contexts/ToastContext";
+import EmptyState from "@/components/jira/EmptyState";
 import type { RetroCategory, RetroCard } from "@/interfaces/Retro.interface";
 import RetroCardModal from "./RetroCardModal";
 import RetroActionItems from "./RetroActionItems";
+import RetroActionItemModal from "./RetroActionItemModal";
 import { Textarea } from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
+import type { RetroActionItemInput } from "@/interfaces/RetroActionItem.interface";
+import { useRoomCustomFlags } from "@/hooks/useRoomCustomFlags";
 
 interface RetroRoomViewProps {
   roomId: string;
@@ -38,6 +42,7 @@ const RetroRoomView = memo(function RetroRoomView({
 }: RetroRoomViewProps) {
   const { cards, loading } = useRetroCards(roomId);
   const { showToast } = useToastContext();
+  const { customFlags, addCustomFlag } = useRoomCustomFlags(roomId, isAdmin);
   const {
     remainingSeconds,
     isActive: timerActive,
@@ -53,6 +58,8 @@ const RetroRoomView = memo(function RetroRoomView({
   const [showTimerModal, setShowTimerModal] = useState<boolean>(false);
   const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
   const [warningShown, setWarningShown] = useState<boolean>(false);
+  const [showAddActionModal, setShowAddActionModal] = useState<boolean>(false);
+  const [selectedCardForAction, setSelectedCardForAction] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const timerOptions = [
@@ -231,13 +238,17 @@ const RetroRoomView = memo(function RetroRoomView({
         room_id_param: roomId,
       });
       if (error) throw error;
+      // Timer'ı kapat
+      if (timerActive) {
+        stopTimer();
+      }
       showToast("Tüm kartlar açıldı!", "success");
     } catch (err) {
       showToast("Kartlar açılırken bir hata oluştu.", "error");
     } finally {
       setIsRevealing(false);
     }
-  }, [roomId, isAdmin, showToast]);
+  }, [roomId, isAdmin, showToast, timerActive, stopTimer]);
 
   const handleOpenEdit = useCallback(
     (card: RetroCard) => {
@@ -259,208 +270,150 @@ const RetroRoomView = memo(function RetroRoomView({
   }
 
   return (
-    <div className="space-y-6">
-      {/* Category Tabs */}
-      <div className="border-b-2 border-gray-200 dark:border-gray-700">
-        <div className="flex gap-1">
-          {(["mad", "sad", "glad"] as RetroCategory[]).map((category) => {
-            const info = getCategoryInfo(category);
-            const isActive = activeTab === category;
-            const categoryCount = cards.filter((c) => c.category === category).length;
-            
-            // Aktif tab için stil
-            const activeStyles =
-              info.color === "red"
-                ? "border-b-2 border-red-600 text-red-600 dark:text-red-400"
-                : info.color === "blue"
-                ? "border-b-2 border-blue-600 text-blue-600 dark:text-blue-400"
-                : "border-b-2 border-green-600 text-green-600 dark:text-green-400";
+    <div className="space-y-4">
+      {/* Status & Timer Section - Minimal */}
+      <div className="rounded-md border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-900">
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Timer Display */}
+          {timerActive && (
+            <div className={`flex items-center gap-2 rounded border px-2 py-1.5 ${
+              timerWarning
+                ? "border-red-300 bg-red-50 dark:border-red-800 dark:bg-red-950/30"
+                : "border-blue-300 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30"
+            }`}>
+              <Timer className={`h-3.5 w-3.5 ${
+                timerWarning
+                  ? "text-red-600 dark:text-red-400"
+                  : "text-blue-600 dark:text-blue-400"
+              }`} />
+              <p className={`text-xs font-semibold ${
+                timerWarning
+                  ? "text-red-700 dark:text-red-300"
+                  : "text-blue-700 dark:text-blue-300"
+              }`}>
+                {Math.floor(remainingSeconds / 60)}:{(remainingSeconds % 60).toString().padStart(2, "0")}
+              </p>
+              {isAdmin && (
+                <Button
+                  onClick={stopTimer}
+                  variant="danger"
+                  size="sm"
+                  className="ml-1 !h-6 !px-2 !text-xs !border-red-600 !bg-red-600 hover:!border-red-700 hover:!bg-red-700 dark:!border-red-500 dark:!bg-red-600 dark:hover:!border-red-400 dark:hover:!bg-red-500"
+                >
+                  Durdur
+                </Button>
+              )}
+            </div>
+          )}
 
-            // Pasif tab için stil
-            const inactiveStyles = "text-gray-600 hover:text-gray-900 hover:border-b-2 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:border-gray-600";
+          {/* Status Display */}
+          {cardsRevealed ? (
+            <div className="flex items-center gap-1.5 rounded border border-green-300 bg-green-50 px-2 py-1 dark:border-green-800 dark:bg-green-950/30">
+              <PartyPopper className="h-3.5 w-3.5 text-green-600 dark:text-green-400" />
+              <p className="text-xs font-medium text-green-700 dark:text-green-300">
+                Tüm kartlar açıldı
+              </p>
+            </div>
+          ) : (
+            <div className="flex items-center gap-1.5 rounded border border-gray-300 bg-gray-50 px-2 py-1 dark:border-gray-700 dark:bg-gray-800">
+              <Layers className="h-3.5 w-3.5 text-gray-600 dark:text-gray-400" />
+              <span className="text-xs font-medium text-gray-900 dark:text-white">
+                {revealedCards.length} açık
+              </span>
+              <span className="text-xs text-gray-400">•</span>
+              <span className="text-xs font-medium text-gray-900 dark:text-white">
+                {hiddenCards.length} gizli
+              </span>
+            </div>
+          )}
 
-            return (
-              <button
-                key={category}
-                onClick={() => setActiveTab(category)}
-                className={`flex items-center gap-2 px-6 py-3 font-semibold transition-all ${
-                  isActive ? activeStyles : inactiveStyles
-                }`}
-              >
-                <info.icon className="h-5 w-5" />
-                <span>{info.title}</span>
-                {categoryCount > 0 && (
-                  <span className={`ml-1 rounded-md border-2 px-2 py-0.5 text-xs font-bold shadow-sm ${
-                    isActive 
-                      ? info.color === "red"
-                        ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
-                        : info.color === "blue"
-                        ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
-                        : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                      : "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400"
-                  }`}>
-                    {categoryCount}
-                  </span>
-                )}
-              </button>
-            );
-          })}
+          {/* Admin Actions */}
+          {isAdmin && !cardsRevealed && (
+            <div className="ml-auto flex items-center gap-1.5">
+              {!timerActive && (
+                <Button
+                  onClick={() => setShowTimerModal(true)}
+                  variant="primary"
+                  size="sm"
+                  icon={Timer}
+                  className="!h-7 !px-2.5 !text-xs !border-[oklch(0.55_0.2_300)] !bg-[oklch(0.55_0.2_300)] hover:!border-[oklch(0.60_0.22_300)] hover:!bg-[oklch(0.60_0.22_300)]"
+                >
+                  Timer
+                </Button>
+              )}
+              {hiddenCards.length > 0 && (
+                <Button
+                  onClick={handleRevealAll}
+                  disabled={isRevealing}
+                  variant="primary"
+                  size="sm"
+                  icon={Layers}
+                  loading={isRevealing}
+                  className="!h-7 !px-2.5 !text-xs !border-green-600 !bg-green-600 hover:!border-green-700 hover:!bg-green-700 dark:!border-green-500 dark:!bg-green-600 dark:hover:!border-green-400 dark:hover:!bg-green-500"
+                >
+                  Aç
+                </Button>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Timer Display */}
-      {timerActive && (
-        <div className={`rounded-md border-2 p-5 shadow-sm ${
-          timerWarning
-            ? "border-red-300 bg-red-50 dark:border-red-800 dark:bg-red-950/30"
-            : "border-blue-300 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30"
-        }`}>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <span className="text-2xl">⏱️</span>
-              <div>
-                <p className={`text-base font-bold ${
-                  timerWarning
-                    ? "text-red-700 dark:text-red-300"
-                    : "text-blue-700 dark:text-blue-300"
-                }`}>
-                  {Math.floor(remainingSeconds / 60)}:{(remainingSeconds % 60).toString().padStart(2, "0")}
-                </p>
-                <p className={`text-xs font-medium ${
-                  timerWarning
-                    ? "text-red-600 dark:text-red-400"
-                    : "text-blue-600 dark:text-blue-400"
-                }`}>
-                  {timerWarning ? "Son 10 saniye!" : "Kart gönderme süresi"}
-                </p>
-              </div>
-            </div>
-            {isAdmin && (
-              <button
-                onClick={stopTimer}
-                className="rounded-md border-2 border-red-600 bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:border-red-700 hover:bg-red-700 hover:shadow-md"
-              >
-                Durdur
-              </button>
-            )}
-          </div>
-        </div>
-      )}
 
-      {/* Status and Reveal Button */}
-      {cardsRevealed ? (
-        <div className="rounded-md border-2 border-green-300 bg-green-50 p-5 shadow-sm dark:border-green-800 dark:bg-green-950/30">
-          <div className="flex items-center justify-center gap-3">
-            <PartyPopper className="h-6 w-6 text-green-600 dark:text-green-400" />
-            <p className="font-semibold text-green-700 dark:text-green-300">
-              Tüm kartlar açıldı! Yeni kart eklenemez.
-            </p>
-          </div>
-        </div>
-      ) : (
-        <div className="rounded-md border-2 border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Layers className="h-5 w-5 text-gray-600 dark:text-gray-400" />
-                <div className="text-sm">
-                  <span className="font-semibold text-gray-900 dark:text-white">
-                    {revealedCards.length}
-                  </span>
-                  <span className="text-gray-600 dark:text-gray-400">
-                    {" "}
-                    açık
-                  </span>
-                  <span className="mx-2 text-gray-300 dark:text-gray-600">•</span>
-                  <span className="font-semibold text-gray-900 dark:text-white">
-                    {hiddenCards.length}
-                  </span>
-                  <span className="text-gray-600 dark:text-gray-400">
-                    {" "}
-                    gizli
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              {isAdmin && !timerActive && (
-                <button
-                  onClick={() => setShowTimerModal(true)}
-                  className="rounded-md border-2 border-purple-600 bg-purple-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:border-purple-700 hover:bg-purple-700 hover:shadow-md dark:border-purple-500 dark:bg-purple-600 dark:text-white dark:hover:bg-purple-700"
-                >
-                  <Timer className="mr-1.5 h-4 w-4" />
-                  Timer Başlat
-                </button>
-              )}
-              {isAdmin && hiddenCards.length > 0 && (
-                <button
-                  onClick={handleRevealAll}
-                  disabled={isRevealing}
-                  className="rounded-md border-2 border-green-600 bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:border-green-700 hover:bg-green-700 hover:shadow-md disabled:opacity-50 disabled:hover:shadow-sm dark:border-green-500 dark:bg-green-600 dark:text-white dark:hover:bg-green-700"
-                >
-                  {isRevealing ? (
-                    <span className="flex items-center gap-2">
-                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                      Açılıyor...
-                    </span>
-                  ) : (
-                    <>
-                      <Layers className="mr-1.5 h-4 w-4" />
-                      Tümünü Aç
-                    </>
-                  )}
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Add Card Form */}
+      {/* Add Card Form - Clean & Minimal */}
       {!cardsRevealed && (
         <form
           onSubmit={handleSubmitCard}
-          className={`rounded-md border-2 p-4 shadow-sm ${
+          className={`rounded-md border p-3 transition-all ${
             isAdmin && !timerActive
-              ? "border-yellow-300 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950/30"
+              ? "border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-800"
               : timerActive && remainingSeconds === 0
-              ? "border-red-300 bg-red-50 dark:border-red-800 dark:bg-red-950/30"
+              ? "border-red-300 bg-red-50/50 dark:border-red-800 dark:bg-red-950/20"
               : timerWarning
-              ? "border-orange-300 bg-orange-50 dark:border-orange-800 dark:bg-orange-950/30"
-              : "border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900"
+              ? "border-orange-300 bg-orange-50/50 dark:border-orange-800 dark:bg-orange-950/20"
+              : "border-gray-300 bg-white dark:border-gray-700 dark:bg-gray-900"
           }`}
         >
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
-            {/* Category Selector */}
-            <div className="flex gap-2">
+          {/* Category Selection - Inside Form */}
+          <div className="mb-3">
+            <label className="mb-1.5 block text-xs font-semibold text-gray-700 dark:text-gray-300">
+              Kategori
+            </label>
+            <div className="flex flex-wrap gap-1.5">
               {(["mad", "sad", "glad"] as RetroCategory[]).map((category) => {
                 const info = getCategoryInfo(category);
-                const isActive = activeTab === category;
-                const activeColor =
-                  info.color === "red"
-                    ? "bg-red-100 border-red-500 text-red-700 dark:bg-red-900/30 dark:border-red-600 dark:text-red-400"
-                    : info.color === "blue"
-                    ? "bg-blue-100 border-blue-500 text-blue-700 dark:bg-blue-900/30 dark:border-blue-600 dark:text-blue-400"
-                    : "bg-green-100 border-green-500 text-green-700 dark:bg-green-900/30 dark:border-green-600 dark:text-green-400";
+                const isSelected = activeTab === category;
+            const getColor = () => {
+              if (info.color === "red") return { border: "var(--destructive)", bg: "oklch(0.95 0.05 25)" };
+              if (info.color === "blue") return { border: "var(--primary)", bg: "oklch(0.95 0.05 250)" };
+              return { border: "oklch(0.6 0.2 145)", bg: "oklch(0.95 0.05 145)" };
+            };
+                const color = getColor();
 
                 return (
-                  <button
+                  <Button
                     key={category}
                     type="button"
                     onClick={() => setActiveTab(category)}
-                    className={`flex items-center gap-1.5 rounded-md border-2 px-3 py-2 text-sm font-semibold transition-all ${
-                      isActive
-                        ? activeColor
-                        : "border-gray-300 bg-gray-50 text-gray-600 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
-                    }`}
+                    variant={isSelected ? "primary" : "outline"}
+                    size="sm"
+                    icon={info.icon}
+                    iconPosition="left"
+                    className={isSelected ? "" : "!border-gray-300 !bg-white !text-gray-700 hover:!border-gray-400 hover:!bg-gray-50 dark:!border-gray-700 dark:!bg-gray-900 dark:!text-gray-300 dark:hover:!bg-gray-800"}
+                    style={isSelected ? {
+                      borderColor: color.border,
+                      backgroundColor: color.bg,
+                      color: color.border,
+                    } : {}}
                   >
-                    <info.icon className="h-4 w-4" />
-                    <span className="hidden sm:inline">{info.title}</span>
-                  </button>
+                    {info.title}
+                  </Button>
                 );
               })}
             </div>
+          </div>
 
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
             {/* Text Input */}
             <div className="flex-1">
               <Textarea
@@ -474,12 +427,12 @@ const RetroRoomView = memo(function RetroRoomView({
                 size="md"
                 className={`${
                   isAdmin && !timerActive
-                    ? "border-yellow-300 bg-yellow-50 text-gray-500 cursor-not-allowed dark:border-yellow-800 dark:bg-yellow-950/30"
+                    ? "border-gray-300 bg-gray-50 text-gray-500 cursor-not-allowed dark:border-gray-700 dark:bg-gray-800"
                     : timerActive && remainingSeconds === 0
                     ? "border-red-300 bg-red-50 text-gray-500 cursor-not-allowed dark:border-red-800 dark:bg-red-950/30"
                     : timerWarning
                     ? "border-orange-300 bg-orange-50 text-gray-900 focus:border-orange-500 focus:ring-orange-500/20 dark:border-orange-700 dark:bg-orange-950/30 dark:text-white"
-                    : "border-gray-300 bg-gray-50 text-gray-900 focus:border-indigo-500 focus:ring-indigo-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-indigo-400"
+                    : "border-gray-300 bg-gray-50 text-gray-900 focus:border-primary focus:ring-primary/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary"
                 }`}
               />
             </div>
@@ -492,26 +445,26 @@ const RetroRoomView = memo(function RetroRoomView({
               disabled={isSubmitting || !cardContent.trim() || (isAdmin && !timerActive) || (timerActive && remainingSeconds === 0)}
               loading={isSubmitting}
               icon={Send}
-              className={`${
+              className={`shrink-0 ${
                 isAdmin && !timerActive
-                  ? "!bg-yellow-500 !border-yellow-500"
+                  ? "!bg-gray-400 !border-gray-400 cursor-not-allowed"
                   : timerActive && remainingSeconds === 0
-                  ? "!bg-gray-400 !border-gray-400"
+                  ? "!bg-gray-400 !border-gray-400 cursor-not-allowed"
                   : timerWarning
                   ? "!border-orange-600 !bg-orange-600 hover:!border-orange-700 hover:!bg-orange-700"
-                  : "!border-indigo-600 !bg-indigo-600 hover:!border-indigo-700 hover:!bg-indigo-700"
+                  : ""
               }`}
             >
               {isSubmitting ? "Gönderiliyor..." : "Gönder"}
             </Button>
           </div>
-          <p className={`mt-2 text-xs ${
+          <p className={`mt-1.5 text-[10px] ${
             isAdmin && !timerActive
-              ? "text-yellow-600 dark:text-yellow-400 font-semibold"
+              ? "text-gray-600 dark:text-gray-400 font-medium"
               : timerActive && remainingSeconds === 0
-              ? "text-red-600 dark:text-red-400 font-semibold"
+              ? "text-red-600 dark:text-red-400 font-medium"
               : timerWarning
-              ? "text-orange-600 dark:text-orange-400 font-semibold"
+              ? "text-orange-600 dark:text-orange-400 font-medium"
               : "text-gray-500 dark:text-gray-400"
           }`}>
             {isAdmin && !timerActive
@@ -528,8 +481,8 @@ const RetroRoomView = memo(function RetroRoomView({
       {/* Timer Start Modal */}
       {showTimerModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-2xl rounded-md border-2 border-gray-200 bg-white p-6 shadow-md dark:border-gray-800 dark:bg-gray-900">
-            <h3 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
+          <div className="w-full max-w-2xl rounded-lg border border-gray-300 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-900">
+            <h3 className="mb-2 text-lg font-bold text-gray-900 dark:text-white">
               Timer Başlat
             </h3>
             <p className="mb-6 text-sm text-gray-600 dark:text-gray-400">
@@ -541,114 +494,160 @@ const RetroRoomView = memo(function RetroRoomView({
               {timerOptions.map((option) => {
                 const isSelected = selectedDuration === option.minutes;
                 return (
-                  <button
+                  <Button
                     key={option.minutes}
                     type="button"
                     onClick={() => setSelectedDuration(option.minutes)}
-                    className={`rounded-md border-2 p-4 text-center transition-all ${
+                    variant={isSelected ? "primary" : "outline"}
+                    size="lg"
+                    className={`!p-4 !flex-col !h-auto ${
                       isSelected
-                        ? "border-purple-500 bg-purple-50 shadow-sm dark:bg-purple-950/30 dark:border-purple-400"
-                        : "border-gray-200 bg-white hover:border-purple-300 hover:bg-purple-50/50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-purple-600 dark:hover:bg-purple-950/20"
+                        ? "!border-[oklch(0.55_0.2_300)] !bg-[oklch(0.95_0.05_300)] !text-[oklch(0.55_0.2_300)] !shadow-sm dark:!bg-[oklch(0.20_0.10_300)] dark:!border-[oklch(0.60_0.22_300)] dark:!text-[oklch(0.60_0.22_300)]"
+                        : "!border-gray-300 !bg-white !text-gray-700 hover:!border-[oklch(0.55_0.2_300)] hover:!bg-[oklch(0.95_0.05_300)] dark:!border-gray-700 dark:!bg-gray-800 dark:!text-gray-300 dark:hover:!border-[oklch(0.60_0.22_300)] dark:hover:!bg-[oklch(0.20_0.10_300)]"
                     }`}
                   >
-                    <div className={`text-base font-bold ${
+                    <span className="text-base font-bold">{option.label}</span>
+                    <span className={`mt-1 text-xs ${
                       isSelected
-                        ? "text-purple-600 dark:text-purple-400"
-                        : "text-gray-700 dark:text-gray-300"
-                    }`}>
-                      {option.label}
-                    </div>
-                    <div className={`mt-1 text-xs ${
-                      isSelected
-                        ? "text-purple-500 dark:text-purple-400"
+                        ? "text-[oklch(0.55_0.2_300)] dark:text-[oklch(0.60_0.22_300)]"
                         : "text-gray-500 dark:text-gray-400"
                     }`}>
                       {option.seconds} saniye
-                    </div>
-                  </button>
+                    </span>
+                  </Button>
                 );
               })}
             </div>
 
             <div className="flex gap-3">
-              <button
+              <Button
                 onClick={() => {
                   setShowTimerModal(false);
                   setSelectedDuration(null);
                 }}
-                className="flex-1 rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                variant="ghost"
+                size="md"
+                fullWidth
+                className="!border-gray-300 !text-gray-700 hover:!border-gray-400 hover:!bg-gray-50 dark:!border-gray-700 dark:!text-gray-300 dark:hover:!bg-gray-800"
               >
                 İptal
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={handleStartTimer}
                 disabled={selectedDuration === null}
-                className="flex-1 rounded-md border-2 border-purple-600 bg-purple-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:border-purple-700 hover:bg-purple-700 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed dark:border-purple-500 dark:bg-purple-600 dark:text-white dark:hover:bg-purple-700"
+                variant="primary"
+                size="md"
+                fullWidth
+                className="!border-purple-600 !bg-purple-600 hover:!border-purple-700 hover:!bg-purple-700 dark:!border-purple-500 dark:!bg-purple-600 dark:hover:!border-purple-400 dark:hover:!bg-purple-500"
               >
                 Başlat
-              </button>
+              </Button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Cards List */}
-      <div className="space-y-3">
+      {/* Cards Section */}
+      <div>
+        {/* Section Header */}
+        <div className="mb-3 flex items-center gap-2">
+          {(() => {
+            const info = getCategoryInfo(activeTab);
+            const getColor = () => {
+              if (info.color === "red") return { border: "var(--destructive)", bg: "oklch(0.95 0.05 25)" };
+              if (info.color === "blue") return { border: "var(--primary)", bg: "oklch(0.95 0.05 250)" };
+              return { border: "oklch(0.6 0.2 145)", bg: "oklch(0.95 0.05 145)" };
+            };
+            const color = getColor();
+            return (
+              <div
+                className="flex h-6 w-6 items-center justify-center rounded border"
+                style={{
+                  borderColor: color.border,
+                  backgroundColor: color.bg,
+                }}
+              >
+                <info.icon
+                  className="h-3.5 w-3.5"
+                  style={{ color: color.border }}
+                />
+              </div>
+            );
+          })()}
+          <h2 className="text-base font-semibold text-gray-900 dark:text-white">
+            {getCategoryInfo(activeTab).title} Kartları
+          </h2>
+          {categoryCards.length > 0 && (
+            <span className="rounded border border-gray-300 bg-gray-100 px-1.5 py-0.5 text-[10px] font-medium text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
+              {categoryCards.length}
+            </span>
+          )}
+        </div>
+
+        {/* Cards Grid */}
         {categoryCards.length === 0 ? (
-          <div className="rounded-md border-2 border-gray-200 bg-white p-8 text-center dark:border-gray-800 dark:bg-gray-900">
-            {(() => {
-              const CategoryIcon = getCategoryInfo(activeTab).icon;
-              return <CategoryIcon className="mx-auto mb-2 h-12 w-12 text-gray-400 dark:text-gray-500" />;
-            })()}
-            <p className="font-medium text-gray-900 dark:text-white">
-              Henüz kart yok
-            </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              {cardsRevealed
-                ? "Kartlar açıldı, yeni kart eklenemez."
-                : "Yukarıdaki formu kullanarak ilk kartı ekleyebilirsiniz."}
-            </p>
-          </div>
+          <EmptyState
+            icon={getCategoryInfo(activeTab).icon}
+            title="Henüz kart yok"
+            description={cardsRevealed
+              ? "Kartlar açıldı, yeni kart eklenemez."
+              : "Yukarıdaki formu kullanarak ilk kartı ekleyebilirsiniz."}
+          />
         ) : (
-          categoryCards.map((card) => {
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+          {categoryCards.map((card) => {
             const isOwnCard = card.user_key === userKey;
             const canViewContent = card.is_revealed || isOwnCard;
             const categoryInfo = getCategoryInfo(card.category);
             
-            // Kategoriye göre renkler - Sharp design system
-            const cardStyles =
-              categoryInfo.color === "red"
-                ? {
-                    borderLeft: "border-l-red-600 dark:border-l-red-500",
-                    accent: "text-red-600 dark:text-red-400",
-                    badge: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
-                  }
-                : categoryInfo.color === "blue"
-                ? {
-                    borderLeft: "border-l-blue-600 dark:border-l-blue-500",
-                    accent: "text-blue-600 dark:text-blue-400",
-                    badge: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
-                  }
-                : {
-                    borderLeft: "border-l-green-600 dark:border-l-green-500",
-                    accent: "text-green-600 dark:text-green-400",
-                    badge: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
-                  };
+            const getCardColor = () => {
+              if (categoryInfo.color === "red") return { border: "var(--destructive)", bg: "oklch(0.95 0.05 25)" };
+              if (categoryInfo.color === "blue") return { border: "var(--primary)", bg: "oklch(0.95 0.05 250)" };
+              return { border: "oklch(0.6 0.2 145)", bg: "oklch(0.95 0.05 145)" };
+            };
+            const cardColor = getCardColor();
 
             return (
               <div
                 key={card.id}
-                className={`group relative border-l-4 ${cardStyles.borderLeft} border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900`}
+                className="group relative flex flex-col overflow-hidden rounded-md border border-gray-300 bg-white p-3 transition-all hover:border-gray-400 hover:shadow-sm dark:border-gray-700 dark:bg-gray-900"
+                style={{
+                  borderColor: cardColor.border,
+                }}
               >
-                {/* Kategori Badge */}
-                <div className="mb-2 flex items-center justify-between">
-                  <span
-                    className={`inline-flex items-center gap-1.5 rounded-md border-2 px-2 py-0.5 text-xs font-semibold shadow-sm ${cardStyles.badge}`}
-                  >
-                    <categoryInfo.icon className="h-3.5 w-3.5" />
-                    <span>{categoryInfo.title}</span>
-                  </span>
-                  <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                {/* Top Color Bar */}
+                <div
+                  className="absolute left-0 top-0 h-0.5 w-full"
+                  style={{ backgroundColor: cardColor.border }}
+                />
+
+                {/* Header - Category & Time */}
+                <div className="relative mb-2 flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <div
+                      className="flex h-6 w-6 items-center justify-center rounded border"
+                      style={{
+                        borderColor: cardColor.border,
+                        backgroundColor: cardColor.bg,
+                      }}
+                    >
+                      <categoryInfo.icon
+                        className="h-3 w-3"
+                        style={{ color: cardColor.border }}
+                      />
+                    </div>
+                    <span
+                      className="rounded border px-1.5 py-0.5 text-[10px] font-semibold"
+                      style={{
+                        borderColor: cardColor.border,
+                        backgroundColor: cardColor.bg,
+                        color: cardColor.border,
+                      }}
+                    >
+                      {categoryInfo.title}
+                    </span>
+                  </div>
+                  <span className="text-[9px] text-gray-500 dark:text-gray-400">
                     {new Date(card.created_at).toLocaleTimeString("tr-TR", {
                       hour: "2-digit",
                       minute: "2-digit",
@@ -656,55 +655,99 @@ const RetroRoomView = memo(function RetroRoomView({
                   </span>
                 </div>
 
-                {/* Kullanıcı Adı */}
-                <div className="mb-2 flex items-center gap-2">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-gray-300 bg-gray-200 text-xs font-bold text-gray-700 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                {/* User Avatar & Name */}
+                <div className="relative mb-2 flex items-center gap-1.5">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-300 bg-gray-100 text-[10px] font-bold text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
                     {card.user_name.charAt(0).toUpperCase()}
                   </div>
-                  <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                  <span className="text-xs font-medium text-gray-900 dark:text-white">
                     {card.user_name}
                   </span>
                 </div>
 
-                {/* Kart İçeriği */}
+                {/* Card Content */}
                 {canViewContent ? (
-                  <div className="mb-3">
-                    <p className="text-sm leading-relaxed text-gray-800 dark:text-gray-200">
+                  <div className="relative mb-3 flex-1 min-h-[50px]">
+                    <p className="text-xs leading-relaxed text-gray-800 dark:text-gray-200 line-clamp-4">
                       {card.content}
                     </p>
                   </div>
                 ) : (
-                  <div className="mb-3 border-2 border-dashed border-gray-300 bg-gray-50 p-4 text-center dark:border-gray-700 dark:bg-gray-800/50">
-                    <Lock className="mx-auto mb-2 h-8 w-8 text-gray-400 opacity-50 dark:text-gray-500" />
-                    <p className="text-xs font-medium text-gray-600 dark:text-gray-400">
+                  <div className="relative mb-3 rounded border border-dashed border-gray-300 bg-gray-50 p-3 text-center dark:border-gray-700 dark:bg-gray-800/50">
+                    <Lock className="mx-auto mb-1.5 h-4 w-4 text-gray-400 opacity-50 dark:text-gray-500" />
+                    <p className="text-[10px] font-medium text-gray-600 dark:text-gray-400">
                       Kart Gizli
                     </p>
-                    <p className="mt-1 text-[10px] text-gray-500 dark:text-gray-500">
+                    <p className="mt-0.5 text-[9px] text-gray-500 dark:text-gray-500">
                       Admin açana kadar bekleyin
                     </p>
                   </div>
                 )}
 
                 {/* Action Buttons */}
-                {isOwnCard && !cardsRevealed && (
-                  <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
-                    <button
-                      onClick={() => handleOpenEdit(card)}
-                      className="flex-1 rounded-md border-2 border-blue-600 bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:border-blue-700 hover:bg-blue-700 hover:shadow-md active:border-blue-800 active:bg-blue-800 dark:border-blue-500 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700"
-                    >
-                      ✎ Düzenle
-                    </button>
-                    <button
-                      onClick={() => handleDeleteCard(card)}
-                      className="flex-1 rounded-md border-2 border-red-600 bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:border-red-700 hover:bg-red-700 hover:shadow-md active:border-red-800 active:bg-red-800 dark:border-red-500 dark:bg-red-600 dark:text-white dark:hover:bg-red-700"
-                    >
-                      🗑️ Sil
-                    </button>
-                  </div>
-                )}
+                <div className="relative mt-auto flex items-center gap-1.5 border-t pt-2 opacity-0 transition-opacity group-hover:opacity-100" style={{ borderTopColor: `${cardColor.border}30` }}>
+                  {isOwnCard && !cardsRevealed && (
+                    <>
+                      <Button
+                        onClick={() => handleOpenEdit(card)}
+                        variant="outline"
+                        size="sm"
+                        icon={Edit}
+                        className="!h-6 !w-6 !p-0 !min-h-0"
+                        style={{
+                          borderColor: `${cardColor.border}80`,
+                          color: cardColor.border,
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.borderColor = cardColor.border;
+                          e.currentTarget.style.backgroundColor = `${cardColor.border}20`;
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.borderColor = `${cardColor.border}80`;
+                          e.currentTarget.style.backgroundColor = 'transparent';
+                        }}
+                        title="Düzenle"
+                      />
+                      <Button
+                        onClick={() => handleDeleteCard(card)}
+                        variant="outline"
+                        size="sm"
+                        icon={Trash2}
+                        className="!h-6 !w-6 !p-0 !min-h-0 !border-red-400 !text-red-400 hover:!bg-red-400/10 dark:!border-red-500 dark:!text-red-500"
+                        title="Sil"
+                      />
+                    </>
+                  )}
+                  {isAdmin && cardsRevealed && (
+                    <Button
+                      onClick={() => {
+                        setSelectedCardForAction(card.id);
+                        setShowAddActionModal(true);
+                      }}
+                      variant="outline"
+                      size="sm"
+                      icon={Plus}
+                      className="!h-6 !w-6 !p-0 !min-h-0"
+                      style={{
+                        borderColor: `${cardColor.border}80`,
+                        color: cardColor.border,
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = cardColor.border;
+                        e.currentTarget.style.backgroundColor = `${cardColor.border}20`;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = `${cardColor.border}80`;
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                      }}
+                      title="Aksiyon Ekle"
+                    />
+                  )}
+                </div>
               </div>
             );
-          })
+          })}
+          </div>
         )}
       </div>
 
@@ -724,15 +767,71 @@ const RetroRoomView = memo(function RetroRoomView({
       )}
 
       {/* Action Items Section */}
-      <div className="mt-8 border-t-2 border-gray-200 pt-6 dark:border-gray-800">
+      <div className="mt-6 border-t border-gray-200 pt-4 dark:border-gray-800">
         <RetroActionItems
           roomId={roomId}
           userKey={userKey}
           username={username}
           isAdmin={isAdmin}
           cardsRevealed={cardsRevealed}
+          cards={cards}
         />
       </div>
+
+      {/* Add Action Modal from Card */}
+      <RetroActionItemModal
+        open={showAddActionModal}
+        onClose={() => {
+          setShowAddActionModal(false);
+          setSelectedCardForAction(null);
+        }}
+        onSubmit={async (data: RetroActionItemInput) => {
+          if (!isAdmin) {
+            showToast("Sadece admin aksiyon maddesi ekleyebilir.", "error");
+            return;
+          }
+          if (!cardsRevealed) {
+            showToast("Önce kartları açmanız gerekiyor!", "error");
+            return;
+          }
+
+          try {
+            const supabase = getSupabase();
+            const { error } = await supabase.from("retro_action_items").insert({
+              room_id: roomId,
+              content: data.content.trim(),
+              created_by_key: userKey,
+              created_by_username: username,
+              is_completed: false,
+              position: 0,
+              flag: data.flag || null,
+              custom_flag: data.custom_flag || null,
+              retro_card_id: data.retro_card_id || selectedCardForAction || null,
+            });
+
+            if (error) throw error;
+            setShowAddActionModal(false);
+            setSelectedCardForAction(null);
+            showToast("Aksiyon maddesi başarıyla eklendi!", "success");
+          } catch (err) {
+            showToast("Aksiyon maddesi eklenirken bir hata oluştu.", "error");
+          }
+        }}
+        initialCardId={selectedCardForAction}
+        customFlags={customFlags.map((cf) => ({
+          id: cf.id,
+          flag_name: cf.flag_name,
+          flag_color: cf.flag_color,
+        }))}
+        onAddCustomFlag={async (flagName) => {
+          await addCustomFlag(flagName);
+        }}
+        cards={cards.map((c) => ({
+          id: c.id,
+          content: c.content,
+          category: c.category,
+        }))}
+      />
     </div>
   );
 });

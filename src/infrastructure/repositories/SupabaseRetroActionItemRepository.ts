@@ -3,7 +3,7 @@
  * Implements IRetroActionItemRepository using Supabase directly
  */
 
-import type { IRetroActionItemRepository } from "../../domain/repositories/IRetroActionItemRepository";
+import type { IRetroActionItemRepository, CreateRetroActionItemData } from "../../domain/repositories/IRetroActionItemRepository";
 import { RetroActionItem } from "../../domain/entities/RetroActionItem";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { getSupabase } from "@/lib/supabase";
@@ -37,6 +37,7 @@ export class SupabaseRetroActionItemRepository implements IRetroActionItemReposi
       position: data.position,
       flag: data.flag,
       custom_flag: data.custom_flag,
+      retro_card_id: data.retro_card_id,
       created_at: data.created_at,
       updated_at: data.updated_at,
     });
@@ -65,13 +66,14 @@ export class SupabaseRetroActionItemRepository implements IRetroActionItemReposi
         position: row.position,
         flag: row.flag,
         custom_flag: row.custom_flag,
+        retro_card_id: row.retro_card_id,
         created_at: row.created_at,
         updated_at: row.updated_at,
       })
     );
   }
 
-  async create(itemData: { roomId: string; content: string; createdBy: string; createdByUsername: string; isCompleted: boolean; completedAt: Date | null; flag: "high-priority" | "medium-priority" | "low-priority" | "improvement" | "research" | "general" | "custom" | null; customFlag: string | null }): Promise<RetroActionItem> {
+  async create(itemData: CreateRetroActionItemData): Promise<RetroActionItem> {
     // Get max position for this room
     const { data: existingItems } = await this.getClient()
       .from("retro_action_items")
@@ -94,6 +96,7 @@ export class SupabaseRetroActionItemRepository implements IRetroActionItemReposi
       position,
       itemData.flag,
       itemData.customFlag,
+      itemData.retroCardId,
       now,
       now
     );
@@ -119,6 +122,7 @@ export class SupabaseRetroActionItemRepository implements IRetroActionItemReposi
       position: data.position,
       flag: data.flag,
       custom_flag: data.custom_flag,
+      retro_card_id: data.retro_card_id,
       created_at: data.created_at,
       updated_at: data.updated_at,
     });
@@ -147,6 +151,7 @@ export class SupabaseRetroActionItemRepository implements IRetroActionItemReposi
       position: data.position,
       flag: data.flag,
       custom_flag: data.custom_flag,
+      retro_card_id: data.retro_card_id,
       created_at: data.created_at,
       updated_at: data.updated_at,
     });

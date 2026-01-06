@@ -13,6 +13,7 @@ export interface CreateRetroActionItemDTO {
   createdByUsername: string;
   flag?: RetroActionItemFlag | null;
   customFlag?: string | null;
+  retroCardId?: string | null;
 }
 
 export class CreateRetroActionItemUseCase {
@@ -38,6 +39,7 @@ export class CreateRetroActionItemUseCase {
       completedAt: null,
       flag: dto.flag || null,
       customFlag: dto.customFlag || null,
+      retroCardId: dto.retroCardId || null,
     });
   }
 }

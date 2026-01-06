@@ -24,6 +24,7 @@ export class RetroActionItem {
     public position: number,
     public flag: RetroActionItemFlag | null,
     public customFlag: string | null,
+    public readonly retroCardId: string | null,
     public readonly createdAt: Date,
     public updatedAt: Date
   ) {
@@ -111,6 +112,7 @@ export class RetroActionItem {
     position: number;
     flag: RetroActionItemFlag | null;
     custom_flag: string | null;
+    retro_card_id: string | null;
     created_at: string;
     updated_at: string;
   }): RetroActionItem {
@@ -125,6 +127,7 @@ export class RetroActionItem {
       row.position,
       row.flag,
       row.custom_flag,
+      row.retro_card_id,
       new Date(row.created_at),
       new Date(row.updated_at)
     );
@@ -142,6 +145,7 @@ export class RetroActionItem {
     position: number;
     flag: RetroActionItemFlag | null;
     custom_flag: string | null;
+    retro_card_id: string | null;
     created_at: string;
     updated_at: string;
   } {
@@ -156,6 +160,7 @@ export class RetroActionItem {
       position: this.position,
       flag: this.flag,
       custom_flag: this.customFlag,
+      retro_card_id: this.retroCardId,
       created_at: this.createdAt.toISOString(),
       updated_at: this.updatedAt.toISOString(),
     };

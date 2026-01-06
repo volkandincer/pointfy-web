@@ -16,9 +16,11 @@ interface RetroActionItemModalProps {
   initialContent?: string;
   initialFlag?: RetroActionItemFlag | null;
   initialCustomFlag?: string | null;
+  initialCardId?: string | null;
   isEdit?: boolean;
   customFlags?: Array<{ id: string; flag_name: string; flag_color: string }>;
   onAddCustomFlag?: (flagName: string) => Promise<void>;
+  cards?: Array<{ id: string; content: string; category: string }>;
 }
 
 const PREDEFINED_FLAGS: Array<{
@@ -42,9 +44,11 @@ const RetroActionItemModal = memo(function RetroActionItemModal({
   initialContent = "",
   initialFlag = null,
   initialCustomFlag = null,
+  initialCardId = null,
   isEdit = false,
   customFlags = [],
   onAddCustomFlag,
+  cards = [],
 }: RetroActionItemModalProps) {
   const { showToast } = useToastContext();
   const [content, setContent] = useState<string>(initialContent);
@@ -53,6 +57,9 @@ const RetroActionItemModal = memo(function RetroActionItemModal({
   );
   const [selectedCustomFlag, setSelectedCustomFlag] = useState<string | null>(
     initialCustomFlag
+  );
+  const [selectedCardId, setSelectedCardId] = useState<string | null>(
+    initialCardId
   );
   const [showCustomFlagInput, setShowCustomFlagInput] = useState<boolean>(false);
   const [newCustomFlagName, setNewCustomFlagName] = useState<string>("");
@@ -63,10 +70,11 @@ const RetroActionItemModal = memo(function RetroActionItemModal({
       setContent(initialContent);
       setSelectedFlag(initialFlag);
       setSelectedCustomFlag(initialCustomFlag);
+      setSelectedCardId(initialCardId);
       setShowCustomFlagInput(false);
       setNewCustomFlagName("");
     }
-  }, [open, initialContent, initialFlag, initialCustomFlag]);
+  }, [open, initialContent, initialFlag, initialCustomFlag, initialCardId]);
 
   const handleAddCustomFlag = useCallback(async () => {
     if (!newCustomFlagName.trim()) {
@@ -98,6 +106,7 @@ const RetroActionItemModal = memo(function RetroActionItemModal({
           content,
           flag: selectedFlag,
           custom_flag: selectedCustomFlag,
+          retro_card_id: selectedCardId,
         });
         setContent("");
         setSelectedFlag(null);
@@ -151,6 +160,41 @@ const RetroActionItemModal = memo(function RetroActionItemModal({
       title={isEdit ? "Aksiyon Maddesini Düzenle" : "Yeni Aksiyon Maddesi Ekle"}
     >
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Card Selection */}
+        {cards.length > 0 && (
+          <div>
+            <label
+              htmlFor="action-item-card"
+              className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
+              Kart Seçimi (Opsiyonel)
+            </label>
+            <select
+              id="action-item-card"
+              value={selectedCardId || ""}
+              onChange={(e) => setSelectedCardId(e.target.value || null)}
+              className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            >
+              <option value="">Genel (Kart seçmeden)</option>
+              {cards.map((card) => {
+                const getCategoryLabel = (category: string) => {
+                  if (category === "mad") return "Mad";
+                  if (category === "sad") return "Sad";
+                  return "Glad";
+                };
+                const truncatedContent = card.content.length > 50 
+                  ? card.content.substring(0, 50) + "..." 
+                  : card.content;
+                return (
+                  <option key={card.id} value={card.id}>
+                    {getCategoryLabel(card.category)}: {truncatedContent}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+        )}
+
         {/* Content Input */}
         <div>
           <label

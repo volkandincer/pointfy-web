@@ -2,6 +2,7 @@
 
 import { memo, useState, useCallback, useMemo } from "react";
 import { Check, Share2 } from "lucide-react";
+import Button from "@/components/ui/Button";
 import { useToastContext } from "@/contexts/ToastContext";
 import { resolveEnvValue } from "@/lib/appEnvironment";
 
@@ -84,23 +85,19 @@ const ShareRoomButton = memo(function ShareRoomButton({
   }, [shareUrl, roomName, roomCode, roomId, showToast]);
 
   return (
-    <button
+    <Button
       onClick={handleShare}
-      className="flex items-center gap-2 rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+      variant="outline"
+      size="sm"
+      icon={copied ? Check : Share2}
+      className={`!h-8 !px-3 !text-xs ${copied 
+        ? "!border-green-300 !text-green-600 hover:!border-green-400 hover:!bg-green-50 dark:!border-green-500 dark:!text-green-400 dark:hover:!bg-green-900/20"
+        : ""
+      }`}
       title="Odayı Paylaş"
     >
-      {copied ? (
-        <>
-          <Check className="h-4 w-4 text-green-600 dark:text-green-400" />
-          <span className="text-green-600 dark:text-green-400">Kopyalandı!</span>
-        </>
-      ) : (
-        <>
-          <Share2 className="h-4 w-4" />
-          <span>Paylaş</span>
-        </>
-      )}
-    </button>
+      {copied ? "Kopyalandı!" : "Paylaş"}
+    </Button>
   );
 });
 

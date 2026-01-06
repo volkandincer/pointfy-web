@@ -1,16 +1,19 @@
 "use client";
 
 import { memo, useState, useCallback, useMemo } from "react";
-import { ClipboardList, User, Clock, CheckCircle2, Edit, Trash2, RotateCcw, Printer, Plus, Circle, AlertCircle, Lightbulb, Search, HelpCircle } from "lucide-react";
+import { ClipboardList, User, Clock, CheckCircle2, Edit, Trash2, RotateCcw, Printer, Plus, Circle, AlertCircle, Lightbulb, Search, HelpCircle, FileText } from "lucide-react";
 import { getSupabase } from "@/lib/supabase";
 import { useRetroActionItems } from "@/hooks/useRetroActionItems";
 import { useRoomCustomFlags } from "@/hooks/useRoomCustomFlags";
 import { useToastContext } from "@/contexts/ToastContext";
 import EmptyState from "@/components/jira/EmptyState";
+import Button from "@/components/ui/Button";
+import Modal from "@/components/ui/Modal";
 import type {
   RetroActionItem,
   RetroActionItemInput,
 } from "@/interfaces/RetroActionItem.interface";
+import type { RetroCard } from "@/interfaces/Retro.interface";
 import RetroActionItemModal from "./RetroActionItemModal";
 
 interface RetroActionItemsProps {
@@ -19,6 +22,7 @@ interface RetroActionItemsProps {
   username: string;
   isAdmin: boolean;
   cardsRevealed: boolean;
+  cards?: RetroCard[];
 }
 
 const RetroActionItems = memo(function RetroActionItems({
@@ -27,12 +31,14 @@ const RetroActionItems = memo(function RetroActionItems({
   username,
   isAdmin,
   cardsRevealed,
+  cards = [],
 }: RetroActionItemsProps) {
   const { actionItems, loading } = useRetroActionItems(roomId);
   const { customFlags, addCustomFlag } = useRoomCustomFlags(roomId, isAdmin);
   const { showToast } = useToastContext();
   const [showAddModal, setShowAddModal] = useState<boolean>(false);
   const [editingItem, setEditingItem] = useState<RetroActionItem | null>(null);
+  const [viewingItem, setViewingItem] = useState<RetroActionItem | null>(null);
 
   const PREDEFINED_FLAGS: Record<string, { icon: typeof Circle; label: string; color: string }> = {
     "high-priority": { icon: Circle, label: "Yüksek Öncelik", color: "#EF4444" },
@@ -75,6 +81,7 @@ const RetroActionItems = memo(function RetroActionItems({
           position: actionItems.length,
           flag: data.flag || null,
           custom_flag: data.custom_flag || null,
+          retro_card_id: data.retro_card_id || null,
         });
 
         if (error) throw error;
@@ -102,6 +109,7 @@ const RetroActionItems = memo(function RetroActionItems({
             content: data.content.trim(),
             flag: data.flag || null,
             custom_flag: data.custom_flag || null,
+            retro_card_id: data.retro_card_id || null,
             updated_at: new Date().toISOString(),
           })
           .eq("id", itemId);
@@ -225,50 +233,57 @@ const RetroActionItems = memo(function RetroActionItems({
       </div>
 
       {/* Header */}
-      <div className="flex flex-col gap-4 no-print sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center border-2 border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20">
-            <ClipboardList className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+      <div className="rounded-md border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-900">
+        <div className="flex flex-col gap-3 no-print sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-2">
+            <div className="flex h-6 w-6 items-center justify-center rounded border border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20">
+              <ClipboardList className="h-3.5 w-3.5 text-indigo-600 dark:text-indigo-400" />
+            </div>
+            <div>
+              <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+                Aksiyon Maddeleri
+              </h3>
+              <p className="text-[10px] text-gray-500 dark:text-gray-400">
+                {pendingItems.length} bekleyen, {completedItems.length} tamamlanan
+              </p>
+            </div>
           </div>
-          <div>
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-              Aksiyon Maddeleri
-            </h3>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              {pendingItems.length} bekleyen, {completedItems.length} tamamlanan
-            </p>
-          </div>
+          {isAdmin && (
+            <div className="flex gap-1.5">
+              <Button
+                onClick={() => window.print()}
+                variant="outline"
+                size="sm"
+                icon={Printer}
+                className="!h-7 !px-2.5 !text-xs"
+                title="Yazdır/PDF"
+              >
+                Yazdır
+              </Button>
+              <Button
+                onClick={() => setShowAddModal(true)}
+                variant="primary"
+                size="sm"
+                icon={Plus}
+                className="!h-7 !px-2.5 !text-xs"
+              >
+                Yeni Ekle
+              </Button>
+            </div>
+          )}
         </div>
-        {isAdmin && (
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <button
-              onClick={() => window.print()}
-              className="flex items-center justify-center gap-2 rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-              title="Yazdır/PDF"
-            >
-              <Printer className="h-4 w-4" />
-              Yazdır
-            </button>
-            <button
-              onClick={() => setShowAddModal(true)}
-              className="flex items-center justify-center gap-2 border-2 border-indigo-600 bg-indigo-600 px-6 py-3 text-base font-bold text-white transition-colors hover:bg-indigo-700 hover:border-indigo-700"
-            >
-              <Plus className="h-5 w-5" />
-              Yeni Aksiyon Maddesi Ekle
-            </button>
-          </div>
-        )}
       </div>
 
       {/* Pending Items */}
       {pendingItems.length > 0 && (
-        <div className="space-y-3">
-          <div className="flex items-center gap-2">
-            <div className="h-1.5 w-1.5 border-2 border-orange-600 bg-orange-500"></div>
-            <h4 className="text-sm font-bold uppercase tracking-wide text-gray-700 dark:text-gray-300">
-              Bekleyen Aksiyonlar ({pendingItems.length})
+        <div>
+          <div className="mb-3 flex items-center gap-1.5">
+            <div className="h-1 w-1 rounded-full bg-orange-500"></div>
+            <h4 className="text-xs font-semibold uppercase tracking-wide text-gray-700 dark:text-gray-300">
+              Bekleyen ({pendingItems.length})
             </h4>
           </div>
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
           {pendingItems.map((item) => {
             const flagInfo = item.flag
               ? PREDEFINED_FLAGS[item.flag]
@@ -293,103 +308,121 @@ const RetroActionItems = memo(function RetroActionItems({
             return (
               <div
                 key={item.id}
-                className="group relative border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                onClick={() => setViewingItem(item)}
+                className="group relative cursor-pointer rounded-md border border-gray-300 bg-white p-3 transition-all hover:border-gray-400 hover:shadow-sm dark:border-gray-700 dark:bg-gray-900"
                 style={{
                   borderLeftColor: '#f97316',
+                  borderLeftWidth: '3px',
                 }}
               >
                 {/* Flag Badge */}
                 {flagInfo && (
-                  <div className="mb-3">
+                  <div className="mb-2">
                     <span
-                      className="inline-flex items-center gap-1.5 rounded-md border-2 px-3 py-1 text-xs font-bold shadow-sm"
+                      className="inline-flex items-center gap-1 rounded border px-1.5 py-0.5 text-[10px] font-semibold"
                       style={{
                         backgroundColor: `${flagColor}15`,
                         color: flagColor,
                         borderColor: flagColor,
                       }}
                     >
-                      {FlagIcon && <FlagIcon className="h-3.5 w-3.5" />}
+                      {FlagIcon && <FlagIcon className="h-2.5 w-2.5" />}
                       {flagLabel}
                     </span>
                   </div>
                 )}
 
+                {/* Card Info */}
+                {item.retro_card_id && (() => {
+                  const card = cards.find((c) => c.id === item.retro_card_id);
+                  if (!card) return null;
+                  const getCategoryInfo = (category: string) => {
+                    if (category === "mad") return { title: "Mad", color: "var(--destructive)" };
+                    if (category === "sad") return { title: "Sad", color: "var(--primary)" };
+                    return { title: "Glad", color: "oklch(0.6 0.2 145)" };
+                  };
+                  const categoryInfo = getCategoryInfo(card.category);
+                  return (
+                    <div className="mb-2 flex items-center gap-1.5">
+                      <div className="flex items-center gap-1 rounded border px-1.5 py-0.5 text-[10px] font-medium" style={{ borderColor: categoryInfo.color, color: categoryInfo.color, backgroundColor: `${categoryInfo.color}15` }}>
+                        <FileText className="h-2.5 w-2.5" />
+                        <span>{categoryInfo.title}</span>
+                      </div>
+                    </div>
+                  );
+                })()}
+
                 {/* Content */}
-                <div className="mb-4">
-                  <p className="text-[15px] leading-7 font-medium text-gray-900 dark:text-white">
+                <div className="mb-2 min-h-[40px]">
+                  <p className="text-xs leading-relaxed text-gray-900 dark:text-white line-clamp-3">
                     {item.content}
                   </p>
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-between border-t-2 border-gray-200 pt-4 dark:border-gray-700">
-                  <div className="flex items-center gap-4 text-xs font-medium text-gray-600 dark:text-gray-400">
-                    <div className="flex items-center gap-2">
-                      <User className="h-4 w-4" />
-                      <span className="font-semibold text-gray-700 dark:text-gray-300">
-                        {item.created_by_username}
-                      </span>
-                    </div>
+                <div className="flex items-center justify-between border-t border-gray-200 pt-2 dark:border-gray-700">
+                  <div className="flex items-center gap-2 text-[10px] text-gray-600 dark:text-gray-400">
+                    <User className="h-3 w-3" />
+                    <span className="font-medium text-gray-700 dark:text-gray-300">
+                      {item.created_by_username}
+                    </span>
                     <span className="text-gray-400">•</span>
-                    <div className="flex items-center gap-2">
-                      <Clock className="h-4 w-4" />
-                      <span className="text-gray-600 dark:text-gray-400">
-                        {new Date(item.created_at).toLocaleDateString("tr-TR", {
-                          day: "numeric",
-                          month: "short",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </span>
-                    </div>
+                    <Clock className="h-3 w-3" />
+                    <span>
+                      {new Date(item.created_at).toLocaleDateString("tr-TR", {
+                        day: "numeric",
+                        month: "short",
+                      })}
+                    </span>
                   </div>
 
                   {/* Action Buttons */}
                   {isAdmin && (
-                    <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
-                      <button
+                    <div className="flex gap-1 opacity-0 transition-opacity group-hover:opacity-100" onClick={(e) => e.stopPropagation()}>
+                      <Button
                         onClick={() => handleToggleComplete(item)}
-                        className="flex items-center gap-1.5 border-2 border-green-600 bg-green-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-green-700 hover:border-green-700"
+                        variant="primary"
+                        size="sm"
+                        icon={CheckCircle2}
+                        className="!h-6 !w-6 !p-0 !min-h-0 !border-green-600 !bg-green-600 hover:!border-green-700 hover:!bg-green-700 dark:!border-green-500 dark:!bg-green-600 dark:hover:!border-green-400 dark:hover:!bg-green-500"
                         title="Tamamla"
-                      >
-                        <CheckCircle2 className="h-4 w-4" />
-                        Tamamla
-                      </button>
-                      <button
+                      />
+                      <Button
                         onClick={() => handleOpenEdit(item)}
-                        className="flex items-center gap-1.5 border-2 border-blue-600 bg-blue-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-blue-700 hover:border-blue-700 dark:border-blue-500 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700"
+                        variant="outline"
+                        size="sm"
+                        icon={Edit}
+                        className="!h-6 !w-6 !p-0 !min-h-0"
                         title="Düzenle"
-                      >
-                        <Edit className="h-4 w-4" />
-                        Düzenle
-                      </button>
-                      <button
+                      />
+                      <Button
                         onClick={() => handleDeleteItem(item)}
-                        className="flex items-center gap-1.5 border-2 border-red-600 bg-red-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-red-700 hover:border-red-700 dark:border-red-500 dark:bg-red-600 dark:text-white dark:hover:bg-red-700"
+                        variant="outline"
+                        size="sm"
+                        icon={Trash2}
+                        className="!h-6 !w-6 !p-0 !min-h-0 !border-red-400 !text-red-400 hover:!bg-red-400/10 dark:!border-red-500 dark:!text-red-500"
                         title="Sil"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                        Sil
-                      </button>
+                      />
                     </div>
                   )}
                 </div>
               </div>
             );
           })}
+          </div>
         </div>
       )}
 
       {/* Completed Items */}
       {completedItems.length > 0 && (
-        <div className="space-y-3">
-          <div className="flex items-center gap-2">
-            <div className="h-1.5 w-1.5 border-2 border-green-600 bg-green-500"></div>
-            <h4 className="text-sm font-bold uppercase tracking-wide text-gray-700 dark:text-gray-300">
-              Tamamlanan Aksiyonlar ({completedItems.length})
+        <div>
+          <div className="mb-3 flex items-center gap-1.5">
+            <div className="h-1 w-1 rounded-full bg-green-500"></div>
+            <h4 className="text-xs font-semibold uppercase tracking-wide text-gray-700 dark:text-gray-300">
+              Tamamlanan ({completedItems.length})
             </h4>
           </div>
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
           {completedItems.map((item) => {
             const flagInfo = item.flag
               ? PREDEFINED_FLAGS[item.flag]
@@ -414,99 +447,116 @@ const RetroActionItems = memo(function RetroActionItems({
             return (
               <div
                 key={item.id}
-                className="group relative border-l-4 border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                onClick={() => setViewingItem(item)}
+                className="group relative cursor-pointer rounded-md border border-gray-300 bg-white p-3 transition-all hover:border-gray-400 hover:shadow-sm dark:border-gray-700 dark:bg-gray-900 opacity-75"
                 style={{
                   borderLeftColor: '#16a34a',
+                  borderLeftWidth: '3px',
                 }}
               >
                 {/* Completed Badge */}
-                <div className="absolute right-4 top-4">
-                  <div className="flex h-8 w-8 items-center justify-center border-2 border-green-600 bg-green-600 text-white">
-                    <CheckCircle2 className="h-5 w-5" />
+                <div className="absolute right-2 top-2">
+                  <div className="flex h-5 w-5 items-center justify-center rounded border border-green-600 bg-green-600 text-white">
+                    <CheckCircle2 className="h-3 w-3" />
                   </div>
                 </div>
 
                 {/* Flag Badge */}
                 {flagInfo && (
-                  <div className="mb-3">
+                  <div className="mb-2">
                     <span
-                      className="inline-flex items-center gap-1.5 rounded-md border-2 px-3 py-1 text-xs font-bold shadow-sm opacity-75"
+                      className="inline-flex items-center gap-1 rounded border px-1.5 py-0.5 text-[10px] font-semibold opacity-75"
                       style={{
                         backgroundColor: `${flagColor}15`,
                         color: flagColor,
                         borderColor: flagColor,
                       }}
                     >
-                      {FlagIcon && <FlagIcon className="h-3.5 w-3.5" />}
+                      {FlagIcon && <FlagIcon className="h-2.5 w-2.5" />}
                       {flagLabel}
                     </span>
                   </div>
                 )}
 
+                {/* Card Info */}
+                {item.retro_card_id && (() => {
+                  const card = cards.find((c) => c.id === item.retro_card_id);
+                  if (!card) return null;
+                  const getCategoryInfo = (category: string) => {
+                    if (category === "mad") return { title: "Mad", color: "var(--destructive)" };
+                    if (category === "sad") return { title: "Sad", color: "var(--primary)" };
+                    return { title: "Glad", color: "oklch(0.6 0.2 145)" };
+                  };
+                  const categoryInfo = getCategoryInfo(card.category);
+                  return (
+                    <div className="mb-2 flex items-center gap-1.5">
+                      <div className="flex items-center gap-1 rounded border px-1.5 py-0.5 text-[10px] font-medium opacity-75" style={{ borderColor: categoryInfo.color, color: categoryInfo.color, backgroundColor: `${categoryInfo.color}15` }}>
+                        <FileText className="h-2.5 w-2.5" />
+                        <span>{categoryInfo.title}</span>
+                      </div>
+                    </div>
+                  );
+                })()}
+
                 {/* Content */}
-                <div className="mb-4 pr-12">
-                  <p className="text-[15px] leading-7 font-medium text-gray-600 line-through dark:text-gray-400">
+                <div className="mb-2 min-h-[40px] pr-6">
+                  <p className="text-xs leading-relaxed text-gray-600 line-through dark:text-gray-400 line-clamp-3">
                     {item.content}
                   </p>
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-between border-t-2 border-green-200 pt-4 dark:border-green-800/50">
-                  <div className="flex items-center gap-4 text-xs font-medium text-gray-600 dark:text-gray-400">
-                    <div className="flex items-center gap-2">
-                      <User className="h-4 w-4" />
-                      <span className="font-semibold text-gray-700 dark:text-gray-300">
-                        {item.created_by_username}
-                      </span>
-                    </div>
+                <div className="flex items-center justify-between border-t border-green-200 pt-2 dark:border-green-800/50">
+                  <div className="flex items-center gap-2 text-[10px] text-gray-600 dark:text-gray-400">
+                    <User className="h-3 w-3" />
+                    <span className="font-medium text-gray-700 dark:text-gray-300">
+                      {item.created_by_username}
+                    </span>
                     <span className="text-gray-400">•</span>
-                    <div className="flex items-center gap-2">
-                      <CheckCircle2 className="h-4 w-4" />
-                      <span className="text-gray-600 dark:text-gray-400">
-                        {item.completed_at &&
-                          new Date(item.completed_at).toLocaleDateString("tr-TR", {
-                            day: "numeric",
-                            month: "short",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                      </span>
-                    </div>
+                    <CheckCircle2 className="h-3 w-3" />
+                    <span>
+                      {item.completed_at &&
+                        new Date(item.completed_at).toLocaleDateString("tr-TR", {
+                          day: "numeric",
+                          month: "short",
+                        })}
+                    </span>
                   </div>
 
                   {/* Action Buttons */}
                   {isAdmin && (
-                    <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
-                      <button
+                    <div className="flex gap-1 opacity-0 transition-opacity group-hover:opacity-100" onClick={(e) => e.stopPropagation()}>
+                      <Button
                         onClick={() => handleToggleComplete(item)}
-                        className="flex items-center gap-1.5 border-2 border-gray-600 bg-gray-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-gray-700 hover:border-gray-700"
+                        variant="outline"
+                        size="sm"
+                        icon={RotateCcw}
+                        className="!h-6 !w-6 !p-0 !min-h-0"
                         title="Geri Al"
-                      >
-                        <RotateCcw className="h-4 w-4" />
-                        Geri Al
-                      </button>
-                      <button
+                      />
+                      <Button
                         onClick={() => handleOpenEdit(item)}
-                        className="flex items-center gap-1.5 border-2 border-blue-600 bg-blue-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-blue-700 hover:border-blue-700 dark:border-blue-500 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700"
+                        variant="outline"
+                        size="sm"
+                        icon={Edit}
+                        className="!h-6 !w-6 !p-0 !min-h-0"
                         title="Düzenle"
-                      >
-                        <Edit className="h-4 w-4" />
-                        Düzenle
-                      </button>
-                      <button
+                      />
+                      <Button
                         onClick={() => handleDeleteItem(item)}
-                        className="flex items-center gap-1.5 border-2 border-red-600 bg-red-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-red-700 hover:border-red-700 dark:border-red-500 dark:bg-red-600 dark:text-white dark:hover:bg-red-700"
+                        variant="outline"
+                        size="sm"
+                        icon={Trash2}
+                        className="!h-6 !w-6 !p-0 !min-h-0 !border-red-400 !text-red-400 hover:!bg-red-400/10 dark:!border-red-500 dark:!text-red-500"
                         title="Sil"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                        Sil
-                      </button>
+                      />
                     </div>
                   )}
                 </div>
               </div>
             );
           })}
+          </div>
         </div>
       )}
 
@@ -538,6 +588,11 @@ const RetroActionItems = memo(function RetroActionItems({
         onAddCustomFlag={async (flagName) => {
           await addCustomFlag(flagName);
         }}
+        cards={cards.map((c) => ({
+          id: c.id,
+          content: c.content,
+          category: c.category,
+        }))}
       />
 
       {/* Edit Modal */}
@@ -549,6 +604,7 @@ const RetroActionItems = memo(function RetroActionItems({
           initialContent={editingItem.content}
           initialFlag={editingItem.flag}
           initialCustomFlag={editingItem.custom_flag}
+          initialCardId={editingItem.retro_card_id}
           isEdit
           customFlags={customFlags.map((cf) => ({
             id: cf.id,
@@ -558,8 +614,182 @@ const RetroActionItems = memo(function RetroActionItems({
           onAddCustomFlag={async (flagName) => {
             await addCustomFlag(flagName);
           }}
+          cards={cards.map((c) => ({
+            id: c.id,
+            content: c.content,
+            category: c.category,
+          }))}
         />
       )}
+
+      {/* View Detail Modal */}
+      {viewingItem && (() => {
+        const item = viewingItem;
+        const flagInfo = item.flag
+          ? PREDEFINED_FLAGS[item.flag]
+          : item.custom_flag
+          ? customFlags.find((cf) => cf.id === item.custom_flag)
+          : null;
+
+        const flagColor =
+          flagInfo && "color" in flagInfo
+            ? flagInfo.color
+            : flagInfo && "flag_color" in flagInfo
+            ? flagInfo.flag_color
+            : "#6B7280";
+        const flagLabel =
+          flagInfo && "label" in flagInfo
+            ? flagInfo.label
+            : flagInfo && "flag_name" in flagInfo
+            ? flagInfo.flag_name
+            : "";
+        const FlagIcon = flagInfo && "icon" in flagInfo ? flagInfo.icon : null;
+        const card = item.retro_card_id ? cards.find((c) => c.id === item.retro_card_id) : null;
+        const getCategoryInfo = (category: string) => {
+          if (category === "mad") return { title: "Mad", color: "var(--destructive)" };
+          if (category === "sad") return { title: "Sad", color: "var(--primary)" };
+          return { title: "Glad", color: "oklch(0.6 0.2 145)" };
+        };
+        const categoryInfo = card ? getCategoryInfo(card.category) : null;
+
+        return (
+          <Modal
+            open={!!viewingItem}
+            onClose={() => setViewingItem(null)}
+            title="Aksiyon Detayı"
+          >
+            <div className="space-y-4">
+              {/* Flag Badge */}
+              {flagInfo && (
+                <div>
+                  <span
+                    className="inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-semibold"
+                    style={{
+                      backgroundColor: `${flagColor}15`,
+                      color: flagColor,
+                      borderColor: flagColor,
+                    }}
+                  >
+                    {FlagIcon && <FlagIcon className="h-3.5 w-3.5" />}
+                    {flagLabel}
+                  </span>
+                </div>
+              )}
+
+              {/* Card Info */}
+              {card && categoryInfo && (
+                <div className="rounded-md border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800">
+                  <div className="mb-2 flex items-center gap-2">
+                    <div className="flex items-center gap-1.5 rounded border px-2 py-1 text-xs font-medium" style={{ borderColor: categoryInfo.color, color: categoryInfo.color, backgroundColor: `${categoryInfo.color}15` }}>
+                      <FileText className="h-3 w-3" />
+                      <span>{categoryInfo.title} Kartı</span>
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">{card.content}</p>
+                </div>
+              )}
+
+              {/* Content */}
+              <div className="rounded-md border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
+                <p className={`text-sm leading-relaxed ${item.is_completed ? 'text-gray-600 line-through dark:text-gray-400' : 'text-gray-900 dark:text-white'}`}>
+                  {item.content}
+                </p>
+              </div>
+
+              {/* Metadata */}
+              <div className="flex flex-col gap-2 rounded-md border border-gray-200 bg-gray-50 p-3 text-xs dark:border-gray-700 dark:bg-gray-800">
+                <div className="flex items-center gap-2">
+                  <User className="h-3.5 w-3.5 text-gray-500 dark:text-gray-400" />
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Oluşturan:</span>
+                  <span className="text-gray-900 dark:text-white">{item.created_by_username}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="h-3.5 w-3.5 text-gray-500 dark:text-gray-400" />
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Oluşturulma:</span>
+                  <span className="text-gray-900 dark:text-white">
+                    {new Date(item.created_at).toLocaleDateString("tr-TR", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+                </div>
+                {item.is_completed && item.completed_at && (
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-green-600 dark:text-green-400" />
+                    <span className="font-medium text-gray-700 dark:text-gray-300">Tamamlanma:</span>
+                    <span className="text-gray-900 dark:text-white">
+                      {new Date(item.completed_at).toLocaleDateString("tr-TR", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Action Buttons */}
+              {isAdmin && (
+                <div className="flex gap-2">
+                  {!item.is_completed ? (
+                    <Button
+                      onClick={() => {
+                        handleToggleComplete(item);
+                        setViewingItem(null);
+                      }}
+                      variant="primary"
+                      size="sm"
+                      icon={CheckCircle2}
+                      className="!border-green-600 !bg-green-600 hover:!border-green-700 hover:!bg-green-700 dark:!border-green-500 dark:!bg-green-600 dark:hover:!border-green-400 dark:hover:!bg-green-500"
+                    >
+                      Tamamla
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => {
+                        handleToggleComplete(item);
+                        setViewingItem(null);
+                      }}
+                      variant="outline"
+                      size="sm"
+                      icon={RotateCcw}
+                    >
+                      Geri Al
+                    </Button>
+                  )}
+                  <Button
+                    onClick={() => {
+                      setViewingItem(null);
+                      handleOpenEdit(item);
+                    }}
+                    variant="outline"
+                    size="sm"
+                    icon={Edit}
+                  >
+                    Düzenle
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      handleDeleteItem(item);
+                      setViewingItem(null);
+                    }}
+                    variant="danger"
+                    size="sm"
+                    icon={Trash2}
+                  >
+                    Sil
+                  </Button>
+                </div>
+              )}
+            </div>
+          </Modal>
+        );
+      })()}
     </div>
   );
 });

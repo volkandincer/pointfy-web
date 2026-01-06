@@ -18,6 +18,7 @@ export interface RetroActionItem {
   position: number;
   flag: RetroActionItemFlag | null;
   custom_flag: string | null;
+  retro_card_id: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -26,6 +27,7 @@ export interface RetroActionItemInput {
   content: string;
   flag?: RetroActionItemFlag | null;
   custom_flag?: string | null;
+  retro_card_id?: string | null;
 }
 
 export interface RoomCustomFlag {
