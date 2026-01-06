@@ -128,7 +128,6 @@ const NoteModal = memo(function NoteModal({
             disabled={loading}
             autoFocus
             size="md"
-            showCharCount
             className="focus:border-yellow-500 focus:ring-yellow-500/20 dark:focus:border-yellow-400"
           />
           <div className="mt-1.5 flex items-center justify-between sm:mt-2">

@@ -46,7 +46,7 @@ const Modal = memo(function Modal({
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:px-4"
+      className="fixed inset-0 z-[100] flex items-end justify-center sm:items-center sm:px-4"
       onTouchMove={(e) => {
         // Modal backdrop'unda scroll'u engelle
         const target = e.target as HTMLElement;
