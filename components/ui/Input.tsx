@@ -75,7 +75,7 @@ const Input = memo(
             {label && (
               <label
                 htmlFor={props.id}
-                className={`absolute left-3 top-0 -translate-y-1/2 bg-background px-2 text-sm font-semibold text-foreground transition-colors ${
+                className={`absolute top-0 -translate-y-1/2 bg-background text-sm font-semibold text-foreground transition-colors ${
                   error ? "text-destructive" : ""
                 } ${labelSizeClasses[size]}`}
               >
@@ -166,9 +166,9 @@ const Textarea = memo(
       };
 
       const labelSizeClasses = {
-        sm: "px-1.5 text-xs",
-        md: "px-2 text-xs",
-        lg: "px-2 text-sm",
+        sm: "px-1.5 text-xs left-3",
+        md: "px-2 text-xs left-4",
+        lg: "px-2 text-sm left-5",
       };
 
       const baseClasses = `rounded-md border bg-background text-foreground outline-none transition-all focus:ring-2 resize-none ${
@@ -185,7 +185,7 @@ const Textarea = memo(
             {label && (
               <label
                 htmlFor={props.id}
-                className={`absolute left-3 top-0 -translate-y-1/2 bg-background px-2 text-sm font-semibold text-foreground transition-colors ${
+                className={`absolute top-0 -translate-y-1/2 bg-background text-sm font-semibold text-foreground transition-colors ${
                   error ? "text-destructive" : ""
                 } ${labelSizeClasses[size]}`}
               >
