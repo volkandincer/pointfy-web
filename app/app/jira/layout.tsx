@@ -229,44 +229,47 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
               </div>
             </aside>
 
-            {/* Mobile Bottom Navigation - Hidden on desktop */}
-            <div className="fixed bottom-0 left-0 right-0 z-50 border-t-2 border-gray-200 bg-white/95 backdrop-blur-sm dark:border-gray-800 dark:bg-gray-900/95 lg:hidden">
-              <div className="container mx-auto">
-                <nav className="flex items-center justify-around">
-                  {jiraNavItems.slice(0, 5).map((item) => {
+            {/* Main Content */}
+            <main className="w-full flex-1 lg:w-auto">
+              {/* Tab Navigation - Header'ın Altında, Mobilde Sticky */}
+              <div className="sticky top-0 z-40 -mx-4 mb-6 border-b border-gray-200 bg-white/95 backdrop-blur-sm px-4 pb-0 shadow-sm dark:border-gray-800 dark:bg-gray-950/95 lg:static lg:mx-0 lg:border-b lg:bg-transparent lg:shadow-none lg:backdrop-blur-0">
+                <nav className="flex items-center gap-0.5 overflow-x-auto scrollbar-hide pb-0 lg:gap-1">
+                  {jiraNavItems.map((item) => {
                     const active = isActive(item.href);
                     const IconComponent = item.icon;
                     return (
                       <Link
                         key={item.id}
                         href={item.href}
-                        className={`relative flex flex-col items-center gap-1 px-2 py-3 transition-all ${
+                        className={`group relative flex shrink-0 items-center gap-2 rounded-md px-3 py-2.5 text-sm font-semibold transition-all duration-200 sm:px-4 sm:py-3 ${
                           active
                             ? "text-purple-600 dark:text-purple-400"
-                            : "text-gray-600 dark:text-gray-400"
+                            : "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
                         }`}
                       >
-                        <div className="relative">
-                          <IconComponent className={`h-5 w-5 transition-transform ${active ? "scale-110" : ""}`} />
-                          {active && (
-                            <div className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-purple-600 dark:bg-purple-400" />
-                          )}
-                        </div>
-                        <span className={`text-[10px] font-medium ${active ? "font-semibold" : ""}`}>
-                          {item.label.length > 8 ? item.label.substring(0, 7) + "..." : item.label}
-                        </span>
+                        <IconComponent
+                          className={`h-4 w-4 shrink-0 transition-transform duration-200 ${
+                            active ? "scale-110 text-purple-600 dark:text-purple-400" : "group-hover:scale-105"
+                          }`}
+                        />
+                        <span className="whitespace-nowrap">{item.label}</span>
+                        {/* Active Indicator - Underline */}
                         {active && (
-                          <div className="absolute bottom-0 left-1/2 h-0.5 w-8 -translate-x-1/2 rounded-full bg-purple-600 dark:bg-purple-400" />
+                          <span className="absolute bottom-0 left-1/2 h-0.5 w-3/4 -translate-x-1/2 rounded-full bg-purple-600 dark:bg-purple-400" />
+                        )}
+                        {/* Hover Indicator */}
+                        {!active && (
+                          <span className="absolute bottom-0 left-1/2 h-0.5 w-0 -translate-x-1/2 rounded-full bg-purple-600 transition-all duration-200 group-hover:w-1/2 dark:bg-purple-400" />
                         )}
                       </Link>
                     );
                   })}
                 </nav>
               </div>
-            </div>
 
-            {/* Main Content */}
-            <main className="w-full flex-1 lg:w-auto pb-20 lg:pb-0">{children}</main>
+              {/* Page Content */}
+              <div>{children}</div>
+            </main>
           </div>
         </div>
       </div>
