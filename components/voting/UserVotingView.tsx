@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useState, useEffect } from "react";
-import { RefreshCw, Pause, BarChart3 } from "lucide-react";
+import { RefreshCw, Pause, BarChart3, Eye } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { getSupabase } from "@/lib/supabase";
 import VotingCardGrid from "./VotingCardGrid";
@@ -15,6 +15,7 @@ interface UserVotingViewProps {
   activeTask: TaskInfo;
   userKey: string;
   username: string;
+  canVote?: boolean;
 }
 
 const UserVotingView = memo(function UserVotingView({
@@ -22,6 +23,7 @@ const UserVotingView = memo(function UserVotingView({
   activeTask,
   userKey,
   username,
+  canVote = true,
 }: UserVotingViewProps) {
   const router = useRouter();
   const { votes, loading: votesLoading } = useVotes(
@@ -57,7 +59,7 @@ const UserVotingView = memo(function UserVotingView({
   }, [activeTask.status, router]);
 
   const handleVote = async (point: number) => {
-    if (!activeTask || !isVotingActive) return;
+    if (!activeTask || !isVotingActive || !canVote) return;
     setSelectedPoint(point);
     try {
       const supabase = getSupabase();
@@ -147,7 +149,7 @@ const UserVotingView = memo(function UserVotingView({
         </div>
       )}
 
-      {isVotingActive && (
+      {isVotingActive && canVote && (
         <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
           <VotingCardGrid
             selectedPoint={selectedPoint}
@@ -155,6 +157,24 @@ const UserVotingView = memo(function UserVotingView({
             isVotingActive={isVotingActive}
             onVote={handleVote}
           />
+        </div>
+      )}
+
+      {isVotingActive && !canVote && (
+        <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+          <div className="flex flex-col items-center justify-center gap-3 py-4">
+            <div className="flex items-center gap-2 rounded-md border-2 border-amber-300 bg-amber-50 px-4 py-2 dark:border-amber-700 dark:bg-amber-900/20">
+              <Eye className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+              <div className="text-center">
+                <p className="text-sm font-semibold text-amber-800 dark:text-amber-300">
+                  İzleyici Modu
+                </p>
+                <p className="text-xs text-amber-700 dark:text-amber-400">
+                  İzleyiciler oy veremez, sadece görüntüleyebilir
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 

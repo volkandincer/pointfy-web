@@ -39,20 +39,38 @@ export class CheckRoomAdminUseCase {
     const isCreator = room.createdBy === userKey;
 
     const supabase = getSupabase();
+    
+    // Oda ayarlarını al (allow_spectators)
+    const { data: roomSettings } = await supabase
+      .from("rooms")
+      .select("allow_spectators")
+      .eq("code", roomCode)
+      .single();
+    
+    const allowSpectators = roomSettings?.allow_spectators ?? false;
+
+    // Katılımcı bilgilerini al (is_admin ve is_spectator)
     const { data: participantData } = await supabase
       .from("room_participants")
-      .select("is_admin")
+      .select("is_admin, is_spectator")
       .eq("room_code", roomCode)
       .eq("user_key", userKey)
       .maybeSingle();
 
     const isParticipantAdmin = participantData?.is_admin || false;
+    const isSpectator = participantData?.is_spectator ?? false;
     const finalAdminStatus = isCreator || isParticipantAdmin;
+
+    // can_vote hesaplama mantığı:
+    // - Admin ise: can_vote = false (adminler oy vermez)
+    // - İzleyici ise: can_vote = false (izleyiciler oy vermez)
+    // - Normal katılımcı ise: can_vote = true
+    const canVote = !finalAdminStatus && !isSpectator;
 
     const permissions: RoomPermissions = {
       is_admin: finalAdminStatus,
-      is_spectator: false,
-      can_vote: !finalAdminStatus,
+      is_spectator: isSpectator,
+      can_vote: canVote,
       can_create_tasks: finalAdminStatus,
       can_manage_room: finalAdminStatus,
     };

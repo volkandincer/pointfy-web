@@ -27,12 +27,13 @@ DROP POLICY IF EXISTS "Users can delete their own votes" ON public.votes;
 
 -- Policy: Oda katılımcıları vote'ları görebilir
 -- Admin'ler her zaman tüm vote'ları görebilir
+-- İzleyiciler de vote'ları görebilir (sadece görüntüleme)
 -- Task completed ise tüm katılımcılar görebilir
 CREATE POLICY "Room participants can view votes"
     ON public.votes
     FOR SELECT
     USING (
-        -- Oda katılımcısı ise görebilir
+        -- Oda katılımcısı ise görebilir (izleyiciler dahil)
         EXISTS (
             SELECT 1 FROM public.room_participants rp
             INNER JOIN public.rooms r ON r.code::text = rp.room_code::text
@@ -41,7 +42,7 @@ CREATE POLICY "Room participants can view votes"
                 -- Admin ise tüm vote'ları görebilir
                 (rp.user_key::uuid = auth.uid() AND rp.is_admin = true)
                 OR
-                -- Normal katılımcı ise:
+                -- Normal katılımcı veya izleyici ise:
                 -- 1. Kendi vote'unu görebilir
                 (rp.user_key::uuid = auth.uid() AND votes.user_key::uuid = auth.uid())
                 OR
@@ -55,7 +56,7 @@ CREATE POLICY "Room participants can view votes"
         )
     );
 
--- Policy: Oda katılımcıları puan verebilir
+-- Policy: Oda katılımcıları puan verebilir (izleyiciler hariç)
 CREATE POLICY "Room participants can insert votes"
     ON public.votes
     FOR INSERT
@@ -65,11 +66,15 @@ CREATE POLICY "Room participants can insert votes"
             INNER JOIN public.rooms r ON r.code::text = rp.room_code::text
             WHERE r.id = votes.room_id
             AND rp.user_key::uuid = auth.uid()
+            -- İzleyiciler oy veremez
+            AND (rp.is_spectator = false OR rp.is_spectator IS NULL)
+            -- Adminler de oy vermez
+            AND (rp.is_admin = false OR rp.is_admin IS NULL)
         )
         AND user_key::uuid = auth.uid()
     );
 
--- Policy: Kullanıcılar kendi puanlarını güncelleyebilir
+-- Policy: Kullanıcılar kendi puanlarını güncelleyebilir (izleyiciler hariç)
 CREATE POLICY "Users can update their own votes"
     ON public.votes
     FOR UPDATE
@@ -81,6 +86,10 @@ CREATE POLICY "Users can update their own votes"
             INNER JOIN public.rooms r ON r.code::text = rp.room_code::text
             WHERE r.id = votes.room_id
             AND rp.user_key::uuid = auth.uid()
+            -- İzleyiciler oy güncelleyemez
+            AND (rp.is_spectator = false OR rp.is_spectator IS NULL)
+            -- Adminler de oy güncelleyemez
+            AND (rp.is_admin = false OR rp.is_admin IS NULL)
         )
     );
 
@@ -94,7 +103,18 @@ CREATE POLICY "Users can delete their own votes"
 -- 4. Realtime'ı Aktif Et (Eğer yoksa)
 -- =====================================================
 
-ALTER PUBLICATION supabase_realtime ADD TABLE public.votes;
+-- Eğer votes tablosu zaten publication'da değilse ekle
+DO $$ 
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM pg_publication_tables 
+        WHERE pubname = 'supabase_realtime' 
+        AND tablename = 'votes'
+    ) THEN
+        ALTER PUBLICATION supabase_realtime ADD TABLE public.votes;
+    END IF;
+END $$;
 
 -- =====================================================
 -- 5. Index'ler (Performans için)

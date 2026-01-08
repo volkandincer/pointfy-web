@@ -53,6 +53,7 @@ export default function RoomDetailPage() {
   const {
     isAdmin,
     loading: adminLoading,
+    permissions,
   } = useRoomAdmin(room?.code || "", userKey);
 
   // Yeni task aktif olduğunda user'a toast göster
@@ -423,6 +424,7 @@ export default function RoomDetailPage() {
                       activeTask={activeTask}
                       userKey={userKey}
                       username={username}
+                      canVote={permissions?.can_vote ?? true}
                     />
                   )}
                 </div>
