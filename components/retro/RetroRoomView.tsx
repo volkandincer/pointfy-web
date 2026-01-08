@@ -530,51 +530,81 @@ const RetroRoomView = memo(function RetroRoomView({
             </div>
           </div>
 
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
-            {/* Text Input */}
-            <div className="flex-1">
-              <Textarea
-                ref={textareaRef}
-                value={cardContent}
-                onChange={(e) => setCardContent(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder={`${getCategoryInfo(formCategory).title} kategorisine kart ekle...`}
-                rows={2}
-                disabled={isSubmitting || (isAdmin && !timerActive) || (timerActive && remainingSeconds === 0)}
-                size="md"
-                className={`${
-                  isAdmin && !timerActive
-                    ? "border-gray-300 bg-gray-50 text-gray-500 cursor-not-allowed dark:border-gray-700 dark:bg-gray-800"
-                    : timerActive && remainingSeconds === 0
-                    ? "border-red-300 bg-red-50 text-gray-500 cursor-not-allowed dark:border-red-800 dark:bg-red-950/30"
-                    : timerWarning
-                    ? "border-orange-300 bg-orange-50 text-gray-900 focus:border-orange-500 focus:ring-orange-500/20 dark:border-orange-700 dark:bg-orange-950/30 dark:text-white"
-                    : "border-gray-300 bg-gray-50 text-gray-900 focus:border-primary focus:ring-primary/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary"
-                }`}
-              />
-            </div>
+            {/* Modern Card Design for Input and Button */}
+            <div className={`relative overflow-hidden rounded-xl border-2 shadow-lg transition-all duration-300 ${
+              isAdmin && !timerActive
+                ? "border-gray-300 bg-gradient-to-br from-gray-50 to-gray-100 dark:border-gray-700 dark:from-gray-800 dark:to-gray-900"
+                : timerActive && remainingSeconds === 0
+                ? "border-red-300 bg-gradient-to-br from-red-50 to-red-100 dark:border-red-800 dark:from-red-950/30 dark:to-red-900/20"
+                : timerWarning
+                ? "border-orange-400 bg-gradient-to-br from-orange-50 via-orange-50 to-amber-50 shadow-orange-200/50 dark:border-orange-600 dark:from-orange-950/40 dark:via-orange-900/30 dark:to-amber-950/40 dark:shadow-orange-900/20"
+                : "border-primary/30 bg-gradient-to-br from-white via-primary/5 to-primary/10 shadow-primary/10 dark:border-primary/40 dark:from-gray-900 dark:via-primary/10 dark:to-primary/20 dark:shadow-primary/20"
+            }`}>
+              {/* Decorative Background Pattern */}
+              <div className="absolute inset-0 opacity-5 dark:opacity-10">
+                <div className="absolute inset-0" style={{
+                  backgroundImage: `radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)`,
+                  backgroundSize: '24px 24px'
+                }}></div>
+              </div>
+              
+              <div className="relative p-4">
+                <div className="flex flex-col gap-3">
+                  {/* Text Input with Enhanced Design */}
+                  <div className="relative">
+                    <div className={`absolute -inset-0.5 rounded-lg blur-sm opacity-20 transition-opacity ${
+                      timerWarning
+                        ? "bg-orange-500"
+                        : "bg-primary"
+                    }`}></div>
+                    <div className="relative">
+                      <Textarea
+                        ref={textareaRef}
+                        value={cardContent}
+                        onChange={(e) => setCardContent(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        placeholder={`${getCategoryInfo(formCategory).title} kategorisine kart ekle...`}
+                        rows={2}
+                        disabled={isSubmitting || (isAdmin && !timerActive) || (timerActive && remainingSeconds === 0)}
+                        size="md"
+                        className={`relative z-10 w-full transition-all duration-200 ${
+                          isAdmin && !timerActive
+                            ? "border-gray-300 bg-white/80 text-gray-500 cursor-not-allowed backdrop-blur-sm dark:border-gray-600 dark:bg-gray-800/80"
+                            : timerActive && remainingSeconds === 0
+                            ? "border-red-300 bg-white/80 text-gray-500 cursor-not-allowed backdrop-blur-sm dark:border-red-700 dark:bg-gray-800/80"
+                            : timerWarning
+                            ? "border-orange-400 bg-white/90 text-gray-900 shadow-md shadow-orange-200/50 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30 dark:border-orange-600 dark:bg-gray-800/90 dark:text-white dark:shadow-orange-900/30 dark:focus:ring-orange-500/40"
+                            : "border-primary/40 bg-white/90 text-gray-900 shadow-md shadow-primary/20 focus:border-primary focus:ring-2 focus:ring-primary/30 dark:border-primary/50 dark:bg-gray-800/90 dark:text-white dark:shadow-primary/30 dark:focus:ring-primary/40"
+                        }`}
+                      />
+                    </div>
+                  </div>
 
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              variant={timerWarning ? "danger" : "primary"}
-              size="md"
-              disabled={isSubmitting || !cardContent.trim() || (isAdmin && !timerActive) || (timerActive && remainingSeconds === 0)}
-              loading={isSubmitting}
-              icon={Send}
-              className={`shrink-0 ${
-                isAdmin && !timerActive
-                  ? "!bg-gray-400 !border-gray-400 cursor-not-allowed"
-                  : timerActive && remainingSeconds === 0
-                  ? "!bg-gray-400 !border-gray-400 cursor-not-allowed"
-                  : timerWarning
-                  ? "!border-orange-600 !bg-orange-600 hover:!border-orange-700 hover:!bg-orange-700"
-                  : ""
-              }`}
-            >
-              {isSubmitting ? "Gönderiliyor..." : "Gönder"}
-            </Button>
-          </div>
+                  {/* Enhanced Submit Button */}
+                  <div className="flex justify-end">
+                    <Button
+                      type="submit"
+                      variant={timerWarning ? "danger" : "primary"}
+                      size="sm"
+                      disabled={isSubmitting || !cardContent.trim() || (isAdmin && !timerActive) || (timerActive && remainingSeconds === 0)}
+                      loading={isSubmitting}
+                      icon={Send}
+                      className={`relative z-10 !h-9 transition-all duration-200 ${
+                        isAdmin && !timerActive
+                          ? "!bg-gray-400 !border-gray-400 cursor-not-allowed shadow-none"
+                          : timerActive && remainingSeconds === 0
+                          ? "!bg-gray-400 !border-gray-400 cursor-not-allowed shadow-none"
+                          : timerWarning
+                          ? "!border-orange-600 !bg-gradient-to-r !from-orange-600 !to-orange-500 hover:!from-orange-700 hover:!to-orange-600 !shadow-lg !shadow-orange-500/50 hover:!shadow-xl hover:!shadow-orange-600/60 hover:scale-105 active:scale-95"
+                          : "!bg-gradient-to-r !from-primary !to-primary/90 hover:!from-primary/90 hover:!to-primary !shadow-lg !shadow-primary/50 hover:!shadow-xl hover:!shadow-primary/60 hover:scale-105 active:scale-95"
+                      }`}
+                    >
+                      {isSubmitting ? "Gönderiliyor..." : "Gönder"}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
           <p className={`mt-1.5 text-[10px] ${
             isAdmin && !timerActive
               ? "text-gray-600 dark:text-gray-400 font-medium"
