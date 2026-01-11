@@ -304,8 +304,10 @@ export default function AccountPage() {
     return (
       <>
         <Header navigationItems={navigationItems} />
-        <main className="container mx-auto px-4 py-16">
-          <div className="h-40 animate-pulse border-2 border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
+        <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
+          <div className="container mx-auto px-4 py-8">
+            <div className="h-40 animate-pulse rounded-md border-2 border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
+          </div>
         </main>
         <Footer navigationItems={navigationItems} />
       </>
@@ -315,8 +317,9 @@ export default function AccountPage() {
   return (
     <>
         <Header navigationItems={navigationItems} />
-        <main className="container mx-auto px-4 py-16">
-          <div className="mx-auto max-w-3xl">
+        <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
+          <div className="container mx-auto px-4 py-8">
+            <div className="mx-auto max-w-6xl">
             <PageHeader
               title="Hesabım"
               description="Profil bilgilerinizi yönetin"
@@ -339,7 +342,7 @@ export default function AccountPage() {
             )}
 
             {/* Profil Bilgileri */}
-            <div className="mb-6 rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
+            <div className="mb-6 rounded-md border-2 border-gray-300 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
               <h2 className="mb-4 text-base font-semibold text-gray-900 dark:text-white">
                 Profil Bilgileri
               </h2>
@@ -353,7 +356,7 @@ export default function AccountPage() {
                     type="email"
                     value={email}
                     disabled
-                    className="w-full border-2 border-gray-300 bg-gray-50 px-3 py-2 text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
+                    className="w-full rounded-md border-2 border-gray-300 bg-gray-50 px-3 py-2 text-base text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
                   />
                   <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                     E-posta adresi değiştirilemez
@@ -373,7 +376,7 @@ export default function AccountPage() {
                         onChange={(e) => setNewUsername(e.target.value)}
                         placeholder="Kullanıcı adı"
                         maxLength={50}
-                        className="flex-1 rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-cyan-600 focus:ring-2 focus:ring-cyan-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-cyan-500"
+                        className="flex-1 rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-base text-gray-900 outline-none transition focus:border-cyan-600 focus:ring-2 focus:ring-cyan-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-cyan-500"
                         disabled={saving}
                       />
                       <Button
@@ -403,7 +406,7 @@ export default function AccountPage() {
                         type="text"
                         value={username}
                         disabled
-                        className="flex-1 border-2 border-gray-300 bg-gray-50 px-3 py-2 text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
+                        className="flex-1 rounded-md border-2 border-gray-300 bg-gray-50 px-3 py-2 text-base text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
                       />
                       <button
                         onClick={() => setEditingUsername(true)}
@@ -418,7 +421,7 @@ export default function AccountPage() {
             </div>
 
             {/* Jira Bağlantısı */}
-            <div className="mb-6 rounded-md border-2 border-gray-300 bg-white p-4 shadow-sm sm:p-5 dark:border-gray-700 dark:bg-gray-900">
+            <div className="mb-6 rounded-md border-2 border-gray-300 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
               <h2 className="mb-4 text-base font-semibold text-gray-900 dark:text-white">
                 Jira Bağlantısı
               </h2>
@@ -453,7 +456,7 @@ export default function AccountPage() {
             </div>
 
             {/* Çıkış Yap */}
-            <div className="border-2 border-red-300 bg-red-50 p-6 shadow-sm dark:border-red-700 dark:bg-red-900/10">
+            <div className="rounded-md border-2 border-red-300 bg-red-50 p-5 shadow-sm dark:border-red-700 dark:bg-red-900/10">
               <h2 className="mb-2 text-base font-semibold text-gray-900 dark:text-white">
                 Hesap İşlemleri
               </h2>
@@ -464,6 +467,7 @@ export default function AccountPage() {
               >
                 Çıkış Yap
               </button>
+            </div>
             </div>
           </div>
         </main>
