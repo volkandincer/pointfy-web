@@ -219,18 +219,18 @@ const HomeWelcome = memo(function HomeWelcome() {
                   if (rooms.length > 0) setShowResults(true);
                 }}
                 placeholder="Oda ara (ad, kod veya oluşturan)..."
-                className="w-full rounded-md border-2 border-gray-300 bg-white px-5 py-4 pl-12 pr-12 text-base outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
+                className="w-full rounded-md border border-gray-300 bg-white px-4 py-2.5 pl-10 pr-10 text-base outline-none transition focus:border-blue-600 focus:ring-1 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
               />
-              <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
               {searchQuery && (
                 <button
                   onClick={() => {
                     setSearchQuery("");
                     setShowResults(false);
                   }}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300"
                 >
-                  <X className="h-5 w-5" />
+                  <X className="h-4 w-4" />
                 </button>
               )}
             </div>
