@@ -632,7 +632,7 @@ export default function JiraIssueDetailPage() {
                 placeholder="Yorumunuzu yazın..."
                 rows={3}
                 maxLength={1000}
-                className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-500 outline-none transition focus:border-purple-600 focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500"
+                className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-base text-gray-900 placeholder-gray-500 outline-none transition focus:border-purple-600 focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500"
                 disabled={addingComment}
               />
               <div className="flex items-center justify-between">
@@ -829,7 +829,7 @@ export default function JiraIssueDetailPage() {
                   value={storyPointsInput}
                   onChange={(e) => setStoryPointsInput(e.target.value)}
                   placeholder="Puan girin"
-                  className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:border-purple-600 focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-purple-500"
+                  className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-base text-gray-900 outline-none transition focus:border-purple-600 focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-purple-500"
                   disabled={storyPointsLoading}
                   autoFocus
                 />
@@ -939,7 +939,7 @@ export default function JiraIssueDetailPage() {
               placeholder="Kullanıcı ara..."
               value={assigneeSearchQuery}
               onChange={(e) => setAssigneeSearchQuery(e.target.value)}
-              className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 pl-10 text-sm text-gray-900 placeholder-gray-500 focus:border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500"
+              className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 pl-10 text-base text-gray-900 placeholder-gray-500 focus:border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500"
               autoFocus
             />
             <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />

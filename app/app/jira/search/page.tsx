@@ -224,7 +224,7 @@ export default function JiraSearchPage() {
                 max="100"
                 value={maxResults}
                 onChange={(e) => setMaxResults(Math.min(100, Math.max(1, parseInt(e.target.value) || 50)))}
-                className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 focus:border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white sm:w-32"
+                className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-base text-gray-900 focus:border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white sm:w-32"
               />
             </div>
             <div className="flex gap-3">

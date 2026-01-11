@@ -237,7 +237,7 @@ export default function JiraIssuesPage() {
           placeholder="Issue ara (key, summary, project)..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2.5 pl-9 text-sm text-gray-900 placeholder-gray-500 focus:border-purple-600 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500"
+          className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2.5 pl-9 text-base text-gray-900 placeholder-gray-500 focus:border-purple-600 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500"
         />
         <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
       </div>

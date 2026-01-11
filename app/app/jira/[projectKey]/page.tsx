@@ -615,7 +615,7 @@ export default function JiraProjectDetailPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Issue'da ara (başlık, açıklama, key)..."
-              className="w-full rounded-md border-2 border-gray-300 bg-gray-50 pl-10 pr-10 py-3 text-base text-gray-900 outline-none transition-all focus:border-purple-600 focus:bg-white focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-purple-500 dark:focus:bg-gray-800 sm:text-sm"
+              className="w-full rounded-md border-2 border-gray-300 bg-gray-50 pl-10 pr-10 py-3 text-base text-gray-900 outline-none transition-all focus:border-purple-600 focus:bg-white focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-purple-500 dark:focus:bg-gray-800"
             />
             {searchQuery && (
               <button

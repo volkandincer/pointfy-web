@@ -168,7 +168,7 @@ const JqlInput = memo(function JqlInput({
         placeholder={placeholder}
         rows={4}
         disabled={disabled}
-        className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 font-mono leading-relaxed"
+        className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-3 text-base text-gray-900 placeholder-gray-500 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 font-mono leading-relaxed"
       />
       {showSuggestions && suggestions.length > 0 && (
         <div

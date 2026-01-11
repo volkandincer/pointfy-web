@@ -155,7 +155,7 @@ const JiraStoryPointModal = memo(function JiraStoryPointModal({
                 setStoryPoints(0);
               }
             }}
-            className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-base text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             placeholder="Story points"
           />
         </div>

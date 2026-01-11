@@ -567,7 +567,7 @@ const RetroRoomView = memo(function RetroRoomView({
                         rows={2}
                         disabled={isSubmitting || (isAdmin && !timerActive) || (timerActive && remainingSeconds === 0)}
                         size="md"
-                        className={`relative z-10 w-full transition-all duration-200 ${
+                        className={`relative z-10 w-full text-base transition-all duration-200 ${
                           isAdmin && !timerActive
                             ? "border-gray-300 bg-white/80 text-gray-500 cursor-not-allowed backdrop-blur-sm dark:border-gray-600 dark:bg-gray-800/80"
                             : timerActive && remainingSeconds === 0
