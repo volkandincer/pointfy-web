@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
 import { jiraConfig } from "@/lib/jiraConfig";
+import { logger } from "@/lib/logger";
 import type { JiraApiErrorResponse } from "@/interfaces/Jira.interface";
 import { resolveEnvValue } from "@/lib/appEnvironment";
 
@@ -242,7 +243,7 @@ export async function GET(
         `Failed to fetch assignable users: ${response.status} ${response.statusText}`;
 
       // Debug için endpoint'i logla
-      console.error("Jira assignable users API error:", {
+      logger.error("Jira assignable users API error:", {
         endpoint: assignableUsersEndpoint,
         status: response.status,
         error: errorMessage,
@@ -257,7 +258,7 @@ export async function GET(
     const users = await response.json();
     
     // Debug için kullanıcı sayısını logla
-    console.log("Jira assignable users fetched:", {
+    logger.log("Jira assignable users fetched:", {
       endpoint: assignableUsersEndpoint,
       count: Array.isArray(users) ? users.length : 0,
     });

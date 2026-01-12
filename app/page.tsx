@@ -11,6 +11,7 @@ import HomeWelcome from "@/components/sections/HomeWelcome";
 import GlobalNoteFab from "@/components/notes/GlobalNoteFab";
 import ToastContainer from "@/components/ui/ToastContainer";
 import { ToastProvider, useToastContext } from "@/contexts/ToastContext";
+import { logger } from "@/lib/logger";
 import type { Feature } from "@/interfaces/Feature.interface";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type { QuickAction } from "@/interfaces/QuickAction.interface";
@@ -61,7 +62,7 @@ function HomePageContent() {
         }
       } catch (error) {
         // Supabase bağlantı hatası veya env variable eksik
-        console.error("Auth check error:", error);
+        logger.error("Auth check error:", error);
         if (mounted) {
           setUserId(null);
         }

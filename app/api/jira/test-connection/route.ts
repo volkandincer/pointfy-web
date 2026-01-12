@@ -141,7 +141,7 @@ export async function GET(request: Request) {
 
     // Test 1: Accessible Resources (OAuth 3LO için cloudId almak için)
     try {
-      console.log("📡 Test 1: Accessible Resources endpoint test ediliyor...");
+      logger.log("📡 Test 1: Accessible Resources endpoint test ediliyor...");
       const accessibleResourcesResponse = await fetch(
         "https://api.atlassian.com/oauth/token/accessible-resources",
         {
@@ -160,7 +160,7 @@ export async function GET(request: Request) {
         // JSON parse başarısız
       }
 
-      console.log("📥 Test 1 Response:", {
+      logger.log("📥 Test 1 Response:", {
         status: accessibleResourcesResponse.status,
         statusText: accessibleResourcesResponse.statusText,
         responseLength: responseText.length,
@@ -182,7 +182,7 @@ export async function GET(request: Request) {
             }`,
       });
     } catch (error) {
-      console.error("❌ Test 1 Error:", error);
+      logger.error("❌ Test 1 Error:", error);
       testResults.tests.push({
         endpoint: "Accessible Resources (OAuth 3LO)",
         status: 0,
@@ -193,7 +193,7 @@ export async function GET(request: Request) {
 
     // Test 2: Jira /rest/agile/1.0/board endpoint (cloudId ile)
     try {
-      console.log("📡 Test 2: Jira /rest/agile/1.0/board endpoint test ediliyor...");
+      logger.log("📡 Test 2: Jira /rest/agile/1.0/board endpoint test ediliyor...");
       
       // Önce cloudId'yi al
       let cloudId: string | undefined;
@@ -248,7 +248,7 @@ export async function GET(request: Request) {
         // JSON parse başarısız
       }
 
-      console.log("📥 Test 2 Response:", {
+      logger.log("📥 Test 2 Response:", {
         status: boardResponse.status,
         statusText: boardResponse.statusText,
         cloudId: cloudId || "not found",
@@ -271,7 +271,7 @@ export async function GET(request: Request) {
           : `Beklenmeyen hata: ${responseJson?.errorMessage || boardResponse.statusText}`,
       });
     } catch (error) {
-      console.error("❌ Test 2 Error:", error);
+      logger.error("❌ Test 2 Error:", error);
       testResults.tests.push({
         endpoint: "/rest/agile/1.0/board",
         status: 0,
@@ -305,7 +305,7 @@ export async function GET(request: Request) {
       },
     };
 
-    console.log("✅ Test tamamlandı:", {
+    logger.log("✅ Test tamamlandı:", {
       success: finalResult.success,
       testsCount: testResults.tests.length,
       successfulTests: testResults.tests.filter(t => t.success).length,
@@ -314,7 +314,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json(finalResult);
   } catch (error) {
-    console.error("Jira connection test error:", error);
+    logger.error("Jira connection test error:", error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Internal server error" },
       { status: 500 }

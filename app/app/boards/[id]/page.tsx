@@ -16,6 +16,7 @@ import JiraTaskSelector from "@/components/jira/JiraTaskSelector";
 import Modal from "@/components/ui/Modal";
 import EmptyState from "@/components/jira/EmptyState";
 import { getDefaultNavigationItems } from "@/lib/utils";
+import { logger } from "@/lib/logger";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type { Board, BoardInput } from "@/interfaces/Board.interface";
 import type { PersonalTask, PersonalTaskInput } from "@/interfaces/PersonalTask.interface";
@@ -341,9 +342,9 @@ export default function BoardDetailPage() {
   // Jira task'ını board'a ekle
   const handleAddJiraTask = useCallback(
     async (jiraTask: { key: string; summary: string; description?: string; url: string }) => {
-      console.log("handleAddJiraTask: Called with", { jiraTask, boardId, userKey });
+      logger.log("handleAddJiraTask: Called with", { jiraTask, boardId, userKey });
       if (!boardId || !userKey) {
-        console.error("handleAddJiraTask: Missing boardId or userKey");
+        logger.error("handleAddJiraTask: Missing boardId or userKey");
         return;
       }
       if (!jiraTask || !jiraTask.key || !jiraTask.summary || !jiraTask.url) {
@@ -373,7 +374,7 @@ export default function BoardDetailPage() {
               .single();
             if (updateError) throw updateError;
             
-            console.log("handleAddJiraTask: Existing task updated", updatedTask);
+            logger.log("handleAddJiraTask: Existing task updated", updatedTask);
             
             // Güncellenmiş task'ı listeye ekle
             if (updatedTask) {
@@ -432,16 +433,16 @@ export default function BoardDetailPage() {
           
           // Realtime subscription çalışmıyorsa fallback olarak manuel ekle
           if (newTask) {
-            console.log("handleAddJiraTask: New task created", newTask);
+            logger.log("handleAddJiraTask: New task created", newTask);
             setTasks((prev) => {
               const exists = prev.some((t) => t.id === newTask.id);
               if (exists) {
-                console.log("handleAddJiraTask: Task already exists in list, updating");
+                logger.log("handleAddJiraTask: Task already exists in list, updating");
                 return prev.map((t) =>
                   t.id === newTask.id ? (newTask as PersonalTask) : t
                 );
               }
-              console.log("handleAddJiraTask: Adding new task to list");
+              logger.log("handleAddJiraTask: Adding new task to list");
               return [newTask as PersonalTask, ...prev];
             });
           }
@@ -1106,7 +1107,7 @@ export default function BoardDetailPage() {
                     showToast("Geçersiz task seçildi", "error");
                     return;
                   }
-                  console.log("JiraTaskSelector: Task selected", task);
+                  logger.log("JiraTaskSelector: Task selected", task);
                   try {
                     await handleAddJiraTask({
                       key: task.key,
@@ -1116,7 +1117,7 @@ export default function BoardDetailPage() {
                     });
                     setShowJiraTaskSelector(false);
                   } catch (error) {
-                    console.error("JiraTaskSelector: Error adding task", error);
+                    logger.error("JiraTaskSelector: Error adding task", error);
                   }
                 }}
                 onCancel={() => setShowJiraTaskSelector(false)}

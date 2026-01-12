@@ -16,6 +16,7 @@ import Footer from "@/components/layout/Footer";
 import PageHeader from "@/components/layout/PageHeader";
 import Button from "@/components/ui/Button";
 import { getDefaultNavigationItems } from "@/lib/utils";
+import { logger } from "@/lib/logger";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import type {
   PersonalTask,
@@ -284,7 +285,7 @@ export default function PersonalTasksPage() {
           ? err
           : "Sync sırasında hata oluştu";
       showToast(errorMessage, "error");
-      console.error("Jira sync error:", err);
+      logger.error("Jira sync error:", err);
     } finally {
       setSyncing(false);
     }

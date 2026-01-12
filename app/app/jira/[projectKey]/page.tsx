@@ -23,6 +23,7 @@ import type {
   JiraTask,
 } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
+import { logger } from "@/lib/logger";
 import {
   getStatusColorClasses,
   getPriorityColorClasses,
@@ -157,7 +158,7 @@ export default function JiraProjectDetailPage() {
         data.total !== undefined &&
         data.total > 0
       ) {
-        console.warn("API returned total > 0 but empty issues array", data);
+        logger.warn("API returned total > 0 but empty issues array", data);
       }
 
       // Helper function: ADF format description'ı string'e çevir (sadece JiraIssue formatı için gerekli)
@@ -186,7 +187,7 @@ export default function JiraProjectDetailPage() {
       const tasks: JiraTask[] = [];
       for (const issue of issuesArray) {
         if (!issue) {
-          console.warn("Skipping invalid issue (null/undefined)");
+          logger.warn("Skipping invalid issue (null/undefined)");
           continue;
         }
 
@@ -253,16 +254,16 @@ export default function JiraProjectDetailPage() {
 
             // Validation: key ve summary olmadan issue ekleme
             if (!task.key || !task.summary) {
-              console.warn("Skipping issue with missing key or summary", task);
+              logger.warn("Skipping issue with missing key or summary", task);
               continue;
             }
 
             tasks.push(task);
           } catch (mapError) {
-            console.error("Error mapping issue:", mapError, issue);
+            logger.error("Error mapping issue:", mapError, issue);
           }
         } else {
-          console.warn("Skipping issue with unknown format", issue);
+          logger.warn("Skipping issue with unknown format", issue);
         }
       }
 

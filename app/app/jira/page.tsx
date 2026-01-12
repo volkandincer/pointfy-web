@@ -13,6 +13,7 @@ import {
 import PageHeader from "@/components/layout/PageHeader";
 import Button from "@/components/ui/Button";
 import { getStatusColorClasses } from "@/lib/jira/colors";
+import { logger } from "@/lib/logger";
 import type { JiraBoard, JiraTask } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
 
@@ -119,7 +120,7 @@ export default function JiraDashboardPage() {
       }
     } catch (err) {
       // Dashboard fetch error - silently fail for dashboard
-      console.error("Dashboard fetch error:", err);
+      logger.error("Dashboard fetch error:", err);
     } finally {
       setLoading(false);
     }

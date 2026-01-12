@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
 import { jiraConfig } from "@/lib/jiraConfig";
 import { resolveEnvValue } from "@/lib/appEnvironment";
+import { logger } from "@/lib/logger";
 import { formatErrorMessage } from "@/lib/utils/errorHandler";
 import type { JiraApiErrorResponse } from "@/interfaces/Jira.interface";
 
@@ -174,8 +175,7 @@ export async function POST(request: Request) {
       }
     } catch (typeCheckError) {
       // Issue type kontrolü başarısız olursa devam et (belki API farklıdır)
-      // eslint-disable-next-line no-console
-      console.warn("Issue type kontrolü başarısız:", typeCheckError);
+      logger.warn("Issue type kontrolü başarısız:", typeCheckError);
     }
 
     // Issue oluştur (ADF formatında description)

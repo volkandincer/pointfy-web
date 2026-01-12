@@ -3,6 +3,7 @@
 import { memo, useCallback, useEffect, useState, useMemo } from "react";
 import { Search, ClipboardList } from "lucide-react";
 import { getSupabase } from "@/lib/supabase";
+import { logger } from "@/lib/logger";
 import type { JiraBoard, JiraTask, JiraAdfDocument, JiraAdfNode } from "@/interfaces/Jira.interface";
 import type { JiraTaskSelectorProps } from "@/interfaces/JiraTaskSelection.interface";
 import { getStatusColorClasses, getPriorityColorClasses } from "@/lib/jira/colors";
@@ -134,7 +135,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
 
     async function fetchIssues() {
       if (!selectedProjectKey || !jiraBaseUrl) {
-        console.log("JiraTaskSelector: Missing projectKey or jiraBaseUrl", {
+        logger.log("JiraTaskSelector: Missing projectKey or jiraBaseUrl", {
           selectedProjectKey,
           jiraBaseUrl,
           selectedBoardId,
@@ -163,7 +164,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
         urlParams.set("jql", `project=${selectedProjectKey}`);
 
         const apiUrl = `/api/jira/search?${urlParams.toString()}`;
-        console.log("JiraTaskSelector: Fetching issues", {
+        logger.log("JiraTaskSelector: Fetching issues", {
           apiUrl,
           projectKey: selectedProjectKey,
           jql: `project=${selectedProjectKey}`,
@@ -185,7 +186,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
 
         if (!mounted) return;
 
-        console.log("JiraTaskSelector: API Response", {
+        logger.log("JiraTaskSelector: API Response", {
           ok: response.ok,
           status: response.status,
           dataKeys: Object.keys(data),
@@ -195,7 +196,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
 
         if (!response.ok) {
           const errorMessage = data.error || "Issue'lar yüklenemedi";
-          console.error("JiraTaskSelector: API Error", {
+          logger.error("JiraTaskSelector: API Error", {
             status: response.status,
             error: errorMessage,
             data,
@@ -279,7 +280,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
           }
         }
 
-        console.log("JiraTaskSelector: Processed issues", {
+        logger.log("JiraTaskSelector: Processed issues", {
           originalCount: data.issues?.length || 0,
           processedCount: issuesArray.length,
         });
@@ -319,7 +320,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
     (task: JiraTask) => {
       // Task validasyonu
       if (!task || !task.key || !task.summary || !task.url) {
-        console.error("Geçersiz task seçildi:", task);
+        logger.error("Geçersiz task seçildi:", task);
         return;
       }
       
