@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
 import { resolveEnvValue } from "@/lib/appEnvironment";
+import { formatErrorMessage } from "@/lib/utils/errorHandler";
 import type { JiraApiErrorResponse } from "@/interfaces/Jira.interface";
 
 /**
@@ -141,8 +142,9 @@ export async function GET(request: Request) {
         // JSON parse başarısız
       }
 
+      const errorMessage = errorJson?.errorMessages?.[0] || errorJson?.error || errorJson?.message || "Jira API hatası oluştu. Lütfen tekrar deneyin.";
       return NextResponse.json(
-        errorJson || { error: errorText || `Jira API error: ${response.status}` },
+        { error: formatErrorMessage(errorMessage) },
         { status: response.status }
       );
     }

@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
 import { jiraConfig } from "@/lib/jiraConfig";
 import { resolveEnvValue } from "@/lib/appEnvironment";
+import { formatErrorMessage } from "@/lib/utils/errorHandler";
 import type {
   JiraAccessibleResource,
   JiraApiErrorResponse,
@@ -569,29 +570,15 @@ async function handleJiraRequestWithJiraToken(
     if (response.status === 404) {
       return NextResponse.json(
         {
-          error: `Jira instance bulunamadı: ${
-            jiraBaseUrl || "cloudId: " + (cloudId || "not found")
-          }`,
-          details:
-            errorDetails ||
-            "Jira URL'i yanlış olabilir veya Jira instance'ı geçici olarak kullanılamıyor.",
-          suggestion: cloudId
-            ? `CloudId bulundu ama API erişimi başarısız. Kullandığımız URL: ${apiUrl}\n\nOAuth 2.0 (3LO) için doğru format kullanılıyor.`
-            : `CloudId bulunamadı. Kullandığımız URL: ${apiUrl}\n\nDoğru Jira URL'inizi manuel olarak girin (örn: pointf.atlassian.net)`,
-          apiUrl: apiUrl,
-          jiraBaseUrl: jiraBaseUrl,
-          cloudId: cloudId || "not found",
+          error: "Jira instance bulunamadı. Jira URL'inizi kontrol edin veya Jira instance'ı geçici olarak kullanılamıyor olabilir.",
         },
         { status: 404 }
       );
     }
+    
+    const errorMessage = errorJson?.errorMessages?.[0] || errorJson?.error || errorJson?.message || "Jira API hatası oluştu. Lütfen tekrar deneyin.";
     return NextResponse.json(
-      errorJson || {
-        error:
-          errorText ||
-          `Jira API error: ${response.status} ${response.statusText}`,
-        rawResponse: errorText,
-      },
+      { error: formatErrorMessage(errorMessage) },
       { status: response.status }
     );
   }
