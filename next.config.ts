@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Security: Disable source maps in production to prevent exposing source code
+  productionBrowserSourceMaps: false,
+  
   images: {
     remotePatterns: [
       {
