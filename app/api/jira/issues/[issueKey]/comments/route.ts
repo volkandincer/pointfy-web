@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
 import { jiraConfig } from "@/lib/jiraConfig";
+import { formatErrorMessage } from "@/lib/utils/errorHandler";
 import type { JiraApiErrorResponse, JiraComment, JiraAdfDocument, JiraAdfNode } from "@/interfaces/Jira.interface";
 import { resolveEnvValue } from "@/lib/appEnvironment";
 
@@ -220,7 +221,7 @@ export async function GET(
         `Failed to fetch comments: ${response.status} ${response.statusText}`;
 
       return NextResponse.json(
-        { error: errorMessage },
+        { error: formatErrorMessage(errorMessage) },
         { status: response.status }
       );
     }
@@ -269,7 +270,7 @@ export async function GET(
     return NextResponse.json({ comments });
   } catch (error) {
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Internal server error" },
+      { error: "Jira API hatası oluştu. Lütfen tekrar deneyin." },
       { status: 500 }
     );
   }
@@ -516,7 +517,7 @@ export async function POST(
         `Failed to add comment: ${response.status} ${response.statusText}`;
 
       return NextResponse.json(
-        { error: errorMessage },
+        { error: formatErrorMessage(errorMessage) },
         { status: response.status }
       );
     }
@@ -553,7 +554,7 @@ export async function POST(
     return NextResponse.json({ comment });
   } catch (error) {
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Internal server error" },
+      { error: "Jira API hatası oluştu. Lütfen tekrar deneyin." },
       { status: 500 }
     );
   }

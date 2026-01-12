@@ -93,7 +93,7 @@ export async function POST(request: Request) {
   } catch (error) {
     // Jira set story points API error
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Internal server error" },
+      { error: "Jira API hatası oluştu. Lütfen tekrar deneyin." },
       { status: 500 }
     );
   }

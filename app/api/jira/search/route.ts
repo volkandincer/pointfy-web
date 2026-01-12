@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
 import { jiraConfig } from "@/lib/jiraConfig";
+import { formatErrorMessage } from "@/lib/utils/errorHandler";
 import type {
   JiraAccessibleResource,
   JiraAdfDocument,
@@ -413,8 +414,9 @@ export async function POST(request: Request) {
         // JSON parse başarısız
       }
 
+      const errorMessage = errorJson?.errorMessages?.[0] || errorJson?.error || errorJson?.message || "Jira API hatası oluştu. Lütfen tekrar deneyin.";
       return NextResponse.json(
-        errorJson || { error: errorText || `Jira API error: ${response.status}` },
+        { error: formatErrorMessage(errorMessage) },
         { status: response.status }
       );
     }
@@ -515,7 +517,7 @@ export async function POST(request: Request) {
   } catch (error) {
     // Jira search API error
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Internal server error" },
+      { error: "Jira API hatası oluştu. Lütfen tekrar deneyin." },
       { status: 500 }
     );
   }

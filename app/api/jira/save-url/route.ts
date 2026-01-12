@@ -35,24 +35,24 @@ export async function POST(request: Request) {
       message: "Jira URL saved successfully",
     });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "Internal server error";
+    const errorMessage = error instanceof Error ? error.message : "";
     
     if (errorMessage.includes("User not found")) {
       return NextResponse.json(
-        { error: "User not found" },
+        { error: "Kullanıcı bulunamadı." },
         { status: 404 }
       );
     }
 
     if (errorMessage.includes("Failed to update")) {
       return NextResponse.json(
-        { error: `Failed to save Jira URL: ${errorMessage}` },
+        { error: "Jira URL kaydedilemedi. Lütfen tekrar deneyin." },
         { status: 500 }
       );
     }
 
     return NextResponse.json(
-      { error: errorMessage },
+      { error: "Jira URL kaydedilirken hata oluştu. Lütfen tekrar deneyin." },
       { status: 500 }
     );
   }

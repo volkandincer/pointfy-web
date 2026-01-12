@@ -281,7 +281,7 @@ export async function GET(
     return NextResponse.json({ users: formattedUsers });
   } catch (error) {
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Internal server error" },
+      { error: "Jira API hatası oluştu. Lütfen tekrar deneyin." },
       { status: 500 }
     );
   }

@@ -212,13 +212,7 @@ export async function GET(
     if (!apiUrl) {
       return NextResponse.json(
         { 
-          error: "Jira base URL not configured",
-          details: {
-            queryJiraBaseUrl: queryJiraBaseUrl || null,
-            userRowJiraBaseUrl: userRow.jira_base_url || null,
-            fallbackJiraBaseUrl: fallbackJiraBaseUrl || null,
-            cloudId: cloudId || null,
-          }
+          error: "Jira bağlantı bilgileri yapılandırılmamış. Lütfen Jira ayarlarınızı kontrol edin.",
         },
         { status: 400 }
       );

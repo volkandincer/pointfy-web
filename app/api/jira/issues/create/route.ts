@@ -238,7 +238,7 @@ export async function POST(request: Request) {
         errorData = JSON.parse(errorText) as JiraApiErrorResponse;
       } catch { /* empty */ }
       const errorMessage = errorData?.errorMessages?.[0] || errorData?.error || errorData?.message || `Failed to create issue: ${response.status} ${response.statusText}`;
-      return NextResponse.json({ error: formatErrorMessage(errorMessage), details: errorText }, { status: response.status });
+      return NextResponse.json({ error: formatErrorMessage(errorMessage) }, { status: response.status });
     }
 
     const newIssue = await response.json();

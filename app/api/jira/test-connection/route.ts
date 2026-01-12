@@ -316,7 +316,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error("Jira connection test error:", error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Internal server error" },
+      { error: "Jira bağlantı testi sırasında hata oluştu. Lütfen tekrar deneyin." },
       { status: 500 }
     );
   }

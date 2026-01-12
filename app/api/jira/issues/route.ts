@@ -129,7 +129,7 @@ export async function GET(request: Request) {
   } catch (error) {
     // Jira issues API error
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Internal server error" },
+      { error: "Jira API hatası oluştu. Lütfen tekrar deneyin." },
       { status: 500 }
     );
   }
@@ -587,14 +587,7 @@ async function handleJiraIssuesRequestWithJiraToken(
     if (response.status === 404) {
       return NextResponse.json(
         { 
-          error: `Jira instance bulunamadı: ${jiraBaseUrl || "cloudId: " + (cloudId || "not found")}`,
-          details: errorDetails || "Jira URL'i yanlış olabilir veya Jira instance'ı geçici olarak kullanılamıyor.",
-          suggestion: cloudId 
-            ? `CloudId bulundu ama API erişimi başarısız. Kullandığımız URL: ${apiUrl}\n\nOAuth 2.0 (3LO) için doğru format kullanılıyor.`
-            : `CloudId bulunamadı. Kullandığımız URL: ${apiUrl}\n\nDoğru Jira URL'inizi manuel olarak girin (örn: pointf.atlassian.net)`,
-          apiUrl: apiUrl,
-          jiraBaseUrl: jiraBaseUrl,
-          cloudId: cloudId || "not found",
+          error: "Jira instance bulunamadı. Jira URL'inizi kontrol edin veya Jira instance'ı geçici olarak kullanılamıyor olabilir.",
         },
         { status: 404 }
       );
@@ -602,18 +595,14 @@ async function handleJiraIssuesRequestWithJiraToken(
     if (response.status === 410) {
       return NextResponse.json(
         { 
-          error: "Jira API error: 410 Gone",
-          details: errorDetails,
-          apiUrl: apiUrl,
-          endpoint: searchEndpoint,
-          cloudId: cloudId || "not found",
+          error: "Jira API hatası: İstenen kaynak artık mevcut değil.",
         },
         { status: 410 }
       );
     }
     
     return NextResponse.json(
-      { error: `Jira API error: ${response.status} ${response.statusText}`, details: errorDetails, apiUrl: apiUrl, cloudId: cloudId || "not found" },
+      { error: "Jira API hatası oluştu. Lütfen tekrar deneyin." },
       { status: response.status }
     );
   }
