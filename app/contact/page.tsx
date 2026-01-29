@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { Mail, CheckCircle2, AlertCircle } from "lucide-react";
+import { Formik, Form, Field, FieldProps } from "formik";
+import * as Yup from "yup";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import PageHeader from "@/components/layout/PageHeader";
@@ -14,46 +15,33 @@ import type {
 } from "@/interfaces/Contact.interface";
 import { getDefaultNavigationItems } from "@/lib/utils";
 
+// Validation schema matching domain entity rules
+const validationSchema = Yup.object().shape({
+  name: Yup.string()
+    .trim()
+    .min(2, "Ad en az 2 karakter olmalıdır")
+    .max(100, "Ad en fazla 100 karakter olabilir")
+    .required("Ad Soyad gereklidir"),
+  email: Yup.string()
+    .email("Geçerli bir e-posta adresi giriniz")
+    .required("E-posta gereklidir"),
+  message: Yup.string()
+    .trim()
+    .min(10, "Mesaj en az 10 karakter olmalıdır")
+    .max(2000, "Mesaj en fazla 2000 karakter olabilir")
+    .required("Mesaj gereklidir"),
+  website: Yup.string(), // Honeypot field
+});
+
+const initialValues: ContactFormData = {
+  name: "",
+  email: "",
+  message: "",
+  website: "",
+};
 
 export default function ContactPage() {
   const navigationItems: NavigationItem[] = getDefaultNavigationItems();
-  const [form, setForm] = useState<ContactFormData>({
-    name: "",
-    email: "",
-    message: "",
-  });
-  const [loading, setLoading] = useState<boolean>(false);
-  const [result, setResult] = useState<{
-    type: "success" | "error";
-    message: string;
-  } | null>(null);
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setLoading(true);
-    setResult(null);
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      const data: ContactApiResponse = await res.json();
-      if (data.success) {
-        setResult({
-          type: "success",
-          message: "Mesajınız alındı. Teşekkürler!",
-        });
-        setForm({ name: "", email: "", message: "" });
-      } else {
-        setResult({ type: "error", message: data.error || "Bir hata oluştu." });
-      }
-    } catch {
-      setResult({ type: "error", message: "Sunucuya ulaşılamıyor." });
-    } finally {
-      setLoading(false);
-    }
-  }
 
   return (
     <>
@@ -70,88 +58,143 @@ export default function ContactPage() {
 
           {/* Form Card */}
           <div className="rounded-md border-2 border-gray-300 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:p-8">
-            <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-              <input
-                type="text"
-                name="website"
-                autoComplete="off"
-                className="hidden"
-                tabIndex={-1}
-                aria-hidden="true"
-              />
-              
-              <Input
-                id="name"
-                type="text"
-                label="Ad Soyad"
-                required
-                value={form.name}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, name: e.target.value }))
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={async (values, { setSubmitting, resetForm, setStatus }) => {
+                setSubmitting(true);
+                setStatus(null);
+                try {
+                  const res = await fetch("/api/contact", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      name: values.name.trim(),
+                      email: values.email.trim(),
+                      message: values.message.trim(),
+                      website: values.website || "",
+                    }),
+                  });
+                  const data: ContactApiResponse = await res.json();
+                  if (data.success) {
+                    setStatus({
+                      type: "success",
+                      message: "Mesajınız alındı. Teşekkürler!",
+                    });
+                    resetForm();
+                  } else {
+                    setStatus({
+                      type: "error",
+                      message: data.error || "Bir hata oluştu.",
+                    });
+                  }
+                } catch {
+                  setStatus({
+                    type: "error",
+                    message: "Sunucuya ulaşılamıyor.",
+                  });
+                } finally {
+                  setSubmitting(false);
                 }
-                placeholder="Adınız ve soyadınız"
-                size="md"
-              />
+              }}
+            >
+              {({ isSubmitting, status, setStatus }) => (
+                <Form className="space-y-5" noValidate>
+                  {/* Honeypot field */}
+                  <Field name="website">
+                    {({ field }: FieldProps) => (
+                      <input
+                        {...field}
+                        type="text"
+                        autoComplete="off"
+                        className="hidden"
+                        tabIndex={-1}
+                        aria-hidden="true"
+                      />
+                    )}
+                  </Field>
 
-              <Input
-                id="email"
-                type="email"
-                label="E-posta"
-                required
-                value={form.email}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, email: e.target.value }))
-                }
-                placeholder="ornek@email.com"
-                size="md"
-              />
+                  <Field name="name">
+                    {({ field, meta }: FieldProps) => (
+                      <Input
+                        {...field}
+                        id="name"
+                        type="text"
+                        label="Ad Soyad"
+                        required
+                        placeholder="Adınız ve soyadınız"
+                        size="md"
+                        error={meta.touched && meta.error ? meta.error : undefined}
+                      />
+                    )}
+                  </Field>
 
-              <Textarea
-                id="message"
-                label="Mesaj"
-                required
-                rows={6}
-                value={form.message}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, message: e.target.value }))
-                }
-                placeholder="Mesajınızı buraya yazın..."
-                size="md"
-              />
+                  <Field name="email">
+                    {({ field, meta }: FieldProps) => (
+                      <Input
+                        {...field}
+                        id="email"
+                        type="email"
+                        label="E-posta"
+                        required
+                        placeholder="ornek@email.com"
+                        size="md"
+                        error={meta.touched && meta.error ? meta.error : undefined}
+                      />
+                    )}
+                  </Field>
 
-              {/* Result Message */}
-              {result && (
-                <div
-                  className={`flex items-center gap-2 rounded-md border-2 p-3 ${
-                    result.type === "success"
-                      ? "border-green-300 bg-green-50 text-green-700 dark:border-green-700 dark:bg-green-900/20 dark:text-green-400"
-                      : "border-red-300 bg-red-50 text-red-700 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400"
-                  }`}
-                >
-                  {result.type === "success" ? (
-                    <CheckCircle2 className="h-5 w-5 shrink-0" />
-                  ) : (
-                    <AlertCircle className="h-5 w-5 shrink-0" />
+                  <Field name="message">
+                    {({ field, meta }: FieldProps) => (
+                      <Textarea
+                        {...field}
+                        id="message"
+                        label="Mesaj"
+                        required
+                        rows={6}
+                        placeholder="Mesajınızı buraya yazın..."
+                        size="md"
+                        error={meta.touched && meta.error ? meta.error : undefined}
+                      />
+                    )}
+                  </Field>
+
+                  {/* Result Message */}
+                  {status && (
+                    <div
+                      className={`flex items-center gap-2 rounded-md border-2 p-3 ${
+                        status.type === "success"
+                          ? "border-green-300 bg-green-50 text-green-700 dark:border-green-700 dark:bg-green-900/20 dark:text-green-400"
+                          : "border-red-300 bg-red-50 text-red-700 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400"
+                      }`}
+                    >
+                      {status.type === "success" ? (
+                        <CheckCircle2 className="h-5 w-5 shrink-0" />
+                      ) : (
+                        <AlertCircle className="h-5 w-5 shrink-0" />
+                      )}
+                      <span className="text-sm font-medium">{status.message}</span>
+                    </div>
                   )}
-                  <span className="text-sm font-medium">{result.message}</span>
-                </div>
-              )}
 
-              {/* Submit Button */}
-              <div className="pt-2">
-                <Button
-                  type="submit"
-                  variant="primary"
-                  size="lg"
-                  fullWidth
-                  loading={loading}
-                  icon={Mail}
-                  iconPosition="left"
-                >
-                  {loading ? "Gönderiliyor..." : "Gönder"}
-                </Button>
-              </div>
-            </form>
+                  {/* Submit Button */}
+                  <div className="pt-2">
+                    <Button
+                      type="submit"
+                      variant="primary"
+                      size="lg"
+                      fullWidth
+                      loading={isSubmitting}
+                      icon={Mail}
+                      iconPosition="left"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Gönderiliyor..." : "Gönder"}
+                    </Button>
+                  </div>
+                </Form>
+              )}
+            </Formik>
           </div>
         </div>
       </main>

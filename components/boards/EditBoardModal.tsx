@@ -2,6 +2,9 @@
 
 import { memo, startTransition, useCallback, useEffect, useState } from "react";
 import { ClipboardList, FileText, CheckSquare, Target, Lightbulb, Rocket, Star, Flame, Pin, Folder, Check, Loader2 } from "lucide-react";
+import { Formik, Form, Field, FieldProps } from "formik";
+import * as Yup from "yup";
+import Input, { Textarea } from "@/components/ui/Input";
 import Modal from "@/components/ui/Modal";
 import type { Board, BoardInput } from "@/interfaces/Board.interface";
 
@@ -37,6 +40,17 @@ const BOARD_ICONS = [
   { icon: Folder, label: "Folder" },
 ];
 
+const validationSchema = Yup.object().shape({
+  name: Yup.string()
+    .trim()
+    .min(1, "Board adı gereklidir")
+    .max(50, "Board adı en fazla 50 karakter olabilir")
+    .required("Board adı gereklidir"),
+  description: Yup.string()
+    .trim()
+    .max(200, "Açıklama en fazla 200 karakter olabilir"),
+});
+
 const EditBoardModal = memo(function EditBoardModal({
   open,
   onClose,
@@ -44,8 +58,6 @@ const EditBoardModal = memo(function EditBoardModal({
   board,
   loading = false,
 }: EditBoardModalProps) {
-  const [name, setName] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
   const [color, setColor] = useState<string>(BOARD_COLORS[0].value);
   const [icon, setIcon] = useState<typeof BOARD_ICONS[0]>(BOARD_ICONS[0]);
 
@@ -55,83 +67,71 @@ const EditBoardModal = memo(function EditBoardModal({
     }
 
     startTransition(() => {
-      setName(board.name);
-      setDescription(board.description || "");
       setColor(board.color || BOARD_COLORS[0].value);
       const iconMatch = BOARD_ICONS.find(ic => ic.label.toLowerCase() === board.icon?.toLowerCase()) || BOARD_ICONS[0];
       setIcon(iconMatch);
     });
   }, [board]);
 
-  const handleSubmit = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      if (!name.trim() || !board) return;
-
-      await onSubmit(board.id, {
-        name: name.trim(),
-        description: description.trim() || undefined,
-        color,
-        icon: icon.label.toLowerCase(),
-      });
-    },
-    [name, description, color, icon, board, onSubmit]
-  );
-
   const handleClose = useCallback(() => {
     if (loading) return;
     onClose();
   }, [loading, onClose]);
 
-  const isFormValid = name.trim().length >= 1 && board !== null;
+  if (!board) return null;
 
   return (
     <Modal open={open} title="Board Düzenle" onClose={handleClose}>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label
-            htmlFor="edit-board-name"
-            className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
-          >
-            Board Adı
-          </label>
-          <input
-            id="edit-board-name"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Örn: İş Projeleri"
-            maxLength={50}
-            required
-            disabled={loading}
-            className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:border-blue-500"
-          />
-          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-            {name.length}/50
-          </p>
-        </div>
+      <Formik
+        initialValues={{ 
+          name: board.name || "", 
+          description: board.description || "" 
+        }}
+        validationSchema={validationSchema}
+        enableReinitialize
+        onSubmit={async (values) => {
+          await onSubmit(board.id, {
+            name: values.name.trim(),
+            description: values.description.trim() || undefined,
+            color,
+            icon: icon.label.toLowerCase(),
+          });
+        }}
+      >
+        {({ isSubmitting }) => (
+          <Form className="space-y-6">
+            <Field name="name">
+              {({ field, meta }: FieldProps) => (
+                <Input
+                  {...field}
+                  id="edit-board-name"
+                  type="text"
+                  label="Board Adı"
+                  placeholder="Örn: İş Projeleri"
+                  maxLength={50}
+                  required
+                  disabled={loading || isSubmitting}
+                  error={meta.touched && meta.error ? meta.error : undefined}
+                  showCharCount
+                />
+              )}
+            </Field>
 
-        <div>
-          <label
-            htmlFor="edit-board-desc"
-            className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
-          >
-            Açıklama (Opsiyonel)
-          </label>
-          <textarea
-            id="edit-board-desc"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Board hakkında kısa bir açıklama..."
-            rows={2}
-            maxLength={200}
-            disabled={loading}
-            className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:border-blue-500"
-          />
-          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-            {description.length}/200
-          </p>
-        </div>
+            <Field name="description">
+              {({ field, meta }: FieldProps) => (
+                <Textarea
+                  {...field}
+                  id="edit-board-desc"
+                  label="Açıklama (Opsiyonel)"
+                  placeholder="Board hakkında kısa bir açıklama..."
+                  rows={2}
+                  maxLength={200}
+                  disabled={loading || isSubmitting}
+                  error={meta.touched && meta.error ? meta.error : undefined}
+                  showCharCount
+                />
+              )}
+            </Field>
 
         <div>
           <label className="mb-3 block text-sm font-semibold text-gray-700 dark:text-gray-300">
@@ -202,22 +202,24 @@ const EditBoardModal = memo(function EditBoardModal({
           >
             İptal
           </button>
-          <button
-            type="submit"
-            disabled={!isFormValid || loading}
-            className="flex-1 border-2 border-blue-600 bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700 disabled:opacity-60 dark:border-blue-500 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700"
-          >
-            {loading ? (
-              <span className="inline-flex items-center gap-2">
-                <Loader2 className="h-4 w-4 animate-spin" />
-                Kaydediliyor...
-              </span>
-            ) : (
-              "Kaydet"
-            )}
-          </button>
-        </div>
-      </form>
+            <button
+              type="submit"
+              disabled={loading || isSubmitting}
+              className="flex-1 border-2 border-blue-600 bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-700 hover:border-blue-700 disabled:opacity-60 dark:border-blue-500 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700"
+            >
+              {loading || isSubmitting ? (
+                <span className="inline-flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Kaydediliyor...
+                </span>
+              ) : (
+                "Kaydet"
+              )}
+            </button>
+          </div>
+        </Form>
+        )}
+      </Formik>
     </Modal>
   );
 });

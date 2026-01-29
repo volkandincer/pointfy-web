@@ -2,6 +2,9 @@
 
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { Link2, Loader2, AlertCircle } from "lucide-react";
+import { Formik, Form, Field, FieldProps } from "formik";
+import * as Yup from "yup";
+import Input, { Textarea } from "@/components/ui/Input";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
 import { getSupabase } from "@/lib/supabase";
@@ -33,12 +36,21 @@ const CreateJiraIssueModal = memo(function CreateJiraIssueModal({
   const [selectedProjectKey, setSelectedProjectKey] = useState<string>("");
   const [issueTypes, setIssueTypes] = useState<IssueType[]>([]);
   const [selectedIssueTypeId, setSelectedIssueTypeId] = useState<string>("");
-  const [summary, setSummary] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
   const [loadingProjects, setLoadingProjects] = useState<boolean>(false);
   const [loadingIssueTypes, setLoadingIssueTypes] = useState<boolean>(false);
   const [creating, setCreating] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  const validationSchema = Yup.object().shape({
+    summary: Yup.string()
+      .trim()
+      .min(1, "Başlık gereklidir")
+      .max(255, "Başlık en fazla 255 karakter olabilir")
+      .required("Başlık gereklidir"),
+    description: Yup.string()
+      .trim()
+      .max(5000, "Açıklama en fazla 5000 karakter olabilir"),
+  });
 
   // Jira base URL'i al
   useEffect(() => {
@@ -183,32 +195,18 @@ const CreateJiraIssueModal = memo(function CreateJiraIssueModal({
     };
   }, [open, selectedProjectKey, jiraBaseUrl]);
 
-  // Personal task bilgilerini form'a doldur (varsa)
-  useEffect(() => {
-    if (open && personalTask) {
-      setSummary(personalTask.title);
-      setDescription(personalTask.description || "");
-    } else if (open && !personalTask) {
-      // Personal task yoksa form'u temizle
-      setSummary("");
-      setDescription("");
-    }
-  }, [open, personalTask]);
-
   // Modal kapandığında state'i temizle
   useEffect(() => {
     if (!open) {
       setSelectedProjectKey("");
       setSelectedIssueTypeId("");
-      setSummary("");
-      setDescription("");
       setError(null);
     }
   }, [open]);
 
-  const handleCreate = useCallback(async () => {
-    if (!selectedProjectKey || !selectedIssueTypeId || !summary.trim()) {
-      setError("Lütfen tüm gerekli alanları doldurun");
+  const handleCreate = useCallback(async (values: { summary: string; description: string }) => {
+    if (!selectedProjectKey || !selectedIssueTypeId) {
+      setError("Lütfen proje ve issue tipi seçin");
       return;
     }
 
@@ -235,8 +233,8 @@ const CreateJiraIssueModal = memo(function CreateJiraIssueModal({
         body: JSON.stringify({
           projectKey: selectedProjectKey,
           issueTypeId: selectedIssueTypeId,
-          summary: summary.trim(),
-          description: description.trim() || undefined,
+          summary: values.summary.trim(),
+          description: values.description.trim() || undefined,
           jiraBaseUrl,
         }),
       });
@@ -254,9 +252,7 @@ const CreateJiraIssueModal = memo(function CreateJiraIssueModal({
     } finally {
       setCreating(false);
     }
-  }, [selectedProjectKey, selectedIssueTypeId, summary, description, jiraBaseUrl, onSuccess, onClose]);
-
-  const isFormValid = selectedProjectKey && selectedIssueTypeId && summary.trim().length > 0;
+  }, [selectedProjectKey, selectedIssueTypeId, jiraBaseUrl, onSuccess, onClose]);
 
   return (
     <Modal
@@ -336,63 +332,81 @@ const CreateJiraIssueModal = memo(function CreateJiraIssueModal({
           </div>
         )}
 
-        {/* Summary */}
-        <div>
-          <label className="mb-1.5 block text-sm font-semibold text-gray-900 dark:text-white">
-            Başlık <span className="text-red-600 dark:text-red-400">*</span>
-          </label>
-          <input
-            type="text"
-            value={summary}
-            onChange={(e) => setSummary(e.target.value)}
-            placeholder="Issue başlığı..."
-            maxLength={255}
-            className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 outline-none transition focus:border-purple-600 focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500"
-          />
-          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-            {summary.length}/255
-          </p>
-        </div>
+        <Formik
+          initialValues={{
+            summary: personalTask?.title || "",
+            description: personalTask?.description || "",
+          }}
+          validationSchema={validationSchema}
+          enableReinitialize
+          onSubmit={handleCreate}
+        >
+          {({ isSubmitting, values }) => (
+            <Form className="space-y-3 sm:space-y-4">
+              {/* Summary */}
+              <Field name="summary">
+                {({ field, meta }: FieldProps) => (
+                  <div>
+                    <Input
+                      {...field}
+                      id="jira-summary"
+                      type="text"
+                      label="Başlık"
+                      placeholder="Issue başlığı..."
+                      maxLength={255}
+                      required
+                      disabled={creating || isSubmitting}
+                      error={meta.touched && meta.error ? meta.error : undefined}
+                      showCharCount
+                    />
+                  </div>
+                )}
+              </Field>
 
-        {/* Description */}
-        <div>
-          <label className="mb-1.5 block text-sm font-semibold text-gray-900 dark:text-white">
-            Açıklama <span className="text-xs font-normal text-gray-500 dark:text-gray-400">(İsteğe Bağlı)</span>
-          </label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Issue açıklaması..."
-            rows={4}
-            maxLength={5000}
-            className="w-full rounded-md border-2 border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 placeholder-gray-500 outline-none transition focus:border-purple-600 focus:ring-2 focus:ring-purple-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500"
-          />
-          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-            {description.length}/5000
-          </p>
-        </div>
+              {/* Description */}
+              <Field name="description">
+                {({ field, meta }: FieldProps) => (
+                  <div>
+                    <Textarea
+                      {...field}
+                      id="jira-description"
+                      label="Açıklama (İsteğe Bağlı)"
+                      placeholder="Issue açıklaması..."
+                      rows={4}
+                      maxLength={5000}
+                      disabled={creating || isSubmitting}
+                      error={meta.touched && meta.error ? meta.error : undefined}
+                      showCharCount
+                    />
+                  </div>
+                )}
+              </Field>
 
-        {/* Action Buttons */}
-        <div className="flex items-center justify-end gap-2 border-t-2 border-gray-200 pt-3 dark:border-gray-800 sm:gap-3">
-          <Button
-            variant="secondary"
-            size="md"
-            onClick={onClose}
-            disabled={creating}
-          >
-            İptal
-          </Button>
-          <Button
-            variant="primary"
-            size="md"
-            disabled={!isFormValid || creating}
-            onClick={handleCreate}
-            loading={creating}
-            className="!border-purple-600 !bg-purple-600 hover:!border-purple-700 hover:!bg-purple-700 dark:!border-purple-500 dark:!bg-purple-600 dark:hover:!border-purple-400 dark:hover:!bg-purple-500"
-          >
-            {creating ? "Oluşturuluyor..." : "Jira&apos;da Aç"}
-          </Button>
-        </div>
+              {/* Action Buttons */}
+              <div className="flex items-center justify-end gap-2 border-t-2 border-gray-200 pt-3 dark:border-gray-800 sm:gap-3">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="md"
+                  onClick={onClose}
+                  disabled={creating || isSubmitting}
+                >
+                  İptal
+                </Button>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="md"
+                  disabled={!selectedProjectKey || !selectedIssueTypeId || creating || isSubmitting}
+                  loading={creating || isSubmitting}
+                  className="!border-purple-600 !bg-purple-600 hover:!border-purple-700 hover:!bg-purple-700 dark:!border-purple-500 dark:!bg-purple-600 dark:hover:!border-purple-400 dark:hover:!bg-purple-500"
+                >
+                  {creating || isSubmitting ? "Oluşturuluyor..." : "Jira&apos;da Aç"}
+                </Button>
+              </div>
+            </Form>
+          )}
+        </Formik>
       </div>
     </Modal>
   );

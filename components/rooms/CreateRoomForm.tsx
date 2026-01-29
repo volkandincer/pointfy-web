@@ -2,6 +2,8 @@
 
 import { memo, useState } from "react";
 import { Zap, RotateCcw, Settings, ChevronDown, ChevronUp, Lock, Eye, Sparkles, Plus, Minus } from "lucide-react";
+import { Formik, Form, Field, FieldProps } from "formik";
+import * as Yup from "yup";
 import Button from "@/components/ui/Button";
 import Input, { Textarea } from "@/components/ui/Input";
 import Switch from "@/components/ui/Switch";
@@ -34,13 +36,32 @@ const ROOM_TYPES: { key: RoomType; label: string; icon: typeof Zap; color: "blue
   },
 ];
 
+const validationSchema = Yup.object().shape({
+  name: Yup.string()
+    .trim()
+    .min(3, "Oda adı en az 3 karakter olmalıdır")
+    .max(50, "Oda adı en fazla 50 karakter olabilir")
+    .required("Oda adı gereklidir"),
+  description: Yup.string()
+    .trim()
+    .max(200, "Açıklama en fazla 200 karakter olabilir"),
+  roomPassword: Yup.string()
+    .when("isPrivate", {
+      is: true,
+      then: (schema) => schema
+        .trim()
+        .length(4, "4 karakterli şifre gerekli")
+        .matches(/^[a-zA-Z0-9]+$/, "Sadece harf ve rakam kullanılabilir")
+        .required("Özel oda için şifre gereklidir"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+});
+
 const CreateRoomForm = memo(function CreateRoomForm({
   onSubmit,
   loading = false,
   initialRoomType,
 }: CreateRoomFormProps) {
-  const [name, setName] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
   const [roomType, setRoomType] = useState<RoomType>(
     initialRoomType || "poker"
   );
@@ -53,26 +74,39 @@ const CreateRoomForm = memo(function CreateRoomForm({
   });
   const [showAdvancedSettings, setShowAdvancedSettings] = useState<boolean>(false);
 
-  const isFormValid =
-    name.trim().length >= 3 &&
-    (!settings.isPrivate || settings.roomPassword.trim().length === 4);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!isFormValid) return;
-    await onSubmit({
-      name: name.trim(),
-      description: description.trim() || undefined,
-      roomType,
-      settings,
-    });
-  };
-
-  const nameError = name.trim().length > 0 && name.trim().length < 3;
-  const passwordError = settings.isPrivate && settings.roomPassword.length > 0 && settings.roomPassword.length !== 4;
-
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <Formik
+      initialValues={{
+        name: "",
+        description: "",
+        isPrivate: false,
+        roomPassword: "",
+      }}
+      validationSchema={validationSchema}
+      onSubmit={async (values) => {
+        await onSubmit({
+          name: values.name.trim(),
+          description: values.description.trim() || undefined,
+          roomType,
+          settings: {
+            ...settings,
+            isPrivate: values.isPrivate,
+            roomPassword: values.roomPassword,
+          },
+        });
+      }}
+    >
+      {({ values, setFieldValue, isSubmitting }) => {
+        // Sync isPrivate and roomPassword with settings state
+        if (values.isPrivate !== settings.isPrivate) {
+          setFieldValue("isPrivate", settings.isPrivate);
+        }
+        if (values.roomPassword !== settings.roomPassword) {
+          setFieldValue("roomPassword", settings.roomPassword);
+        }
+
+        return (
+          <Form className="space-y-6">
       {/* Room Type Selection */}
       <div className="space-y-3">
         <label className="text-sm font-semibold text-foreground">
@@ -124,33 +158,42 @@ const CreateRoomForm = memo(function CreateRoomForm({
         </div>
       </div>
 
-      {/* Basic Information */}
-      <div className="space-y-5">
-        <Input
-          id="room-name"
-          label="Oda Adı"
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Örn: Sprint Planning, Q1 Review"
-          maxLength={50}
-          required
-          error={nameError ? "Oda adı en az 3 karakter olmalıdır" : undefined}
-          helperText={!nameError ? "Minimum 3 karakter gerekli" : undefined}
-          showCharCount
-        />
+            {/* Basic Information */}
+            <div className="space-y-5">
+              <Field name="name">
+                {({ field, meta }: FieldProps) => (
+                  <Input
+                    {...field}
+                    id="room-name"
+                    label="Oda Adı"
+                    type="text"
+                    placeholder="Örn: Sprint Planning, Q1 Review"
+                    maxLength={50}
+                    required
+                    disabled={loading || isSubmitting}
+                    error={meta.touched && meta.error ? meta.error : undefined}
+                    helperText={!meta.error ? "Minimum 3 karakter gerekli" : undefined}
+                    showCharCount
+                  />
+                )}
+              </Field>
 
-        <Textarea
-          id="room-desc"
-          label="Açıklama"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Bu oda için kısa bir açıklama ekleyin..."
-          rows={3}
-          maxLength={200}
-          showCharCount
-        />
-      </div>
+              <Field name="description">
+                {({ field, meta }: FieldProps) => (
+                  <Textarea
+                    {...field}
+                    id="room-desc"
+                    label="Açıklama"
+                    placeholder="Bu oda için kısa bir açıklama ekleyin..."
+                    rows={3}
+                    maxLength={200}
+                    disabled={loading || isSubmitting}
+                    error={meta.touched && meta.error ? meta.error : undefined}
+                    showCharCount
+                  />
+                )}
+              </Field>
+            </div>
 
       {/* Advanced Settings */}
       <div className="space-y-4">
@@ -226,45 +269,57 @@ const CreateRoomForm = memo(function CreateRoomForm({
                   description="Odaya şifre ile erişim sağlayın"
                   icon={<Lock className="h-4 w-4" />}
                   checked={settings.isPrivate}
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    const isPrivate = e.target.checked;
                     setSettings((prev) => ({
                       ...prev,
-                      isPrivate: e.target.checked,
-                      roomPassword: e.target.checked ? prev.roomPassword : "",
-                    }))
-                  }
+                      isPrivate,
+                      roomPassword: isPrivate ? prev.roomPassword : "",
+                    }));
+                    setFieldValue("isPrivate", isPrivate);
+                    if (!isPrivate) {
+                      setFieldValue("roomPassword", "");
+                    }
+                  }}
                   variant="compact"
                   className="!border-0 !bg-transparent !p-0"
                 />
               </div>
 
               {settings.isPrivate && (
-                <div className="rounded-md border border-border bg-card p-4 shadow-sm">
-                  <Input
-                    id="room-password"
-                    label="Oda Şifresi"
-                    type="password"
-                    value={settings.roomPassword}
-                    onChange={(e) => {
-                      const val = e.target.value.replace(/[^a-zA-Z0-9]/g, "");
-                      if (val.length <= 4)
-                        setSettings((prev) => ({ ...prev, roomPassword: val }));
-                    }}
-                    maxLength={4}
-                    placeholder="1234"
-                    required
-                    showPasswordToggle
-                    error={passwordError ? "4 karakterli şifre gerekli" : undefined}
-                    helperText={
-                      settings.roomPassword.length === 4
-                        ? undefined
-                        : !passwordError
-                          ? "4 karakter (harf veya rakam)"
-                          : undefined
-                    }
-                    className="text-center text-base font-semibold tracking-widest"
-                  />
-                </div>
+                <Field name="roomPassword">
+                  {({ field, meta }: FieldProps) => (
+                    <div className="rounded-md border border-border bg-card p-4 shadow-sm">
+                      <Input
+                        {...field}
+                        id="room-password"
+                        label="Oda Şifresi"
+                        type="password"
+                        onChange={(e) => {
+                          const val = e.target.value.replace(/[^a-zA-Z0-9]/g, "");
+                          if (val.length <= 4) {
+                            setSettings((prev) => ({ ...prev, roomPassword: val }));
+                            setFieldValue("roomPassword", val);
+                          }
+                        }}
+                        maxLength={4}
+                        placeholder="1234"
+                        required
+                        showPasswordToggle
+                        disabled={loading || isSubmitting}
+                        error={meta.touched && meta.error ? meta.error : undefined}
+                        helperText={
+                          field.value.length === 4
+                            ? undefined
+                            : !meta.error
+                              ? "4 karakter (harf veya rakam)"
+                              : undefined
+                        }
+                        className="text-center text-base font-semibold tracking-widest"
+                      />
+                    </div>
+                  )}
+                </Field>
               )}
 
               <div className="rounded-md border border-border bg-card p-4 shadow-sm">
@@ -307,26 +362,23 @@ const CreateRoomForm = memo(function CreateRoomForm({
         )}
       </div>
 
-      {/* Submit Button */}
-      <div className="space-y-2 border-t border-border pt-6">
-        <Button
-          type="submit"
-          variant="primary"
-          size="lg"
-          fullWidth
-          loading={loading}
-          disabled={!isFormValid}
-        >
-          {loading ? "Oluşturuluyor..." : "Oda Oluştur"}
-        </Button>
-        {!isFormValid && (
-          <p className="text-center text-xs text-muted-foreground">
-            {name.trim().length < 3 && "Oda adı en az 3 karakter olmalıdır"}
-            {name.trim().length >= 3 && settings.isPrivate && settings.roomPassword.length !== 4 && "Özel oda için 4 karakterli şifre gerekli"}
-          </p>
-        )}
-      </div>
-    </form>
+            {/* Submit Button */}
+            <div className="space-y-2 border-t border-border pt-6">
+              <Button
+                type="submit"
+                variant="primary"
+                size="lg"
+                fullWidth
+                loading={loading || isSubmitting}
+                disabled={loading || isSubmitting}
+              >
+                {loading || isSubmitting ? "Oluşturuluyor..." : "Oda Oluştur"}
+              </Button>
+            </div>
+          </Form>
+        );
+      }}
+    </Formik>
   );
 });
 

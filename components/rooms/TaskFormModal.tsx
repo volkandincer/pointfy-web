@@ -2,6 +2,10 @@
 
 import { memo, useState, useCallback, useEffect } from "react";
 import { Link2, Star, Edit, ClipboardList } from "lucide-react";
+import { Formik, Form, Field, FieldProps } from "formik";
+import * as Yup from "yup";
+import Input, { Textarea } from "@/components/ui/Input";
+import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
 import { getSupabase } from "@/lib/supabase";
 import JiraTaskSelector from "@/components/jira/JiraTaskSelector";
@@ -27,8 +31,6 @@ const TaskFormModal = memo(function TaskFormModal({
   onSubmit,
   loading = false,
 }: TaskFormModalProps) {
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
   const [mode, setMode] = useState<"create" | "select" | "jira">("create");
   const [personalTasks, setPersonalTasks] = useState<PersonalTask[]>([]);
   const [loadingTasks, setLoadingTasks] = useState<boolean>(false);
@@ -38,6 +40,17 @@ const TaskFormModal = memo(function TaskFormModal({
   const [jiraKey, setJiraKey] = useState<string | undefined>(undefined);
   const [jiraUrl, setJiraUrl] = useState<string | undefined>(undefined);
   const [jiraId, setJiraId] = useState<string | undefined>(undefined);
+
+  const validationSchema = Yup.object().shape({
+    title: Yup.string()
+      .trim()
+      .min(1, "Başlık gereklidir")
+      .max(200, "Başlık en fazla 200 karakter olabilir")
+      .required("Başlık gereklidir"),
+    description: Yup.string()
+      .trim()
+      .max(500, "Açıklama en fazla 500 karakter olabilir"),
+  });
 
   // Jira bağlantı durumunu kontrol et
   useEffect(() => {
@@ -124,8 +137,6 @@ const TaskFormModal = memo(function TaskFormModal({
   // Modal kapandığında state'i temizle
   useEffect(() => {
     if (!open) {
-      setTitle("");
-      setDescription("");
       setMode("create");
       setSelectedTaskId(null);
       setJiraKey(undefined);
@@ -137,42 +148,16 @@ const TaskFormModal = memo(function TaskFormModal({
   // Task seçildiğinde formu doldur
   const handleTaskSelect = useCallback((task: PersonalTask) => {
     setSelectedTaskId(task.id);
-    setTitle(task.title);
-    setDescription(task.description || "");
     setMode("create"); // Seçim yapıldıktan sonra create moduna geç
   }, []);
 
   // Jira task seçildiğinde formu doldur
   const handleJiraTaskSelect = useCallback((task: JiraTask) => {
-    setTitle(task.summary);
-    setDescription(task.description || "");
     setJiraKey(task.key);
     setJiraUrl(task.url);
     setJiraId(task.id);
     setMode("create"); // Seçim yapıldıktan sonra create moduna geç
   }, []);
-
-  const handleSubmit = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      if (!title.trim()) return;
-      await onSubmit(
-        title.trim(),
-        description.trim() || undefined,
-        jiraKey,
-        jiraUrl,
-        jiraId
-      );
-      setTitle("");
-      setDescription("");
-      setSelectedTaskId(null);
-      setJiraKey(undefined);
-      setJiraUrl(undefined);
-      setJiraId(undefined);
-      onClose();
-    },
-    [description, jiraId, jiraKey, jiraUrl, onClose, onSubmit, title]
-  );
 
   const isCreateMode = mode === "create";
   const isSelectMode = mode === "select";
@@ -224,64 +209,97 @@ const TaskFormModal = memo(function TaskFormModal({
             )}
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label
-                htmlFor="task-title"
-                className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                Başlık
-                {jiraKey && (
-                  <span className="ml-2 font-mono text-xs text-blue-600 dark:text-blue-400">
-                    ({jiraKey})
-                  </span>
-                )}
-              </label>
-              <input
-                id="task-title"
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Task başlığı"
-                maxLength={200}
-                required
-                className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="task-desc"
-                className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                Açıklama (opsiyonel)
-              </label>
-              <textarea
-                id="task-desc"
-                rows={3}
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Task açıklaması"
-                maxLength={500}
-                className="w-full rounded-md border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-              />
-            </div>
-            <div className="flex items-center justify-end gap-3 pt-4">
-              <button
-                type="button"
-                onClick={onClose}
-                className="inline-flex h-10 items-center justify-center rounded-md border-2 border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
-              >
-                İptal
-              </button>
-              <button
-                type="submit"
-                disabled={loading || !title.trim()}
-                className="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-5 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:opacity-60"
-              >
-                {loading ? "Ekleniyor..." : "Ekle"}
-              </button>
-            </div>
-          </form>
+          <Formik
+            initialValues={{
+              title: selectedTaskId
+                ? personalTasks.find((t) => t.id === selectedTaskId)?.title || ""
+                : "",
+              description: selectedTaskId
+                ? personalTasks.find((t) => t.id === selectedTaskId)?.description || ""
+                : "",
+            }}
+            validationSchema={validationSchema}
+            enableReinitialize
+            onSubmit={async (values, { resetForm }) => {
+              await onSubmit(
+                values.title.trim(),
+                values.description.trim() || undefined,
+                jiraKey,
+                jiraUrl,
+                jiraId
+              );
+              resetForm();
+              setSelectedTaskId(null);
+              setJiraKey(undefined);
+              setJiraUrl(undefined);
+              setJiraId(undefined);
+              onClose();
+            }}
+          >
+            {({ isSubmitting }) => (
+              <Form className="space-y-4">
+                <Field name="title">
+                  {({ field, meta }: FieldProps) => (
+                    <Input
+                      {...field}
+                      id="task-title"
+                      type="text"
+                      label={
+                        <>
+                          Başlık
+                          {jiraKey && (
+                            <span className="ml-2 font-mono text-xs text-blue-600 dark:text-blue-400">
+                              ({jiraKey})
+                            </span>
+                          )}
+                        </>
+                      }
+                      placeholder="Task başlığı"
+                      maxLength={200}
+                      required
+                      disabled={loading || isSubmitting}
+                      error={meta.touched && meta.error ? meta.error : undefined}
+                    />
+                  )}
+                </Field>
+                <Field name="description">
+                  {({ field, meta }: FieldProps) => (
+                    <Textarea
+                      {...field}
+                      id="task-desc"
+                      label="Açıklama (opsiyonel)"
+                      rows={3}
+                      placeholder="Task açıklaması"
+                      maxLength={500}
+                      disabled={loading || isSubmitting}
+                      error={meta.touched && meta.error ? meta.error : undefined}
+                    />
+                  )}
+                </Field>
+                <div className="flex items-center justify-end gap-3 pt-4">
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    size="md"
+                    onClick={onClose}
+                    disabled={loading || isSubmitting}
+                  >
+                    İptal
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    size="md"
+                    disabled={loading || isSubmitting}
+                    loading={loading || isSubmitting}
+                    className="bg-indigo-600 hover:bg-indigo-700"
+                  >
+                    {loading || isSubmitting ? "Ekleniyor..." : "Ekle"}
+                  </Button>
+                </div>
+              </Form>
+            )}
+          </Formik>
         </>
       ) : isSelectMode ? (
         <>
