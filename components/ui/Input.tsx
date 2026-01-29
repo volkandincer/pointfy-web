@@ -2,10 +2,10 @@
 
 import { memo, forwardRef, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import type { InputHTMLAttributes, TextareaHTMLAttributes } from "react";
+import type { InputHTMLAttributes, TextareaHTMLAttributes, ReactNode } from "react";
 
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
-  label?: string;
+  label?: ReactNode;
   error?: string;
   helperText?: string;
   showPasswordToggle?: boolean;
@@ -16,7 +16,7 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 }
 
 export interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "size"> {
-  label?: string;
+  label?: ReactNode;
   error?: string;
   helperText?: string;
   showCharCount?: boolean;
