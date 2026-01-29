@@ -100,7 +100,7 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
           className="group flex items-center gap-2 transition-opacity hover:opacity-80"
         >
           <span className="bg-gradient-to-r from-primary via-primary to-primary/80 bg-clip-text text-sm font-bold tracking-tight text-transparent transition-all group-hover:from-primary group-hover:via-primary/90 group-hover:to-primary/70 md:text-base">
-            TeamHubX
+            Pointfy
           </span>
           <span className="relative rounded-full border border-yellow-500/60 bg-gradient-to-br from-yellow-50 to-yellow-100/80 px-2 py-0.5 text-[10px] font-bold leading-none tracking-wider text-yellow-700 shadow-sm backdrop-blur-sm transition-all group-hover:border-yellow-500/80 group-hover:shadow-md dark:border-yellow-500/40 dark:from-yellow-900/20 dark:to-yellow-900/10 dark:text-yellow-400 dark:group-hover:border-yellow-500/60">
             BETA

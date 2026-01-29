@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Özellikler | TeamHubX",
+  title: "Özellikler | Pointfy",
   description:
-    "TeamHubX özellikleri: takım odaları, poker planning, retrospektif, görev yönetimi ve gerçek zamanlı işbirliği.",
+    "Pointfy özellikleri: takım odaları, poker planning, retrospektif, görev yönetimi ve gerçek zamanlı işbirliği.",
 };
 
 export default function FeaturesLayout({

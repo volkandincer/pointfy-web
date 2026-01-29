@@ -227,7 +227,7 @@
 
 #### 3. **Integration Features**
 
-- TeamHubX room'lara issue link
+- Pointfy room'lara issue link
 - Story points sync
 - Status sync
 - Notification integration

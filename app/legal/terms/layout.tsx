@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Kullanım Şartları | TeamHubX",
-  description: "TeamHubX kullanım şartları: hizmet koşulları ve sorumluluklar.",
+  title: "Kullanım Şartları | Pointfy",
+  description: "Pointfy kullanım şartları: hizmet koşulları ve sorumluluklar.",
   alternates: { canonical: "/legal/terms" },
 };
 

@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import type { OnboardingStep, OnboardingOption } from "@/interfaces/Onboarding.interface";
 
-const ONBOARDING_COOKIE_NAME = "teamhubx_onboarding_completed";
+const ONBOARDING_COOKIE_NAME = "pointfy_onboarding_completed";
 
 export function useOnboarding(userId: string | null) {
   const router = useRouter();
@@ -55,9 +55,9 @@ export function useOnboarding(userId: string | null) {
   const steps: OnboardingStep[] = [
     {
       id: "welcome",
-      title: "TeamHubX'e Hoş Geldiniz! 🎉",
+      title: "Pointfy'e Hoş Geldiniz! 🎉",
       description:
-        "TeamHubX, takım yönetimi ve planlama için tasarlanmış modern bir platformdur. Size en iyi deneyimi sunmak için kısa bir tur yapalım.",
+        "Pointfy, takım yönetimi ve planlama için tasarlanmış modern bir platformdur. Size en iyi deneyimi sunmak için kısa bir tur yapalım.",
       icon: Home,
     },
     {
@@ -92,7 +92,7 @@ export function useOnboarding(userId: string | null) {
       id: "complete",
       title: "Hazırsınız! 🚀",
       description:
-        "Artık TeamHubX'i kullanmaya başlayabilirsiniz. Aşağıdan başlamak istediğiniz özelliği seçebilirsiniz.",
+        "Artık Pointfy'i kullanmaya başlayabilirsiniz. Aşağıdan başlamak istediğiniz özelliği seçebilirsiniz.",
       icon: CheckCircle2,
       isSelectionStep: true,
       options: [

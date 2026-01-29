@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TeamHubX",
+  title: "Pointfy",
   description:
     "Poker planning, retrospektif toplantıları ve görev yönetimi ile takımınızı bir araya getirin.",
 };

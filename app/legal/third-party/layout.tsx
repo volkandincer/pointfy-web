@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Üçüncü Taraf Hizmetler | TeamHubX",
-  description: "TeamHubX tarafından kullanılan üçüncü taraf hizmetler.",
+  title: "Üçüncü Taraf Hizmetler | Pointfy",
+  description: "Pointfy tarafından kullanılan üçüncü taraf hizmetler.",
   alternates: { canonical: "/legal/third-party" },
 };
 

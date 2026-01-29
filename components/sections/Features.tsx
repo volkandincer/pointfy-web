@@ -81,7 +81,7 @@ const Features = memo(function Features({ features }: FeaturesProps) {
             Özellikler
           </h2>
           <p className="text-sm text-muted-foreground md:text-base">
-            TeamHubX ile takımınızı yönetmek hiç bu kadar kolay olmamıştı
+            Pointfy ile takımınızı yönetmek hiç bu kadar kolay olmamıştı
           </p>
         </div>
         <div className="space-y-8 md:space-y-16">

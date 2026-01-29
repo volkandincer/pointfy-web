@@ -80,7 +80,7 @@
 }
 
 .dark {
-  /* Dark Theme - Optimized for TeamHubX */
+  /* Dark Theme - Optimized for Pointfy */
   --background: oklch(0.08 0 0); /* Çok koyu siyah */
   --foreground: oklch(0.98 0 0); /* Neredeyse beyaz */
   --card: oklch(0.15 0 0); /* Koyu gri card */

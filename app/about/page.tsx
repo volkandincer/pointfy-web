@@ -17,7 +17,7 @@ export default function AboutPage() {
         <div className="mx-auto max-w-3xl">
           <PageHeader
             title="Hakkında"
-            description="TeamHubX, ekiplerin planlama, geri bildirim ve görev yönetimi süreçlerini tek bir yerde toplamasına yardımcı olan modern bir takım işbirliği platformudur."
+            description="Pointfy, ekiplerin planlama, geri bildirim ve görev yönetimi süreçlerini tek bir yerde toplamasına yardımcı olan modern bir takım işbirliği platformudur."
             icon={Info}
             iconColor="blue"
           />

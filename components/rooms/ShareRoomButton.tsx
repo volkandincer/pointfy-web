@@ -43,7 +43,7 @@ const ShareRoomButton = memo(function ShareRoomButton({
     try {
       if (typeof navigator !== "undefined" && navigator.share) {
         const shareData = {
-          title: `TeamHubX Odasına Katıl: ${roomName}`,
+          title: `Pointfy Odasına Katıl: ${roomName}`,
           text: `${roomName} odasına katılmak için linke tıklayın!\n\nOda Kodu: ${roomCode}\n\nLink: ${shareUrl}`,
           url: shareUrl,
         };

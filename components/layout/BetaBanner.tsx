@@ -12,7 +12,7 @@ const BetaBanner = memo(function BetaBanner() {
             BETA
           </span>
           <span className="text-xs text-yellow-800 dark:text-yellow-400">
-            TeamHubX şu anda beta aşamasındadır.{" "}
+            Pointfy şu anda beta aşamasındadır.{" "}
             <Link
               href="/contact"
               className="font-semibold underline underline-offset-2 transition-colors hover:text-yellow-900 dark:hover:text-yellow-300"

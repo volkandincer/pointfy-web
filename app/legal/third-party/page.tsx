@@ -16,7 +16,7 @@ export default function ThirdPartyPage() {
         <div className="mx-auto max-w-4xl">
           <PageHeader
             title="Üçüncü Taraf Hizmetler"
-            description="TeamHubX tarafından kullanılan üçüncü taraf hizmetler hakkında bilgi edinin."
+            description="Pointfy tarafından kullanılan üçüncü taraf hizmetler hakkında bilgi edinin."
             icon={Link2}
             iconColor="blue"
             className="mb-8 text-center"
@@ -29,7 +29,7 @@ export default function ThirdPartyPage() {
               <strong>Son Güncelleme:</strong> {new Date().toLocaleDateString("tr-TR", { year: "numeric", month: "long", day: "numeric" })}
             </p>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
-              TeamHubX, hizmetlerini sağlamak için aşağıdaki üçüncü taraf
+              Pointfy, hizmetlerini sağlamak için aşağıdaki üçüncü taraf
               hizmetleri kullanmaktadır. Bu hizmetler, verilerinizin işlenmesi
               ve saklanması konusunda rol oynayabilir.
             </p>
@@ -38,7 +38,7 @@ export default function ThirdPartyPage() {
               1. Veri Depolama ve Altyapı Hizmetleri
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
-              TeamHubX, veri depolama, gerçek zamanlı işbirliği özellikleri ve
+              Pointfy, veri depolama, gerçek zamanlı işbirliği özellikleri ve
               kimlik doğrulama için güvenli bulut altyapı hizmetleri
               kullanmaktadır. Bu hizmetler:
             </p>
@@ -101,7 +101,7 @@ export default function ThirdPartyPage() {
               5. Veri Paylaşımı ve Aktarımı
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
-              TeamHubX, yukarıda belirtilen hizmetler dışında verilerinizi üçüncü
+              Pointfy, yukarıda belirtilen hizmetler dışında verilerinizi üçüncü
               taraflarla paylaşmaz. Tüm veri işlemleri, bu hizmetlerin gizlilik
               politikalarına ve veri koruma yasalarına uygun olarak
               gerçekleştirilir.

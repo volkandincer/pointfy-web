@@ -29,7 +29,7 @@ export default function CookiesPage() {
               <strong>Son Güncelleme:</strong> {new Date().toLocaleDateString("tr-TR", { year: "numeric", month: "long", day: "numeric" })}
             </p>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
-              TeamHubX web sitesi, hizmetlerimizi iyileştirmek ve size daha iyi
+              Pointfy web sitesi, hizmetlerimizi iyileştirmek ve size daha iyi
               bir deneyim sunmak için çerezler kullanmaktadır. Bu politika,
               hangi çerezleri kullandığımızı ve bunları nasıl yönetebileceğinizi
               açıklamaktadır.
@@ -49,7 +49,7 @@ export default function CookiesPage() {
               2. Kullandığımız Çerez Türleri
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
-              TeamHubX, aşağıdaki türde çerezler kullanmaktadır:
+              Pointfy, aşağıdaki türde çerezler kullanmaktadır:
             </p>
 
             <h3 className="mt-6 text-xl font-semibold text-gray-900 dark:text-white">

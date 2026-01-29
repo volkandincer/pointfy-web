@@ -1,6 +1,6 @@
-# TeamHubX Web
+# Pointfy Web
 
-TeamHubX web sitesi - Takım işbirliği platformu için landing page ve yasal sayfalar.
+Pointfy web sitesi - Takım işbirliği platformu için landing page ve yasal sayfalar.
 
 ## 🚀 Özellikler
 
@@ -15,7 +15,7 @@ TeamHubX web sitesi - Takım işbirliği platformu için landing page ve yasal s
 ## 📁 Proje Yapısı
 
 ```
-teamhubx-web/
+pointfy-web/
 ├── app/                    # Next.js App Router
 │   ├── legal/             # Yasal sayfalar
 │   ├── layout.tsx         # Root layout
