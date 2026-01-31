@@ -13,6 +13,7 @@ import {
   Shield,
   FileText as FileTextIcon,
   Cookie,
+  ChevronRight,
 } from "lucide-react";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 
@@ -35,14 +36,12 @@ const Footer = memo(function Footer({ navigationItems }: FooterProps) {
   };
 
   return (
-    <footer className="border-t border-border bg-background">
-      <div className="container mx-auto px-4 py-8 md:py-12">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-3 lg:grid-cols-4">
+    <footer className="border-t border-slate-800/50 bg-slate-900/30 backdrop-blur-sm mt-20">
+      <div className="container mx-auto px-4 py-12 max-w-7xl">
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           {/* Ana Sayfalar */}
           <div>
-            <h4 className="mb-4 text-sm font-semibold text-foreground">
-              Sayfalar
-            </h4>
+            <h3 className="font-semibold text-white mb-4">Sayfalar</h3>
             <ul className="space-y-2.5">
               {navigationItems
                 .filter(
@@ -59,11 +58,11 @@ const Footer = memo(function Footer({ navigationItems }: FooterProps) {
                     <li key={item.href}>
                       <Link
                         href={item.href}
-                        className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                        className="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-1 group"
                         target={item.external ? "_blank" : undefined}
                         rel={item.external ? "noopener noreferrer" : undefined}
                       >
-                        {Icon && <Icon className="h-3.5 w-3.5 shrink-0" />}
+                        {Icon && <Icon className="h-3.5 w-3.5 shrink-0 opacity-0 group-hover:opacity-100 -ml-4 group-hover:ml-0 transition-all" />}
                         <span>{item.label}</span>
                       </Link>
                     </li>
@@ -74,43 +73,41 @@ const Footer = memo(function Footer({ navigationItems }: FooterProps) {
 
           {/* Uygulama */}
           <div>
-            <h4 className="mb-4 text-sm font-semibold text-foreground">
-              Uygulama
-            </h4>
+            <h3 className="font-semibold text-white mb-4">Uygulamalar</h3>
             <ul className="space-y-2.5">
               <li>
                 <Link
                   href="/app/jira"
-                  className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-1 group"
                 >
-                  <Zap className="h-3.5 w-3.5 shrink-0" />
+                  <Zap className="h-3.5 w-3.5 shrink-0 opacity-0 group-hover:opacity-100 -ml-4 group-hover:ml-0 transition-all" />
                   <span>Jira</span>
                 </Link>
               </li>
               <li>
                 <Link
                   href="/app/boards"
-                  className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-1 group"
                 >
-                  <ClipboardList className="h-3.5 w-3.5 shrink-0" />
+                  <ClipboardList className="h-3.5 w-3.5 shrink-0 opacity-0 group-hover:opacity-100 -ml-4 group-hover:ml-0 transition-all" />
                   <span>Board&apos;lar</span>
                 </Link>
               </li>
               <li>
                 <Link
                   href="/app/tasks"
-                  className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-1 group"
                 >
-                  <CheckSquare className="h-3.5 w-3.5 shrink-0" />
+                  <CheckSquare className="h-3.5 w-3.5 shrink-0 opacity-0 group-hover:opacity-100 -ml-4 group-hover:ml-0 transition-all" />
                   <span>Task&apos;lar</span>
                 </Link>
               </li>
               <li>
                 <Link
                   href="/app/notes"
-                  className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-1 group"
                 >
-                  <FileText className="h-3.5 w-3.5 shrink-0" />
+                  <FileText className="h-3.5 w-3.5 shrink-0 opacity-0 group-hover:opacity-100 -ml-4 group-hover:ml-0 transition-all" />
                   <span>Notlar</span>
                 </Link>
               </li>
@@ -119,44 +116,42 @@ const Footer = memo(function Footer({ navigationItems }: FooterProps) {
 
           {/* Yasal */}
           <div>
-            <h4 className="mb-4 text-sm font-semibold text-foreground">
-              Yasal
-            </h4>
+            <h3 className="font-semibold text-white mb-4">Yasal</h3>
             <ul className="space-y-2.5">
               <li>
                 <Link
                   href="/legal/privacy"
-                  className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-1 group"
                 >
-                  <Shield className="h-3.5 w-3.5 shrink-0" />
+                  <Shield className="h-3.5 w-3.5 shrink-0 opacity-0 group-hover:opacity-100 -ml-4 group-hover:ml-0 transition-all" />
                   <span>Gizlilik Politikası</span>
                 </Link>
               </li>
               <li>
                 <Link
                   href="/legal/terms"
-                  className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-1 group"
                 >
-                  <FileTextIcon className="h-3.5 w-3.5 shrink-0" />
+                  <FileTextIcon className="h-3.5 w-3.5 shrink-0 opacity-0 group-hover:opacity-100 -ml-4 group-hover:ml-0 transition-all" />
                   <span>Kullanım Şartları</span>
                 </Link>
               </li>
               <li>
                 <Link
                   href="/legal/cookies"
-                  className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-1 group"
                 >
-                  <Cookie className="h-3.5 w-3.5 shrink-0" />
+                  <Cookie className="h-3.5 w-3.5 shrink-0 opacity-0 group-hover:opacity-100 -ml-4 group-hover:ml-0 transition-all" />
                   <span>Çerez Politikası</span>
                 </Link>
               </li>
               <li>
                 <Link
                   href="/legal/third-party"
-                  className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-1 group"
                 >
-                  <Shield className="h-3.5 w-3.5 shrink-0" />
-                  <span>Üçüncü Taraf Hizmetler</span>
+                  <Shield className="h-3.5 w-3.5 shrink-0 opacity-0 group-hover:opacity-100 -ml-4 group-hover:ml-0 transition-all" />
+                  <span>Üçüncü Taraf Ayrıntıları</span>
                 </Link>
               </li>
             </ul>
@@ -164,25 +159,23 @@ const Footer = memo(function Footer({ navigationItems }: FooterProps) {
 
           {/* Bilgi */}
           <div>
-            <h4 className="mb-4 text-sm font-semibold text-foreground">
-              Bilgi
-            </h4>
+            <h3 className="font-semibold text-white mb-4">Bilgi</h3>
             <ul className="space-y-2.5">
               <li>
                 <Link
                   href="/about"
-                  className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-1 group"
                 >
-                  <Info className="h-3.5 w-3.5 shrink-0" />
-                  <span>Hakkında</span>
+                  <Info className="h-3.5 w-3.5 shrink-0 opacity-0 group-hover:opacity-100 -ml-4 group-hover:ml-0 transition-all" />
+                  <span>Hakkımızda</span>
                 </Link>
               </li>
               <li>
                 <Link
                   href="/contact"
-                  className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-1 group"
                 >
-                  <Mail className="h-3.5 w-3.5 shrink-0" />
+                  <Mail className="h-3.5 w-3.5 shrink-0 opacity-0 group-hover:opacity-100 -ml-4 group-hover:ml-0 transition-all" />
                   <span>İletişim</span>
                 </Link>
               </li>
@@ -191,12 +184,8 @@ const Footer = memo(function Footer({ navigationItems }: FooterProps) {
         </div>
 
         {/* Copyright */}
-        <div className="mt-8 border-t border-border pt-6">
-          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-            <p className="text-sm text-muted-foreground">
-              © {currentYear} Tüm hakları saklıdır.
-            </p>
-          </div>
+        <div className="mt-12 pt-8 border-t border-slate-800/50 text-center text-sm text-slate-500">
+          <p>© {currentYear} Tüm hakları saklıdır.</p>
         </div>
       </div>
     </footer>

@@ -206,116 +206,115 @@ const HomeWelcome = memo(function HomeWelcome() {
         />
       )}
 
-      <section className="container mx-auto px-4 pt-8 pb-4">
-        <div className="mx-auto max-w-6xl">
-          <div className="relative">
-            {/* Arama Input */}
-            <div className="relative">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onFocus={() => {
-                  if (rooms.length > 0) setShowResults(true);
+      <section className="container mx-auto px-4 pt-8 max-w-7xl">
+        <div className="mb-2">
+          <div className="relative max-w-2xl mx-auto">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => {
+                if (rooms.length > 0) setShowResults(true);
+              }}
+              placeholder="Oda ara (ad, konu veya oluşturan)..."
+              className="w-full bg-slate-800/50 border border-slate-700/50 rounded-xl py-3.5 pl-12 pr-10 text-sm text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => {
+                  setSearchQuery("");
+                  setShowResults(false);
                 }}
-                placeholder="Oda ara (ad, kod veya oluşturan)..."
-                className="w-full rounded-md border border-gray-300 bg-white px-4 py-2.5 pl-10 pr-10 text-base outline-none transition focus:border-blue-600 focus:ring-1 focus:ring-blue-600/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
-              />
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-              {searchQuery && (
-                <button
-                  onClick={() => {
-                    setSearchQuery("");
-                    setShowResults(false);
-                  }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              )}
-            </div>
-
-            {/* Arama Sonuçları */}
-            {showResults && searchQuery && (
-              <div className="absolute z-50 mt-2 w-full rounded-md border-2 border-gray-300 bg-white shadow-md dark:border-gray-700 dark:bg-gray-900">
-                {loading ? (
-                  <div className="p-4 text-center">
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Aranıyor...
-                    </p>
-                  </div>
-                ) : rooms.length === 0 ? (
-                  <div className="p-6 text-center">
-                    <Search className="mx-auto mb-2 h-8 w-8 text-gray-400 dark:text-gray-500" />
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">
-                      Sonuç bulunamadı
-                    </p>
-                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                      &quot;{searchQuery}&quot; için oda bulunamadı
-                    </p>
-                  </div>
-                ) : (
-                  <div className="max-h-[400px] overflow-y-auto p-2">
-                    {rooms.map((room) => {
-                      const isRetro = room.room_type === "retro";
-                      const borderColor = isRetro
-                        ? "border-l-purple-600 dark:border-l-purple-500"
-                        : "border-l-blue-600 dark:border-l-blue-500";
-                      const iconBorderColor = isRetro
-                        ? "border-purple-600 dark:border-purple-500"
-                        : "border-blue-600 dark:border-blue-500";
-                      const iconBgColor = isRetro
-                        ? "bg-purple-50 dark:bg-purple-900/20"
-                        : "bg-blue-50 dark:bg-blue-900/20";
-                      const iconTextColor = isRetro
-                        ? "text-purple-600 dark:text-purple-400"
-                        : "text-blue-600 dark:text-blue-400";
-                      const arrowBorderColor = isRetro
-                        ? "border-purple-600 bg-purple-600 group-hover:bg-purple-700 group-hover:border-purple-700"
-                        : "border-blue-600 bg-blue-600 group-hover:bg-blue-700 group-hover:border-blue-700";
-
-                      return (
-                        <button
-                          key={room.id}
-                          onClick={() => handleRoomClick(room.id)}
-                          className={`group w-full border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-gray-300 bg-white p-3 text-left shadow-sm transition-all active:border-gray-400 active:shadow-md sm:p-4 hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900`}
-                        >
-                          <div className="flex items-center gap-4">
-                            <div
-                              className={`flex h-12 w-12 shrink-0 items-center justify-center border-2 ${iconBorderColor} ${iconBgColor}`}
-                            >
-                              <Home className={`h-6 w-6 ${iconTextColor}`} />
-                            </div>
-                            <div className="min-w-0 flex-1">
-                              <h3 className="mb-1 truncate text-base font-semibold text-gray-900 dark:text-white">
-                                {room.name || "Oda"}
-                              </h3>
-                              <div className="flex items-center gap-2">
-                                <span className="rounded-md border-2 border-gray-300 bg-white px-2 py-0.5 text-xs font-semibold text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
-                                  {room.code}
-                                </span>
-                                {room.created_by_username && (
-                                  <span className="text-xs font-semibold text-green-600 dark:text-green-400">
-                                    {room.created_by_username}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                            <div
-                              className={`flex h-7 w-7 shrink-0 items-center justify-center border-2 ${arrowBorderColor} text-white shadow-sm transition`}
-                            >
-                              <ChevronRight className="h-4 w-4" />
-                            </div>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition-colors hover:text-slate-300"
+              >
+                <X className="h-4 w-4" />
+              </button>
             )}
           </div>
         </div>
+
+        {/* Arama Sonuçları */}
+        {showResults && searchQuery && (
+          <div className="relative max-w-2xl mx-auto">
+            <div className="absolute z-50 mt-2 w-full rounded-md border-2 border-slate-700 bg-slate-800 shadow-lg">
+              {loading ? (
+                <div className="p-4 text-center">
+                  <p className="text-sm text-slate-400">
+                    Aranıyor...
+                  </p>
+                </div>
+              ) : rooms.length === 0 ? (
+                <div className="p-6 text-center">
+                  <Search className="mx-auto mb-2 h-8 w-8 text-slate-500" />
+                  <p className="text-sm font-medium text-white">
+                    Sonuç bulunamadı
+                  </p>
+                  <p className="mt-1 text-xs text-slate-400">
+                    &quot;{searchQuery}&quot; için oda bulunamadı
+                  </p>
+                </div>
+              ) : (
+                <div className="max-h-[400px] overflow-y-auto p-2">
+                  {rooms.map((room) => {
+                    const isRetro = room.room_type === "retro";
+                    const borderColor = isRetro
+                      ? "border-l-purple-500"
+                      : "border-l-blue-500";
+                    const iconBorderColor = isRetro
+                      ? "border-purple-500"
+                      : "border-blue-500";
+                    const iconBgColor = isRetro
+                      ? "bg-purple-900/20"
+                      : "bg-blue-900/20";
+                    const iconTextColor = isRetro
+                      ? "text-purple-400"
+                      : "text-blue-400";
+                    const arrowBorderColor = isRetro
+                      ? "border-purple-600 bg-purple-600 group-hover:bg-purple-700 group-hover:border-purple-700"
+                      : "border-blue-600 bg-blue-600 group-hover:bg-blue-700 group-hover:border-blue-700";
+
+                    return (
+                      <button
+                        key={room.id}
+                        onClick={() => handleRoomClick(room.id)}
+                        className={`group w-full border-l-4 ${borderColor} border-t-2 border-r-2 border-b-2 border-slate-700 bg-slate-800 p-3 text-left shadow-sm transition-all active:border-slate-600 active:shadow-md sm:p-4 hover:border-slate-600 hover:shadow-md`}
+                      >
+                        <div className="flex items-center gap-4">
+                          <div
+                            className={`flex h-12 w-12 shrink-0 items-center justify-center border-2 ${iconBorderColor} ${iconBgColor}`}
+                          >
+                            <Home className={`h-6 w-6 ${iconTextColor}`} />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <h3 className="mb-1 truncate text-base font-semibold text-white">
+                              {room.name || "Oda"}
+                            </h3>
+                            <div className="flex items-center gap-2">
+                              <span className="rounded-md border-2 border-slate-700 bg-slate-900 px-2 py-0.5 text-xs font-semibold text-slate-300 shadow-sm">
+                                {room.code}
+                              </span>
+                              {room.created_by_username && (
+                                <span className="text-xs font-semibold text-green-400">
+                                  {room.created_by_username}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <div
+                            className={`flex h-7 w-7 shrink-0 items-center justify-center border-2 ${arrowBorderColor} text-white shadow-sm transition`}
+                          >
+                            <ChevronRight className="h-4 w-4" />
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </section>
 
       {/* Click outside to close results */}
