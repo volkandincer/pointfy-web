@@ -16,6 +16,7 @@ import { getStatusColorClasses } from "@/lib/jira/colors";
 import { logger } from "@/lib/logger";
 import type { JiraBoard, JiraTask } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
+import { authFetch } from "@/lib/authFetch";
 
 export default function JiraDashboardPage() {
   const [jiraBaseUrl, setJiraBaseUrl] = useState<string>("");
@@ -72,14 +73,13 @@ export default function JiraDashboardPage() {
 
       const urlParams = new URLSearchParams();
       urlParams.set("jiraBaseUrl", jiraBaseUrl);
-      urlParams.set("userId", userData.user.id);
 
       // Projects, Boards ve Issues'i paralel olarak yükle
       const [projectsResponse, issuesResponse] = await Promise.all([
-        fetch(`/api/jira/boards?${urlParams.toString()}`, {
+        authFetch(`/api/jira/boards?${urlParams.toString()}`, {
           credentials: "include",
         }),
-        fetch(`/api/jira/issues?${urlParams.toString()}`, {
+        authFetch(`/api/jira/issues?${urlParams.toString()}`, {
           credentials: "include",
         }),
       ]);

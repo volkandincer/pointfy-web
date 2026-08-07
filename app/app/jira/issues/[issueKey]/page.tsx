@@ -24,6 +24,7 @@ import {
 import { getStatusColorClasses, getPriorityColorClasses } from "@/lib/jira/colors";
 import type { JiraTask, JiraComment } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
+import { authFetch } from "@/lib/authFetch";
 import Button from "@/components/ui/Button";
 import { useToastContext } from "@/contexts/ToastContext";
 import Modal from "@/components/ui/Modal";
@@ -112,9 +113,8 @@ export default function JiraIssueDetailPage() {
 
       const urlParams = new URLSearchParams();
       urlParams.set("jiraBaseUrl", jiraBaseUrl);
-      urlParams.set("userId", userData.user.id);
 
-      const response = await fetch(
+      const response = await authFetch(
         `/api/jira/issues/${issueKey}?${urlParams.toString()}`,
         {
           credentials: "include",
@@ -162,10 +162,9 @@ export default function JiraIssueDetailPage() {
 
       const urlParams = new URLSearchParams();
       urlParams.set("jiraBaseUrl", jiraBaseUrl);
-      urlParams.set("userId", userData.user.id);
       urlParams.set("issueId", issue.id);
 
-      const response = await fetch(
+      const response = await authFetch(
         `/api/jira/get-story-points?${urlParams.toString()}`,
         {
           credentials: "include",
@@ -207,12 +206,11 @@ export default function JiraIssueDetailPage() {
 
       const urlParams = new URLSearchParams();
       urlParams.set("jiraBaseUrl", jiraBaseUrl);
-      urlParams.set("userId", userData.user.id);
       if (assigneeSearchQuery.trim()) {
         urlParams.set("query", assigneeSearchQuery.trim());
       }
 
-      const response = await fetch(
+      const response = await authFetch(
         `/api/jira/issues/${issueKey}/assignable-users?${urlParams.toString()}`,
         {
           credentials: "include",
@@ -284,9 +282,8 @@ export default function JiraIssueDetailPage() {
       }
 
       const urlParams = new URLSearchParams();
-      urlParams.set("userId", userData.user.id);
 
-      const response = await fetch(`/api/jira/set-story-points?${urlParams.toString()}`, {
+      const response = await authFetch(`/api/jira/set-story-points?${urlParams.toString()}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -334,9 +331,8 @@ export default function JiraIssueDetailPage() {
 
       const urlParams = new URLSearchParams();
       urlParams.set("jiraBaseUrl", jiraBaseUrl);
-      urlParams.set("userId", userData.user.id);
 
-      const response = await fetch(
+      const response = await authFetch(
         `/api/jira/issues/${issueKey}/assign?${urlParams.toString()}`,
         {
           method: "POST",
@@ -433,9 +429,8 @@ export default function JiraIssueDetailPage() {
 
       const urlParams = new URLSearchParams();
       urlParams.set("jiraBaseUrl", jiraBaseUrl);
-      urlParams.set("userId", userData.user.id);
 
-      const response = await fetch(
+      const response = await authFetch(
         `/api/jira/issues/${issueKey}/comments?${urlParams.toString()}`,
         {
           credentials: "include",
@@ -475,9 +470,8 @@ export default function JiraIssueDetailPage() {
 
       const urlParams = new URLSearchParams();
       urlParams.set("jiraBaseUrl", jiraBaseUrl);
-      urlParams.set("userId", userData.user.id);
 
-      const response = await fetch(
+      const response = await authFetch(
         `/api/jira/issues/${issueKey}/comments?${urlParams.toString()}`,
         {
           method: "POST",

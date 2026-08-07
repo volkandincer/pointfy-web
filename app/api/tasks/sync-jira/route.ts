@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
 import { resolveEnvValue } from "@/lib/appEnvironment";
 import { jiraConfig } from "@/lib/jiraConfig";
 import { formatErrorMessage } from "@/lib/utils/errorHandler";
+import { getUserIdFromRequest } from "@/src/infrastructure/utils/getUserIdFromRequest";
 import type { JiraApiErrorResponse, JiraTask, JiraAdfDocument, JiraAdfNode } from "@/interfaces/Jira.interface";
 
 const { clientId: jiraClientId, clientSecret: jiraClientSecret } = jiraConfig;
@@ -191,32 +191,13 @@ async function getJiraApiDetails(userId: string, jiraBaseUrlFromQuery?: string |
   return { jiraToken, apiUrl, cloudId, jiraBaseUrl };
 }
 
-async function getUserIdFromCookie(): Promise<string | undefined> {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get("sb-access-token")?.value;
-  if (accessToken) {
-    try {
-      const tokenParts = accessToken.split(".");
-      if (tokenParts.length === 3) {
-        const payload = JSON.parse(Buffer.from(tokenParts[1], "base64").toString());
-        return payload.sub;
-      }
-    } catch {
-      // JWT decode başarısız
-    }
-  }
-  return undefined;
-}
-
 /**
  * Jira tasklarını kişisel tasklara sync et
  */
 export async function POST(request: Request) {
   try {
-    const { searchParams } = new URL(request.url);
-    let userId: string | undefined = searchParams.get("userId") || undefined;
+    const userId = await getUserIdFromRequest(request);
 
-    if (!userId) userId = await getUserIdFromCookie();
     if (!userId) return NextResponse.json({ error: "Unauthorized: Please log in first" }, { status: 401 });
 
     const body = await request.json().catch(() => ({}));

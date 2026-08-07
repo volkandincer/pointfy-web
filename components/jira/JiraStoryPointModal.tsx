@@ -4,6 +4,7 @@ import { memo, useState, useEffect, useCallback } from "react";
 import { CheckCircle2, AlertCircle } from "lucide-react";
 import Modal from "@/components/ui/Modal";
 import { getSupabase } from "@/lib/supabase";
+import { authFetch } from "@/lib/authFetch";
 
 interface JiraStoryPointModalProps {
   open: boolean;
@@ -69,10 +70,9 @@ const JiraStoryPointModal = memo(function JiraStoryPointModal({
       }
 
       const urlParams = new URLSearchParams();
-      urlParams.set("userId", userData.user.id);
       urlParams.set("jiraBaseUrl", jiraBaseUrl);
 
-      const response = await fetch(`/api/jira/set-story-points?${urlParams.toString()}`, {
+      const response = await authFetch(`/api/jira/set-story-points?${urlParams.toString()}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

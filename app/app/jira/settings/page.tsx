@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Settings } from "lucide-react";
 import PageHeader from "@/components/layout/PageHeader";
 import { getSupabase } from "@/lib/supabase";
+import { authFetch, getAccessToken } from "@/lib/authFetch";
 import { useToastContext } from "@/contexts/ToastContext";
 
 interface ConnectionStatus {
@@ -97,9 +98,8 @@ export default function JiraSettingsPage() {
 
       const urlParams = new URLSearchParams();
       urlParams.set("jiraBaseUrl", baseUrl);
-      urlParams.set("userId", userData.user.id);
 
-      const response = await fetch(
+      const response = await authFetch(
         `/api/jira/test-connection?${urlParams.toString()}`,
         {
           credentials: "include",
@@ -162,7 +162,7 @@ export default function JiraSettingsPage() {
         return;
       }
 
-      const response = await fetch("/api/jira/save-url", {
+      const response = await authFetch("/api/jira/save-url", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -236,17 +236,15 @@ export default function JiraSettingsPage() {
   // Connect Jira (OAuth)
   const connectJira = useCallback(async () => {
     try {
-      const supabase = getSupabase();
-      const { data: userData } = await supabase.auth.getUser();
+      const accessToken = await getAccessToken();
 
-      if (!userData.user) {
+      if (!accessToken) {
         showToast("Lütfen giriş yapın.", "error");
         return;
       }
 
       const returnUrl = encodeURIComponent("/app/jira/settings");
-      const encodedUserId = encodeURIComponent(userData.user.id);
-      window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
+      window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&accessToken=${encodeURIComponent(accessToken)}`;
     } catch {
       showToast("Jira bağlantısı başlatılamadı.", "error");
     }

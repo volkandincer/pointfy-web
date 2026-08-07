@@ -26,6 +26,7 @@ import PersonalTaskList from "@/components/tasks/PersonalTaskList";
 import PersonalTaskModal from "@/components/tasks/PersonalTaskModal";
 import CreateJiraIssueModal from "@/components/tasks/CreateJiraIssueModal";
 import { getSupabase } from "@/lib/supabase";
+import { authFetch } from "@/lib/authFetch";
 import { useToastContext } from "@/contexts/ToastContext";
 
 export default function PersonalTasksPage() {
@@ -222,7 +223,7 @@ export default function PersonalTasksPage() {
 
     setSyncing(true);
     try {
-      const response = await fetch(`/api/tasks/sync-jira?userId=${userKey}`, {
+      const response = await authFetch("/api/tasks/sync-jira", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

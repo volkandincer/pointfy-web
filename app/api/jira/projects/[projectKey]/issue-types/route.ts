@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
 import { jiraConfig } from "@/lib/jiraConfig";
 import { resolveEnvValue } from "@/lib/appEnvironment";
 import { formatErrorMessage } from "@/lib/utils/errorHandler";
+import { getUserIdFromRequest } from "@/src/infrastructure/utils/getUserIdFromRequest";
 import type { JiraApiErrorResponse } from "@/interfaces/Jira.interface";
 
 const { clientId: jiraClientId, clientSecret: jiraClientSecret } = jiraConfig;
@@ -109,23 +109,6 @@ async function getJiraApiDetails(userId: string, jiraBaseUrlFromQuery?: string |
   return { jiraToken, apiUrl, cloudId };
 }
 
-async function getUserIdFromCookie(): Promise<string | undefined> {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get("sb-access-token")?.value;
-  if (accessToken) {
-    try {
-      const tokenParts = accessToken.split(".");
-      if (tokenParts.length === 3) {
-        const payload = JSON.parse(Buffer.from(tokenParts[1], "base64").toString());
-        return payload.sub;
-      }
-    } catch {
-      // JWT decode başarısız
-    }
-  }
-  return undefined;
-}
-
 /**
  * Proje için mevcut issue type'ları getir
  */
@@ -137,9 +120,8 @@ export async function GET(
     const { searchParams } = new URL(request.url);
     const resolvedParams = await Promise.resolve(params);
     const projectKey = resolvedParams?.projectKey;
-    let userId: string | undefined = searchParams.get("userId") || undefined;
+    const userId = await getUserIdFromRequest(request);
 
-    if (!userId) userId = await getUserIdFromCookie();
     if (!userId) return NextResponse.json({ error: "Unauthorized: Please log in first" }, { status: 401 });
     if (!projectKey) return NextResponse.json({ error: "Project key is required" }, { status: 400 });
 

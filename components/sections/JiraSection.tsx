@@ -4,6 +4,7 @@ import Link from "next/link";
 import { memo, useMemo, useState } from "react";
 import { Link2, BarChart3, Folder, ClipboardList, Search, Settings, ChevronDown } from "lucide-react";
 import Modal from "@/components/ui/Modal";
+import { getAccessToken } from "@/lib/authFetch";
 import type { JiraAction } from "@/interfaces/JiraAction.interface";
 
 interface JiraSectionProps {
@@ -302,9 +303,10 @@ const JiraSection = memo(function JiraSection({
                 if (!userId) return;
                 setShowPermissionModal(false);
                 try {
+                  const accessToken = await getAccessToken();
+                  if (!accessToken) return;
                   const returnUrl = encodeURIComponent("/");
-                  const encodedUserId = encodeURIComponent(userId);
-                  window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
+                  window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&accessToken=${encodeURIComponent(accessToken)}`;
                 } catch (err) {
                   // Jira OAuth error
                 }

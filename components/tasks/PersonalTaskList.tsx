@@ -7,6 +7,7 @@ import EmptyState from "@/components/jira/EmptyState";
 import Button from "@/components/ui/Button";
 import { getStatusColorClasses, getPriorityColorClasses } from "@/lib/jira/colors";
 import { getSupabase } from "@/lib/supabase";
+import { authFetch } from "@/lib/authFetch";
 import type { PersonalTask } from "@/interfaces/PersonalTask.interface";
 import type { JiraTask } from "@/interfaces/Jira.interface";
 
@@ -85,9 +86,8 @@ const PersonalTaskList = memo(function PersonalTaskList({
 
       const urlParams = new URLSearchParams();
       urlParams.set("jiraBaseUrl", jiraBaseUrl);
-      urlParams.set("userId", userData.user.id);
 
-      const response = await fetch(
+      const response = await authFetch(
         `/api/jira/issues/${issueKey}?${urlParams.toString()}`,
         {
           credentials: "include",

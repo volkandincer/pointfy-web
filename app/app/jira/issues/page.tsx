@@ -10,6 +10,7 @@ import Modal from "@/components/ui/Modal";
 import { getStatusColorClasses, getPriorityColorClasses } from "@/lib/jira/colors";
 import type { JiraTask } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
+import { authFetch } from "@/lib/authFetch";
 import { useToastContext } from "@/contexts/ToastContext";
 import { formatErrorMessage } from "@/lib/utils/errorHandler";
 
@@ -85,10 +86,9 @@ export default function JiraIssuesPage() {
 
       const urlParams = new URLSearchParams();
       urlParams.set("jiraBaseUrl", jiraBaseUrl);
-      urlParams.set("userId", userData.user.id);
       urlParams.set("maxResults", "100");
 
-      const response = await fetch(`/api/jira/issues?${urlParams.toString()}`, {
+      const response = await authFetch(`/api/jira/issues?${urlParams.toString()}`, {
         credentials: "include",
       });
 

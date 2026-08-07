@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
 import { jiraConfig } from "@/lib/jiraConfig";
 import { formatErrorMessage } from "@/lib/utils/errorHandler";
 import type { JiraApiErrorResponse, JiraComment, JiraAdfDocument, JiraAdfNode } from "@/interfaces/Jira.interface";
 import { resolveEnvValue } from "@/lib/appEnvironment";
+import { getUserIdFromRequest } from "@/src/infrastructure/utils/getUserIdFromRequest";
 
 const { clientId: jiraClientId, clientSecret: jiraClientSecret } = jiraConfig;
 const fallbackJiraBaseUrl = resolveEnvValue("JIRA_BASE_URL");
@@ -20,31 +20,7 @@ export async function GET(
     const { searchParams } = new URL(request.url);
     const resolvedParams = await Promise.resolve(params);
     const issueKey = resolvedParams?.issueKey;
-    let userId: string | undefined = searchParams.get("userId") || undefined;
-
-    // Cookie'den user ID al
-    if (!userId) {
-      try {
-        const cookieStore = await cookies();
-        const accessToken = cookieStore.get("sb-access-token")?.value;
-
-        if (accessToken) {
-          try {
-            const tokenParts = accessToken.split(".");
-            if (tokenParts.length === 3) {
-              const payload = JSON.parse(
-                Buffer.from(tokenParts[1], "base64").toString()
-              );
-              userId = payload.sub;
-            }
-          } catch {
-            // JWT decode başarısız
-          }
-        }
-      } catch {
-        // Auth error
-      }
-    }
+    const userId = await getUserIdFromRequest(request);
 
     if (!userId) {
       return NextResponse.json(
@@ -171,7 +147,7 @@ export async function GET(
         if (resourcesResponse.ok) {
           const resources: Array<{ id: string; url: string; name: string }> =
             await resourcesResponse.json();
-          
+
           const jiraResource = resources.find(
             (r) => r.url.includes("atlassian.net") || r.name.toLowerCase().includes("jira")
           );
@@ -287,7 +263,7 @@ export async function POST(
     const resolvedParams = await Promise.resolve(params);
     const issueKey = resolvedParams?.issueKey;
     const { searchParams } = new URL(request.url);
-    let userId: string | undefined = searchParams.get("userId") || undefined;
+    const userId = await getUserIdFromRequest(request);
     const { body } = await request.json();
 
     if (!body || typeof body !== "string" || body.trim() === "") {
@@ -295,30 +271,6 @@ export async function POST(
         { error: "Comment body is required" },
         { status: 400 }
       );
-    }
-
-    // Cookie'den user ID al
-    if (!userId) {
-      try {
-        const cookieStore = await cookies();
-        const accessToken = cookieStore.get("sb-access-token")?.value;
-
-        if (accessToken) {
-          try {
-            const tokenParts = accessToken.split(".");
-            if (tokenParts.length === 3) {
-              const payload = JSON.parse(
-                Buffer.from(tokenParts[1], "base64").toString()
-              );
-              userId = payload.sub;
-            }
-          } catch {
-            // JWT decode başarısız
-          }
-        }
-      } catch {
-        // Auth error
-      }
     }
 
     if (!userId) {
@@ -446,7 +398,7 @@ export async function POST(
         if (resourcesResponse.ok) {
           const resources: Array<{ id: string; url: string; name: string }> =
             await resourcesResponse.json();
-          
+
           const jiraResource = resources.find(
             (r) => r.url.includes("atlassian.net") || r.name.toLowerCase().includes("jira")
           );

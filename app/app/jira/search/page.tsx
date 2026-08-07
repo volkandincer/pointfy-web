@@ -10,6 +10,7 @@ import Button from "@/components/ui/Button";
 import { getStatusColorClasses, getPriorityColorClasses } from "@/lib/jira/colors";
 import type { JiraTask } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
+import { authFetch } from "@/lib/authFetch";
 import { useToastContext } from "@/contexts/ToastContext";
 
 interface SearchHistoryItem {
@@ -128,9 +129,8 @@ export default function JiraSearchPage() {
 
       const urlParams = new URLSearchParams();
       urlParams.set("jiraBaseUrl", jiraBaseUrl);
-      urlParams.set("userId", userData.user.id);
 
-      const response = await fetch(`/api/jira/search?${urlParams.toString()}`, {
+      const response = await authFetch(`/api/jira/search?${urlParams.toString()}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

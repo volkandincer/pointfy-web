@@ -3,6 +3,7 @@
 import { memo, useEffect, useState, useMemo } from "react";
 import { Link2, CheckCircle2, RefreshCw, Clock, BarChart3 } from "lucide-react";
 import { getSupabase } from "@/lib/supabase";
+import { authFetch } from "@/lib/authFetch";
 import Modal from "@/components/ui/Modal";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
@@ -169,11 +170,10 @@ const TaskCard = memo(function TaskCard({
         }
 
         const urlParams = new URLSearchParams();
-        urlParams.set("userId", userData.user.id);
         urlParams.set("issueId", task.jira_id);
         urlParams.set("jiraBaseUrl", baseUrl);
 
-        const response = await fetch(
+        const response = await authFetch(
           `/api/jira/get-story-points?${urlParams.toString()}`,
           {
             credentials: "include",
@@ -354,10 +354,9 @@ const TaskCard = memo(function TaskCard({
       }
 
       const urlParams = new URLSearchParams();
-      urlParams.set("userId", userData.user.id);
       urlParams.set("jiraBaseUrl", baseUrl);
 
-      const response = await fetch(
+      const response = await authFetch(
         `/api/jira/set-story-points?${urlParams.toString()}`,
         {
           method: "POST",

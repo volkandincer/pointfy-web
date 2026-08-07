@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
-import { resolveEnvValue } from "@/lib/appEnvironment";
 import { logger } from "@/lib/logger";
+import { getUserIdFromRequest } from "@/src/infrastructure/utils/getUserIdFromRequest";
 import type {
   JiraAccessibleResource,
   JiraApiErrorResponse,
@@ -14,56 +13,9 @@ import type {
  */
 export async function GET(request: Request) {
   try {
-    // 1. Kullanıcıyı doğrula
+    // 1. Kullanıcıyı doğrula (Supabase session token'ından, query userId'den değil)
     const { searchParams } = new URL(request.url);
-    let userId: string | undefined = searchParams.get("userId") || undefined;
-    
-    // Eğer query'den alınamadıysa, cookie'den deneyelim
-    if (!userId) {
-      try {
-        const cookieStore = await cookies();
-        const accessToken = cookieStore.get("sb-access-token")?.value;
-        
-        if (accessToken) {
-          try {
-            const tokenParts = accessToken.split(".");
-            if (tokenParts.length === 3) {
-              const payload = JSON.parse(Buffer.from(tokenParts[1], "base64").toString());
-              userId = payload.sub;
-            }
-          } catch (error) {
-            logger.warn("JWT decode başarısız:", error);
-          }
-        }
-        
-        if (!userId && accessToken) {
-          try {
-            const supabaseUrl = resolveEnvValue("NEXT_PUBLIC_SUPABASE_URL");
-            const supabaseAnonKey = resolveEnvValue(
-              "NEXT_PUBLIC_SUPABASE_ANON_KEY"
-            );
-            if (!supabaseUrl || !supabaseAnonKey) {
-              throw new Error("Supabase REST env vars missing");
-            }
-            const userResponse = await fetch(`${supabaseUrl}/auth/v1/user`, {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-                apikey: supabaseAnonKey,
-              },
-            });
-            
-            if (userResponse.ok) {
-              const userData = await userResponse.json();
-              userId = userData.id;
-            }
-          } catch (apiError) {
-            logger.error("Supabase API error:", apiError);
-          }
-        }
-      } catch (authError) {
-        logger.error("Auth error:", authError);
-      }
-    }
+    const userId = await getUserIdFromRequest(request);
 
     if (!userId) {
       return NextResponse.json(

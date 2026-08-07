@@ -23,6 +23,7 @@ import type {
   JiraTask,
 } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
+import { authFetch } from "@/lib/authFetch";
 import { logger } from "@/lib/logger";
 import {
   getStatusColorClasses,
@@ -120,10 +121,9 @@ export default function JiraProjectDetailPage() {
 
       const urlParams = new URLSearchParams();
       urlParams.set("jiraBaseUrl", jiraBaseUrl);
-      urlParams.set("userId", userData.user.id);
       urlParams.set("jql", `project=${projectKey}`);
 
-      const response = await fetch(`/api/jira/search?${urlParams.toString()}`, {
+      const response = await authFetch(`/api/jira/search?${urlParams.toString()}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -8,6 +8,7 @@ import Input, { Textarea } from "@/components/ui/Input";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
 import { getSupabase } from "@/lib/supabase";
+import { authFetch } from "@/lib/authFetch";
 import type { PersonalTask } from "@/interfaces/PersonalTask.interface";
 import type { JiraBoard } from "@/interfaces/Jira.interface";
 
@@ -102,9 +103,8 @@ const CreateJiraIssueModal = memo(function CreateJiraIssueModal({
 
         const urlParams = new URLSearchParams();
         urlParams.set("jiraBaseUrl", jiraBaseUrl);
-        urlParams.set("userId", userData.user.id);
 
-        const response = await fetch(`/api/jira/boards?${urlParams.toString()}`, {
+        const response = await authFetch(`/api/jira/boards?${urlParams.toString()}`, {
           credentials: "include",
         });
 
@@ -157,9 +157,8 @@ const CreateJiraIssueModal = memo(function CreateJiraIssueModal({
 
         const urlParams = new URLSearchParams();
         urlParams.set("jiraBaseUrl", jiraBaseUrl);
-        urlParams.set("userId", userData.user.id);
 
-        const response = await fetch(
+        const response = await authFetch(
           `/api/jira/projects/${selectedProjectKey}/issue-types?${urlParams.toString()}`,
           {
             credentials: "include",
@@ -222,9 +221,8 @@ const CreateJiraIssueModal = memo(function CreateJiraIssueModal({
       }
 
       const urlParams = new URLSearchParams();
-      urlParams.set("userId", userData.user.id);
 
-      const response = await fetch(`/api/jira/issues/create?${urlParams.toString()}`, {
+      const response = await authFetch(`/api/jira/issues/create?${urlParams.toString()}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

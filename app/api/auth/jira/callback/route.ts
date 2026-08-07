@@ -106,23 +106,10 @@ export async function GET(request: Request) {
       supabase = getSupabase();
     }
 
-    let currentUserId: string | undefined = userIdFromState;
-
-    // Eğer state'ten alınamadıysa, cookie'den al
-    if (!currentUserId) {
-      const accessToken = cookieStore.get("sb-access-token")?.value;
-      if (accessToken) {
-        try {
-          const tokenParts = accessToken.split(".");
-          if (tokenParts.length === 3) {
-            const payload = JSON.parse(Buffer.from(tokenParts[1], "base64").toString());
-            currentUserId = payload.sub;
-          }
-        } catch {
-          // JWT decode hatası
-        }
-      }
-    }
+    // Kullanıcı id'si sadece state'ten alınır (OAuth başlatma sırasında
+    // Supabase session'ından doğrulanarak encode edilmişti). Cookie'den
+    // ham bir userId decode edip güvenmek IDOR'a yol açardı.
+    const currentUserId: string | undefined = userIdFromState;
 
     if (!currentUserId) {
       throw new Error("Kullanıcı bulunamadı. Lütfen tekrar giriş yapın.");

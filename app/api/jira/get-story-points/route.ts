@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
 import { resolveEnvValue } from "@/lib/appEnvironment";
 import { jiraConfig } from "@/lib/jiraConfig";
+import { getUserIdFromRequest } from "@/src/infrastructure/utils/getUserIdFromRequest";
 import type { JiraApiErrorResponse } from "@/interfaces/Jira.interface";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -19,31 +19,7 @@ const fallbackJiraBaseUrl = resolveEnvValue("JIRA_BASE_URL");
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    let userId: string | undefined = searchParams.get("userId") || undefined;
-
-    // Cookie'den user ID al
-    if (!userId) {
-      try {
-        const cookieStore = await cookies();
-        const accessToken = cookieStore.get("sb-access-token")?.value;
-
-        if (accessToken) {
-          try {
-            const tokenParts = accessToken.split(".");
-            if (tokenParts.length === 3) {
-              const payload = JSON.parse(
-                Buffer.from(tokenParts[1], "base64").toString()
-              );
-              userId = payload.sub;
-            }
-          } catch {
-            // JWT decode başarısız
-          }
-        }
-      } catch {
-        // Auth error
-      }
-    }
+    const userId = await getUserIdFromRequest(request);
 
     if (!userId) {
       return NextResponse.json(

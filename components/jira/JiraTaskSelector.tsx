@@ -3,6 +3,7 @@
 import { memo, useCallback, useEffect, useState, useMemo } from "react";
 import { Search, ClipboardList } from "lucide-react";
 import { getSupabase } from "@/lib/supabase";
+import { authFetch } from "@/lib/authFetch";
 import { logger } from "@/lib/logger";
 import type { JiraBoard, JiraTask, JiraAdfDocument, JiraAdfNode } from "@/interfaces/Jira.interface";
 import type { JiraTaskSelectorProps } from "@/interfaces/JiraTaskSelection.interface";
@@ -80,9 +81,8 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
 
         const urlParams = new URLSearchParams();
         urlParams.set("jiraBaseUrl", jiraBaseUrl);
-        urlParams.set("userId", userData.user.id);
 
-        const response = await fetch(`/api/jira/boards?${urlParams.toString()}`, {
+        const response = await authFetch(`/api/jira/boards?${urlParams.toString()}`, {
           credentials: "include",
         });
 
@@ -160,7 +160,6 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
         // Project key ile issue'ları çek (Agile API yerine REST API v3 kullan)
         const urlParams = new URLSearchParams();
         urlParams.set("jiraBaseUrl", jiraBaseUrl);
-        urlParams.set("userId", userData.user.id);
         urlParams.set("jql", `project=${selectedProjectKey}`);
 
         const apiUrl = `/api/jira/search?${urlParams.toString()}`;
@@ -170,7 +169,7 @@ const JiraTaskSelector = memo(function JiraTaskSelector({
           jql: `project=${selectedProjectKey}`,
         });
 
-        const response = await fetch(apiUrl, {
+        const response = await authFetch(apiUrl, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

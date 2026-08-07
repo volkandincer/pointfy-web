@@ -9,6 +9,7 @@ import FilterChip from "@/components/jira/FilterChip";
 import EmptyState from "@/components/jira/EmptyState";
 import type { JiraBoard } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
+import { authFetch } from "@/lib/authFetch";
 
 export default function JiraBoardsPage() {
   const [jiraBaseUrl, setJiraBaseUrl] = useState<string>("");
@@ -69,9 +70,8 @@ export default function JiraBoardsPage() {
 
       const urlParams = new URLSearchParams();
       urlParams.set("jiraBaseUrl", jiraBaseUrl);
-      urlParams.set("userId", userData.user.id);
 
-      const response = await fetch(`/api/jira/boards?${urlParams.toString()}`, {
+      const response = await authFetch(`/api/jira/boards?${urlParams.toString()}`, {
         credentials: "include",
       });
 

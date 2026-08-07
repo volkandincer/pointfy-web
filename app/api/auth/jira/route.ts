@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { jiraConfig } from "@/lib/jiraConfig";
+import { getUserIdFromRequest } from "@/src/infrastructure/utils/getUserIdFromRequest";
 
 /**
  * Jira OAuth başlatma endpoint'i
@@ -11,7 +11,6 @@ export async function GET(request: Request) {
   const appUrl = getAppUrl(request);
   const { searchParams } = new URL(request.url);
   const returnUrl = searchParams.get("returnUrl") || "/app/jira";
-  const userIdFromQuery = searchParams.get("userId");
 
   if (!clientId) {
     return NextResponse.json(
@@ -24,27 +23,16 @@ export async function GET(request: Request) {
     );
   }
 
-  // Önce query parametresinden user ID'yi al
-  let currentUserId: string | undefined = userIdFromQuery || undefined;
+  // Kullanıcıyı doğrula (Supabase session token'ından, query'den gelen ham
+  // userId'den değil) — aksi halde herhangi biri başka bir kullanıcının
+  // userId'sini vererek kendi Jira hesabını o kullanıcıya bağlayabilirdi.
+  const currentUserId = await getUserIdFromRequest(request);
 
-  // Eğer query'den alınamadıysa, cookie'den al
   if (!currentUserId) {
-    const cookieStore = await cookies();
-    const accessToken = cookieStore.get("sb-access-token")?.value;
-
-    if (accessToken) {
-      try {
-        const tokenParts = accessToken.split(".");
-        if (tokenParts.length === 3) {
-          const payload = JSON.parse(
-            Buffer.from(tokenParts[1], "base64").toString()
-          );
-          currentUserId = payload.sub;
-        }
-      } catch {
-        // JWT decode başarısız
-      }
-    }
+    return NextResponse.json(
+      { error: "Unauthorized: Please log in first" },
+      { status: 401 }
+    );
   }
 
   // OAuth state oluştur - user ID'yi state'e encode et

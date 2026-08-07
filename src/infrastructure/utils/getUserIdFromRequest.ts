@@ -1,78 +1,41 @@
 /**
  * getUserIdFromRequest
- * Utility to extract user ID from Next.js API route request
+ * Derives the authenticated user's id from a Supabase access token.
+ *
+ * The token must be supplied either via the `Authorization: Bearer <token>`
+ * header (preferred, used by all fetch-based API calls) or an `accessToken`
+ * query parameter (used only where a header can't be attached, e.g. a
+ * top-level browser navigation like the Jira OAuth redirect). The token is
+ * always verified against Supabase Auth via `auth.getUser(token)` — a
+ * client-supplied `userId` is never accepted as an identity claim, since
+ * that would let any caller impersonate any other user.
  */
 
-import { cookies } from "next/headers";
 import { getSupabase } from "@/lib/supabase";
-import { resolveEnvValue } from "@/lib/appEnvironment";
 
 export async function getUserIdFromRequest(
   request: Request
 ): Promise<string | null> {
-  const { searchParams } = new URL(request.url);
-  let userId: string | undefined = searchParams.get("userId") || undefined;
+  const authHeader = request.headers.get("authorization");
+  const bearerToken = authHeader?.toLowerCase().startsWith("bearer ")
+    ? authHeader.slice(7).trim()
+    : null;
 
-  if (userId) {
-    return userId;
+  const { searchParams } = new URL(request.url);
+  const token = bearerToken || searchParams.get("accessToken");
+
+  if (!token) {
+    return null;
   }
 
   try {
-    const cookieStore = await cookies();
-    const accessToken = cookieStore.get("sb-access-token")?.value;
-
-    if (accessToken) {
-      try {
-        const tokenParts = accessToken.split(".");
-        if (tokenParts.length === 3) {
-          const payload = JSON.parse(
-            Buffer.from(tokenParts[1], "base64").toString()
-          );
-          userId = payload.sub;
-          if (userId) {
-            return userId;
-          }
-        }
-      } catch {
-        // JWT decode failed, continue
-      }
-
-      if (!userId) {
-        try {
-          const supabaseUrl = resolveEnvValue("NEXT_PUBLIC_SUPABASE_URL");
-          const supabaseAnonKey = resolveEnvValue("NEXT_PUBLIC_SUPABASE_ANON_KEY");
-          if (supabaseUrl && supabaseAnonKey) {
-            const userResponse = await fetch(`${supabaseUrl}/auth/v1/user`, {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-                apikey: supabaseAnonKey,
-              },
-            });
-
-            if (userResponse.ok) {
-              const userData = await userResponse.json();
-              if (userData.id) {
-                return userData.id;
-              }
-            }
-          }
-        } catch {
-          // Supabase API error, continue
-        }
-      }
+    const supabase = getSupabase();
+    const { data, error } = await supabase.auth.getUser(token);
+    if (error || !data.user) {
+      return null;
     }
-
-    if (!userId) {
-      const supabase = getSupabase();
-      const { data: { user }, error } = await supabase.auth.getUser();
-      if (!error && user) {
-        return user.id;
-      }
-    }
+    return data.user.id;
   } catch {
-    // Auth error
+    return null;
   }
-
-  return null;
 }
-

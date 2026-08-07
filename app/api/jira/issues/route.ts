@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { getSupabase, getSupabaseServer } from "@/lib/supabase";
 import { resolveEnvValue } from "@/lib/appEnvironment";
 import { jiraConfig } from "@/lib/jiraConfig";
+import { getUserIdFromRequest } from "@/src/infrastructure/utils/getUserIdFromRequest";
 import type {
   JiraAdfDocument,
   JiraAdfNode,
@@ -17,8 +17,6 @@ const isJiraApiErrorResponse = (
 ): value is JiraApiErrorResponse => typeof value === "object" && value !== null;
 
 const { clientId: jiraClientId, clientSecret: jiraClientSecret } = jiraConfig;
-const supabaseRestUrl = resolveEnvValue("NEXT_PUBLIC_SUPABASE_URL");
-const supabaseRestAnonKey = resolveEnvValue("NEXT_PUBLIC_SUPABASE_ANON_KEY");
 const fallbackJiraBaseUrl = resolveEnvValue("JIRA_BASE_URL");
 
 /**
@@ -27,63 +25,8 @@ const fallbackJiraBaseUrl = resolveEnvValue("JIRA_BASE_URL");
  */
 export async function GET(request: Request) {
   try {
-    // 1. Kullanıcıyı doğrula
-    const { searchParams } = new URL(request.url);
-    let userId: string | undefined = searchParams.get("userId") || undefined;
-    
-    // Eğer query'den alınamadıysa, cookie'den deneyelim
-    if (!userId) {
-      try {
-        const cookieStore = await cookies();
-        const accessToken = cookieStore.get("sb-access-token")?.value;
-        
-        if (accessToken) {
-          try {
-            const tokenParts = accessToken.split(".");
-            if (tokenParts.length === 3) {
-              const payload = JSON.parse(Buffer.from(tokenParts[1], "base64").toString());
-              userId = payload.sub;
-            }
-          } catch {
-            // JWT decode başarısız, Supabase API'ye istek yapılacak
-          }
-        }
-        
-        // Eğer JWT'den alınamadıysa, Supabase API'sine istek yap
-        if (!userId && accessToken) {
-          try {
-            if (!supabaseRestUrl || !supabaseRestAnonKey) {
-              throw new Error("Supabase REST env vars missing");
-            }
-            const userResponse = await fetch(`${supabaseRestUrl}/auth/v1/user`, {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-                apikey: supabaseRestAnonKey,
-              },
-            });
-            
-            if (userResponse.ok) {
-              const userData = await userResponse.json();
-              userId = userData.id;
-            }
-          } catch {
-            // Supabase API error
-          }
-        }
-        
-        // Son çare: Supabase client ile getUser()
-        if (!userId) {
-          const supabase = getSupabase();
-          const { data: { user }, error: userError } = await supabase.auth.getUser();
-          
-          if (!userError && user) {
-            userId = user.id;
-          }
-        }
-      } catch {
-        // Auth error
-      }
-    }
+    // 1. Kullanıcıyı doğrula (Supabase session token'ından, query userId'den değil)
+    const userId = await getUserIdFromRequest(request);
 
     if (!userId) {
       return NextResponse.json(

@@ -26,6 +26,7 @@ import type {
   ApiResponseWithStatus,
 } from "@/interfaces/Jira.interface";
 import { getSupabase } from "@/lib/supabase";
+import { authFetch, getAccessToken } from "@/lib/authFetch";
 
 type TabType = "boards" | "issues" | "projects" | "myself" | "search" | "test" | "settings";
 
@@ -141,9 +142,8 @@ export default function JiraTestPage() {
 
       const urlParams = new URLSearchParams();
       urlParams.set("jiraBaseUrl", jiraBaseUrl);
-      urlParams.set("userId", userData.user.id);
 
-      const response = await fetch(`/api/jira/boards?${urlParams.toString()}`, {
+      const response = await authFetch(`/api/jira/boards?${urlParams.toString()}`, {
         credentials: "include",
       });
 
@@ -187,9 +187,8 @@ export default function JiraTestPage() {
 
       const urlParams = new URLSearchParams();
       urlParams.set("jiraBaseUrl", jiraBaseUrl);
-      urlParams.set("userId", userData.user.id);
 
-      const response = await fetch(`/api/jira/issues?${urlParams.toString()}`, {
+      const response = await authFetch(`/api/jira/issues?${urlParams.toString()}`, {
         credentials: "include",
       });
 
@@ -233,9 +232,8 @@ export default function JiraTestPage() {
 
       const urlParams = new URLSearchParams();
       urlParams.set("jiraBaseUrl", jiraBaseUrl);
-      urlParams.set("userId", userData.user.id);
 
-      const response = await fetch(`/api/jira/boards?${urlParams.toString()}`, {
+      const response = await authFetch(`/api/jira/boards?${urlParams.toString()}`, {
         credentials: "include",
       });
 
@@ -278,9 +276,8 @@ export default function JiraTestPage() {
       }
 
       const urlParams = new URLSearchParams();
-      urlParams.set("userId", userData.user.id);
 
-      const response = await fetch(`/api/jira/myself?${urlParams.toString()}`, {
+      const response = await authFetch(`/api/jira/myself?${urlParams.toString()}`, {
         credentials: "include",
       });
 
@@ -323,9 +320,8 @@ export default function JiraTestPage() {
       }
 
       const urlParams = new URLSearchParams();
-      urlParams.set("userId", userData.user.id);
 
-      const response = await fetch(`/api/jira/search?${urlParams.toString()}`, {
+      const response = await authFetch(`/api/jira/search?${urlParams.toString()}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -423,9 +419,8 @@ export default function JiraTestPage() {
 
       const urlParams = new URLSearchParams();
       urlParams.set("jiraBaseUrl", jiraBaseUrl);
-      urlParams.set("userId", userData.user.id);
 
-      const response = await fetch(`/api/jira/test-connection?${urlParams.toString()}`, {
+      const response = await authFetch(`/api/jira/test-connection?${urlParams.toString()}`, {
         credentials: "include",
       });
 
@@ -471,8 +466,8 @@ export default function JiraTestPage() {
         normalizedUrl = normalizedUrl.slice(0, -1);
       }
 
-      const response = await fetch(
-        `/api/jira/save-url?userId=${encodeURIComponent(userData.user.id)}`,
+      const response = await authFetch(
+        "/api/jira/save-url",
         {
           method: "POST",
           headers: {
@@ -542,13 +537,11 @@ export default function JiraTestPage() {
               <button
                 onClick={async () => {
                   try {
-                    const supabase = getSupabase();
-                    const { data: userData } = await supabase.auth.getUser();
-                    if (!userData.user) return;
+                    const accessToken = await getAccessToken();
+                    if (!accessToken) return;
 
                     const returnUrl = encodeURIComponent("/app/jira-test");
-                    const encodedUserId = encodeURIComponent(userData.user.id);
-                    window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
+                    window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&accessToken=${encodeURIComponent(accessToken)}`;
                   } catch (err) {
                     logger.error("Jira OAuth error:", err);
                   }
@@ -636,13 +629,11 @@ export default function JiraTestPage() {
                         <button
                           onClick={async () => {
                             try {
-                              const supabase = getSupabase();
-                              const { data: userData } = await supabase.auth.getUser();
-                              if (!userData.user) return;
+                              const accessToken = await getAccessToken();
+                              if (!accessToken) return;
 
                               const returnUrl = encodeURIComponent("/app/jira-test");
-                              const encodedUserId = encodeURIComponent(userData.user.id);
-                              window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
+                              window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&accessToken=${encodeURIComponent(accessToken)}`;
                             } catch (err) {
                               logger.error("Jira OAuth error:", err);
                             }
@@ -725,13 +716,11 @@ export default function JiraTestPage() {
                         <button
                           onClick={async () => {
                             try {
-                              const supabase = getSupabase();
-                              const { data: userData } = await supabase.auth.getUser();
-                              if (!userData.user) return;
+                              const accessToken = await getAccessToken();
+                              if (!accessToken) return;
 
                               const returnUrl = encodeURIComponent("/app/jira-test");
-                              const encodedUserId = encodeURIComponent(userData.user.id);
-                              window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
+                              window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&accessToken=${encodeURIComponent(accessToken)}`;
                             } catch (err) {
                               logger.error("Jira OAuth error:", err);
                             }

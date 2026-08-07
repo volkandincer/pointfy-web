@@ -17,6 +17,7 @@ import Footer from "@/components/layout/Footer";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import { getSupabase } from "@/lib/supabase";
+import { getAccessToken } from "@/lib/authFetch";
 
 interface JiraLayoutProps {
   children: React.ReactNode;
@@ -155,13 +156,11 @@ export default function JiraLayout({ children }: JiraLayoutProps) {
                 <button
                   onClick={async () => {
                     try {
-                      const supabase = getSupabase();
-                      const { data: userData } = await supabase.auth.getUser();
-                      if (!userData.user) return;
+                      const accessToken = await getAccessToken();
+                      if (!accessToken) return;
 
                       const returnUrl = encodeURIComponent(pathname || "/app/jira");
-                      const encodedUserId = encodeURIComponent(userData.user.id);
-                      window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
+                      window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&accessToken=${encodeURIComponent(accessToken)}`;
                     } catch {
                       // Jira OAuth error
                     }

@@ -12,6 +12,7 @@ import { useToastContext } from "@/contexts/ToastContext";
 import { getDefaultNavigationItems } from "@/lib/utils";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 import { getSupabase } from "@/lib/supabase";
+import { getAccessToken } from "@/lib/authFetch";
 import { formatErrorMessage } from "@/lib/utils/errorHandler";
 
 export default function AccountPage() {
@@ -264,11 +265,17 @@ export default function AccountPage() {
       return;
     }
 
+    const accessToken = await getAccessToken();
+    if (!accessToken) {
+      showToast("Kullanıcı bilgileri alınamadı. Lütfen sayfayı yenileyin.", "error");
+      setShowJiraPermissionModal(false);
+      return;
+    }
+
     // Modal'ı kapat ve OAuth akışını başlat
     setShowJiraPermissionModal(false);
     const returnUrl = encodeURIComponent("/app/jira");
-    const encodedUserId = encodeURIComponent(userId);
-    window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&userId=${encodedUserId}`;
+    window.location.href = `/api/auth/jira?returnUrl=${returnUrl}&accessToken=${encodeURIComponent(accessToken)}`;
   };
 
   const handleDisconnectJira = async () => {
