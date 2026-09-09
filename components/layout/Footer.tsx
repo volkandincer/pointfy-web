@@ -13,6 +13,8 @@ import {
   Shield,
   FileText as FileTextIcon,
   Cookie,
+  Sparkles,
+  Tag,
 } from "lucide-react";
 import type { NavigationItem } from "@/interfaces/Navigation.interface";
 
@@ -29,6 +31,8 @@ const Footer = memo(function Footer({ navigationItems }: FooterProps) {
     if (href.startsWith("/app/boards")) return ClipboardList;
     if (href.startsWith("/app/tasks")) return CheckSquare;
     if (href.startsWith("/app/notes")) return FileText;
+    if (href === "/features") return Sparkles;
+    if (href === "/pricing") return Tag;
     if (href === "/about") return Info;
     if (href === "/contact") return Mail;
     return null;
@@ -45,14 +49,6 @@ const Footer = memo(function Footer({ navigationItems }: FooterProps) {
             </h4>
             <ul className="space-y-2.5">
               {navigationItems
-                .filter(
-                  (item) =>
-                    item.href !== "/features" &&
-                    item.href !== "/#features" &&
-                    item.href !== "/#download" &&
-                    item.label !== "Özellikler" &&
-                    item.label !== "İndir"
-                )
                 .map((item) => {
                   const Icon = getIcon(item.href);
                   return (

@@ -57,7 +57,9 @@ function LoginPageContent() {
       return "/";
     }
   })();
-  const [isLogin, setIsLogin] = useState<boolean>(true);
+  const [isLogin, setIsLogin] = useState<boolean>(
+    searchParams.get("tab") !== "register"
+  );
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [username, setUsername] = useState<string>("");
@@ -126,11 +128,10 @@ function LoginPageContent() {
       <>
         <Header navigationItems={navigationItems} />
         <main className="relative min-h-[calc(100vh-4rem)] overflow-hidden">
-          <div className="pointer-events-none absolute inset-0 -z-10 bg-white dark:bg-gray-950" />
           <div className="container mx-auto flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-16">
             <div className="text-center">
-              <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-blue-600 border-t-transparent dark:border-blue-400" />
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+              <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+              <p className="text-sm font-medium text-muted-foreground">
                 Kontrol ediliyor...
               </p>
             </div>
@@ -224,32 +225,25 @@ function LoginPageContent() {
   return (
     <>
       <Header navigationItems={navigationItems} />
-      <main className="relative min-h-[calc(100vh-4rem)] overflow-hidden">
-        {/* Background */}
-        <div className="pointer-events-none absolute inset-0 -z-10 bg-gray-50 dark:bg-gray-950" />
-
+      <main className="relative min-h-[calc(100vh-4rem)] overflow-hidden bg-muted/30">
         <div className="container mx-auto flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-16">
           <div className="w-full max-w-md">
             {/* Card */}
-             <div className="rounded-md border-2 border-gray-300 bg-white p-8 shadow-md dark:border-gray-700 dark:bg-gray-900">
+             <div className="rounded-2xl border border-border bg-card p-8 shadow-sm">
               {/* Logo */}
               <div className="mb-8 flex justify-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-md border-2 border-blue-600 bg-blue-50 dark:bg-blue-900/20">
-                  <Layers className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <Layers className="h-7 w-7" />
                 </div>
               </div>
 
               {/* Tab buttons */}
-              <div className="mb-8 flex gap-2 rounded-md border-2 border-gray-300 bg-gray-100 p-1 dark:border-gray-700 dark:bg-gray-800">
+              <div className="mb-8 flex gap-1 rounded-lg border border-border bg-muted p-1">
                 <Button
                   variant={isLogin ? "primary" : "ghost"}
                   size="md"
                   fullWidth
-                  className={`flex-1 ${
-                    isLogin
-                      ? ""
-                      : "border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                  }`}
+                  className={`flex-1 ${isLogin ? "" : "border-transparent"}`}
                   onClick={() => {
                     setIsLogin(true);
                     setMessage("");
@@ -261,11 +255,7 @@ function LoginPageContent() {
                   variant={!isLogin ? "primary" : "ghost"}
                   size="md"
                   fullWidth
-                  className={`flex-1 ${
-                    !isLogin
-                      ? ""
-                      : "border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                  }`}
+                  className={`flex-1 ${!isLogin ? "" : "border-transparent"}`}
                   onClick={() => {
                     setIsLogin(false);
                     setMessage("");
@@ -276,7 +266,7 @@ function LoginPageContent() {
               </div>
 
               {/* Title */}
-              <h1 className="mb-8 text-center text-base font-bold text-gray-900 dark:text-white sm:text-lg">
+              <h1 className="mb-8 text-center text-lg font-bold text-card-foreground">
                 {isLogin ? "Hesabınıza Giriş Yapın" : "Yeni Hesap Oluşturun"}
               </h1>
 
@@ -333,7 +323,7 @@ function LoginPageContent() {
                     : "Kayıt Ol"}
                 </Button>
                 {message && (
-                  <div className="rounded-md border-2 border-red-300 bg-red-50 p-3 text-sm text-red-600 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400">
+                  <div className="rounded-md border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
                     {message}
                   </div>
                 )}
@@ -354,7 +344,7 @@ export default function LoginPage() {
       <>
         <Header navigationItems={getDefaultNavigationItems()} />
         <main className="container mx-auto px-4 py-16">
-          <div className="h-40 animate-pulse border border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
+          <div className="h-40 animate-pulse rounded-xl border border-border bg-muted" />
         </main>
         <Footer navigationItems={getDefaultNavigationItems()} />
       </>

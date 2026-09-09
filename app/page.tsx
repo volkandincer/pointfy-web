@@ -108,15 +108,15 @@ function HomePageContent() {
       },
       {
         id: "5",
-        title: "Gerçek Zamanlı Senkronizasyon",
+        title: "Jira Entegrasyonu",
         description:
-          "Realtime ile anında güncellemeler alın ve değişiklikleri takip edin.",
+          "Jira hesabınızı bağlayın; projelerinizi ve issue'larınızı tek yerden yönetin.",
       },
       {
         id: "6",
-        title: "Kolay Kullanım",
+        title: "Gerçek Zamanlı Senkronizasyon",
         description:
-          "Sezgisel arayüz ve modern tasarım ile takım yönetimi çok daha kolay.",
+          "Realtime ile anında güncellemeler alın ve değişiklikleri takip edin.",
       },
     ],
     []
@@ -195,10 +195,14 @@ function HomePageContent() {
     <>
       <Header navigationItems={navigationItems} />
       <main className="pb-8">
-        {userId ? <HomeWelcome /> : <Hero />}
-        <QuickActions actions={actions} />
-        {!userId && (
+        {userId ? (
           <>
+            <HomeWelcome />
+            <QuickActions actions={actions} />
+          </>
+        ) : (
+          <>
+            <Hero />
             <Features features={features} />
             <CTA />
           </>

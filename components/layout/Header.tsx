@@ -109,77 +109,109 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
 
         {/* Desktop Navigation - Center */}
         <nav className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-1 md:flex">
-          <Link
-            href="/"
-            className={`flex min-h-[36px] items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-              isActive("/")
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-            }`}
-          >
-            <Home className="h-4 w-4" />
-            <span>Ana Sayfa</span>
-          </Link>
-
-          <Link
-            href="/app/jira"
-            className={`flex min-h-[36px] items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-              isActive("/app/jira")
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-            }`}
-          >
-            <Zap className="h-4 w-4" />
-            <span>Jira</span>
-          </Link>
-
-          <Link
-            href="/app/rooms"
-            className={`flex min-h-[36px] items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-              isActive("/app/rooms")
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-            }`}
-          >
-            <DoorOpen className="h-4 w-4" />
-            <span>Odalar</span>
-          </Link>
-
-          <Link
-            href="/app/boards"
-            className={`flex min-h-[36px] items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-              isActive("/app/boards")
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-            }`}
-          >
-            <ClipboardList className="h-4 w-4" />
-            <span>Board&apos;lar</span>
-          </Link>
-
-          <Link
-            href="/app/tasks"
-            className={`flex min-h-[36px] items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-              isActive("/app/tasks")
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-            }`}
-          >
-            <CheckSquare className="h-4 w-4" />
-            <span>Task&apos;lar</span>
-          </Link>
-
-          <Link
-            href="/app/notes"
-            className={`flex min-h-[36px] items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-              isActive("/app/notes")
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-            }`}
-          >
-            <FileText className="h-4 w-4" />
-            <span>Notlar</span>
-          </Link>
+          {isAuthed ? (
+            <>
+              <Link
+                href="/"
+                className={`flex min-h-[36px] items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                  isActive("/")
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                }`}
+              >
+                <Home className="h-4 w-4" />
+                <span>Ana Sayfa</span>
+              </Link>
+              <Link
+                href="/app/jira"
+                className={`flex min-h-[36px] items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                  isActive("/app/jira")
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                }`}
+              >
+                <Zap className="h-4 w-4" />
+                <span>Jira</span>
+              </Link>
+              <Link
+                href="/app/rooms"
+                className={`flex min-h-[36px] items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                  isActive("/app/rooms")
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                }`}
+              >
+                <DoorOpen className="h-4 w-4" />
+                <span>Odalar</span>
+              </Link>
+              <Link
+                href="/app/boards"
+                className={`flex min-h-[36px] items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                  isActive("/app/boards")
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                }`}
+              >
+                <ClipboardList className="h-4 w-4" />
+                <span>Board&apos;lar</span>
+              </Link>
+              <Link
+                href="/app/tasks"
+                className={`flex min-h-[36px] items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                  isActive("/app/tasks")
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                }`}
+              >
+                <CheckSquare className="h-4 w-4" />
+                <span>Task&apos;lar</span>
+              </Link>
+              <Link
+                href="/app/notes"
+                className={`flex min-h-[36px] items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                  isActive("/app/notes")
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                }`}
+              >
+                <FileText className="h-4 w-4" />
+                <span>Notlar</span>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/features"
+                className={`flex min-h-[36px] items-center rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                  isActive("/features")
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Özellikler
+              </Link>
+              <Link
+                href="/pricing"
+                className={`flex min-h-[36px] items-center rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                  isActive("/pricing")
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Fiyatlandırma
+              </Link>
+              <Link
+                href="/about"
+                className={`flex min-h-[36px] items-center rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                  isActive("/about")
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Hakkında
+              </Link>
+            </>
+          )}
         </nav>
 
         {/* Mobile Right Side - Theme & User */}
@@ -338,13 +370,20 @@ const Header = memo(function Header({ navigationItems }: HeaderProps) {
               )}
             </div>
           ) : (
-            <Link
-              href="/login"
-              className="flex min-h-[36px] items-center gap-2 rounded-md border border-primary bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-            >
-              <User className="h-4 w-4" />
-              <span>Giriş Yap</span>
-            </Link>
+            <>
+              <Link
+                href="/login"
+                className="flex min-h-[36px] items-center rounded-md px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+              >
+                Giriş Yap
+              </Link>
+              <Link
+                href="/login?tab=register"
+                className="flex min-h-[36px] items-center gap-2 rounded-md border border-primary bg-primary px-3.5 py-1.5 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
+              >
+                <span>Ücretsiz Başla</span>
+              </Link>
+            </>
           )}
         </div>
       </div>
