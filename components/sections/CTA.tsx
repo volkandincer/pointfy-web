@@ -9,7 +9,18 @@ const CTA = memo(function CTA() {
       <div className="relative mx-auto max-w-4xl overflow-hidden rounded-2xl bg-primary px-8 py-14 text-center shadow-sm md:px-16 md:py-16">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent"
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage:
+              "radial-gradient(rgba(255,255,255,0.35) 1px, transparent 1px)",
+            backgroundSize: "20px 20px",
+            maskImage:
+              "radial-gradient(ellipse 70% 100% at 50% 0%, black, transparent)",
+          }}
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-16 -left-10 h-40 w-40 rounded-full bg-amber-400/30 blur-3xl"
         />
         <div className="relative">
           <h2 className="text-balance text-2xl font-bold tracking-tight text-primary-foreground sm:text-3xl">

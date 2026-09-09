@@ -36,7 +36,7 @@ export default function PricingPage() {
               <h2 className="text-lg font-semibold text-card-foreground">
                 Erken Erişim
               </h2>
-              <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
+              <span className="rounded-full bg-amber-400/15 px-2.5 py-1 text-xs font-semibold text-amber-600 dark:text-amber-400">
                 Beta
               </span>
             </div>
