@@ -20,9 +20,9 @@ export function getAppUrlFromRequest(request: Request): string {
   const allowedHosts = [
     "localhost:3000",
     "localhost",
-    "pointfy.app",
-    "www.pointfy.app",
-    "pointfy-web.vercel.app",
+    "teamhubx.com",
+    "www.teamhubx.com",
+    "teamhubx-web.vercel.app",
     // Custom domain'ler buraya eklenebilir
   ];
   
@@ -51,7 +51,7 @@ export function getAppUrlFromRequest(request: Request): string {
   
   // Fallback
   return appEnvironment === "prod"
-    ? "https://pointfy.app"
+    ? "https://www.teamhubx.com"
     : "http://localhost:3000";
 }
 
@@ -68,7 +68,7 @@ export const jiraConfig = {
     return (
       resolveEnvValue("NEXT_PUBLIC_APP_URL") ||
       (appEnvironment === "prod"
-        ? "https://pointfy.app"
+        ? "https://www.teamhubx.com"
         : "http://localhost:3000")
     );
   },

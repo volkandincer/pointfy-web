@@ -1,4 +1,4 @@
-# Dark Theme Renk Paleti - Pointfy
+# Dark Theme Renk Paleti - TeamHubX
 
 ## 🎨 Ana Renkler
 

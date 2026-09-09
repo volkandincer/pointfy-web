@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Gizlilik Politikası | Pointfy",
+  title: "Gizlilik Politikası | TeamHubX",
   description:
-    "Pointfy gizlilik politikası: hangi verileri topluyoruz ve nasıl koruyoruz.",
+    "TeamHubX gizlilik politikası: hangi verileri topluyoruz ve nasıl koruyoruz.",
   alternates: { canonical: "/legal/privacy" },
 };
 
