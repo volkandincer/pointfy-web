@@ -236,7 +236,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
           <div
             key={t.id}
             onClick={() => handleCardClick(t)}
-            className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-300 bg-white p-5 transition-all hover:border-gray-400 hover:shadow-lg cursor-pointer dark:border-gray-700 dark:bg-gray-900"
+            className="group relative flex flex-col overflow-hidden rounded-lg border border-border bg-card p-5 transition-all hover:shadow-lg cursor-pointer"
             style={{
               borderColor: cardColor.border,
             }}
@@ -249,7 +249,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
 
             {/* Header */}
             <div className="relative mb-3 flex items-start justify-between gap-2">
-              <h3 className="flex-1 text-base font-bold text-gray-900 dark:text-white line-clamp-2">
+              <h3 className="flex-1 text-base font-bold text-card-foreground line-clamp-2">
                 {t.title}
               </h3>
               <div className="flex shrink-0 items-center gap-1.5">
@@ -272,7 +272,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
             {/* Description */}
             {t.description && (
               <div className="relative mb-4">
-                <p className="line-clamp-2 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+                <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
                   {t.description}
                 </p>
               </div>
@@ -291,15 +291,15 @@ const PersonalTaskList = memo(function PersonalTaskList({
                   </span>
                 )}
                 {jiraTask.assignee && (
-                  <div className="flex items-center gap-1 rounded border border-gray-300 bg-gray-50 px-1.5 py-0.5 dark:border-gray-700 dark:bg-gray-800">
+                  <div className="flex items-center gap-1 rounded border border-border bg-muted px-1.5 py-0.5">
                     {jiraTask.assignee.avatar && (
                       <img
                         src={jiraTask.assignee.avatar}
                         alt={jiraTask.assignee.name}
-                        className="h-3 w-3 rounded-full border border-gray-300 dark:border-gray-600"
+                        className="h-3 w-3 rounded-full border border-border"
                       />
                     )}
-                    <span className="text-[10px] font-medium text-gray-700 dark:text-gray-300">
+                    <span className="text-[10px] font-medium text-muted-foreground">
                       {jiraTask.assignee.name}
                     </span>
                   </div>
@@ -320,7 +320,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
                 {getCategoryLabel(t.category)}
               </span>
               {t.created_at && (
-                <div className="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400">
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                   <Calendar className="h-3.5 w-3.5" />
                   <span>{formatDate(t.created_at)}</span>
                 </div>
@@ -392,7 +392,7 @@ const PersonalTaskList = memo(function PersonalTaskList({
                     onDelete(t.id);
                   }
                 }}
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border-2 border-red-400 text-red-400 transition-colors hover:bg-red-400/10 dark:border-red-500 dark:text-red-500"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border-2 border-destructive/60 text-destructive transition-colors hover:bg-destructive/10"
                 title="Sil"
               >
                 <Trash2 className="h-4 w-4" />

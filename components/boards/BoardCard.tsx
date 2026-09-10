@@ -85,7 +85,7 @@ const BoardCard = memo(function BoardCard({
   return (
     <Link
       href={`/app/boards/${board.id}`}
-      className="group relative block overflow-hidden rounded-lg border border-gray-300 bg-white p-4 transition-all hover:border-gray-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+      className="group relative block overflow-hidden rounded-lg border border-border bg-card p-4 transition-all hover:shadow-md"
     >
       {/* Top Color Bar */}
       <div
@@ -114,11 +114,11 @@ const BoardCard = memo(function BoardCard({
 
             {/* Title and Description */}
             <div className="min-w-0 flex-1">
-              <h3 className="mb-1 text-sm font-bold text-gray-900 dark:text-white line-clamp-2">
+              <h3 className="mb-1 text-sm font-bold text-card-foreground line-clamp-2">
                 {board.name}
               </h3>
               {board.description && (
-                <p className="line-clamp-2 text-xs leading-relaxed text-gray-600 dark:text-gray-400">
+                <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground">
                   {board.description}
                 </p>
               )}
@@ -130,7 +130,7 @@ const BoardCard = memo(function BoardCard({
             {onEdit && (
               <button
                 onClick={handleEdit}
-                className="flex h-8 w-8 items-center justify-center rounded-md border border-blue-600 bg-white text-blue-600 transition-all hover:border-blue-700 hover:bg-blue-50 dark:bg-gray-900 dark:border-blue-500 dark:text-blue-400 dark:hover:bg-blue-900/20"
+                className="flex h-8 w-8 items-center justify-center rounded-md border border-primary bg-card text-primary transition-all hover:bg-primary/10"
                 title="Düzenle"
               >
                 <Edit className="h-4 w-4" />
@@ -139,7 +139,7 @@ const BoardCard = memo(function BoardCard({
             {onArchive && (
               <button
                 onClick={handleArchive}
-                className="flex h-8 w-8 items-center justify-center rounded-md border border-gray-300 bg-white text-gray-600 transition-all hover:border-gray-400 hover:bg-gray-50 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
+                className="flex h-8 w-8 items-center justify-center rounded-md border border-border bg-card text-muted-foreground transition-all hover:bg-accent"
                 title={board.is_archived ? "Arşivden Çıkar" : "Arşivle"}
               >
                 {board.is_archived ? (
@@ -152,7 +152,7 @@ const BoardCard = memo(function BoardCard({
             {onDelete && (
               <button
                 onClick={handleDelete}
-                className="flex h-8 w-8 items-center justify-center rounded-md border border-red-600 bg-white text-red-600 transition-all hover:border-red-700 hover:bg-red-50 dark:bg-gray-900 dark:border-red-500 dark:text-red-400 dark:hover:bg-red-900/20"
+                className="flex h-8 w-8 items-center justify-center rounded-md border border-destructive bg-card text-destructive transition-all hover:bg-destructive/10"
                 title="Sil"
               >
                 <Trash2 className="h-4 w-4" />

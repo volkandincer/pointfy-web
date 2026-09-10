@@ -22,45 +22,8 @@ const CATEGORY_LABELS: Record<string, string> = {
   general: "Genel",
 };
 
-const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  personal: {
-    bg: "bg-pink-50 dark:bg-pink-900/20",
-    text: "text-pink-700 dark:text-pink-400",
-    border: "border-pink-300 dark:border-pink-700",
-  },
-  work: {
-    bg: "bg-blue-50 dark:bg-blue-900/20",
-    text: "text-blue-700 dark:text-blue-400",
-    border: "border-blue-300 dark:border-blue-700",
-  },
-  ideas: {
-    bg: "bg-purple-50 dark:bg-purple-900/20",
-    text: "text-purple-700 dark:text-purple-400",
-    border: "border-purple-300 dark:border-purple-700",
-  },
-  todo: {
-    bg: "bg-yellow-50 dark:bg-yellow-900/20",
-    text: "text-yellow-700 dark:text-yellow-400",
-    border: "border-yellow-300 dark:border-yellow-700",
-  },
-  important: {
-    bg: "bg-red-50 dark:bg-red-900/20",
-    text: "text-red-700 dark:text-red-400",
-    border: "border-red-300 dark:border-red-700",
-  },
-  general: {
-    bg: "bg-gray-50 dark:bg-gray-800",
-    text: "text-gray-700 dark:text-gray-300",
-    border: "border-gray-300 dark:border-gray-700",
-  },
-};
-
 function getCategoryLabel(category: string): string {
   return CATEGORY_LABELS[category] || category;
-}
-
-function getCategoryStyle(category: string) {
-  return CATEGORY_COLORS[category] || CATEGORY_COLORS.general;
 }
 
 function formatDate(dateValue: string | number | undefined): string {
@@ -117,7 +80,7 @@ const NoteList = memo(function NoteList({
           <div
             key={note.id}
             onClick={() => onEdit(note)}
-            className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-300 bg-white p-4 transition-all hover:border-gray-400 hover:shadow-md cursor-pointer dark:border-gray-700 dark:bg-gray-900"
+            className="group relative flex flex-col overflow-hidden rounded-lg border border-border bg-card p-4 transition-all hover:shadow-md cursor-pointer"
             style={{
               borderColor: cardColor.border,
             }}
@@ -144,19 +107,19 @@ const NoteList = memo(function NoteList({
 
             {/* Content */}
             <div className="relative mb-3 flex-1 min-h-[50px]">
-              <p className="line-clamp-4 text-sm leading-relaxed text-gray-900 dark:text-white">
+              <p className="line-clamp-4 text-sm leading-relaxed text-card-foreground">
                 {note.content}
               </p>
             </div>
 
             {/* Footer - Date & Action Buttons */}
             <div className="relative mt-auto flex items-center gap-2 border-t pt-2.5" style={{ borderTopColor: `${cardColor.border}30` }}>
-              <div className="flex flex-1 items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400">
+              <div className="flex flex-1 items-center gap-1.5 text-xs text-muted-foreground">
                 <Calendar className="h-3.5 w-3.5 shrink-0" />
                 <span>{formatDate(dateValue)}</span>
                 {isUpdated && updatedValue && (
                   <>
-                    <span className="text-gray-400">•</span>
+                    <span className="text-muted-foreground">•</span>
                     <RefreshCw className="h-3.5 w-3.5 shrink-0" />
                   </>
                 )}
@@ -190,7 +153,7 @@ const NoteList = memo(function NoteList({
                     onDelete(note.id);
                   }
                 }}
-                className="flex h-6 w-6 shrink-0 items-center justify-center rounded border-2 border-red-400 text-red-400 transition-colors hover:bg-red-400/10 dark:border-red-500 dark:text-red-500"
+                className="flex h-6 w-6 shrink-0 items-center justify-center rounded border-2 border-destructive/60 text-destructive transition-colors hover:bg-destructive/10"
                 title="Sil"
               >
                 <Trash2 className="h-3 w-3" />

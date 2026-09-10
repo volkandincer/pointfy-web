@@ -139,7 +139,7 @@ const BoardList = memo(function BoardList({
         {[1, 2, 3, 4].map((i) => (
           <div
             key={i}
-            className="h-32 animate-pulse rounded-md border border-gray-300 bg-white dark:border-gray-700 dark:bg-gray-900"
+            className="h-32 animate-pulse rounded-md border border-border bg-card"
           />
         ))}
       </div>
@@ -148,7 +148,7 @@ const BoardList = memo(function BoardList({
 
   if (error) {
     return (
-      <div className="rounded-md border-2 border-red-200 bg-red-50 p-4 text-red-800 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+      <div className="rounded-md border-2 border-destructive/30 bg-destructive/10 p-4 text-destructive">
         <p className="font-semibold">Hata:</p>
         <p>{error}</p>
       </div>
@@ -158,8 +158,8 @@ const BoardList = memo(function BoardList({
   return (
     <>
       {!showArchived && (
-        <div className="mb-6 flex items-center justify-between border-b border-gray-300 pb-4 dark:border-gray-700">
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+        <div className="mb-6 flex items-center justify-between border-b border-border pb-4">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             {filteredBoards.length} Board
           </h2>
           <Button
@@ -168,7 +168,6 @@ const BoardList = memo(function BoardList({
             onClick={() => setShowCreateModal(true)}
             disabled={actionLoading}
             icon={Plus}
-            className="!border-green-600 !bg-green-600 hover:!border-green-700 hover:!bg-green-700 dark:!border-green-500 dark:!bg-green-600 dark:hover:!bg-green-700"
           >
             Yeni Board
           </Button>

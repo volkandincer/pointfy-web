@@ -55,11 +55,11 @@ const Toast = memo(function Toast({
       };
     }
     return {
-      bg: "bg-blue-50 dark:bg-blue-950/30",
-      border: "border-blue-200 dark:border-blue-800",
-      icon: "text-blue-600 dark:text-blue-400",
-      text: "text-blue-900 dark:text-blue-100",
-      close: "text-blue-600 hover:bg-blue-100 dark:text-blue-400 dark:hover:bg-blue-900/50",
+      bg: "bg-primary/10",
+      border: "border-primary/30",
+      icon: "text-primary",
+      text: "text-foreground",
+      close: "text-primary hover:bg-primary/10",
     };
   };
 
